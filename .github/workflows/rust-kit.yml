@@ -1,0 +1,214 @@
+# WyattAu shared kit CI — the gate matrix.
+# Called from each kit repo:
+#   jobs:
+#     quality:
+#       uses: WyattAu/engineering-standards/.github/workflows/rust-kit.yml@main
+#       with:
+#         tier: a
+#
+# Tier semantics:
+#   a — pedantic clippy, unwrap/indexing/panic lints, coverage >= 90%
+#   b — coverage >= 80%
+#   c — coverage >= 70% (informational)
+
+name: quality
+
+on:
+  workflow_call:
+    inputs:
+      tier:
+        description: "Standards tier: a | b | c"
+        required: false
+        default: "c"
+        type: string
+      all-features:
+        description: "Run with --all-features"
+        required: false
+        default: true
+        type: boolean
+      loom:
+        description: "Run loom models (--cfg loom)"
+        required: false
+        default: false
+        type: boolean
+      wasm:
+        description: "Add wasm32-unknown-unknown check"
+        required: false
+        default: false
+        type: boolean
+      miri:
+        description: "Run miri on lib tests (nightly)"
+        required: false
+        default: false
+        type: boolean
+      bench-regression:
+        description: "Run criterion benches (regression visibility, not gating)"
+        required: false
+        default: false
+        type: boolean
+      package:
+        description: "Restrict to one crate in a workspace (cargo -p <name>)"
+        required: false
+        default: ""
+        type: string
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+  PKG_FLAG: ${{ inputs.package != '' && format('-p {0}', inputs.package) || '' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: check (all-features, locked)
+        if: ${{ inputs.all-features }}
+        run: cargo check --locked --all-features ${{ env.PKG_FLAG }}
+      - name: check (no-default-features, locked)
+        run: cargo check --locked --no-default-features ${{ env.PKG_FLAG }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: test (all-features)
+        if: ${{ inputs.all-features }}
+        run: cargo test --all-features ${{ env.PKG_FLAG }}
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: clippy (deny warnings)
+        run: cargo clippy --all-features --all-targets -- -D warnings ${{ env.PKG_FLAG }}
+      - name: clippy (pedantic — tier a)
+        if: ${{ inputs.tier == 'a' }}
+        # Pedantic findings are reported but must be fixed or allowed with
+        # justification at the lint site (never blanket-suppressed).
+        run: |
+          cargo clippy --all-features --all-targets -- -W clippy::pedantic \
+            -W clippy::unwrap_used -W clippy::expect_used \
+            -W clippy::indexing_slicing -W clippy::panic ${{ env.PKG_FLAG }} \
+            2>&1 | tee pedantic.log
+          # Gate on NEW pedantic findings is tracked separately; this job
+          # surfaces them. Hard gate: the default-deny lints above already run
+          # under -D warnings in the first step.
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --check --all
+
+  deny:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: install cargo-deny
+        run: cargo install --locked cargo-deny || true
+      - name: cargo-deny (advisories / licenses / bans)
+        run: |
+          if [ -f deny.toml ]; then
+            cargo deny check advisories licenses bans
+          else
+            echo "::warning::no deny.toml — adopt templates/deny.toml"
+          fi
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+      - name: install cargo-llvm-cov
+        run: cargo install --locked cargo-llvm-cov
+      - name: coverage (tier threshold)
+        run: |
+          case "${{ inputs.tier }}" in
+            a) THRESHOLD=90 ;;
+            b) THRESHOLD=80 ;;
+            *) THRESHOLD=70; INFO=1 ;;
+          esac
+          ARGS="--all-features"
+          [ -n "${{ inputs.package }}" ] && ARGS="$ARGS -p ${{ inputs.package }}"
+          if [ "${INFO:-0}" = "1" ]; then
+            cargo llvm-cov --summary-only $ARGS
+          else
+            cargo llvm-cov --fail-under-lines "$THRESHOLD" $ARGS
+          fi
+
+  semver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - name: install cargo-semver-checks
+        run: cargo install --locked cargo-semver-checks
+      - name: semver-checks (gate breaking changes without version bump)
+        run: |
+          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+            cargo semver-checks ${{ env.PKG_FLAG }} --baseline-rev "$(git describe --tags --abbrev=0)"
+          else
+            echo "::notice::no tags yet — semver baseline will begin at first release"
+          fi
+
+  loom:
+    if: ${{ inputs.loom }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: loom models
+        run: RUSTFLAGS="--cfg loom" cargo test --release --lib -- --test-threads=1 loom
+
+  miri:
+    if: ${{ inputs.miri }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: miri
+      - uses: Swatinem/rust-cache@v2
+      - name: miri (lib tests)
+        run: cargo +nightly miri test --lib ${{ env.PKG_FLAG }}
+
+  wasm:
+    if: ${{ inputs.wasm }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: wasm32 check
+        run: cargo check --locked --target wasm32-unknown-unknown --no-default-features ${{ env.PKG_FLAG }}
+
+  bench:
+    if: ${{ inputs.bench-regression }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: benches (regression visibility)
+        run: cargo bench ${{ env.PKG_FLAG }} -- --save-baseline ci || true
