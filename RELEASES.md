@@ -57,3 +57,20 @@ cargo info <crate>              # version + repository on crates.io
 git -C <repo> tag --list v1.0.0 # release tag
 scripts/release.sh <dir> 1.0.0 --dry-run   # re-run gate without publishing
 ```
+
+## Wave 2 — 2026-09-05 (all 11 shortlisted crates now at 1.0.0)
+
+| Crate | Prior | semver | Coverage | Published |
+|---|---|---|---|---|
+| throttle-kit | 0.4.1 | clean | post-XFF re-measured; proptest flake root-caused + pinned in-code | ✓ |
+| webhookkit | 0.2.0 | clean | 98.15% (FFI 100% — safe direct-call tests) | ✓ |
+| chronoshift | 0.2.0 | n/a (first tag) | wasm module target-gated (0.3.0 breaking) — denominator fixed | ✓ |
+| healthkit | 0.1.0 | clean | 99.09% | ✓ (wave 2a) |
+| decimal-money | 0.2.0 | clean | 100.00% | ✓ (wave 2a) |
+| validkit | 0.1.0 | clean | 96.99% + fallback-engine CI job | ✓ (wave 2a) |
+| otelkit | 0.1.0 | clean | 98.77% | ✓ (wave 2a) |
+
+Bugs fixed en route to 1.0: healthkit worst-status aggregation (failing check reported Healthy),
+validkit serde Deserialize bypassing validation (untrusted JSON invariant break),
+webhookkit FFI error mapping (0 return unreachable → tampered indistinguishable from malformed),
+otelkit RUSTSEC-2026-0009 time bump.
