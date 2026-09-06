@@ -31,6 +31,48 @@ jobs:
 | loom (`--cfg loom` job) | ✅ (concurrency primitives) | — | — |
 | miri (pure-logic modules) | ✅ nightly job | — | — |
 | wasm32 check | ✅ if wasm claimed | — | — |
+| thumbv7em check (`embedded: true`) | ✅ if no_std claimed | ✅ if no_std claimed | ✅ if no_std claimed |
+
+## no_std / Embedded
+
+Leaf crates claim `no_std` when they build core-only (or core + `alloc`)
+with `--no-default-features`. The embedded gate is the shared workflow's
+`embedded: true` input:
+
+```yaml
+jobs:
+  quality:
+    uses: WyattAu/engineering-standards/.github/workflows/rust-kit.yml@main
+    with:
+      tier: c
+      embedded: true   # adds cargo check --target thumbv7em-none-eabihf --no-default-features
+```
+
+Pattern: `#![cfg_attr(not(feature = "std"), no_std)]` + `extern crate alloc`,
+with a `std` feature (default-on) for std-bound surface area — gate whole
+modules behind it rather than silently degrading behavior (e.g. webhookkit
+gates timestamp/replay/Stripe verification, which need a wall clock or std
+mutex). `alloc` has no `HashMap`; use `hashbrown` with `default-hasher`.
+Targets without 64-bit atomics (thumbv7em, Armv7-M) cannot use
+`AtomicI64`; use `core` atomics on 64-bit-capable targets and a
+critical-section fallback elsewhere (see chronoshift's `MockClock`).
+
+### Audit results (2026-09-06)
+
+| Crate | Status | Notes |
+|---|---|---|
+| validkit | ✅ ready | already `no_std`; passes thumbv7em check |
+| error-codes (errcode) | ✅ ready | already `no_std` |
+| error-classify (app-error) | ✅ ready | already `no_std` |
+| typed-id | ✅ ready | already `no_std` |
+| chronoshift (clock) | ✅ fixed | time → `std` feature gates `SystemClock`; MockClock uses critical-section fallback on non-64-bit-atomic targets |
+| delta-kit | ✅ fixed | alloc-only fixes (`hashbrown::HashMap`); zstd strategy stays std-gated (`zstd` implies `std`) |
+| webhookkit | ✅ fixed | stateless verify/parse core-only; timestamp/replay/stripe gated behind `std` |
+| http-error (http-errors) | ✅ fixed | pure `#![no_std]` + alloc; unused deps removed |
+| json-envelope | ✅ fixed | pure `#![no_std]` + alloc; `axum` adapter now a real optional dep |
+| simd-tokenizer | ✅ fixed | SWAR estimator core-only; `tiktoken` implies `std` |
+| model-router | ⚠ std-bound | `std::sync::Mutex` in `CostTracker` — fixable via spin/critical-section lock swap (follow-up) |
+| cas-kit | ⚠ std-bound | genuinely std-bound: filesystem blob store (`fs`, `Path`, `tempfile`) |
 
 ## Policies
 

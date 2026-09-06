@@ -46,6 +46,11 @@ on:
         required: false
         default: false
         type: boolean
+      embedded:
+        description: "Add thumbv7em-none-eabihf check (no_std / embedded tier)"
+        required: false
+        default: false
+        type: boolean
       package:
         description: "Restrict to one crate in a workspace (cargo -p <name>)"
         required: false
@@ -202,6 +207,21 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: wasm32 check
         run: cargo check --locked --target wasm32-unknown-unknown --no-default-features ${{ env.PKG_FLAG }}
+
+  embedded:
+    if: ${{ inputs.embedded }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: thumbv7em-none-eabihf
+      - uses: Swatinem/rust-cache@v2
+      - name: embedded check (thumbv7em-none-eabihf, no-default-features)
+        # no_std tier: the crate must build core-only (extern crate alloc
+        # allowed) for the Cortex-M4F target. Crates that pass this carry
+        # `embedded: true` in their ci.yml call.
+        run: cargo check --locked --target thumbv7em-none-eabihf --no-default-features ${{ env.PKG_FLAG }}
 
   bench:
     if: ${{ inputs.bench-regression }}
