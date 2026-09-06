@@ -50,7 +50,7 @@ locally 2026-09-06.
 | barbican | 10 | 7 | 0 | 3 | 100% | 0 | Extractor fn-bodies unviable-by-construction; suite already total. |
 | chronoshift (clock) | 49 | 45 | 0 | 4 | 100% | 0 | Clean — mock/real clock seams fully observed. |
 | healthkit | 19 | 15 | 0 | 4 | 100% | 0 | Clean — axum route + registry tests kill everything viable. |
-| salting | 60 | 49 | 0 (11 untested) | 0 | 100% of tested (49/49) | 1 | `low_memory()` preset was roundtrip-tested only — Default-replacement invisible; now pinned. `error.rs` (11 mutants) beyond the 25-min cap — untested, first queue candidate. |
+| salting | 60 | 51 | 0 (9 untested) | 0 | 100% of tested (51/51) | 2 | `low_memory()` preset was roundtrip-tested only — Default-replacement invisible; zxcvbn score-bucket guards had no boundary pins. 9 `strength.rs` mutants untested under the 25-min cap (run interrupted); `error.rs` generates no mutants (pure thiserror enum). |
 | breaker | 89 | 58 | 1 equiv | 14 | 98.3% (58/59) | 2 | `failure_count()` getter observable only through the metrics histogram — killing test captures it with a recording recorder; `lock.rs` cfg-shim excluded (loom/kani harnesses). |
 | validkit | 291 | 178 | 8 equiv (+41 cfg-unviable) | 64 | 95.7% (178/186) | ~78 | Validator-internal branches were barely observed: accessor roundtrips, `is_valid_*` helpers, length boundaries, and per-character-class inputs were missing; CR/LF guards masked by downstream validation are pinned by *message-asserting* tests. |
 
@@ -74,9 +74,9 @@ money, otelkit. Same `mutation.yml` (header: *baseline pending*). Order of
 attack when compute allows: one crate per night, smallest `src/` first;
 budget 25 min/crate, narrow by `--file` on timeout.
 
-Also queued: salting `src/error.rs` completion pass (11 mutants), and a
-`--no-default-features` second pass over validkit fallback branches to
-convert the 41 cfg-unviable into tested kills.
+Also queued: salting `strength.rs` completion pass (9 mutants untested under
+the cap), and a `--no-default-features` second pass over validkit fallback
+branches to convert the 41 cfg-unviable into tested kills.
 
 ## Running locally
 
