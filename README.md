@@ -136,12 +136,35 @@ jobs:
 Then delete repo-local duplicated CI. Repo-specific jobs (looms, wasm,
 benches) live alongside the shared call.
 
+### Node/TS repositories (astro-solidjs, starlight, ts-package, ...)
+
+Proportionate gate matrix via the shared Node workflow — locked install,
+typecheck, lint, build, test:
+
+```yaml
+# .github/workflows/ci.yml in your Node/TS repo:
+jobs:
+  quality:
+    uses: WyattAu/engineering-standards/.github/workflows/node-ci.yml@main
+    with:
+      package-manager: bun   # bun | npm
+```
+
+Each script the flags enable (`typecheck`, `lint`, `build`, `test`) must exist
+in `package.json`. Commit your lockfile (`bun.lock` / `package-lock.json`) so
+the frozen install stays reproducible. `templates/dependabot-npm.yml` covers
+the npm ecosystem.
+
+Scaffolds born green: `forgeyard init` (WyattAu/forgeyard) produces repos that
+pass this matrix on first push.
+
 ## Repo Layout
 
-- `.github/workflows/rust-kit.yml` — shared reusable CI (the gate matrix)
+- `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
+- `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
 - `templates/deny.toml` — dependency governance config
 - `templates/SECURITY.md`, `templates/THREAT-MODEL.md`,
   `templates/REQUIREMENTS.md`, `templates/CHANGELOG.md`
-- `templates/dependabot.yml`
+- `templates/dependabot.yml` (cargo), `templates/dependabot-npm.yml` (npm)
 - `scripts/release.sh` — release automation
 - `scripts/apply-standards.sh` — bulk-apply templates to a kit repo

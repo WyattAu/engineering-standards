@@ -1,0 +1,98 @@
+# WyattAu shared Node/TS CI — the Node gate matrix (proportionate to rust-kit.yml).
+# Called from each Node/TS repo (astro-solidjs, starlight, ts-package, ...):
+#   jobs:
+#     quality:
+#       uses: WyattAu/engineering-standards/.github/workflows/node-ci.yml@main
+#       with:
+#         package-manager: bun   # bun | npm
+#
+# Gates: locked install → typecheck → lint → build → test.
+# Repo-specific jobs (deploy, e2e, previews) live alongside the shared call.
+
+name: quality
+
+on:
+  workflow_call:
+    inputs:
+      package-manager:
+        description: "bun | npm"
+        required: false
+        default: "bun"
+        type: string
+      node-version:
+        description: "Node version (npm path)"
+        required: false
+        default: "22"
+        type: string
+      typecheck:
+        description: "Run `typecheck` script"
+        required: false
+        default: true
+        type: boolean
+      lint:
+        description: "Run `lint` script"
+        required: false
+        default: true
+        type: boolean
+      build:
+        description: "Run `build` script"
+        required: false
+        default: true
+        type: boolean
+      test:
+        description: "Run `test` script"
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup (bun)
+        if: ${{ inputs.package-manager == 'bun' }}
+        uses: oven-sh/setup-bun@v2
+
+      - name: setup (npm)
+        if: ${{ inputs.package-manager == 'npm' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: install (bun, frozen lockfile)
+        if: ${{ inputs.package-manager == 'bun' }}
+        run: |
+          if [ -f bun.lock ] || [ -f bun.lockb ]; then
+            bun install --frozen-lockfile
+          else
+            echo "::warning::no bun.lock committed — commit it so installs stay reproducible"
+            bun install
+          fi
+
+      - name: install (npm, ci)
+        if: ${{ inputs.package-manager == 'npm' }}
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            echo "::warning::no package-lock.json committed — commit it so installs stay reproducible"
+            npm install
+          fi
+
+      - name: typecheck
+        if: ${{ inputs.typecheck }}
+        run: ${{ inputs.package-manager == 'bun' && 'bun run' || 'npm run' }} typecheck
+
+      - name: lint
+        if: ${{ inputs.lint }}
+        run: ${{ inputs.package-manager == 'bun' && 'bun run' || 'npm run' }} lint
+
+      - name: build
+        if: ${{ inputs.build }}
+        run: ${{ inputs.package-manager == 'bun' && 'bun run' || 'npm run' }} build
+
+      - name: test
+        if: ${{ inputs.test }}
+        run: ${{ inputs.package-manager == 'bun' && 'bun run' || 'npm run' }} test
