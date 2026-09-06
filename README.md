@@ -46,6 +46,22 @@ jobs:
 - MSRV floor: **1.85**. Exceptions require an entry below:
   - `tantivy-helper` — 1.86 (tantivy 0.26 requirement)
 
+#### Release provenance
+
+Releases carry a provenance note so any published artifact can be traced to
+source commit, toolchain, and artifact hash:
+
+- `scripts/verify-reproducible.sh <crate-dir>` — two from-scratch
+  `--release --locked` builds through identical sanitized paths, compared by
+  SHA-256 of every artifact. Results in `REPRODUCIBILITY.md`. (Caveat:
+  verifies same-machine determinism, not cross-machine reproducibility.)
+- `.github/workflows/attest.yml` — workflow_dispatch per crate: builds from
+  the kit repo ref, emits `SHA256SUMS` + `provenance/<crate>-<version>.json`
+  (`{crate, version, commit, toolchain, hash, ...}`), commits them here, and
+  attempts GitHub build attestation (best-effort; needs id-token perms).
+- A release should only be published once its provenance note exists for the
+  tagged commit.
+
 ### 2. Panics & Error Handling (defence-grade failure modes)
 
 - `unwrap()` and bare `expect()` are **denied in non-test code** (Tier A via
@@ -101,7 +117,11 @@ jobs:
 
 - `deny.toml` in every repo: advisories `deny`, licenses allow-list
   (MIT/Apache-2.0/BSD/ISC/Unicode/Zlib), bans on duplicate versions (warn).
-- dependabot weekly. cargo-vet audits for Tier A (pilot).
+- dependabot weekly. cargo-vet audits rolled out to all Tier A repos
+  (`supply-chain/` bootstrapped from crates.io/registry peer audits — mozilla,
+  google, isrg, bytecode-alliance, embark-studios, fermyon, zcash; per-repo
+  `vet.yml` runs weekly + on PR, non-blocking until exemption backlog is
+  burned down).
 - Vendoring is a deliberate act: vendored copies get a drift-check script
   (see ecom-engine `scripts/check_vendor_drift.sh` pattern).
 
@@ -162,9 +182,13 @@ pass this matrix on first push.
 
 - `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
 - `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
+- `.github/workflows/attest.yml` — per-crate release provenance (dispatch)
 - `templates/deny.toml` — dependency governance config
 - `templates/SECURITY.md`, `templates/THREAT-MODEL.md`,
   `templates/REQUIREMENTS.md`, `templates/CHANGELOG.md`
 - `templates/dependabot.yml` (cargo), `templates/dependabot-npm.yml` (npm)
 - `scripts/release.sh` — release automation
+- `scripts/verify-reproducible.sh` — same-machine build determinism check
+- `REPRODUCIBILITY.md` — reproducibility method, caveat, and results
+- `provenance/` — committed release provenance notes + SHA256SUMS
 - `scripts/apply-standards.sh` — bulk-apply templates to a kit repo

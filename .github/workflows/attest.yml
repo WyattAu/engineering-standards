@@ -1,0 +1,116 @@
+# Release provenance — per-crate build attestation.
+# Trigger manually per crate (workflow_dispatch): builds the crate's repo
+# from its default branch with --locked, generates SHA256SUMS and a
+# provenance note, and commits both to provenance/ in this repo.
+#
+# GitHub artifact attestations (actions/attest-build-provenance) are attempted
+# opportunistically — they require id-token/attestations write, which some
+# repos deny. The committed provenance/ note is the source of record either
+# way. Reproducibility context: see REPRODUCIBILITY.md (hashes are
+# same-machine deterministic; CI hashes are recorded per-build).
+name: attest
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: "Kit repo under WyattAu/ (e.g. salting)"
+        required: true
+        type: string
+      ref:
+        description: "Git ref of the kit repo (default: main)"
+        required: false
+        default: main
+        type: string
+
+permissions:
+  contents: write # commit provenance/ + SHA256SUMS to this repo
+  id-token: write # opportunistic GitHub artifact attestation
+  attestations: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout engineering-standards (provenance store)
+        uses: actions/checkout@v4
+        with:
+          path: eng
+
+      - name: checkout kit repo
+        uses: actions/checkout@v4
+        with:
+          repository: WyattAu/${{ inputs.repo }}
+          ref: ${{ inputs.ref }}
+          path: kit
+          fetch-depth: 1
+
+      - uses: dtolnay/rust-toolchain@stable
+        id: toolchain
+
+      - name: build (--release --locked)
+        working-directory: kit
+        run: cargo build --release --locked
+
+      - name: collect artifact hashes
+        id: hashes
+        working-directory: kit
+        run: |
+          set -euo pipefail
+          crate="${{ inputs.repo }}"
+          version=$(grep -m1 '^version = ' Cargo.toml | sed 's/.*"\(.*\)".*/\1/')
+          commit=$(git rev-parse HEAD)
+          toolchain="${{ steps.toolchain.outputs.version }}"
+          primary=$(find target/release -maxdepth 1 -type f ! -name '*.d' \
+            ! -name 'CACHEDIR.TAG' ! -name '.cargo-lock' | sort)
+          primary_hash=$(sha256sum $primary | sha256sum | awk '{print $1}')
+          find target/release -type f ! -name '*.d' ! -name 'CACHEDIR.TAG' \
+            ! -name '.cargo-lock' -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+          {
+            echo "crate=$crate"
+            echo "version=$version"
+            echo "commit=$commit"
+            echo "toolchain=$toolchain"
+            echo "primary_hash=$primary_hash"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: write provenance note
+        run: |
+          set -euo pipefail
+          mkdir -p eng/provenance
+          f="eng/provenance/${{ inputs.repo }}-${{ steps.hashes.outputs.version }}.json"
+          {
+            echo '{'
+            echo "  \"crate\": \"${{ steps.hashes.outputs.crate }}\","
+            echo "  \"version\": \"${{ steps.hashes.outputs.version }}\","
+            echo "  \"commit\": \"${{ steps.hashes.outputs.commit }}\","
+            echo "  \"repo\": \"${{ inputs.repo }}\","
+            echo "  \"ref\": \"${{ inputs.ref }}\","
+            echo "  \"toolchain\": \"${{ steps.hashes.outputs.toolchain }}\","
+            echo "  \"hash\": \"${{ steps.hashes.outputs.primary_hash }}\","
+            echo "  \"built\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
+            echo "  \"runner\": \"${{ runner.os }}/${{ runner.arch }}\","
+            echo '  "flags": "--release --locked"'
+            echo '}'
+          } > "$f"
+          cp kit/SHA256SUMS "eng/provenance/${{ inputs.repo }}-${{ steps.hashes.outputs.version }}.SHA256SUMS"
+          cat "$f"
+
+      - name: GitHub artifact attestation (best-effort)
+        continue-on-error: true
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: kit/target/release
+
+      - name: commit provenance to engineering-standards
+        working-directory: eng
+        run: |
+          set -euo pipefail
+          git config user.name "provenance-bot"
+          git config user.email "provenance-bot@users.noreply.github.com"
+          git add provenance/
+          git commit -m "chore(provenance): ${{ inputs.repo }} ${{ steps.hashes.outputs.version }} @ ${{ steps.hashes.outputs.commit }}"
+          git push
