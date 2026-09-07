@@ -1,0 +1,24 @@
+/* Amoebic UI Design System — Organic radii, gradients, easing
+ * (copied from pediment tokens; @theme → :root) */
+
+:root {
+  /* Organic radii */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --radius-organic: 42% 58% 70% 30% / 45% 45% 55% 55%;
+
+  /* Easing curves */
+  --ease-organic: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-organic-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-organic-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-brutal: cubic-bezier(0.9, 0, 0.1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Duration tiers */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+}

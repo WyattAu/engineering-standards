@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const nav = [
+  { href: "/", label: "Overview" },
+  { href: "/crates/", label: "Crates" },
+  { href: "/standards/", label: "Standards" },
+  { href: "/verification/", label: "Verification" },
+];
+
+const currentPath = Astro.url.pathname.replace(/index\.html$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <nav class="site-nav">
+      <div class="container">
+        <a class="brand" href="/">kits<span>.</span>wyattau<span>.</span>dev</a>
+        <div class="nav-links">
+          {
+            nav.map((item) => (
+              <a
+                href={item.href}
+                aria-current={currentPath === item.href ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </nav>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          WyattAu kit ecosystem — engineering standards at
+          <a href="https://github.com/WyattAu/engineering-standards">WyattAu/engineering-standards</a>.
+        </p>
+        <p>
+          <a href="https://github.com/WyattAu/WyattAu/blob/main/KITS.md">KITS.md</a>
+          ·
+          <a href="https://github.com/WyattAu/crdt-demo">crdt-demo</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

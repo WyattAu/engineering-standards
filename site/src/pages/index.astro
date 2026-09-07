@@ -1,0 +1,141 @@
+---
+import Base from "../layouts/Base.astro";
+import { KITS, LAYERS, LAYER_DESCRIPTIONS, stats } from "../lib/kits.ts";
+
+const verificationBadges = ["fuzz", "loom", "Kani", "DST", "Quint"];
+
+const shipped = [
+  {
+    title: "CI gate matrix",
+    body: "One shared reusable workflow: locked builds, tests, clippy pedantic, fmt, llvm-cov thresholds by tier, loom + miri for concurrency crates.",
+  },
+  {
+    title: "cargo-deny",
+    body: "Advisories denied, license allow-list (MIT/Apache-2.0/BSD/ISC/Unicode/Zlib), duplicate-version bans, weekly cargo-audit.",
+  },
+  {
+    title: "cargo-semver-checks",
+    body: "Runs on every version diff. A breaking change without a matching version bump fails CI — no exceptions, pre-1.0 included.",
+  },
+  {
+    title: "Mutation scoring",
+    body: "cargo-mutants weekly on every kit. Baselines 92.3–100% viable-kill so far; gates graduate to blocking once stable.",
+  },
+  {
+    title: "SLSA-style provenance",
+    body: "Releases carry commit, toolchain, and SHA-256 artifact hashes. Two from-scratch sanitized builds verified byte-identical (REPRODUCIBILITY.md).",
+  },
+  {
+    title: "Measured performance",
+    body: "Latency-relevant crates publish P50 numbers and allocation profiles in their READMEs. Claims without numbers are removed.",
+  },
+];
+
+const links = [
+  {
+    href: "https://github.com/WyattAu/engineering-standards",
+    title: "engineering-standards",
+    body: "The gate matrix, shared CI workflows, templates, and policies behind every kit.",
+  },
+  {
+    href: "https://github.com/WyattAu/WyattAu/blob/main/KITS.md",
+    title: "KITS.md",
+    body: "The live compatibility matrix this registry is generated from — versions verified against vendored copies.",
+  },
+  {
+    href: "https://github.com/WyattAu/crdt-demo",
+    title: "crdt-demo",
+    body: "Live demo of crdts-kit's RGA replicated string — collaborative text over WebSockets, deployed on Fly.io.",
+  },
+];
+---
+
+<Base
+  title="WyattAu Kit Ecosystem — production-grade Rust crates"
+  description="65+ production-grade Rust crates across four layers, every one behind a shared engineering gate matrix: fuzzing, loom, Kani, mutation scoring, cargo-deny, semver checks, and SLSA-style provenance."
+>
+  <section class="hero">
+    <p class="eyebrow">Kit Registry</p>
+    <h1>WyattAu Kit Ecosystem — <em>65+</em> production-grade Rust crates</h1>
+    <p class="lede">
+      Leaf utilities, core primitives, service infrastructure, and application
+      frameworks — every crate published under one engineering standard, every
+      release traceable to source, toolchain, and artifact hash.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="num">{stats.crates}</div>
+        <div class="label">crates in the registry (KITS.md)</div>
+      </div>
+      <div class="stat">
+        <div class="num">{stats.stable}</div>
+        <div class="label">crates at 1.0+ — all pre-1.0, semver-gated</div>
+      </div>
+      <div class="stat">
+        <div class="num">56</div>
+        <div class="label">repos behind the shared CI gate matrix</div>
+      </div>
+    </div>
+
+    <div class="badges" aria-label="Verification methods">
+      <span class="badge accent">verified by</span>
+      {verificationBadges.map((b) => <span class="badge">{b}</span>)}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>What every crate ships with</h2>
+    <p class="lede">
+      The gate matrix is not aspirational documentation — it is a shared
+      reusable CI workflow each repo calls with a single
+      <code>uses:</code> block. Tier A (security-critical) adds pedantic
+      lints, loom models, and miri.
+    </p>
+    <div class="cards">
+      {
+        shipped.map((item) => (
+          <div class="card">
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>The four layers</h2>
+    <div class="cards">
+      {
+        LAYERS.map((layer) => (
+          <div class="card">
+            <div class="card-head">
+              <h3>{layer}</h3>
+              <span class="layer-tag {layer.toLowerCase()}">{stats.byLayer[layer]} crates</span>
+            </div>
+            <p>{LAYER_DESCRIPTIONS[layer]}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="footnote">
+      Browse the full matrix on the
+      <a href="/crates/">crates page</a> — searchable, filterable by layer.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Links</h2>
+    <div class="cards">
+      {
+        links.map((link) => (
+          <a class="card" href={link.href} style="color: inherit;">
+            <h3>{link.title} ↗</h3>
+            <p>{link.body}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Base>

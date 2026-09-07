@@ -1,0 +1,29 @@
+/* Spatial Materialism Design System — Elevation, Shadows, Z-Index, Spacing
+ * (copied from pediment tokens; @theme → :root) */
+
+:root {
+  /* Elevation tiers (single light source, top-left) */
+  --shadow-elevation-0: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(var(--accent-rgb, 0, 229, 255), 0.3);
+
+  /* Z-index layers */
+  --z-bg: 0;
+  --z-content: 10;
+  --z-nav: 100;
+  --z-overlay: 500;
+  --z-modal: 1000;
+
+  /* Fluid spacing */
+  --space-fluid-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-fluid-sm: clamp(0.5rem, 1vw, 1rem);
+  --space-fluid-md: clamp(1rem, 2vw, 2rem);
+  --space-fluid-lg: clamp(2rem, 4vw, 4rem);
+  --space-fluid-xl: clamp(4rem, 8vw, 8rem);
+
+  /* Max width */
+  --max-width: 1200px;
+}

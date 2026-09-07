@@ -1,0 +1,16 @@
+/* Midnight Navy Theme — Default dark
+ * (copied from pediment tokens; applied on :root so dark is the site
+ * default, and kept on [data-theme] for compatibility with the
+ * pediment theme switcher pattern) */
+
+:root,
+[data-theme="midnight-navy"] {
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent: #00e5ff;
+  --accent-warm: #ff6b35;
+  --border: #222222;
+}

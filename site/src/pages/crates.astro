@@ -1,0 +1,123 @@
+---
+import Base from "../layouts/Base.astro";
+import { KITS, LAYERS, LAYER_DESCRIPTIONS, stats } from "../lib/kits.ts";
+---
+
+<Base
+  title="Crates — WyattAu Kit Registry"
+  description="The full WyattAu kit compatibility matrix: {stats.crates} Rust crates across L0–L3, with versions, purposes, consumers, and optional features. Searchable and filterable."
+>
+  <section class="hero">
+    <p class="eyebrow">Compatibility Matrix</p>
+    <h1>Crates</h1>
+    <p class="lede">
+      All crates are published on crates.io under the WyattAu ecosystem.
+      Versions are read from each repo's <code>Cargo.toml</code> and verified
+      against vendored copies in <code>ecom-engine/crates/vendor/</code>.
+      Repo directory names may differ from crate names (shown in parentheses).
+    </p>
+  </section>
+
+  <div class="filter-bar" role="search">
+    <input
+      id="kit-filter"
+      type="search"
+      placeholder="Filter by name, purpose, consumer, feature…"
+      autocomplete="off"
+      aria-label="Filter crates"
+    />
+    <button class="layer-btn" data-layer="all" aria-pressed="true">All</button>
+    {
+      LAYERS.map((layer) => (
+        <button class="layer-btn" data-layer={layer} aria-pressed="false" title={LAYER_DESCRIPTIONS[layer]}>
+          {layer}
+        </button>
+      ))
+    }
+    <span class="result-count" id="result-count" role="status"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="kit-table">
+      <thead>
+        <tr>
+          <th scope="col">Crate</th>
+          <th scope="col">Version</th>
+          <th scope="col">Layer</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Consumers</th>
+          <th scope="col">Optional features of note</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          KITS.map((kit) => (
+            <tr data-layer={kit.layer} data-search={`${kit.name} ${kit.repo ?? ""} ${kit.version} ${kit.layer} ${kit.purpose} ${kit.consumers.join(" ")} ${kit.features ?? ""}`.toLowerCase()}>
+              <td>
+                <span class="crate-name">{kit.name}</span>
+                {kit.repo && <span class="footnote"> ({kit.repo})</span>}
+              </td>
+              <td><span class="ver">{kit.version}</span></td>
+              <td><span class="layer-tag {kit.layer.toLowerCase()}">{kit.layer}</span></td>
+              <td>{kit.purpose}</td>
+              <td>{kit.consumers.length ? kit.consumers.join(", ") : "—"}</td>
+              <td>{kit.features ?? "—"}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="footnote">
+    Source:
+    <a href="https://github.com/WyattAu/WyattAu/blob/main/KITS.md">KITS.md</a>
+    — {stats.byLayer.L0} L0 · {stats.byLayer.L1} L1 · {stats.byLayer.L2} L2 · {stats.byLayer.L3} L3.
+    Vendored kits (blobkit, geo-kit, media-kit, decimal-money, webhookkit,
+    healthkit, loop-retry) are drift-checked weekly against crates.io.
+  </p>
+</Base>
+
+<script>
+  const input = document.getElementById("kit-filter") as HTMLInputElement;
+  const count = document.getElementById("result-count")!;
+  const rows = Array.from(
+    document.querySelectorAll<HTMLTableRowElement>("#kit-table tbody tr"),
+  );
+  const buttons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".layer-btn"),
+  );
+
+  let query = "";
+  let layer = "all";
+
+  function apply() {
+    let visible = 0;
+    for (const row of rows) {
+      const matchesLayer = layer === "all" || row.dataset.layer === layer;
+      const matchesQuery =
+        query === "" || (row.dataset.search ?? "").includes(query);
+      const show = matchesLayer && matchesQuery;
+      row.hidden = !show;
+      if (show) visible++;
+    }
+    count.textContent = `${visible}/${rows.length} crates`;
+  }
+
+  input.addEventListener("input", () => {
+    query = input.value.trim().toLowerCase();
+    apply();
+  });
+
+  for (const button of buttons) {
+    button.addEventListener("click", () => {
+      layer = button.dataset.layer ?? "all";
+      for (const b of buttons) {
+        b.setAttribute("aria-pressed", String(b === button));
+      }
+      apply();
+    });
+  }
+
+  apply();
+</script>

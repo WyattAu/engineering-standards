@@ -1,0 +1,201 @@
+---
+import Base from "../layouts/Base.astro";
+
+const gates = [
+  { gate: "build --locked (all-features + no-default-features)", a: "yes", b: "yes", c: "yes" },
+  { gate: "test --all-features", a: "yes", b: "yes", c: "yes" },
+  { gate: "clippy -D warnings", a: "yes + pedantic", b: "yes", c: "yes" },
+  { gate: "unwrap_used / indexing_used / panic denied", a: "yes", b: "—", c: "—" },
+  { gate: "fmt --check", a: "yes", b: "yes", c: "yes" },
+  { gate: "cargo-deny (advisories / licenses / bans)", a: "yes", b: "yes", c: "yes" },
+  { gate: "cargo-audit (scheduled weekly)", a: "yes", b: "yes", c: "yes" },
+  { gate: "llvm-cov", a: "≥90%", b: "≥80%", c: "≥70% (informational until 2026-10)" },
+  { gate: "cargo-semver-checks", a: "on version diff", b: "yes", c: "yes" },
+  { gate: "criterion baseline regression", a: "yes (latency-relevant)", b: "optional", c: "—" },
+  { gate: "loom (--cfg loom job)", a: "yes (concurrency primitives)", b: "—", c: "—" },
+  { gate: "miri (pure-logic modules)", a: "nightly job", b: "—", c: "—" },
+  { gate: "wasm32 check", a: "if wasm claimed", b: "—", c: "—" },
+  { gate: "thumbv7em check (embedded: true)", a: "if no_std claimed", b: "if no_std claimed", c: "if no_std claimed" },
+];
+
+const tiers = [
+  {
+    name: "Tier A — Security-critical / load-bearing (14)",
+    body: "tokenkit, cryptkit, salting, webauthn-kit, multi-chain-wallet, barbican, validkit, breaker, throttle-kit, ws-kit, blobkit, decimal-money, healthkit, otelkit",
+  },
+  {
+    name: "Tier B — Flagship infra (10)",
+    body: "actor-kit, cas-kit, eventbus-kit, cache-pal, fetchkit, media-kit, docs-pipeline, axum-stack, geo-kit, mailkit",
+  },
+  {
+    name: "Tier C — Long tail",
+    body: "Everything else — same core gates, lower coverage threshold (informational until 2026-10).",
+  },
+];
+
+const policies = [
+  {
+    name: "Versioning & Release",
+    body: "Semver everywhere; pre-1.0 breaking = minor bump. cargo-semver-checks on every version diff — a breaking change without a bump fails CI. No publish without a green gate matrix, CHANGELOG entry, and matching git tag. MSRV floor 1.85. Releases carry provenance: SHA256SUMS + per-crate provenance JSON (commit, toolchain, hash), committed to provenance/.",
+  },
+  {
+    name: "Panics & Error Handling",
+    body: "unwrap() and bare expect() denied in non-test code. Legitimate invariants use .expect(\"INVARIANT: …\") with justification. Every public fallible function returns Result with a crate-owned thiserror type; documented failure modes are part of the API contract (#[deny(missing_docs)] ecosystem-wide).",
+  },
+  {
+    name: "Concurrency Verification",
+    body: "Shared mutable state uses loom-compatible primitives behind #[cfg(loom)] shims or documented CAS loops. Tier A concurrency primitives carry loom models — minimum 2 interleaving scenarios per invariant, proven non-vacuous (a seeded race must be caught).",
+  },
+  {
+    name: "Input Parsing",
+    body: "Every public function taking &str/&[u8] from an untrusted source gets a cargo-fuzz harness asserting Err-not-panic. Harnesses cap input size and resource amplification; CI smoke-runs them on a short budget.",
+  },
+  {
+    name: "Performance",
+    body: "Latency-relevant crates publish measured P50/P99 in their README — claims without numbers are removed. Criterion baselines committed on main; CI fails on >20% P99 regression. Hot paths allocation-profiled (dhat); zero-alloc claims require proof. Decision paths use BTreeMap/total-order types, never HashMap iteration order.",
+  },
+  {
+    name: "Security",
+    body: "Tier A crypto/auth subset carries SECURITY.md, THREAT-MODEL.md (STRIDE per public surface), REQUIREMENTS.md with numbered REQ-<crate>-NNN IDs, doc-comment REQ- traceability, and constant-time audit notes. All crates: SECURITY.md with a disclosure contact.",
+  },
+  {
+    name: "Dependencies",
+    body: "deny.toml in every repo: advisories deny, license allow-list, duplicate-version bans. Weekly dependabot + cargo-audit. cargo-vet audits rolling out to all Tier A repos (supply-chain/ bootstrapped from mozilla, google, isrg, bytecode-alliance, embark-studios, fermyon, zcash peer audits).",
+  },
+  {
+    name: "Documentation",
+    body: "#![deny(missing_docs)] everywhere; every public item documented; doc examples must compile (doctests are tests). README minimum: value prop, install, working example, feature table, perf numbers if latency-relevant, license.",
+  },
+];
+
+const workflowLinks = [
+  {
+    href: "https://github.com/WyattAu/engineering-standards/blob/main/.github/workflows/rust-kit.yml",
+    label: ".github/workflows/rust-kit.yml",
+    body: "Shared reusable CI — the Rust gate matrix (tier: a | b | c, embedded: true).",
+  },
+  {
+    href: "https://github.com/WyattAu/engineering-standards/blob/main/.github/workflows/node-ci.yml",
+    label: ".github/workflows/node-ci.yml",
+    body: "Shared reusable CI for Node/TS repos — locked install, typecheck, lint, build, test.",
+  },
+  {
+    href: "https://github.com/WyattAu/engineering-standards/blob/main/.github/workflows/attest.yml",
+    label: ".github/workflows/attest.yml",
+    body: "Per-crate release provenance: SHA256SUMS + provenance JSON, GitHub build attestation.",
+  },
+  {
+    href: "https://github.com/WyattAu/engineering-standards/tree/main/templates",
+    label: "templates/",
+    body: "deny.toml, SECURITY.md, THREAT-MODEL.md, REQUIREMENTS.md, CHANGELOG.md, dependabot.yml, dependabot-npm.yml.",
+  },
+  {
+    href: "https://github.com/WyattAu/engineering-standards/tree/main/scripts",
+    label: "scripts/",
+    body: "release.sh, verify-reproducible.sh, apply-standards.sh — release automation and bulk template apply.",
+  },
+  {
+    href: "https://github.com/WyattAu/engineering-standards/blob/main/REPRODUCIBILITY.md",
+    label: "REPRODUCIBILITY.md",
+    body: "Reproducible-build method, caveat, and per-crate results.",
+  },
+];
+---
+
+<Base
+  title="Engineering Standards — WyattAu Kit Ecosystem"
+  description="The gate matrix behind every WyattAu kit: tiered CI gates, semver discipline, fuzz policy, concurrency verification, supply-chain governance, and release provenance."
+>
+  <section class="hero">
+    <p class="eyebrow">Engineering Standards</p>
+    <h1>The Gate Matrix</h1>
+    <p class="lede">
+      Production engineering standards modeled on FAANG platform practices,
+      defence-grade traceability, and ECN/HFT latency discipline. Every kit
+      repository runs this matrix via one shared reusable workflow:
+    </p>
+    <pre><code>jobs:
+  quality:
+    uses: WyattAu/engineering-standards/.github/workflows/rust-kit.yml@main
+    with:
+      tier: a        # a | b | c — selects coverage threshold + lint depth</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>Matrix</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Gate</th>
+            <th scope="col">Tier A</th>
+            <th scope="col">Tier B</th>
+            <th scope="col">Tier C</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            gates.map((g) => (
+              <tr>
+                <td><span class="mono">{g.gate}</span></td>
+                <td>{g.a}</td>
+                <td>{g.b}</td>
+                <td>{g.c}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Tier definitions</h2>
+    <div class="cards">
+      {
+        tiers.map((tier) => (
+          <div class="card">
+            <h3>{tier.name}</h3>
+            <p>{tier.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Policies</h2>
+    <dl class="policies">
+      {
+        policies.map((policy, i) => (
+          <>
+            <dt>
+              {i + 1}. {policy.name}
+            </dt>
+            <dd>{policy.body}</dd>
+          </>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section">
+    <h2>Workflows &amp; templates</h2>
+    <div class="cards">
+      {
+        workflowLinks.map((link) => (
+          <a class="card" href={link.href} style="color: inherit;">
+            <h3 class="mono" style="font-size: var(--text-sm);">{link.label} ↗</h3>
+            <p>{link.body}</p>
+          </a>
+        ))
+      }
+    </div>
+    <p class="footnote">
+      Adopting: add the shared <code>uses:</code> block to your kit's
+      <code>ci.yml</code>, delete repo-local duplicated CI. Repo-specific jobs
+      (looms, wasm, benches) live alongside the shared call. Scaffolds born
+      green via <a href="https://github.com/WyattAu/forgeyard">forgeyard init</a>.
+    </p>
+  </section>
+</Base>

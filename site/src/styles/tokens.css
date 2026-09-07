@@ -1,0 +1,11 @@
+/*
+ * Pediment design tokens — copied from
+ * github.com/WyattAu/pediment/packages/tokens/src/
+ * Adapted for standalone use: `@theme` blocks flattened to `:root`
+ * so the custom properties resolve without a Tailwind build step.
+ */
+@import "./tokens/spatial-materialism.css";
+@import "./tokens/amoebic-ui.css";
+@import "./tokens/typography.css";
+@import "./tokens/animations.css";
+@import "./tokens/midnight-navy.css";
