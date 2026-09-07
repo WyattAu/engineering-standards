@@ -25,7 +25,7 @@ export const KITS: Kit[] = [
   // ---- L0 — Leaf utilities ----
   {
     name: "salting",
-    version: "0.2.0",
+    version: "1.0.0",
     layer: "L0",
     purpose: "Deterministic salt derivation for keyed hashing",
     consumers: ["suture", "Tachyon", "crawlkit", "CivitForge", "clawdius"],
@@ -33,7 +33,7 @@ export const KITS: Kit[] = [
   {
     name: "error-codes",
     repo: "errcode",
-    version: "0.1.0",
+    version: "1.0.0",
     layer: "L0",
     purpose: "Stable numeric/error-code registry",
     consumers: ["error-classify"],
@@ -48,7 +48,7 @@ export const KITS: Kit[] = [
   {
     name: "chronoshift",
     repo: "clock",
-    version: "0.2.0",
+    version: "1.0.0",
     layer: "L0",
     purpose: "Time abstractions and clock injection",
     consumers: [],
@@ -64,14 +64,14 @@ export const KITS: Kit[] = [
   },
   {
     name: "validkit",
-    version: "0.1.0",
+    version: "1.0.0",
     layer: "L0",
     purpose: "Composable input validation primitives",
     consumers: ["ferro", "Tachyon", "CivitForge", "EvergreenShims"],
   },
   {
     name: "geo-kit",
-    version: "0.1.1",
+    version: "1.0.0",
     layer: "L0",
     purpose: "Geocoding / geo utilities (UK postcode incl. GIR 0AA, etc.)",
     consumers: ["ecom-engine (vendored)"],
@@ -86,7 +86,7 @@ export const KITS: Kit[] = [
   },
   {
     name: "delta-kit",
-    version: "0.1.0",
+    version: "0.2.0",
     layer: "L0",
     purpose: "Rabin-rolling binary-safe delta codec (rsync-style, wire-compatible with suture)",
     consumers: [],
@@ -106,6 +106,30 @@ export const KITS: Kit[] = [
     purpose: "Cost-aware LLM routing — pricing tables, USD budget tracking, fallback chains (genai companion)",
     consumers: [],
     features: "`genai` adapter",
+  },
+  {
+    name: "plycore",
+    repo: "plychart",
+    version: "0.2.0",
+    layer: "L0",
+    purpose: "Shared types for plychart and plycompute",
+    consumers: ["plychart", "plycompute"],
+  },
+  {
+    name: "typed-id-derive",
+    repo: "typed-id",
+    version: "0.1.0",
+    layer: "L0",
+    purpose: "Derive macro for `typed-id-new`",
+    consumers: ["typed-id-new"],
+  },
+  {
+    name: "leptos-macros",
+    repo: "leptos-macro",
+    version: "0.1.0",
+    layer: "L0",
+    purpose: "Procedural macros for Leptos components — boilerplate reduction for lib.rs, feature flags, prop defaults",
+    consumers: [],
   },
 
   // ---- L1 — Core primitives ----
@@ -160,7 +184,7 @@ export const KITS: Kit[] = [
   },
   {
     name: "breaker",
-    version: "0.3.0",
+    version: "1.0.0",
     layer: "L1",
     purpose: "Circuit breaker",
     consumers: ["ferro", "aether-core", "fetchkit"],
@@ -168,7 +192,7 @@ export const KITS: Kit[] = [
   {
     name: "throttle-kit",
     repo: "ratelimit",
-    version: "0.3.0",
+    version: "1.0.0",
     layer: "L1",
     purpose: "Rate limiting / throttling",
     consumers: ["ferro"],
@@ -183,7 +207,7 @@ export const KITS: Kit[] = [
   {
     name: "eventbus-kit",
     repo: "eventbus",
-    version: "0.2.0",
+    version: "0.3.0",
     layer: "L1",
     purpose: "In-process event bus",
     consumers: [],
@@ -203,6 +227,22 @@ export const KITS: Kit[] = [
     purpose: "Custom CTAP2/COSE WebAuthn over `ring` — registration/authentication verification, sign-count state machine, challenge/replay store",
     consumers: [],
     features: "`serde`",
+  },
+  {
+    name: "plychart",
+    repo: "plychart",
+    version: "0.2.0",
+    layer: "L1",
+    purpose: "Full-featured graphing library for Rust/WASM — Canvas2D rendering, zero dependencies, zero watermarks; builds on `plycore`",
+    consumers: [],
+  },
+  {
+    name: "plycompute",
+    repo: "plychart",
+    version: "0.2.0",
+    layer: "L1",
+    purpose: "Quantitative computation — portfolio analytics, risk metrics, signal processing; builds on `plycore`",
+    consumers: [],
   },
 
   // ---- L2 — Service infrastructure ----
@@ -230,21 +270,21 @@ export const KITS: Kit[] = [
   },
   {
     name: "otelkit",
-    version: "0.1.0",
+    version: "1.0.0",
     layer: "L2",
     purpose: "OpenTelemetry setup helpers",
     consumers: ["EvergreenShims"],
   },
   {
     name: "healthkit",
-    version: "0.1.0",
+    version: "1.0.0",
     layer: "L2",
     purpose: "Health/readiness endpoints",
     consumers: ["axum-stack", "ecom-engine (vendored)"],
   },
   {
     name: "webhookkit",
-    version: "0.2.0",
+    version: "1.0.0",
     layer: "L2",
     purpose: "Signed outbound webhooks + HMAC verification",
     consumers: ["ecom-engine (vendored)"],
@@ -275,7 +315,7 @@ export const KITS: Kit[] = [
   {
     name: "decimal-money",
     repo: "money",
-    version: "0.2.0",
+    version: "1.0.0",
     layer: "L2",
     purpose: "Decimal money type",
     consumers: ["billing-kit", "ecom-engine (vendored)"],
@@ -283,7 +323,7 @@ export const KITS: Kit[] = [
   {
     name: "tamper-audit",
     repo: "auditlog",
-    version: "0.1.0",
+    version: "0.2.0",
     layer: "L2",
     purpose: "Tamper-evident audit logging",
     consumers: [],
@@ -320,28 +360,28 @@ export const KITS: Kit[] = [
   },
   {
     name: "media-kit",
-    version: "0.1.0",
+    version: "0.1.1",
     layer: "L2",
     purpose: "Media upload/processing helpers",
     consumers: ["ferro", "Tachyon", "ecom-engine (vendored)"],
   },
   {
     name: "flag-kit",
-    version: "0.1.0",
+    version: "0.1.1",
     layer: "L2",
     purpose: "Feature flags",
     consumers: ["ferro"],
   },
   {
     name: "blobkit",
-    version: "0.2.0",
+    version: "0.3.0",
     layer: "L2",
     purpose: "Object storage abstraction",
     consumers: ["EvergreenShims", "ecom-engine (vendored)"],
   },
   {
     name: "ws-kit",
-    version: "0.2.0",
+    version: "0.3.0",
     layer: "L2",
     purpose: "WebSocket server/session management",
     consumers: ["aether-core", "ferro", "ws-barbican"],
@@ -377,7 +417,7 @@ export const KITS: Kit[] = [
   },
   {
     name: "actor-kit",
-    version: "0.1.0",
+    version: "0.2.1",
     layer: "L2",
     purpose: "Work-stealing actor runtime — OTP supervision trees, crossbeam steal, bounded backpressure; `ResourcePolicy` hook",
     consumers: [],
@@ -395,7 +435,7 @@ export const KITS: Kit[] = [
   // ---- L3 — Application frameworks ----
   {
     name: "barbican",
-    version: "0.1.0",
+    version: "0.2.0",
     layer: "L3",
     purpose: "Secrets/credential custody service toolkit",
     consumers: ["ws-barbican"],
@@ -409,14 +449,14 @@ export const KITS: Kit[] = [
   },
   {
     name: "fetchkit",
-    version: "0.1.0",
+    version: "0.1.1",
     layer: "L3",
     purpose: "Hardened outbound HTTP fetcher (breaker-integrated)",
     consumers: [],
   },
   {
     name: "ws-barbican",
-    version: "0.1.0",
+    version: "0.1.1",
     layer: "L3",
     purpose: "WebSocket transport to barbican (ws-kit + tokenkit)",
     consumers: ["aether-core"],

@@ -52,11 +52,11 @@ const links = [
 
 <Base
   title="WyattAu Kit Ecosystem — production-grade Rust crates"
-  description="65+ production-grade Rust crates across four layers, every one behind a shared engineering gate matrix: fuzzing, loom, Kani, mutation scoring, cargo-deny, semver checks, and SLSA-style provenance."
+  description={`${stats.crates} production-grade Rust crates across four layers, every one behind a shared engineering gate matrix: fuzzing, loom, Kani, mutation scoring, cargo-deny, semver checks, and SLSA-style provenance.`}
 >
   <section class="hero">
     <p class="eyebrow">Kit Registry</p>
-    <h1>WyattAu Kit Ecosystem — <em>65+</em> production-grade Rust crates</h1>
+    <h1>WyattAu Kit Ecosystem — <em>{stats.crates}</em> production-grade Rust crates</h1>
     <p class="lede">
       Leaf utilities, core primitives, service infrastructure, and application
       frameworks — every crate published under one engineering standard, every
@@ -70,7 +70,7 @@ const links = [
       </div>
       <div class="stat">
         <div class="num">{stats.stable}</div>
-        <div class="label">crates at 1.0+ — all pre-1.0, semver-gated</div>
+        <div class="label">crates at 1.0+ — semver-gated</div>
       </div>
       <div class="stat">
         <div class="num">56</div>
