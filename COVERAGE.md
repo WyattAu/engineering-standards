@@ -7,6 +7,48 @@
 Status legend: **PASS** ≥ threshold · **GAP** measured, below threshold (deficit in pts) · **FAIL** run failed before a coverage number existed.
 `PASS*` = passed threshold, but has a flaky/failing property test that must still be fixed (see FAIL & Flakes).
 
+## Hard-gate readiness (2026-09)
+
+**Date:** 2026-09-07 · **Tool:** cargo-llvm-cov 0.8.7, `--summary-only --all-features` · same thresholds.
+
+Tier A gap-closing sprint: the 3 GAP crates (barbican, hdwallet, blobkit) were closed with real
+behavioral tests (signature recovery, error-path, wire-format assertions); the 3 previously-PASS
+crates (tokenkit, cryptkit, ws-kit) were re-measured and hold. All closed crates pass the full
+gate (check / test / clippy `-D warnings` / fmt) and are committed + pushed.
+
+| Crate | Tier | Line % (2026-09-05) | Line % (2026-09-07) | Missed/Total | Δ | Status |
+|---|---|---|---|---|---|---|
+| salting | A | 99.7 | 99.7 * | 1/308 | +9.7 | PASS* — flaky proptest still outstanding |
+| hdwallet | A | 83.6 | **98.0** | 18/910 | +8.0 | **READY** |
+| breaker | A | 96.9 | 96.9 | 21/668 | +6.9 | PASS |
+| cryptkit | A | 95.4 | 95.4 | 9/196 | +5.4 | PASS — re-measured, holding |
+| webauthn-kit | A | 94.8 | 94.8 | 92/1780 | +4.8 | PASS |
+| tokenkit | A | 92.8 | **96.7** | 19/582 | +6.7 | **READY** — re-measured, improved |
+| ws-kit | A | 91.9 | 91.9 | 81/997 | +1.9 | PASS — re-measured, holding (incl. new origin.rs tests) |
+| blobkit | A | 83.5 | **92.9** | 72/1018 | +2.9 | **READY** (exceptions documented in blobkit `COVERAGE-NOTES.md`) |
+| barbican | A | 49.4 | **98.1** | 3/156 | +8.1 | **READY** |
+| otelkit | A | 78.6 | 78.6 | 87/407 | −11.4 | GAP (~7 tests) |
+| validkit | A | 76.8 | 76.8 | 203/876 | −13.2 | GAP (~17 tests) |
+| healthkit | A | 76.3 | 76.3 | 64/270 | −13.7 | GAP (~5 tests) |
+| money | A | 74.5 | 74.5 | 127/498 | −15.5 | GAP (~11 tests) |
+| ratelimit | A | — | — | — | — | **FAIL** — failing proptest still blocks measurement |
+
+\* salting number not re-measured this pass; the flaky `fuzz_edited_params_are_classified`
+proptest (seed persisted in `proptest-regressions/`) must be fixed before October regardless.
+
+**blobkit note:** during gap-closing, a latent bug was found and fixed in hdwallet (not blobkit):
+`hdwallet::eth::sign_eth_transaction` declared a 12-field RLP list but appended 11 (missing the
+empty access_list), so the function panicked unconditionally — it had never been executed (0%
+coverage). Fixed with the tests that exercise it.
+
+### Verdict: Tier A is **NOT READY** — 9/14 at threshold
+
+- **Ready (9):** salting, breaker, cryptkit, webauthn-kit, tokenkit, ws-kit, hdwallet, blobkit, barbican.
+- **Remaining work (5):** ratelimit (proptest triage — *blocking*, cheapest first), healthkit (~5
+  tests), otelkit (~7 tests), money (~11 tests), validkit (~17 tests). Roughly 40 focused tests
+  plus one property-test triage put the tier at 14/14. salting's flaky proptest must also be
+  stabilized (test-gate violation, independent of its 99.7% number).
+
 ## Results
 
 | Crate | Tier | Line % | Missed/Total lines | Δ vs threshold | Status |
