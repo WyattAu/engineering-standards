@@ -16,9 +16,29 @@ behavioral tests (signature recovery, error-path, wire-format assertions); the 3
 crates (tokenkit, cryptkit, ws-kit) were re-measured and hold. All closed crates pass the full
 gate (check / test / clippy `-D warnings` / fmt) and are committed + pushed.
 
+### Tier A close-out pass (2026-09-07, later the same day)
+
+The six remaining crates were re-measured directly at HEAD. **None of the GAP numbers below the
+gate reproduced** — the "GAP" rows above traced to stale 2026-09-05 sweep numbers taken before the
+same-day `test: close coverage gap` commits landed (healthkit `d3df6ed`, otelkit `b5fbfb4`,
+money `8b1bc0f`, validkit `6a6d516`); the hard-gate table had carried them over unverified.
+ratelimit's measurement blocker was likewise already fixed in-code (`65845e7` + in-code
+`max_global_rejects: 20000`). Final Tier A state after this pass — **14/14 READY**:
+
+| Crate | Was (table above) | Final Line % | Missed/Total | Δ | Status / notes |
+|---|---|---|---|---|---|
+| salting | 99.7 * | **99.33** | 3/449 | +9.3 | **READY** — full suite green 5/5 runs; the flaky `fuzz_edited_params_are_classified` property is stable (underlying bug fixed by `675aa10`, seed pinned). Added `phc_unknown_param_ident_is_ignored_by_bounds_check` (keyid ignore-arm). Remaining 3 lines are `matches!` false-branch artifacts inside passing asserts. |
+| ratelimit | FAIL | **95.05** | 37/747 | +5.1 | **READY** — proptest blocker was environmental/stale: suite green with no env vars; coverage now measurable. Added `resolve_from_request` tests, custom-extractor + `with_client_ip` override test, `poll_ready` delegation test, sqlite read-only `init` error test, and `tests/redis_error_paths.rs` (malformed URL / unreachable server). Redis GCRA execution paths documented as requiring a live server in ratelimit `COVERAGE-NOTES.md`. |
+| healthkit | 76.3 | **99.10** | 3/332 | +9.1 | **READY** — GAP number was stale (pre-`d3df6ed`). 3 remaining lines are structurally unreachable `Err` arms in axum handlers (`check_readiness`/`check_liveness` return `Ok` on every path); documented in healthkit `COVERAGE-NOTES.md`. |
+| otelkit | 78.6 | **99.76** | 1/354 (lib.rs) | +9.8 | **READY** — GAP number was stale (pre-`b5fbfb4`). Added guard-drop shutdown-error unit test (sdk 0.28 `AlreadyShutdown`), `tests/init_otlp_errors.rs` (malformed endpoint → `OtlpConnection`; double-init → `InvalidConfig`), `tests/init_json_errors.rs` (JSON-branch rebind refusal), `tests/init_sentry_errors.rs` (sentry without DSN). Last line is the provably-unreachable duplicate `EnvFilter` validation (lib.rs:90); documented in otelkit `COVERAGE-NOTES.md`. |
+| money | 74.5 | **100.00** | 0/709 | +10.0 | **READY** — GAP number was stale (pre-`8b1bc0f`); exact gate command reproduces 100.00% at HEAD. Benches (`harness = false`) compile but do not run under `cargo test`, so they contribute nothing to the denominator either way. No changes needed. |
+| validkit | 76.8 | **96.99** | 28/930 | +7.0 | **READY** — GAP number was stale (pre-`6a6d516`). Methodology note added (validkit `COVERAGE-NOTES.md`): the `cfg(not(regex/url/idna))` fallback validators are *excluded from the denominator* under `--all-features` and need the dedicated `--no-default-features --features serde,std` CI job (re-verified green); no single sweep can measure them. All 28 remaining lines are provably-unreachable defensive arms, individually itemized with invariants in validkit `COVERAGE-NOTES.md`. |
+
+All six crates pass the full gate (test / clippy `-D warnings` / fmt) and are committed + pushed.
+
 | Crate | Tier | Line % (2026-09-05) | Line % (2026-09-07) | Missed/Total | Δ | Status |
 |---|---|---|---|---|---|---|
-| salting | A | 99.7 | 99.7 * | 1/308 | +9.7 | PASS* — flaky proptest still outstanding |
+| salting | A | 99.7 | **99.33** | 3/449 | +9.3 | **READY** — flaky proptest fixed, deterministic 5/5 |
 | hdwallet | A | 83.6 | **98.0** | 18/910 | +8.0 | **READY** |
 | breaker | A | 96.9 | 96.9 | 21/668 | +6.9 | PASS |
 | cryptkit | A | 95.4 | 95.4 | 9/196 | +5.4 | PASS — re-measured, holding |
@@ -27,27 +47,28 @@ gate (check / test / clippy `-D warnings` / fmt) and are committed + pushed.
 | ws-kit | A | 91.9 | 91.9 | 81/997 | +1.9 | PASS — re-measured, holding (incl. new origin.rs tests) |
 | blobkit | A | 83.5 | **92.9** | 72/1018 | +2.9 | **READY** (exceptions documented in blobkit `COVERAGE-NOTES.md`) |
 | barbican | A | 49.4 | **98.1** | 3/156 | +8.1 | **READY** |
-| otelkit | A | 78.6 | 78.6 | 87/407 | −11.4 | GAP (~7 tests) |
-| validkit | A | 76.8 | 76.8 | 203/876 | −13.2 | GAP (~17 tests) |
-| healthkit | A | 76.3 | 76.3 | 64/270 | −13.7 | GAP (~5 tests) |
-| money | A | 74.5 | 74.5 | 127/498 | −15.5 | GAP (~11 tests) |
-| ratelimit | A | — | — | — | — | **FAIL** — failing proptest still blocks measurement |
+| otelkit | A | 78.6 | **99.76** | 1/354 | +9.8 | **READY** — stale sweep number; gaps closed, exception documented |
+| validkit | A | 76.8 | **96.99** | 28/930 | +7.0 | **READY** — stale sweep number; per-config methodology documented |
+| healthkit | A | 76.3 | **99.10** | 3/332 | +9.1 | **READY** — stale sweep number; exception documented |
+| money | A | 74.5 | **100.00** | 0/709 | +10.0 | **READY** — stale sweep number; reproduces 100.00% |
+| ratelimit | A | — | **95.05** | 37/747 | +5.1 | **READY** — proptest blocker resolved in-code; redis exception documented |
 
-\* salting number not re-measured this pass; the flaky `fuzz_edited_params_are_classified`
-proptest (seed persisted in `proptest-regressions/`) must be fixed before October regardless.
+\* superseded: see close-out pass above.
 
 **blobkit note:** during gap-closing, a latent bug was found and fixed in hdwallet (not blobkit):
 `hdwallet::eth::sign_eth_transaction` declared a 12-field RLP list but appended 11 (missing the
 empty access_list), so the function panicked unconditionally — it had never been executed (0%
 coverage). Fixed with the tests that exercise it.
 
-### Verdict: Tier A is **NOT READY** — 9/14 at threshold
+### Verdict: Tier A is **READY** — 14/14 at threshold
 
-- **Ready (9):** salting, breaker, cryptkit, webauthn-kit, tokenkit, ws-kit, hdwallet, blobkit, barbican.
-- **Remaining work (5):** ratelimit (proptest triage — *blocking*, cheapest first), healthkit (~5
-  tests), otelkit (~7 tests), money (~11 tests), validkit (~17 tests). Roughly 40 focused tests
-  plus one property-test triage put the tier at 14/14. salting's flaky proptest must also be
-  stabilized (test-gate violation, independent of its 99.7% number).
+- All 14 Tier A crates measure ≥ 90% line coverage under `cargo llvm-cov --summary-only
+  --all-features`, with every residual uncovered line either closed by a test or recorded as a
+  documented exception in the crate's `COVERAGE-NOTES.md` (unreachable defensive arms, or
+  environment-bound code: ratelimit's live-Redis paths, validkit's per-config fallback suite).
+- Measurement-methodology lesson carried into future audits: **same-day sweeps can race same-day
+  commits** — a GAP number must be re-verified at HEAD before being recorded, and feature-cfg'd
+  code requires per-config runs (validkit pattern).
 
 ## Results
 
@@ -148,13 +169,16 @@ Estimate ≈ missed_lines ÷ 12 (one focused test typically closes 10–15 lines
 
 | Crate | Tier | Reason |
 |---|---|---|
-| ratelimit | A | Property test `prop_adversarial_chain_matches_oracle` (tests/client_ip.rs:697) fails: adversarial `X-Forwarded-For` chain disagrees with the resolution oracle. Blocks `cargo test`; no coverage produced. Genuine gate blocker — needs bug-vs-flaky-property triage. |
+| ratelimit | A | ~~Property test `prop_adversarial_chain_matches_oracle` blocks `cargo test`.~~ **RESOLVED 2026-09-07**: the X-Forwarded-For trust-walk fix (`65845e7`) removed the disagreement and the property now sets `max_global_rejects: 20000` in-code; the suite is green with no env vars and the crate measures **95.05%**. |
 | app-error | C | `--all-features` build break: `error-classify` src/lib.rs calls `.kind()` on `&CommonError` without `use crate::AppError;` — code does not compile under the all-features cfg union. |
 | clock | C | Broken test target: package is `chronoshift` but `tests/integration.rs:1` does `use clock::…` → unresolved crate; integration test target has never compiled. |
 | poolkit | C | `--all-features` dep conflict: activates sqlx `sqlite`/`unbundled`; `sqlx-sqlite 0.8.6` references `sqlite3_serialize`/`sqlite3_deserialize`/`sqlite3_prepare_v3` absent from the selected `libsqlite3-sys` build. Feature matrix needs fixing (pick bundled, or exclude conflicting feature pair). |
 | leptos-leaflet | C | Test failure: `test_layer_state_custom` panics (tests/comprehensive_test.rs:90). Real failing test. |
 
-**PASS\* flake:** salting — `proptest fuzz_edited_params_are_classified` (src/lib.rs:292) failed on re-run (seed persisted to `proptest-regressions/lib.txt`); clean run measured 99.7%. The 90% number is real; the flaky property still needs fixing before October.
+**PASS\* flake:** salting — ~~`proptest fuzz_edited_params_are_classified` failed on re-run~~
+**RESOLVED 2026-09-07**: the underlying bug was fixed by the PHC-params clamp (`675aa10`), the
+regression seed stays pinned in `proptest-regressions/`, and the full suite passed 5/5 consecutive
+runs. The crate measures 99.33% with a deterministic suite.
 
 All five FAILs violate the *test* gate (`test --all-features` must be green), independent of coverage — they block the October flip regardless of thresholds.
 
@@ -180,7 +204,7 @@ That path puts Tier A at 12–13/14 by October (only validkit or money at risk),
 
 ### 3. FAIL fixes required for October (blocking, any tier)
 
-app-error (missing import), clock (rename test imports to `chronoshift` or add `lib name`), poolkit (fix sqlite feature unification), leptos-leaflet (fix or quarantine `test_layer_state_custom`), ratelimit (triage proptest), salting (stabilize flaky proptest).
+app-error (missing import), clock (rename test imports to `chronoshift` or add `lib name`), poolkit (fix sqlite feature unification), leptos-leaflet (fix or quarantine `test_layer_state_custom`). ~~ratelimit (triage proptest)~~ and ~~salting (stabilize flaky proptest)~~ — both resolved 2026-09-07, see FAIL reasons.
 
 ## Method & limitations
 
