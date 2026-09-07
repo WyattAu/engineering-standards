@@ -43,7 +43,7 @@ locally 2026-09-06.
    timeout, narrow with `--file <largest src file>` and report partial
    coverage honestly (see salting).
 
-## Baselines (2026-09-06)
+## Baselines (2026-09-06/07)
 
 | Crate | Mutants | Killed | Survived (unresolved) | Unviable | Viable-kill score | Tests added | Headline finding |
 |---|---|---|---|---|---|---|---|
@@ -53,6 +53,9 @@ locally 2026-09-06.
 | salting | 60 | 51 | 0 (9 untested) | 0 | 100% of tested (51/51) | 2 | `low_memory()` preset was roundtrip-tested only — Default-replacement invisible; zxcvbn score-bucket guards had no boundary pins. 9 `strength.rs` mutants untested under the 25-min cap (run interrupted); `error.rs` generates no mutants (pure thiserror enum). |
 | breaker | 89 | 58 | 1 equiv | 14 | 98.3% (58/59) | 2 | `failure_count()` getter observable only through the metrics histogram — killing test captures it with a recording recorder; `lock.rs` cfg-shim excluded (loom/kani harnesses). |
 | validkit | 291 | 178 | 8 equiv (+41 cfg-unviable) | 64 | 95.7% (178/186) | ~78 | Validator-internal branches were barely observed: accessor roundtrips, `is_valid_*` helpers, length boundaries, and per-character-class inputs were missing; CR/LF guards masked by downstream validation are pinned by *message-asserting* tests. |
+| money | 124 | 107 | 3 equiv | 14 | 97.3% (107/110) | 1 | Zero-amount sign flip (`<`→`<=`) rendered `$0.00` as `-$0.00` unobserved — now pinned; 2 of 3 equivalents are masked-by-later-guard (`use_iso_code` branch never reads `show_symbol`) and a boundary no-op (`==places` pads width-0 ≡ truncates to full length). |
+| tokenkit | 32 | 25 | 1 cfg-phantom | 6 | 96.2% (25/26) | 4 + 1 fixed | Cross-algorithm (REQ-TK-105) test was masked by its own missing `iss` claim — required-claims rejection fired before the pinned-algorithm check; `validate()`/`encode_standard`'s exp arithmetic and Debug's algorithm name were unobserved; Redis store fail-closed pinned with a guaranteed-refused endpoint (kills all 3 store mutants). |
+| otelkit | 16 | 12 | 1 equiv | 3 | 92.3% (12/13) | 1 | Sentry `traces_sample_rate`/`release` plumbing was unobserved — now asserted in-process via the hub client's `options()` (no network); `TelemetryGuard::drop` flush is equivalent-in-host-suite (observable only through an external collector/transport). |
 
 Notes:
 - **validkit "cfg-unviable" (41):** all `#[cfg(not(feature = "regex"))]` /
@@ -63,16 +66,32 @@ Notes:
 - **Killing masked mutants:** a guard whose rejection a later validator
   repeats is *not* equivalent when the two paths emit different error
   messages — assert the message fragment, not just `is_err()`.
+- **Masked killer lesson (tokenkit REQ-TK-105):** a rejection test can pass
+  for the *wrong reason*. The cross-algorithm test's claims omitted `iss`,
+  so required-spec-claim validation rejected every token before the
+  pinned-algorithm check could fire — the algorithm-confusion defense was
+  green while its entire mapping function was mutable. Fixtures for
+  rejection tests must be valid in every other respect; otherwise the test
+  masks the very defense it names.
+- **Fail-closed pins without infra (tokenkit Redis store):** store methods
+  whose happy path needs a live backend are still killable — point them at
+  a guaranteed-refused endpoint (`redis://127.0.0.1:1/`) and assert `Err`.
+  This pins the fail-closed property AND kills every silent-success mutant;
+  never use a "probably not running" default port.
+- **Read-back beats equivalence (otelkit):** before classifying a config
+  plumbing mutant as equivalent, check whether the value is readable back
+  in process — `sentry::Hub::current().client().options()` exposed both
+  deleted fields without any transport. Private-field ≠ unobservable.
 - **Flaky kill lesson (validkit `bucket.rs:89`):** a length-boundary mutant
   flipped between runs because only a proptest ever generated a max-length
   input. Every boundary mutant now gets a pinned test.
 
 ## Queued (baseline pending — workflow landed, no baseline yet)
 
-tokenkit, cryptkit, webauthn-kit, hdwallet, ratelimit, ws-kit, blobkit,
-money, otelkit. Same `mutation.yml` (header: *baseline pending*). Order of
-attack when compute allows: one crate per night, smallest `src/` first;
-budget 25 min/crate, narrow by `--file` on timeout.
+cryptkit, webauthn-kit, hdwallet, ratelimit, ws-kit, blobkit. Same
+`mutation.yml` (header: *baseline pending*). Order of attack when compute
+allows: one crate per night, smallest `src/` first; budget 25 min/crate,
+narrow by `--file` on timeout.
 
 Also queued: salting `strength.rs` completion pass (9 mutants untested under
 the cap), and a `--no-default-features` second pass over validkit fallback
