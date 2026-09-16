@@ -41,6 +41,11 @@ on:
         required: false
         default: false
         type: boolean
+      miri-flags:
+        description: "Extra MIRIFLAGS for the miri job (e.g. -Zmiri-disable-isolation so tests using the filesystem run under miri). Default: none."
+        required: false
+        default: ""
+        type: string
       bench-regression:
         description: "Run criterion benches (regression visibility, not gating)"
         required: false
@@ -194,6 +199,8 @@ jobs:
           components: miri
       - uses: Swatinem/rust-cache@v2
       - name: miri (lib tests)
+        env:
+          MIRIFLAGS: ${{ inputs.miri-flags }}
         run: cargo +nightly miri test --lib ${{ env.PKG_FLAG }}
 
   wasm:
