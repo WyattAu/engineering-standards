@@ -166,6 +166,9 @@ source commit, toolchain, and artifact hash:
   burned down).
 - Vendoring is a deliberate act: vendored copies get a drift-check script
   (see ecom-engine `scripts/check_vendor_drift.sh` pattern).
+- Allow-list additions are ratified by PR: each new SPDX id lands in
+  `templates/deny.toml` with a one-line rationale naming the dependency that
+  requires it and a precedent repo that already accepts it.
 
 ### 8. Documentation
 
