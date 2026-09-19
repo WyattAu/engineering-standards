@@ -159,11 +159,15 @@ source commit, toolchain, and artifact hash:
 
 - `deny.toml` in every repo: advisories `deny`, licenses allow-list
   (MIT/Apache-2.0/BSD/ISC/Unicode/Zlib), bans on duplicate versions (warn).
-- dependabot weekly. cargo-vet audits rolled out to all Tier A repos
-  (`supply-chain/` bootstrapped from crates.io/registry peer audits — mozilla,
-  google, isrg, bytecode-alliance, embark-studios, fermyon, zcash; per-repo
-  `vet.yml` runs weekly + on PR, non-blocking until exemption backlog is
-  burned down).
+- dependabot weekly. cargo-vet audits run via the shared workflow's `vet` job
+  (`cargo vet --locked`, installed with `taiki-e/install-action`) — advisory
+  (job-level `continue-on-error`) until every kit repo has a `supply-chain/`;
+  flip to enforcing once that backlog burns down (tracked: 2026-09-19).
+  Repos: run `cargo vet init` to bootstrap `supply-chain/` from crates.io
+  peer audits (mozilla, google, isrg, bytecode-alliance, embark-studios,
+  fermyon, zcash) — `scripts/apply-standards.sh <repo>` does it
+  automatically. Keep `vet` non-blocking in per-repo `vet.yml` schedules
+  until the exemption backlog is burned down.
 - Vendoring is a deliberate act: vendored copies get a drift-check script
   (see ecom-engine `scripts/check_vendor_drift.sh` pattern).
 - Allow-list additions are ratified by PR: each new SPDX id lands in

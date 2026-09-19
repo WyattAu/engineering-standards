@@ -137,6 +137,20 @@ jobs:
             echo "::warning::no deny.toml — adopt templates/deny.toml"
           fi
 
+  vet:
+    # Rollout: cargo-vet audits are advisory while repos without supply-chain/
+    # would fail `cargo vet` (no vet.toml/config). Flip to enforcing after
+    # repos without supply-chain/ burn down (tracked: 2026-09-19).
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cargo-vet
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-vet
+      - run: cargo vet --locked
+
   coverage:
     runs-on: ubuntu-latest
     steps:

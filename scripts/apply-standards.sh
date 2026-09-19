@@ -57,4 +57,18 @@ else
   echo "dependabot: exists"
 fi
 
+# 4. cargo-vet supply-chain bootstrap (idempotent: only when absent).
+# The shared workflow's `vet` job runs `cargo vet --locked`; repos without
+# supply-chain/ rely on its rollout grace period until initialized here.
+if [ ! -f supply-chain/vet.toml ]; then
+  if command -v cargo-vet >/dev/null 2>&1; then
+    cargo vet init
+    echo "cargo-vet: initialized (supply-chain/)"
+  else
+    echo "cargo-vet: NOT installed — run 'cargo install --locked cargo-vet && cargo vet init'"
+  fi
+else
+  echo "cargo-vet: supply-chain/ exists"
+fi
+
 echo "== $repo: apply complete (tier=$tier)"
