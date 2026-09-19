@@ -58,8 +58,9 @@ else
 fi
 
 # 4. cargo-vet supply-chain bootstrap (idempotent: only when absent).
-# The shared workflow's `vet` job runs `cargo vet --locked`; repos without
-# supply-chain/ rely on its rollout grace period until initialized here.
+# The shared workflow's `vet` job is enforcing (`cargo vet --locked`):
+# a repo without supply-chain/ and a committed Cargo.lock fails CI, so
+# bootstrap must happen here before first push.
 if [ ! -f supply-chain/vet.toml ]; then
   if command -v cargo-vet >/dev/null 2>&1; then
     cargo vet init
