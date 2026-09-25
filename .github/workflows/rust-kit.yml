@@ -141,10 +141,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # taiki-e install-action can only serve the v0.10.0 GitHub release, which
+      # predates trusted-publisher support: it cannot parse imports.lock
+      # entries for crates published via crates.io trusted publishing
+      # (no user-id exists). Install from crates.io instead — 0.10.2 matches
+      # the dev toolchain and reads all existing imports.lock files.
       - name: Install cargo-vet
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-vet
+        run: cargo install --locked cargo-vet --version 0.10.2
       - run: cargo vet --locked
 
   coverage:
