@@ -74,6 +74,20 @@ critical-section fallback elsewhere (see chronoshift's `MockClock`).
 | model-router | ⚠ std-bound | `std::sync::Mutex` in `CostTracker` — fixable via spin/critical-section lock swap (follow-up) |
 | cas-kit | ⚠ std-bound | genuinely std-bound: filesystem blob store (`fs`, `Path`, `tempfile`) |
 
+### Status update (2026-09-26)
+
+- **Gate adoption complete (2026-09):** every kit repository in the estate now
+  runs the shared `rust-kit.yml` matrix via one reusable-workflow call —
+  including the newest wave: metrics-kit, config-kit, idempotency-kit,
+  outbox-kit, percentile-kit, chaos-kit, telemetry-init, worker-kit.
+- **cargo-vet enforcement is live:** the shared workflow's `vet` job
+  (`cargo vet --locked`) fails CI on unaudited dependencies; kit repos carry a
+  committed `supply-chain/` and `Cargo.lock`.
+- **Registry additions:** the 8 kits above are now on crates.io and listed in
+  KITS.md and the site's crates page (63 published kits). Corrections:
+  `fetchkit` publishes as `fetch-kit` (superseding `resilient-fetch`);
+  `testkit` remains repo-only (not yet published).
+
 ## Policies
 
 ### 1. Versioning & Release (semver discipline)
@@ -187,7 +201,7 @@ source commit, toolchain, and artifact hash:
   salting, webauthn-kit, multi-chain-wallet, barbican, validkit, breaker,
   throttle-kit, ws-kit, blobkit, decimal-money, healthkit, otelkit
 - **Tier B — Flagship infra (10)**: actor-kit, cas-kit, eventbus-kit,
-  cache-pal, fetchkit, media-kit, docs-pipeline, axum-stack, geo-kit, mailkit
+  cache-pal, fetch-kit, media-kit, docs-pipeline, axum-stack, geo-kit, mailkit
 - **Tier C — Long tail**: everything else
 
 ## Adopting the Standards
