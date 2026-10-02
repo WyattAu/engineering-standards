@@ -129,16 +129,6 @@ def proc_macro_packages(meta: dict) -> set[str]:
     return names
 
 
-def node_estate_deps(node: dict, estate: set[str]) -> list[dict]:
-    """Estate deps of this resolve node with normal/build kind (dev excluded)."""
-    out = []
-    for dep in node.get("deps", []):
-        kinds = {(dk.get("kind") or "normal") for dk in dep.get("dep_kinds", [])}
-        if kinds & set(CHECKED_KINDS) and dep["name"] in estate:
-            out.append(dep)
-    return out
-
-
 def transitive_estate_deps(
     meta: dict,
     member_id: str,
