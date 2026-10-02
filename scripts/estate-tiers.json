@@ -32,7 +32,7 @@
   "flag-kit": "L2",
   "geo-kit": "L0",
   "healthkit": "L2",
-  "http-errors": "L0",
+  "http-errors": "L1",
   "i18n-kit": "L0",
   "idempotency-kit": "L2",
   "json-envelope": "L0",

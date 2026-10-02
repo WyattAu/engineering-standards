@@ -131,7 +131,7 @@ drift. Justifications are one line per crate.
 | `error-classify-derive` | L0 | Proc-macro companion (host codegen leaf) |
 | `error-codes` | L0 | Stable numeric error-code registry leaf (task candidate errcode) |
 | `geo-kit` | L0 | Geocoding utils, thiserror only (kits.ts L0) |
-| `http-errors` | L0 | Error->status mapping; http+serde only (task candidate verified) |
+| `http-errors` | L1 | Re-export shim over error-codes L0; runtime estate dep forbids L0 (mirrors error-classify) |
 | `i18n-kit` | L0 | Runtime i18n catalogs; thiserror-only leaf |
 | `json-envelope` | L0 | API envelope types; http+serde only (task candidate verified) |
 | `leptos-derive` | L0 | Proc-macro companion (host codegen leaf) |
@@ -291,6 +291,22 @@ drift. Justifications are one line per crate.
 - **No cycles.** The estate dependency graph is acyclic (verified over all 186
   estate-internal edges). A cycle would make classification impossible — flag
   it immediately rather than forcing a layer.
+- **Sweep reclassification.** `http-errors` started as an L0 candidate but its
+  repo HEAD turned it into a thin re-export shim over `error-codes` — a
+  runtime estate dep — so it is declared **L1** (the same shape as
+  `error-classify`). Found by the checker itself on the first estate-wide run;
+  the crate's repo carries the L0→L1 commit.
+- **Published but absent from repo HEAD.** Four crates were published and
+  classified from their crates.io dependency graph, but no longer exist under
+  those names in their repo's default branch: `ply-viz` and `plycharts`
+  (plychart), `leptos-derive` (leptos-macro), and `resilient-fetch`
+  (superseded by `fetch-kit`; only `fetch-kit` remains). Their tiers are
+  recorded in `scripts/estate-tiers.json` — registry consumers are still
+  checked — but their repos cannot carry a manifest declaration. Two more
+  were renamed in HEAD: `typed-id-new` → `typedids` (declared L0) and
+  `suture-git-bridge` → `git-remote-suture` (declared L1); the tier follows
+  the crate, and the rename should be reflected on crates.io at the next
+  publish.
 - **Crate/repo naming.** Several crates publish under names that differ from
   their repo (`money` → `decimal-money`, `clock` → `chronoshift`,
   `errcode` → `error-codes`, `ratelimit` → `throttle-kit`, `graceful` →

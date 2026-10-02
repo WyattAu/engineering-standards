@@ -139,10 +139,17 @@ def node_estate_deps(node: dict, estate: set[str]) -> list[dict]:
     return out
 
 
-def transitive_estate_deps(meta: dict, member_id: str, estate: set[str]) -> set[str]:
+def transitive_estate_deps(
+    meta: dict,
+    member_id: str,
+    estate: set[str],
+    name_of_id: dict[str, str],
+) -> set[str]:
     """All estate-internal package names reachable from `member_id` over
-    normal/build edges. Path deps and registry deps are treated identically
-    (matching is by package name)."""
+    normal/build edges. Path deps and registry deps are treated identically.
+    Matching is by package name, resolved through the package id (resolve
+    nodes key deps by lib-target name, e.g. `throttle_kit`, while package
+    names are hyphenated: `throttle-kit`)."""
     nodes = {n["id"]: n for n in meta["resolve"]["nodes"]}
     found: set[str] = set()
     stack = [member_id]
@@ -160,8 +167,9 @@ def transitive_estate_deps(meta: dict, member_id: str, estate: set[str]) -> set[
             kinds = {(dk.get("kind") or "normal") for dk in dep.get("dep_kinds", [])}
             if not (kinds & set(CHECKED_KINDS)):
                 continue
-            if dep["name"] in estate:
-                found.add(dep["name"])
+            dep_name = name_of_id.get(dep["pkg"], dep["name"])
+            if dep_name in estate:
+                found.add(dep_name)
             stack.append(dep["pkg"])
     return found
 
@@ -214,7 +222,9 @@ def main() -> int:
             continue
         name = pkg["name"]
         tier = declared_tier(pkg["manifest_path"])
-        estate_deps = transitive_estate_deps(meta, member_id, estate)
+        estate_deps = transitive_estate_deps(
+            meta, member_id, estate, {p["id"]: p["name"] for p in meta["packages"]}
+        )
         estate_deps.discard(name)  # a workspace-internal crate is not its own dep
 
         if not estate_deps:
