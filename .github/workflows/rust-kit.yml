@@ -150,6 +150,27 @@ jobs:
         run: cargo install --locked cargo-vet --version 0.10.2
       - run: cargo vet --locked
 
+  layer:
+    # Estate L0-L3 layer model: dependencies must never point up the stack.
+    # See docs/layers.md in WyattAu/engineering-standards.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: checkout engineering-standards (public; checker + estate list)
+        uses: actions/checkout@v4
+        with:
+          repository: WyattAu/engineering-standards
+          ref: main
+          path: .standards
+          persist-credentials: false
+      - name: estate layer check (no upward deps)
+        run: |
+          python3 .standards/scripts/check-layers.py \
+            --cwd . \
+            --estate-list .standards/scripts/estate-crates.txt
+
   coverage:
     runs-on: ubuntu-latest
     steps:
