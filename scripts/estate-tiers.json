@@ -35,6 +35,7 @@
   "eventbus-kit": "L1",
   "fetch-kit": "L3",
   "flag-kit": "L2",
+  "font-parse": "L0",
   "geo-kit": "L0",
   "healthkit": "L2",
   "http-errors": "L1",
