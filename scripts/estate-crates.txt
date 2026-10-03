@@ -33,6 +33,7 @@ flag-kit
 geo-kit
 healthkit
 http-errors
+hw-kit
 i18n-kit
 idempotency-kit
 json-envelope

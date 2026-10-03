@@ -33,6 +33,7 @@
   "geo-kit": "L0",
   "healthkit": "L2",
   "http-errors": "L1",
+  "hw-kit": "L1",
   "i18n-kit": "L0",
   "idempotency-kit": "L2",
   "json-envelope": "L0",
