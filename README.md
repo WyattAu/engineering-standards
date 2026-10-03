@@ -195,6 +195,17 @@ source commit, toolchain, and artifact hash:
 - README minimum: one-line value prop, install, working example, feature
   table, perf numbers if latency-relevant, license.
 
+### 9. Naming & Repo Identity
+
+- Repo name and published crate name are **identical** (no lookup tables).
+- Names follow the estate taxonomy: `{domain}-{concern}` for domain stacks,
+  `{concern}-kit` (hyphenated) for cross-cutting infrastructure, short names
+  for unique primitives, product names for products.
+- The full rules, the decision flowchart, the grandfathered-name list, and
+  the pending repo-rename commands live in
+  [`docs/naming-convention.md`](docs/naming-convention.md) — authoritative
+  for every naming decision.
+
 ## Tier Definitions
 
 - **Tier A — Security-critical / load-bearing (14)**: tokenkit, cryptkit,
@@ -243,6 +254,9 @@ pass this matrix on first push.
 
 ## Repo Layout
 
+- `docs/naming-convention.md` — estate naming convention: the 6 rules,
+  decision flowchart, domain-stack template, grandfathered names, and repo
+  rename procedure
 - `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
 - `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
 - `.github/workflows/attest.yml` — per-crate release provenance (dispatch)
