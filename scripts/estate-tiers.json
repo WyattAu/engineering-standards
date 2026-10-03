@@ -144,6 +144,7 @@
   "vane-tls": "L1",
   "webauthn-kit": "L1",
   "webhookkit": "L2",
+  "wire-kit": "L1",
   "worker-kit": "L3",
   "ws-barbican": "L3",
   "ws-kit": "L2"

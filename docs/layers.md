@@ -27,7 +27,7 @@ essential external infra like tokio). Linux/platform-scoped crates are allowed
 here with declared `#[cfg(target_os)]` targets.
 
 Examples: `metrics-kit`, `cas-kit`, `shm-rings`, `uds-kit`, `tokenkit`,
-`shutdown-kit`, `clock-kit`, `hw-kit` (future: `uring-kit`).
+`shutdown-kit`, `wire-kit`, `clock-kit`, `hw-kit` (future: `uring-kit`).
 
 ### L2 — domain
 Domain logic with estate semantics; depends on L0/L1 and other L2 kits
@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (146 crates, 2026-10-03)
+## Classification (147 crates, 2026-10-03)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -206,6 +206,7 @@ drift. Justifications are one line per crate.
 | `vane-shm` | L1 | Shm segments over shm-rings L1 |
 | `vane-tls` | L1 | TLS termination over shm-rings L1 |
 | `webauthn-kit` | L1 | CTAP2/COSE verification substrate (kits.ts L1) |
+| `wire-kit` | L1 | Zero-copy SBE/FIX wire codec substrate; zero estate deps (spec §Cross-references: estate's edge-format leaf) |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
