@@ -152,6 +152,7 @@ drift. Justifications are one line per crate.
 | `validkit-derive` | L0 | Proc-macro companion (host codegen leaf) |
 | `vane-observe` | L0 | Observability primitives, tracing/rand only |
 | `cas-kit` | L1 | CAS blob-store substrate; zero estate deps verified (task §1 L1 anchor) |
+| `book-kit` | L1 | Lock-free limit order book substrate (seqlock snapshots); zero estate deps |
 | `clock-kit` | L1 | Precision time substrate over chronoshift L0 (optional bridge edge); libc only otherwise (spec clock-kit.md) |
 | `error-classify` | L1 | Error taxonomy on error-codes L0; runtime estate dep forbids L0 (kits.ts L1) |
 | `eventbus-kit` | L1 | In-process event bus substrate (kits.ts L1) |

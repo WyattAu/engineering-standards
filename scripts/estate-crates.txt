@@ -9,6 +9,7 @@ axum-stack
 barbican
 billing-kit
 blobkit
+book-kit
 breaker
 cache-pal
 cas-kit
