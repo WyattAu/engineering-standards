@@ -19,7 +19,7 @@ dependency an L0 crate may have is its own **proc-macro companion** (host
 codegen, no runtime edge — e.g. `typed-id-new` → `typed-id-derive`).
 
 Examples: `decimal-money`, `typed-id-new`, `chronoshift`, `simd-tokenizer`,
-`salting`, `error-codes`, `geo-kit`, `json-envelope`.
+`salting`, `error-codes`, `geo-kit`, `json-envelope`, `dsp-core`.
 
 ### L1 — substrate
 Runtime/platform infrastructure and core primitives; depends on L0 (plus
@@ -128,6 +128,7 @@ drift. Justifications are one line per crate.
 | `crdts-kit` | L0 | Pure CRDT types, serde+wasm (kits.ts L0) |
 | `cryptkit` | L0 | AEAD/hash primitives (kits.ts L0) |
 | `dbc-parse` | L0 | DBC file parser leaf; zero deps, self-contained CanId (automotive protocol stack §L0) |
+| `dsp-core` | L0 | Audio DSP primitives leaf (FFT/biquad/convolution/windows/dynamics/oscillators); `libm` only, zero estate deps |
 | `decimal-money` | L0 | Decimal money type leaf, rust_decimal only (task §1 anchor) |
 | `delta-kit` | L0 | Binary delta codec leaf, no estate deps |
 | `error-classify-derive` | L0 | Proc-macro companion (host codegen leaf) |

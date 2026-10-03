@@ -27,6 +27,7 @@ dbc-parse
 decimal-money
 delta-kit
 docs-pipeline
+dsp-core
 envstack
 error-classify-derive
 error-classify
