@@ -27,7 +27,7 @@ essential external infra like tokio). Linux/platform-scoped crates are allowed
 here with declared `#[cfg(target_os)]` targets.
 
 Examples: `metrics-kit`, `cas-kit`, `shm-rings`, `uds-kit`, `tokenkit`,
-`shutdown-kit`, `hw-kit` (future: `uring-kit`, `clock-kit`).
+`shutdown-kit`, `clock-kit`, `hw-kit` (future: `uring-kit`).
 
 ### L2 — domain
 Domain logic with estate semantics; depends on L0/L1 and other L2 kits
@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (145 crates, 2026-10-03)
+## Classification (146 crates, 2026-10-03)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -152,6 +152,7 @@ drift. Justifications are one line per crate.
 | `validkit-derive` | L0 | Proc-macro companion (host codegen leaf) |
 | `vane-observe` | L0 | Observability primitives, tracing/rand only |
 | `cas-kit` | L1 | CAS blob-store substrate; zero estate deps verified (task §1 L1 anchor) |
+| `clock-kit` | L1 | Precision time substrate over chronoshift L0 (optional bridge edge); libc only otherwise (spec clock-kit.md) |
 | `error-classify` | L1 | Error taxonomy on error-codes L0; runtime estate dep forbids L0 (kits.ts L1) |
 | `eventbus-kit` | L1 | In-process event bus substrate (kits.ts L1) |
 | `loop-retry` | L1 | Retry/backoff substrate primitive (kits.ts L1) |

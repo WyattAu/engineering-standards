@@ -14,6 +14,7 @@ cache-pal
 cas-kit
 chaos-kit
 chronoshift
+clock-kit
 config-kit
 contact-miner
 crawlkit-engine
