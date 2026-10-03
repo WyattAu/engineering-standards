@@ -12,6 +12,7 @@ blobkit
 book-kit
 breaker
 cache-pal
+can-core
 cas-kit
 chaos-kit
 chronoshift
@@ -22,6 +23,7 @@ crawlkit-engine
 crawlkit-plugin-sdk
 crdts-kit
 cryptkit
+dbc-parse
 decimal-money
 delta-kit
 docs-pipeline

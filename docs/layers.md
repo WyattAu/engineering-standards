@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (147 crates, 2026-10-03)
+## Classification (150 crates, 2026-10-03)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -122,10 +122,12 @@ drift. Justifications are one line per crate.
 
 | Crate | Layer | Justification |
 |---|---|---|
+| `can-core` | L0 | CAN 2.0/CAN FD frame codec leaf; thiserror only, zero estate deps (automotive protocol stack §L0) |
 | `chronoshift` | L0 | Time abstraction leaf, critical-section only (task §3 anchor) |
 | `crawlkit-plugin-sdk` | L0 | Plugin contract types, serde only; no runtime |
 | `crdts-kit` | L0 | Pure CRDT types, serde+wasm (kits.ts L0) |
 | `cryptkit` | L0 | AEAD/hash primitives (kits.ts L0) |
+| `dbc-parse` | L0 | DBC file parser leaf; zero deps, self-contained CanId (automotive protocol stack §L0) |
 | `decimal-money` | L0 | Decimal money type leaf, rust_decimal only (task §1 anchor) |
 | `delta-kit` | L0 | Binary delta codec leaf, no estate deps |
 | `error-classify-derive` | L0 | Proc-macro companion (host codegen leaf) |
