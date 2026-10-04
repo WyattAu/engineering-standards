@@ -1,0 +1,71 @@
+# WyattAu shared Python CI — the Python gate matrix (proportionate to
+# rust-kit.yml / node-ci.yml). Called from each Python repo:
+#   jobs:
+#     quality:
+#       uses: WyattAu/engineering-standards/.github/workflows/python-kit.yml@main
+#       with:
+#         python-version: "3.13"
+#
+# Gates: locked install (uv --frozen) → ruff → pyright → pytest (coverage
+# gate lives in the repo's pytest addopts: --cov-fail-under).
+# Repo-specific jobs (docs, publish) live alongside the shared call.
+
+name: quality
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: "Python version (single leg; matrix in the repo's CI)"
+        required: false
+        default: "3.13"
+        type: string
+      typecheck:
+        description: "Run pyright (strict)"
+        required: false
+        default: true
+        type: boolean
+      lint:
+        description: "Run ruff check"
+        required: false
+        default: true
+        type: boolean
+      format:
+        description: "Run ruff format --check"
+        required: false
+        default: true
+        type: boolean
+      test:
+        description: "Run pytest (coverage gate via repo config)"
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: install (locked)
+        run: uv sync --frozen
+
+      - name: format
+        if: ${{ inputs.format }}
+        run: uv run ruff format --check .
+
+      - name: lint
+        if: ${{ inputs.lint }}
+        run: uv run ruff check .
+
+      - name: typecheck
+        if: ${{ inputs.typecheck }}
+        run: uv run pyright
+
+      - name: test
+        if: ${{ inputs.test }}
+        run: uv run pytest

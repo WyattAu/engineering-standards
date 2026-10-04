@@ -269,3 +269,30 @@ pass this matrix on first push.
 - `REPRODUCIBILITY.md` — reproducibility method, caveat, and results
 - `provenance/` — committed release provenance notes + SHA256SUMS
 - `scripts/apply-standards.sh` — bulk-apply templates to a kit repo
+
+---
+
+## Omni template estate
+
+The [Omni templates](https://github.com/WyattAu?tab=repositories&q=omni-template)
+are thin per-language scaffolds that consume these shared gates (rust-kit,
+node-ci, python-kit, go-kit, haskell-kit) and ship housekeeping pre-baked.
+The contract every template satisfies — and the coverage-tier table — lives
+in [OMNI-CORE.md](OMNI-CORE.md). `apply-standards.sh` (+ per-language
+variants `apply-standards-python.sh`, `apply-standards-go.sh`,
+`apply-standards-haskell.sh`) remain the idempotent re-application path for
+derived repos.
+
+### Branch protection recipes (recommended per template)
+
+| Check | R / Rust | TS | Python | Go | Haskell | C++ | Flutter | Infra/Dotfiles |
+|---|---|---|---|---|---|---|---|---|
+| quality (reusable gate) | rust-kit tier a | node-ci | python-kit | go-kit | haskell-kit | test.yml | reusable-analyze | lint |
+| contract | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| devcontainer (image) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| msrv / matrix leg | ✅ (1.85) | — | ✅ (3.12+) | ✅ (oldstable) | ✅ (9.6/9.8) | — | — | — |
+| e2e / fuzz / size budgets | fuzz+bench | ✅ playwright | — | ✅ fuzz | — | — | — | plan |
+
+Recipe: require the `quality` + `contract` checks, require 1 approval
+(self-owned repos: disable), require linear history, allow the marked
+experimental legs to fail.

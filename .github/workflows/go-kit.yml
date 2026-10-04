@@ -1,0 +1,63 @@
+# WyattAu shared Go CI — the Go gate matrix (proportionate to rust-kit.yml).
+# Called from each Go repo:
+#   jobs:
+#     quality:
+#       uses: WyattAu/engineering-standards/.github/workflows/go-kit.yml@main
+#
+# Gates: build → golangci-lint → test -race → govulncheck. Coverage and
+# fuzz live in repo CI (repo-specific thresholds/timeout budgets).
+
+name: quality
+
+on:
+  workflow_call:
+    inputs:
+      go-version:
+        description: "Go version (stable | oldstable | 1.x)"
+        required: false
+        default: "stable"
+        type: string
+      lint:
+        description: "Run golangci-lint"
+        required: false
+        default: true
+        type: boolean
+      race:
+        description: "Run tests with -race"
+        required: false
+        default: true
+        type: boolean
+      vuln:
+        description: "Run govulncheck ./..."
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+          check-latest: true
+
+      - name: build
+        run: go build ./...
+
+      - name: lint
+        if: ${{ inputs.lint }}
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: latest
+
+      - name: test
+        run: go test ${{ inputs.race && '-race' || '' }} ./...
+
+      - name: govulncheck
+        if: ${{ inputs.vuln }}
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          govulncheck ./...
