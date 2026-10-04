@@ -223,3 +223,20 @@ Note the asymmetry: the crate names above are already fixed and published —
 the rename is repo-side only. Nothing is re-published, no version bumps, no
 breaking change. That is the point of Rule 1: it converts every future
 crate/repo mismatch into a zero-crate-impact repo rename.
+
+## Template estate (Omni)
+
+Templates follow their own namespace, orthogonal to crate names:
+
+- **`Omni{Lang}-template`** — the scaffold. `OmniRust`, `OmniTS`, `OmniGo`,
+  `OmniHaskell`, `OmniEmbedded`, `OmniInfra`, `OmniDotfiles`, plus the
+  originals (`OmniR`, `OmniLaTeX`, `OmniCPP`, `OmniFlutter`, `OmniPython`).
+  `OmniR` is taken by R, hence Rust is `OmniRust` — no collisions.
+- **`Omni{Lang}-{variant}`** — derivatives (`OmniLaTeX-CV`,
+  `OmniLaTeX-coverletter`, `OmniCPP-docker`, `OmniLaTeX-docker`).
+- **Topics**: `omni-template` + language + `template` on every member
+  (+ `monorepo`, `nix`, `devcontainer` where applicable). Every Omni is a
+  GitHub **template repo** so "Use this template" appears.
+- **License**: Apache-2.0 across the template estate (commercial use
+  expressly permitted). Crate licensing rules are unchanged.
+- **Contract**: all templates conform to [OMNI-CORE.md](../OMNI-CORE.md).

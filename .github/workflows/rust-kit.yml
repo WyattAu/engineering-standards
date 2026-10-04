@@ -61,6 +61,11 @@ on:
         required: false
         default: ""
         type: string
+      coverage-ignore-regex:
+        description: "Regex for cargo-llvm-cov --ignore-filename-regex (exclude process surfaces from the line gate; see template ADR-0005)"
+        required: false
+        default: ""
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -190,6 +195,7 @@ jobs:
           esac
           ARGS="--all-features"
           [ -n "${{ inputs.package }}" ] && ARGS="$ARGS -p ${{ inputs.package }}"
+          [ -n "${{ inputs.coverage-ignore-regex }}" ] && ARGS="$ARGS --ignore-filename-regex=${{ inputs.coverage-ignore-regex }}"
           if [ "${INFO:-0}" = "1" ]; then
             cargo llvm-cov --summary-only $ARGS
           else
