@@ -226,6 +226,12 @@ source commit, toolchain, and artifact hash:
 - The rules, the reasoning, the R3 ownership subtlety, and the current estate
   findings live in
   [`docs/feature-compatibility.md`](docs/feature-compatibility.md).
+- The estate is **clean**: 0 findings across 33 repositories and 1,100+
+  library files. The 16 the gate found on its first sweep were each fixed with
+  `#[non_exhaustive]` rather than a suppression — that attribute does not
+  merely silence the gate, it changes a future feature-gated variant from a
+  silent downstream build break into one compile error that names the missing
+  arm.
 
 ## Tier Definitions
 

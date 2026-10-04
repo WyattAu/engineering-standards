@@ -213,6 +213,51 @@ def collect_local_enums(sources: list[Path]) -> dict[str, bool]:
     return local
 
 
+NON_EXHAUSTIVE_DECL_RE = re.compile(
+    r'#\[non_exhaustive\](?:\s*#\[[^\]]*\])*\s*'
+    r'(?:#\[derive\((?P<derive>[^\]]*)\)\]\s*)?'
+    r'(?:#\[(?P<between>[a-z_][a-z_0-9]*)(?:\([^\]]*\))?\])*\s*'
+    r'(?:pub\s*(?:\([^)]*\)\s*)?)?'
+    r'(?:enum|struct)\s+(?P<name>[A-Za-z_][A-Za-z0-9_]*)'
+)
+
+
+def collect_non_exhaustive(sources: list[Path]) -> set[str]:
+    """Names of types declared `#[non_exhaustive]`.
+
+    Resolved across the whole crate and over a *window* of following lines,
+    because the attribute is routinely separated from its item by a doc comment
+    or a `derive` list:
+
+        #[derive(Debug, Clone)]
+        #[non_exhaustive]
+        pub struct Config { .. }
+
+    An earlier revision missed exactly this shape and reported R2 on a type
+    that was opted out, so the scan reads ahead rather than pattern-matching one
+    line.
+    """
+    out: set[str] = set()
+    for path in sources:
+        try:
+            lines = [
+                strip_comments(ln) for ln in path.read_text(encoding="utf-8").splitlines()
+            ]
+        except OSError:
+            continue
+        for i, line in enumerate(lines):
+            if not NON_EXHAUSTIVE_RE.search(line):
+                continue
+            for j in range(i, min(len(lines), i + 6)):
+                pm = ITEM_RE.match(lines[j])
+                if pm and pm.group("kind") in ("enum", "struct", "union"):
+                    pn = NAME_RE.search(pm.group("rest") or "")
+                    if pn:
+                        out.add(pn.group(1))
+                    break
+    return out
+
+
 def owning_enum(
     arm_line: str, local_enums: dict[str, bool], self_type: str | None = None
 ) -> str | None:
@@ -269,7 +314,11 @@ class Finding:
         }
 
 
-def scan_file(path: Path, local_enums: dict[str, bool]) -> list[Finding]:
+def scan_file(
+    path: Path,
+    local_enums: dict[str, bool],
+    non_exhaustive_names: set[str],
+) -> list[Finding]:
     findings: list[Finding] = []
     try:
         raw_lines = path.read_text(encoding="utf-8").splitlines()
@@ -327,9 +376,6 @@ def scan_file(path: Path, local_enums: dict[str, bool]) -> list[Finding]:
         # a reader (and any suppression comment) will look.
         attr_line = pending[0][0] if pending else lineno
         feats = features_in([b for _, b in pending])
-        # Everything accumulated so far, including attributes that landed on
-        # earlier lines (`#[non_exhaustive]` conventionally does).
-        all_attrs = [b for _, b in pending]
         pending = []
 
         in_test = test_mod_depth is not None
@@ -373,12 +419,7 @@ def scan_file(path: Path, local_enums: dict[str, bool]) -> list[Finding]:
 
             if "{" in rest:
                 frame = Frame(kind, name, is_pub, depth, in_test=in_test)
-                # `#[non_exhaustive]` usually sits on its own line above the
-                # struct, so the peeled attribute bodies must be consulted too.
-                frame.non_exhaustive = bool(
-                    NON_EXHAUSTIVE_RE.search(rest)
-                    or any(NON_EXHAUSTIVE_RE.search(b) for b in all_attrs)
-                )
+                frame.non_exhaustive = name in non_exhaustive_names
                 stack.append(frame)
 
         elif m_match:
@@ -400,6 +441,12 @@ def scan_file(path: Path, local_enums: dict[str, bool]) -> list[Finding]:
                 is_pub_field = bool(re.match(r'\s*pub\s', rest))
 
                 if c_enum is not None and c_enum.pub:
+                    # `#[non_exhaustive]` is the sanctioned remedy: it converts
+                    # "silently breaks every exhaustive match" into one compile
+                    # error at the point of use. worker-kit's `Trigger` and
+                    # `RegisterError` are fixed this way.
+                    if c_enum.name in non_exhaustive_names:
+                        continue
                     for f in feats:
                         report(
                             "R1",
@@ -407,8 +454,10 @@ def scan_file(path: Path, local_enums: dict[str, bool]) -> list[Finding]:
                             f,
                             "variant of public enum `%s` is gated behind feature "
                             "`%s`; a host enabling it must add a match arm, and a "
-                            "host built without it cannot name the variant "
-                            "(%s R1)" % (c_enum.name, f, DOC_REF),
+                            "host built without it cannot name the variant. Mark "
+                            "the enum #[non_exhaustive] to convert this into a "
+                            "single actionable error (%s R1)"
+                            % (c_enum.name, f, DOC_REF),
                         )
                 elif (
                     c_struct is not None
@@ -542,9 +591,12 @@ def main() -> int:
     sources = iter_sources(root)
 
     findings: list[Finding] = []
+    # Both maps are crate-wide: a match arm or a struct declared in one module
+    # must be judged against types declared in another.
     local_enums = collect_local_enums(sources)
+    non_exhaustive_names = collect_non_exhaustive(sources)
     for path in sources:
-        findings.extend(scan_file(path, local_enums))
+        findings.extend(scan_file(path, local_enums, non_exhaustive_names))
     findings = [f for f in findings if f.rule in rules]
     findings.sort(key=lambda f: (str(f.path), f.line, f.rule))
 
@@ -584,7 +636,7 @@ def main() -> int:
             "  - marking the struct #[non_exhaustive], or\n"
             "  - documenting a deliberate exception with\n"
             "    `// feature-compat: allow — <reason>` on the line.\n"
-            "See %s." % DOC_REF
+            "See %s." % (len(findings), DOC_REF)
         )
         return 1
 

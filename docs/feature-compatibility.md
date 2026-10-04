@@ -163,13 +163,38 @@ Swept 2026-10-04: 29 kit crates and 4 multi-crate workspaces (1,100+ `.rs`
 files across library targets). **16 findings, in 4 crates.** Both product
 workspaces and both kit workspaces carry real debt.
 
-| Crate | Rule | Feature | Sites | Assessment |
+The sweep found 16 findings in 4 crates. All 16 are now fixed, and the gate
+re-reports zero across the estate.
+
+| Crate | Rule | Feature | Sites | Fix |
 |---|---|---|---|---|
-| `metrics-kit` | R1 | `openmetrics` | 1 | Real. `Format::OpenMetrics` — hosts rendering exposition output must handle both formats. |
-| `worker-kit` | R1 | `cron` | 2 | Real, and the worst of the set: `Trigger::Cron` and `RegisterError::InvalidCron`, both `pub` enums that hosts match on. `RegisterError` is a `thiserror` enum whose gated variant carries a `#[source]`. |
-| `crawlkit-engine` | R1 | `full`, `postgres`, `wasi-preview2` | 5 | Real. `CrawlError`, `StorageError`, `PluginInstance`. Note `full` is a **default** feature, so these are the common case rather than an edge. |
-| `clawdius-gateway` | R2 | `auth` | 2 | Real. `AdminState` has public feature-gated fields and is constructible by struct literal. |
-| `clawdius-core` | R1 | `local-llm` | 1 | Real. `EmbedderType`. |
+| `metrics-kit` | R1 | `openmetrics` | 1 | `Format` → `#[non_exhaustive]` |
+| `worker-kit` | R1 | `cron` | 2 | `Trigger`, `RegisterError` → `#[non_exhaustive]` |
+| `crawlkit-engine` | R1, R2, R3 | `full`, `postgres`, `wasi-preview2` | 7 | `CrawlError`, `StorageError`, `PluginInstance`, `AnalysisContext` → `#[non_exhaustive]`; two gated `RequestFailed` arms collapsed into one unconditional arm with a `cfg`-gated body |
+| `clawdius-core` | R1 | `local-llm` | 1 | `EmbedderType` → `#[non_exhaustive]` |
+| `clawdius` (CLI) | R1 | `keyring`, `vector-db` | 2 | `Commands` → `#[non_exhaustive]` |
+| `clawdius-gateway` | R2 | `auth` | 2 | `AdminState` → `#[non_exhaustive]`, plus a new `attach_auth(..)` and two call sites moved off struct literals |
+
+`#[non_exhaustive]` is the right remedy rather than a suppression for every one
+of these, and the reason is worth stating: it does not merely silence the gate,
+it changes *which* failure a future feature produces. A new gated variant behind
+`#[non_exhaustive]` yields one compile error at the point of use, with the
+compiler naming the missing arm — instead of a build break in a downstream
+crate that never asked for the feature. That is why the checker stands R1 down
+when it sees the attribute.
+
+Two of the fixes found further breakage on their own, which is the argument for
+doing this before merging the gate rather than after:
+
+- `crawlkit-engine`'s `IsRetryable` matched two `cfg`-gated arms for
+  `RequestFailed`. The variant exists in *both* feature states — only its
+  payload type changes — so the gating bought nothing while putting the
+  match's totality at risk. One arm with a `cfg`-gated body is strictly
+  better.
+- `AdminState` → `#[non_exhaustive]` immediately failed
+  `cargo check -p clawdius-gateway --features auth` with `E0639`: `main.rs`
+  built the struct with a literal in two places, a path evidently not built in
+  CI without that feature.
 
 The `crawlkit` and `clawdius` results are worth stating precisely, because both
 look alarming and neither is as bad as the raw count suggests:
@@ -186,38 +211,28 @@ look alarming and neither is as bad as the raw count suggests:
   re-exporting `pub mod cli`, so its `Commands` enum is technically public
   even though the crate is an application.
 
-### Fix order
+`outbox-kit` and `breaker` — the crates that started this — were never in the
+table: they are already clean. `outbox-kit` is defended twice over, each with
+the reasoning recorded at the site: it enables `breaker/timeout` in its own
+manifest, *and* ends its dispatch match with a catch-all arm. That is the shape
+to copy for a crate that cannot take `#[non_exhaustive]` (a foreign enum it
+does not own, for instance).
 
-`worker-kit` first: two `pub` enums, both host-matched, and `cron` is
-off-by-default so the break lands on whoever enables it. `crawlkit-engine` next
-— five sites and `full` is default-on, so it has the widest blast radius.
-`metrics-kit` and `clawdius` after.
+## Adoption
 
-The standard remedy for all of them is `#[non_exhaustive]` on the enum, which
-converts "silently breaks every exhaustive match" into "one compile error at the
-point of use, with a migration note". For `R2` on `AdminState`,
-`#[non_exhaustive]` is the fix as well.
+The gate is in `rust-kit.yml` and every kit picks it up by calling the shared
+workflow — no per-repo wiring, and no `continue-on-error` crutch needed,
+because the estate is already green.
 
-`outbox-kit` and `breaker` — the crates that started this — are clean, and
-`outbox-kit` is now defended twice over: it enables `breaker/timeout` in its own
-manifest *and* ends its dispatch match with a catch-all arm, each with the
-reasoning recorded at the site. That is the shape to copy.
+1. **Done** — checker, 13 fixtures, and this document.
+2. **Done** — all 16 findings fixed across 6 crates, each with a
+   `CHANGELOG.md` entry naming the gate as the reason.
+3. **Next** — merge `rust-kit.yml` to `main` and confirm the first kit runs.
 
-## Adoption order for the sweep
-
-When enabling this gate across the estate, expect red on the four crates above.
-The mechanical order that keeps every commit independently green:
-
-1. Land the checker and this document (no behaviour change).
-2. Add the `feature-compat` job to `rust-kit.yml` with `continue-on-error` or as
-   a non-required status check, so adoption does not block unrelated work.
-3. Fix the 16 findings. Each is small: an `#[non_exhaustive]` attribute, or
-   splitting a public struct's feature-gated fields behind a new type.
-4. Flip the job to required.
-
-Steps 3 and 4 are where the estate's own gate rules apply: any change to a
-public enum is a semver-affecting edit and needs the `CHANGELOG.md` entry and
-the release-gate treatment, not a drive-by fix.
+New code should be written against the rule rather than fixed afterwards. The
+three always-legal shapes — a whole gated module, a whole gated type, a
+defaulted trait method — cover nearly every case anyone actually wants, so the
+gate should rarely fire on new work.
 
 ## See also
 

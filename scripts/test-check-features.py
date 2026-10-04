@@ -8,6 +8,7 @@ regressions, reproduced verbatim in shape:
   r1_enum_variant      outbox-kit 0.1.0 vs breaker's `timeout` feature
   r1_private_enum      same shape, but not public API -> must stay silent
   r1_nested_module     pub enum in a pub mod — nesting must not hide it
+  r1_non_exhaustive    #[non_exhaustive] enum — the sanctioned remedy
   r2_struct_field      a gated field on a pub struct
   r2_non_exhaustive    gated field on #[non_exhaustive] struct -> allowed
   r3_match_arm         a match arm that vanishes under unification
@@ -96,6 +97,7 @@ CASES = [
     ("r1_enum_variant", ["R1"], False),
     ("r1_private_enum", [], True),
     ("r1_nested_module", ["R1"], False),
+    ("r1_non_exhaustive", [], True),
     ("r2_struct_field", ["R2"], False),
     ("r2_non_exhaustive", [], True),
     ("r3_match_arm", ["R3"], False),
