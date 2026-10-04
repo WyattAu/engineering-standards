@@ -176,6 +176,28 @@ jobs:
             --cwd . \
             --estate-list .standards/scripts/estate-crates.txt
 
+  feature-compat:
+    # Additive cargo features must not gate public API elements: Cargo unifies
+    # features graph-wide, so a feature-gated variant/field/arm breaks hosts
+    # that enable it anywhere in the graph. See docs/feature-compatibility.md.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: checkout engineering-standards (public; checker)
+        uses: actions/checkout@v4
+        with:
+          repository: WyattAu/engineering-standards
+          ref: main
+          path: .standards
+          persist-credentials: false
+      - name: feature-compatibility check
+        run: |
+          python3 .standards/scripts/check-features.py --cwd .
+      - name: checker self-test (guards against false positives)
+        run: python3 .standards/scripts/test-check-features.py
+
   coverage:
     runs-on: ubuntu-latest
     steps:
