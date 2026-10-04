@@ -1,6 +1,6 @@
-# WyattAu estate-internal crates (crates.io owner WyattAu, user id 404181).
-# Regenerate: curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=N' | jq -r '.crates[].name'
 # Checked by scripts/check-layers.py — estate membership = published under this owner.
+# Regenerate: curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=N' | jq -r '.crates[].name'
+# WyattAu estate-internal crates (crates.io owner WyattAu, user id 404181).
 accessctl
 actor-kit
 api-paginate
@@ -29,8 +29,8 @@ delta-kit
 docs-pipeline
 dsp-core
 envstack
-error-classify-derive
 error-classify
+error-classify-derive
 error-codes
 eventbus-kit
 fetch-kit
@@ -51,23 +51,23 @@ leptos-map-search
 leptos-sparkline
 leptos-stale-indicator
 loop-retry
-mailkit
 mail-sync-kit
+mailkit
 media-kit
 metrics-kit
 model-router
 multi-chain-wallet
 oauth-toolkit
-otelkit
 otel-stack
+otelkit
 outbox-kit
 percentile-kit
 pid-manager
+ply-viz
 plychart
 plycharts
 plycompute
 plycore
-ply-viz
 polyfont-cli
 polyfont-config
 polyfont-core
@@ -82,6 +82,8 @@ resilient-fetch
 salting
 scim-kit
 shared-state
+sheet-core
+sheet-xlsx
 shm-rings
 shutdown-kit
 sieve-kit
@@ -93,6 +95,7 @@ suture-connector-airtable
 suture-connector-notion
 suture-core
 suture-daemon
+suture-driver
 suture-driver-csv
 suture-driver-docx
 suture-driver-example
@@ -106,7 +109,6 @@ suture-driver-otio
 suture-driver-pdf
 suture-driver-pptx
 suture-driver-sql
-suture-driver
 suture-driver-svg
 suture-driver-toml
 suture-driver-xlsx
@@ -133,8 +135,8 @@ tokenkit
 typed-id-derive
 typed-id-new
 uds-kit
-validkit-derive
 validkit
+validkit-derive
 vane-client-sdk
 vane-control
 vane-filters

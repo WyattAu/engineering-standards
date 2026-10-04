@@ -83,6 +83,8 @@
   "salting": "L0",
   "scim-kit": "L3",
   "shared-state": "L1",
+  "sheet-core": "L1",
+  "sheet-xlsx": "L1",
   "shm-rings": "L1",
   "shutdown-kit": "L1",
   "sieve-kit": "L0",

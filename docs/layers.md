@@ -27,7 +27,7 @@ essential external infra like tokio). Linux/platform-scoped crates are allowed
 here with declared `#[cfg(target_os)]` targets.
 
 Examples: `metrics-kit`, `cas-kit`, `shm-rings`, `uds-kit`, `tokenkit`,
-`shutdown-kit`, `wire-kit`, `clock-kit`, `hw-kit` (future: `uring-kit`).
+`shutdown-kit`, `wire-kit`, `clock-kit`, `hw-kit`, `sheet-core` (future: `uring-kit`).
 
 ### L2 — domain
 Domain logic with estate semantics; depends on L0/L1 and other L2 kits
@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (152 crates, 2026-10-03)
+## Classification (154 crates, 2026-10-04)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -172,6 +172,8 @@ drift. Justifications are one line per crate.
 | `polyfont-scope` | L1 | Font scoping over polyfont-core L0 |
 | `polyfont-themes` | L1 | Theme layer over polyfont-config L1 |
 | `shared-state` | L1 | Shared-state plumbing substrate (kits.ts L1) |
+| `sheet-core` | L1 | Spreadsheet data model substrate (sparse cells, dependency DAG, topological order); zero estate deps |
+| `sheet-xlsx` | L1 | XLSX codec over sheet-core L1 (same-layer composition) |
 | `shm-rings` | L1 | Shared-memory ring substrate (task §1 L1 anchor) |
 | `shutdown-kit` | L1 | Graceful shutdown coordination substrate (kits.ts L1) |
 | `slab-pool` | L1 | Lock-free memory pool substrate, shm-rings sibling |
