@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (155 crates, 2026-10-04)
+## Classification (157 crates, 2026-10-04)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -215,6 +215,8 @@ drift. Justifications are one line per crate.
 | `vane-tls` | L1 | TLS termination over shm-rings L1 |
 | `webauthn-kit` | L1 | CTAP2/COSE verification substrate (kits.ts L1) |
 | `wire-kit` | L1 | Zero-copy SBE/FIX wire codec substrate; zero estate deps (spec §Cross-references: estate's edge-format leaf) |
+| `a2l-parse` | L1 | ASAP2/A2L ECU-description parser, zero deps; description half of the automotive calibration stack beside xcp-core (automotive protocol stack §L1) |
+| `xcp-core` | L1 | XCP on CAN protocol substrate (commands, responses, DAQ lists) over can-core L0; only estate dep is can-core (automotive protocol stack §L1) |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
