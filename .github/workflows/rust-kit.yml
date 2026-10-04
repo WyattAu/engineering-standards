@@ -61,6 +61,11 @@ on:
         required: false
         default: ""
         type: string
+      coverage-extra-args:
+        description: "Extra cargo-llvm-cov args for the coverage job (e.g. --ignore-filename-regex for process surfaces; see template ADR-0005)"
+        required: false
+        default: ""
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -190,6 +195,7 @@ jobs:
           esac
           ARGS="--all-features"
           [ -n "${{ inputs.package }}" ] && ARGS="$ARGS -p ${{ inputs.package }}"
+          [ -n "${{ inputs.coverage-extra-args }}" ] && ARGS="$ARGS ${{ inputs.coverage-extra-args }}"
           if [ "${INFO:-0}" = "1" ]; then
             cargo llvm-cov --summary-only $ARGS
           else
