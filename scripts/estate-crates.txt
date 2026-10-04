@@ -35,6 +35,7 @@ error-codes
 eventbus-kit
 fetch-kit
 flag-kit
+formula-lang
 geo-kit
 healthkit
 http-errors

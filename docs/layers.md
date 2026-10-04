@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (154 crates, 2026-10-04)
+## Classification (155 crates, 2026-10-04)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -135,6 +135,7 @@ drift. Justifications are one line per crate.
 | `error-codes` | L0 | Stable numeric error-code registry leaf (task candidate errcode) |
 | `geo-kit` | L0 | Geocoding utils, thiserror only (kits.ts L0) |
 | `font-parse` | L0 | SFNT/OTF/TrueType/WOFF2 binary font parser leaf, font-types + thiserror only; zero estate deps |
+| `formula-lang` | L0 | Spreadsheet formula language leaf — tokenizer, Pratt parser, AST, evaluator; thiserror + libm only, zero estate deps |
 | `http-errors` | L1 | Re-export shim over error-codes L0; runtime estate dep forbids L0 (mirrors error-classify) |
 | `hw-kit` | L1 | Linux-only hardware substrate (topology/pinning/NUMA/hugepages); zero estate deps, `libc`-only external edge |
 | `i18n-kit` | L0 | Runtime i18n catalogs; thiserror-only leaf |
