@@ -84,6 +84,7 @@ salting
 scim-kit
 shared-state
 sheet-core
+sheet-engine
 sheet-xlsx
 shm-rings
 shutdown-kit

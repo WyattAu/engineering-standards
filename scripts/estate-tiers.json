@@ -85,6 +85,7 @@
   "scim-kit": "L3",
   "shared-state": "L1",
   "sheet-core": "L1",
+  "sheet-engine": "L2",
   "sheet-xlsx": "L1",
   "shm-rings": "L1",
   "shutdown-kit": "L1",
