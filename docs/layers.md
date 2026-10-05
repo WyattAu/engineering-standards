@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (162 crates, 2026-10-05)
+## Classification (163 crates, 2026-10-06)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
