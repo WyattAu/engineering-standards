@@ -3,6 +3,7 @@ accessctl
 actor-kit
 api-paginate
 api-types
+audiobook-core
 axum-stack
 barbican
 billing-kit
