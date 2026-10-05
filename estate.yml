@@ -733,7 +733,7 @@ repos:
       - multi-chain-wallet
     _seen:
       last_push: "2026-10-02"
-      multi-chain-wallet: 0.2.1
+      multi-chain-wallet: 0.2.2
 
   healthkit:
     area: obsv
