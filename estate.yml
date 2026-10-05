@@ -1023,6 +1023,16 @@ repos:
       last_push: "2026-10-05"
       decimal-money: 1.1.1
 
+  double-entry:
+    area: money
+    status: core
+    notes: "Immutable double-entry accounting core: append-only journals, balanced posting, period close, reversal by counter-entry. Published 2026-10-05 with an estate-integration suite in the same loop. Models a posting as an integer count of minor units with an explicit rounding mode, which ledger-kit does not; see ROADMAP.md round 14."
+    crates:
+      - double-entry
+    _seen:
+      last_push: "2026-10-05"
+      double-entry: 0.1.0
+
   morph:
     area: app
     status: dormant
@@ -1043,7 +1053,7 @@ repos:
       - oauth-toolkit
     _seen:
       last_push: "2026-10-02"
-      oauth-toolkit: 0.2.2
+      oauth-toolkit: 0.3.0
 
   observability-assets:
     area: obsv
