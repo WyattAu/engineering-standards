@@ -74,6 +74,20 @@ critical-section fallback elsewhere (see chronoshift's `MockClock`).
 | model-router | ⚠ std-bound | `std::sync::Mutex` in `CostTracker` — fixable via spin/critical-section lock swap (follow-up) |
 | cas-kit | ⚠ std-bound | genuinely std-bound: filesystem blob store (`fs`, `Path`, `tempfile`) |
 
+### Status update (2026-09-26)
+
+- **Gate adoption complete (2026-09):** every kit repository in the estate now
+  runs the shared `rust-kit.yml` matrix via one reusable-workflow call —
+  including the newest wave: metrics-kit, config-kit, idempotency-kit,
+  outbox-kit, percentile-kit, chaos-kit, telemetry-init, worker-kit.
+- **cargo-vet enforcement is live:** the shared workflow's `vet` job
+  (`cargo vet --locked`) fails CI on unaudited dependencies; kit repos carry a
+  committed `supply-chain/` and `Cargo.lock`.
+- **Registry additions:** the 8 kits above are now on crates.io and listed in
+  KITS.md and the site's crates page (63 published kits). Corrections:
+  `fetchkit` publishes as `fetch-kit` (superseding `resilient-fetch`);
+  `testkit` remains repo-only (not yet published).
+
 ## Policies
 
 ### 1. Versioning & Release (semver discipline)
@@ -159,13 +173,20 @@ source commit, toolchain, and artifact hash:
 
 - `deny.toml` in every repo: advisories `deny`, licenses allow-list
   (MIT/Apache-2.0/BSD/ISC/Unicode/Zlib), bans on duplicate versions (warn).
-- dependabot weekly. cargo-vet audits rolled out to all Tier A repos
-  (`supply-chain/` bootstrapped from crates.io/registry peer audits — mozilla,
-  google, isrg, bytecode-alliance, embark-studios, fermyon, zcash; per-repo
-  `vet.yml` runs weekly + on PR, non-blocking until exemption backlog is
-  burned down).
+- dependabot weekly. cargo-vet audits are **enforcing** via the shared
+  workflow's `vet` job (`cargo vet --locked`, installed with
+  `taiki-e/install-action`): every kit repo must carry a committed
+  `supply-chain/` plus a committed `Cargo.lock` (`--locked` requires it —
+  cargo-vet never generates one). New repos: run `cargo vet init` to
+  bootstrap `supply-chain/` from crates.io peer audits (mozilla, google,
+  isrg, bytecode-alliance, embark-studios, fermyon, zcash) —
+  `scripts/apply-standards.sh <repo>` does it automatically. Burn down any
+  exemption backlog surfaced by `cargo vet` before it turns the gate red.
 - Vendoring is a deliberate act: vendored copies get a drift-check script
   (see ecom-engine `scripts/check_vendor_drift.sh` pattern).
+- Allow-list additions are ratified by PR: each new SPDX id lands in
+  `templates/deny.toml` with a one-line rationale naming the dependency that
+  requires it and a precedent repo that already accepts it.
 
 ### 8. Documentation
 
@@ -174,13 +195,24 @@ source commit, toolchain, and artifact hash:
 - README minimum: one-line value prop, install, working example, feature
   table, perf numbers if latency-relevant, license.
 
+### 9. Naming & Repo Identity
+
+- Repo name and published crate name are **identical** (no lookup tables).
+- Names follow the estate taxonomy: `{domain}-{concern}` for domain stacks,
+  `{concern}-kit` (hyphenated) for cross-cutting infrastructure, short names
+  for unique primitives, product names for products.
+- The full rules, the decision flowchart, the grandfathered-name list, and
+  the pending repo-rename commands live in
+  [`docs/naming-convention.md`](docs/naming-convention.md) — authoritative
+  for every naming decision.
+
 ## Tier Definitions
 
 - **Tier A — Security-critical / load-bearing (14)**: tokenkit, cryptkit,
   salting, webauthn-kit, multi-chain-wallet, barbican, validkit, breaker,
   throttle-kit, ws-kit, blobkit, decimal-money, healthkit, otelkit
 - **Tier B — Flagship infra (10)**: actor-kit, cas-kit, eventbus-kit,
-  cache-pal, fetchkit, media-kit, docs-pipeline, axum-stack, geo-kit, mailkit
+  cache-pal, fetch-kit, media-kit, docs-pipeline, axum-stack, geo-kit, mailkit
 - **Tier C — Long tail**: everything else
 
 ## Adopting the Standards
@@ -268,6 +300,9 @@ keeps 181 repos honest:
 
 ## Repo Layout
 
+- `docs/naming-convention.md` — estate naming convention: the 6 rules,
+  decision flowchart, domain-stack template, grandfathered names, and repo
+  rename procedure
 - `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
 - `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
 - `.github/workflows/attest.yml` — per-crate release provenance (dispatch)
@@ -285,3 +320,44 @@ keeps 181 repos honest:
 - `scripts/estate-audit.py` — verifies the manifest against GitHub,
   crates.io, and consumer pin sets; reports pin drift, coverage debt and
   dormancy, and fails on schema violations (`.github/workflows/estate-audit.yml`)
+---
+
+## Omni template estate
+
+The [Omni templates](https://github.com/WyattAu?tab=repositories&q=omni-template)
+are thin per-language scaffolds that consume these shared gates (rust-kit,
+node-ci, python-kit, go-kit, haskell-kit) and ship housekeeping pre-baked.
+The contract every template satisfies — and the coverage-tier table — lives
+in [OMNI-CORE.md](OMNI-CORE.md). `apply-standards.sh` (+ per-language
+variants `apply-standards-python.sh`, `apply-standards-go.sh`,
+`apply-standards-haskell.sh`) remain the idempotent re-application path for
+derived repos.
+
+### Branch protection recipes (recommended per template)
+
+| Check | R / Rust | TS | Python | Go | Haskell | C++ | Flutter | Infra/Dotfiles |
+|---|---|---|---|---|---|---|---|---|
+| quality (reusable gate) | rust-kit tier a | node-ci | python-kit | go-kit | haskell-kit | test.yml | reusable-analyze | lint |
+| contract | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| devcontainer (image) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| msrv / matrix leg | ✅ (1.85) | — | ✅ (3.12+) | ✅ (oldstable) | ✅ (9.6/9.8) | — | — | — |
+| e2e / fuzz / size budgets | fuzz+bench | ✅ playwright | — | ✅ fuzz | — | — | — | plan |
+
+Recipe: require the `quality` + `contract` checks, require 1 approval
+(self-owned repos: disable), require linear history, allow the marked
+experimental legs to fail.
+
+### Keeping the estate leading
+
+The estate runs a monthly improvement loop against the market:
+
+- [LOOP.md](LOOP.md) — the loop itself (survey → matrix diff → implement →
+  test → publish) and its log, plus the advisory-to-gate graduation policy.
+- [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md) — feature-by-feature
+  matrix against the leading templates per language, with the backlog.
+- [PITFALLS.md](PITFALLS.md) — failure modes already paid for (Dependabot
+  misreading toolchain refs, TypeScript 7 vs `astro check`, GHCR feature 401s,
+  `mkdocs gh-deploy` vs workflow-built Pages, advisory-job semantics).
+
+New gates land **advisory** for one loop, then graduate to blocking once the
+whole loop has been green or triaged in writing.

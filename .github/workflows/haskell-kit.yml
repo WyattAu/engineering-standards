@@ -1,0 +1,76 @@
+# WyattAu shared Haskell CI — the Haskell gate matrix (proportionate to
+# rust-kit.yml). Called from each Haskell repo:
+#   jobs:
+#     quality:
+#       uses: WyattAu/engineering-standards/.github/workflows/haskell-kit.yml@main
+#       with:
+#         ghc-version: "9.8.4"
+#
+# Gates: cabal build (warnings-as-errors) → test → hlint → fourmolu check.
+# weeder + docs live in repo CI (they need repo-specific hie/doc config).
+
+name: quality
+
+on:
+  workflow_call:
+    inputs:
+      ghc-version:
+        description: "GHC version"
+        required: false
+        default: "9.8.4"
+        type: string
+      lint:
+        description: "Run hlint"
+        required: false
+        default: true
+        type: boolean
+      format:
+        description: "Run fourmolu --mode check + cabal-fmt -c"
+        required: false
+        default: true
+        type: boolean
+      test:
+        description: "Run cabal test all"
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: ${{ inputs.ghc-version }}
+          cabal-version: latest
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cabal/store
+            dist-newstyle
+          key: cabal-${{ inputs.ghc-version }}-${{ hashFiles('cabal.project', '**/*.cabal') }}
+          restore-keys: cabal-${{ inputs.ghc-version }}-
+
+      - run: cabal update
+      - name: build (warnings are errors via cabal.project)
+        run: cabal build all
+
+      - name: test
+        if: ${{ inputs.test }}
+        run: cabal test all
+
+      - name: hlint
+        if: ${{ inputs.lint }}
+        run: |
+          curl -sSfL https://github.com/ndmitchell/hlint/releases/latest/download/hlint-x86_64-linux.tar.gz | tar xz
+          ./hlint-x86_64-linux/hlint .
+
+      - name: fourmolu + cabal-fmt check
+        if: ${{ inputs.format }}
+        run: |
+          cabal install fourmolu cabal-fmt --overwrite-policy=always --installdir="$HOME/.local/bin"
+          "$HOME/.local/bin/fourmolu" --mode check .
+          find . -name '*.cabal' -not -path './dist-newstyle/*' -exec "$HOME/.local/bin/cabal-fmt" -c {} +

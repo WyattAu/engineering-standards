@@ -41,6 +41,11 @@ on:
         required: false
         default: false
         type: boolean
+      miri-flags:
+        description: "Extra MIRIFLAGS for the miri job (e.g. -Zmiri-disable-isolation so tests using the filesystem run under miri). Default: none."
+        required: false
+        default: ""
+        type: string
       bench-regression:
         description: "Run criterion benches (regression visibility, not gating)"
         required: false
@@ -53,6 +58,11 @@ on:
         type: boolean
       package:
         description: "Restrict to one crate in a workspace (cargo -p <name>)"
+        required: false
+        default: ""
+        type: string
+      coverage-ignore-regex:
+        description: "Regex for cargo-llvm-cov --ignore-filename-regex (exclude process surfaces from the line gate; see template ADR-0005)"
         required: false
         default: ""
         type: string
@@ -132,6 +142,40 @@ jobs:
             echo "::warning::no deny.toml — adopt templates/deny.toml"
           fi
 
+  vet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # taiki-e install-action can only serve the v0.10.0 GitHub release, which
+      # predates trusted-publisher support: it cannot parse imports.lock
+      # entries for crates published via crates.io trusted publishing
+      # (no user-id exists). Install from crates.io instead — 0.10.2 matches
+      # the dev toolchain and reads all existing imports.lock files.
+      - name: Install cargo-vet
+        run: cargo install --locked cargo-vet --version 0.10.2
+      - run: cargo vet --locked
+
+  layer:
+    # Estate L0-L3 layer model: dependencies must never point up the stack.
+    # See docs/layers.md in WyattAu/engineering-standards.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: checkout engineering-standards (public; checker + estate list)
+        uses: actions/checkout@v4
+        with:
+          repository: WyattAu/engineering-standards
+          ref: main
+          path: .standards
+          persist-credentials: false
+      - name: estate layer check (no upward deps)
+        run: |
+          python3 .standards/scripts/check-layers.py \
+            --cwd . \
+            --estate-list .standards/scripts/estate-crates.txt
+
   coverage:
     runs-on: ubuntu-latest
     steps:
@@ -151,6 +195,7 @@ jobs:
           esac
           ARGS="--all-features"
           [ -n "${{ inputs.package }}" ] && ARGS="$ARGS -p ${{ inputs.package }}"
+          [ -n "${{ inputs.coverage-ignore-regex }}" ] && ARGS="$ARGS --ignore-filename-regex=${{ inputs.coverage-ignore-regex }}"
           if [ "${INFO:-0}" = "1" ]; then
             cargo llvm-cov --summary-only $ARGS
           else
@@ -194,6 +239,8 @@ jobs:
           components: miri
       - uses: Swatinem/rust-cache@v2
       - name: miri (lib tests)
+        env:
+          MIRIFLAGS: ${{ inputs.miri-flags }}
         run: cargo +nightly miri test --lib ${{ env.PKG_FLAG }}
 
   wasm:
