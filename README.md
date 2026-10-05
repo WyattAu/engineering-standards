@@ -284,14 +284,21 @@ The audit enforces four invariants, and fails CI on any of them:
 4. an exact pin matches what crates.io currently serves
 
 Beyond the schema it reports three classes of drift, which is what actually
-keeps 181 repos honest:
+keeps 182 repos honest:
 
 - **pin drift** — a consumer tests an artifact nobody ships any more. This
   is not hypothetical: the audit's first run found **17 stale pins** in
-  `estate-integration`, including a held-back `outbox-kit` whose newer
-  release `ledger-kit` cannot consume. Holds are recorded in
-  `pins_held:` with the reason and the ask, so "held on purpose" is
-  distinguishable from "nobody noticed".
+  `estate-integration`, all fixed, plus one `outbox-kit` pin held behind
+  because `ledger-kit` could not consume the newer major. That hold has since
+  been released (`ledger-kit 0.1.1` shipped the consumer) and `pins_held` is
+  now empty. Holds are recorded in `pins_held:` with the reason and the ask,
+  so "held on purpose" is distinguishable from "nobody noticed".
+
+  The audit has already paid for itself twice over. Its findings led
+  directly to two published releases — `billing-kit 0.2.0` (closing a
+  decimal-money major split that made a price unpostable) and
+  `ledger-kit 0.1.1` (unblocking the outbox-kit pin) — and to one bug fix in
+  `actor-kit`, where a suspended actor could never be resumed or stopped.
 - **coverage debt** — a published crate no suite composes (53 at last
   count). Each round of `estate-integration` suites exists to retire some
   of this.

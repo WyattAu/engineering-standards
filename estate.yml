@@ -27,21 +27,15 @@
 
 # ## pins_held
 #
-# Exact pins a consumer deliberately holds behind the published version,
-# with the reason. Keeping them here rather than in a comment inside the
+# Exact pins a consumer deliberately holds behind the published version, with
+# the reason. Keeping them here rather than in a comment inside the
 # consumer's Cargo.toml means the audit can tell "held on purpose, here is
 # why" apart from "nobody noticed", and CI will fail if a hold loses its
 # reason or names an unknown consumer.
-pins_held:
-  - consumer: WyattAu/estate-integration
-    crate: outbox-kit
-    reason: >-
-      outbox-kit 0.2.0 is a breaking release (DispatcherConfig::batch_size
-      replaced by adaptive FetchBatch, OutboxStore redefined) and
-      ledger-kit 0.1.0 declares outbox-kit = "^0.1", so pinning 0.2.0 puts
-      two majors in one graph and OutboxJournal::with_inner_and_store fails
-      with E0308. Blocks the accounting product's durable journal until
-      ledger-kit ships an outbox-kit 0.2 consumer.
+#
+# Currently empty: the last hold (outbox-kit, waiting on a ledger-kit
+# consumer) was released when ledger-kit 0.1.1 shipped.
+pins_held: []
 
 schema: 1
 updated: "2026-10-05"
@@ -312,6 +306,11 @@ repos:
       last_push: "2026-10-02"
       error-classify: 0.3.1
       error-classify-derive: 0.1.0
+
+  audiobook-conformance:
+    area: data
+    status: support
+    notes: "Conformance harness cross-checking mp4-core/id3-core/audiobook-core against ffmpeg and ffprobe; repo-only, not a published crate."
 
   audiobook-core:
     area: data
