@@ -21,7 +21,8 @@ monthly or after any major ecosystem shift.
 5. **Test the estate**: every template's main CI green; devcontainer both
    flavors green; new jobs advisory until stable, then promoted to gates
    (MUTATION.md promote pattern).
-6. **Update the matrix + this file** with the loop's date and outcome.
+6. **Update the matrix + this file** with the loop's date and outcome, and record any
+   new failure mode in [PITFALLS.md](PITFALLS.md).
 7. **Publish**: engineering-standards PR (docs + shared gates), then the
    sweep PRs per template.
 
@@ -36,7 +37,7 @@ for the whole loop. Nothing jumps straight to blocking.
 
 | Loop | Date | Outcome |
 |---|---|---|
-| 1 | 2026-10-05 | COMPETITIVE-ANALYSIS.md; AGENTS.md + llms.txt estate-wide; OpenSSF Scorecard + zizmor + osv-scanner workflows (advisory); macOS+Windows CI legs (Rust/Go/TS/Python). Backlog: git-cliff/release-please, REUSE.toml, perf budgets, Copier updates, legacy-template migration. |
+| 1 | 2026-10-05 | COMPETITIVE-ANALYSIS.md + PITFALLS.md; AGENTS.md + llms.txt estate-wide; OpenSSF Scorecard + zizmor + osv-scanner workflows (advisory); macOS+Windows CI legs (Rust/Go/TS/Python) — Rust green on both first try; nix devcontainer flavor repaired (official installer, no GHCR feature) and promoted advisory → gate; TypeScript pinned to 6.x estate-wide (TS 7 breaks `astro check` + knip) with dependabot guards; msrv gate made un-bumpable (`master` + `toolchain` input); OmniPython docs moved to the Pages artifact flow. Backlog: git-cliff/release-please, REUSE.toml, perf budgets, Copier updates, legacy-template migration. |
 
 ## Backlog
 

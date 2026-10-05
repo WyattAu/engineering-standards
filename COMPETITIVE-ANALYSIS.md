@@ -51,6 +51,26 @@ Legend: ✅ ships today · 🔶 partial/advisory · ❌ absent · 🎯 exceeds m
 | Multi-version test matrix | ✅ Python 3.12–3.14, GHC 9.6–9.10, Go old/stable/next | common | ✅ |
 | Docs deploy zero-touch | ✅ OmniDocs | common | ✅ |
 
+## Loop 1 outcome
+
+Everything below shipped and is green on `main`. Two rows moved beyond the
+plan: the nix devcontainer flavor was found to be **broken** (the GHCR feature
+401s for anonymous pulls) rather than merely advisory, so it was repaired and
+promoted from advisory to a blocking gate; and the TypeScript floor became a
+hard constraint — TS 7 (native port) ships no programmatic compiler API, so
+`astro check` and knip crash on it — recorded as a documented pin plus
+dependabot guard, detailed in [PITFALLS.md](PITFALLS.md).
+
+| Capability | Omni | Best market | Verdict |
+|---|---|---|---|
+| AGENTS.md | ✅ | d-oit | ✅ par |
+| llms.txt | ✅ | d-oit | ✅ par |
+| OpenSSF Scorecard (advisory) | ✅ | rare in templates | 🎯 |
+| zizmor + osv-scanner (advisory) | ✅ | rare | 🎯 |
+| macOS CI | ✅ Rust/Go/TS/Python | common | ✅ par |
+| Windows CI | ✅ Rust/Go/TS/Python | common | ✅ par |
+| Nix devcontainer that actually builds | ✅ | rare to ship nix at all | 🎯 |
+
 ## Gap-closing work in loop 1
 
 1. **AGENTS.md** per template — agent contract: scripts canonical, `make ci`,
