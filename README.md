@@ -296,3 +296,18 @@ derived repos.
 Recipe: require the `quality` + `contract` checks, require 1 approval
 (self-owned repos: disable), require linear history, allow the marked
 experimental legs to fail.
+
+### Keeping the estate leading
+
+The estate runs a monthly improvement loop against the market:
+
+- [LOOP.md](LOOP.md) — the loop itself (survey → matrix diff → implement →
+  test → publish) and its log, plus the advisory-to-gate graduation policy.
+- [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md) — feature-by-feature
+  matrix against the leading templates per language, with the backlog.
+- [PITFALLS.md](PITFALLS.md) — failure modes already paid for (Dependabot
+  misreading toolchain refs, TypeScript 7 vs `astro check`, GHCR feature 401s,
+  `mkdocs gh-deploy` vs workflow-built Pages, advisory-job semantics).
+
+New gates land **advisory** for one loop, then graduate to blocking once the
+whole loop has been green or triaged in writing.
