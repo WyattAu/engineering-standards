@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (161 crates, 2026-10-05)
+## Classification (162 crates, 2026-10-05)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -222,6 +222,7 @@ drift. Justifications are one line per crate.
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
+| `audiobook-conformance` | L3 | Conformance harness — generates a corpus with ffmpeg and cross-checks the audiobook crates against ffprobe and Symphonia; the independent oracle the parsers are measured against |
 | `audiobook-core` | L1 | Audiobook domain model — format-independent `Title`/`Part`/`Chapter`, an MP3 frame walker deriving duration from Xing/Info/VBRI or bitrate, and signature-based container detection; composes `id3-core` + `mp4-core`, `no_std` + `alloc` |
 | `axum-stack` | L2 | Axum middleware stack on healthkit+shutdown-kit (kits.ts L2) |
 | `billing-kit` | L2 | Pricing primitives over decimal-money L0 (kits.ts L2) |
