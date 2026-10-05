@@ -1,0 +1,54 @@
+name: estate-audit
+
+# Keeps estate.yml honest. The manifest is only useful if it cannot drift from
+# reality, so this runs on every edit to the manifest and nightly otherwise.
+
+on:
+  push:
+    branches: [main]
+    paths: ["estate.yml", "scripts/estate-audit.py"]
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: estate-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --quiet pyyaml
+
+      - name: Audit the estate manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/estate-audit.py
+
+      - name: Fail on unclaimed crates or unpinned core repos
+        # The audit exits 1 on manifest errors. Drift and coverage debt are
+        # reported but do not fail the run: they are work items, not schema
+        # violations, and blocking merges on them would stall the estate.
+        run: |
+          python scripts/estate-audit.py --json > audit.json || true
+          python - <<'PY'
+          import json, sys
+          d = json.load(open("audit.json"))
+          errs = [f for f in d["findings"] if f["kind"] == "error"]
+          if errs:
+              for f in errs:
+                  print(f"::error::{f['subject']}: {f['message']}")
+              sys.exit(1)
+          print(f"manifest clean: {d['repos']} repos, {d['crates']} crates")
+          PY

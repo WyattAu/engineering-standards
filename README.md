@@ -279,6 +279,59 @@ the npm ecosystem.
 Scaffolds born green: `forgeyard init` (WyattAu/forgeyard) produces repos that
 pass this matrix on first push.
 
+## The Estate Manifest
+
+`estate.yml` is the registry of record for the estate: **181 repos**,
+classified by area (`auth` `net` `obsv` `money` `data` `conc` `ui` `dx`
+`docs` `infra` `app` `research` `personal`) and status, with the
+crates.io packages each repo publishes.
+
+```sh
+python3 scripts/estate-audit.py          # full report; exit 1 on schema errors
+python3 scripts/estate-audit.py --json   # machine-readable findings
+python3 scripts/estate-audit.py --sync   # refresh the generated _seen blocks
+```
+
+Status is a claim about *proof*, not about activity:
+
+| status | meaning |
+|---|---|
+| `core` | published **and** dogfooded — a consumer suite exact-pins one of its crates |
+| `support` | published, active, not yet composed by any suite |
+| `orphan` | published, neither composed nor recently active |
+| `dormant` | no meaningful activity; superseded or shelved |
+| `template` / `fork` / `personal` / `infra` | scaffolding, upstream forks, private repos, CI-only |
+
+The audit enforces four invariants, and fails CI on any of them:
+
+1. every repo under the account has exactly one manifest entry
+2. every published crate is claimed by exactly one repo (no unclaimed
+   packages, no double-claimed ones)
+3. a `core` status means some consumer suite exact-pins one of its crates
+4. an exact pin matches what crates.io currently serves
+
+Beyond the schema it reports three classes of drift, which is what actually
+keeps 182 repos honest:
+
+- **pin drift** — a consumer tests an artifact nobody ships any more. This
+  is not hypothetical: the audit's first run found **17 stale pins** in
+  `estate-integration`, all fixed, plus one `outbox-kit` pin held behind
+  because `ledger-kit` could not consume the newer major. That hold has since
+  been released (`ledger-kit 0.1.1` shipped the consumer) and `pins_held` is
+  now empty. Holds are recorded in `pins_held:` with the reason and the ask,
+  so "held on purpose" is distinguishable from "nobody noticed".
+
+  The audit has already paid for itself twice over. Its findings led
+  directly to two published releases — `billing-kit 0.2.0` (closing a
+  decimal-money major split that made a price unpostable) and
+  `ledger-kit 0.1.1` (unblocking the outbox-kit pin) — and to one bug fix in
+  `actor-kit`, where a suspended actor could never be resumed or stopped.
+- **coverage debt** — a published crate no suite composes (53 at last
+  count). Each round of `estate-integration` suites exists to retire some
+  of this.
+- **dormancy** — a repo whose status claims activity its push history does
+  not support.
+
 ## Repo Layout
 
 - `docs/naming-convention.md` — estate naming convention: the 6 rules,
@@ -306,7 +359,11 @@ pass this matrix on first push.
 - `REPRODUCIBILITY.md` — reproducibility method, caveat, and results
 - `provenance/` — committed release provenance notes + SHA256SUMS
 - `scripts/apply-standards.sh` — bulk-apply templates to a kit repo
-
+- `estate.yml` — the estate manifest: one entry per repo (area, status,
+  published crates, supersession pointers) plus any deliberately-held pins
+- `scripts/estate-audit.py` — verifies the manifest against GitHub,
+  crates.io, and consumer pin sets; reports pin drift, coverage debt and
+  dormancy, and fails on schema violations (`.github/workflows/estate-audit.yml`)
 ---
 
 ## Omni template estate
@@ -333,3 +390,18 @@ derived repos.
 Recipe: require the `quality` + `contract` checks, require 1 approval
 (self-owned repos: disable), require linear history, allow the marked
 experimental legs to fail.
+
+### Keeping the estate leading
+
+The estate runs a monthly improvement loop against the market:
+
+- [LOOP.md](LOOP.md) — the loop itself (survey → matrix diff → implement →
+  test → publish) and its log, plus the advisory-to-gate graduation policy.
+- [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md) — feature-by-feature
+  matrix against the leading templates per language, with the backlog.
+- [PITFALLS.md](PITFALLS.md) — failure modes already paid for (Dependabot
+  misreading toolchain refs, TypeScript 7 vs `astro check`, GHCR feature 401s,
+  `mkdocs gh-deploy` vs workflow-built Pages, advisory-job semantics).
+
+New gates land **advisory** for one loop, then graduate to blocking once the
+whole loop has been green or triaged in writing.
