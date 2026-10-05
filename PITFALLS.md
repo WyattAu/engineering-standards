@@ -8,6 +8,8 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 
 | Symptom | Cause | Fix |
 |---|---|---|
+| `Dependabot Updates` fails with `Unsupported bun.lock 'lockfileVersion' 2` | Dependabot's bun updater only understands lockfile v1 | Known upstream gap. Action bumps (the `github-actions` ecosystem) still work, so security updates flow; **package** updates must be applied by hand until Dependabot (or a Renovate `bun` manager) supports v2. Verify each major locally before landing it — that is the only review path left for package deps. |
+|---|---|---|
 | A toolchain job starts testing the wrong language version (e.g. `msrv` suddenly builds with a version that does not exist) | Dependabot reads `some/action@1.85.0` as an *action version* and bumps it to `@1.120.0` | Keep the version in an **input**, not the ref: `dtolnay/rust-toolchain@master` + `with: {toolchain: "1.85.0"}`. Dependabot has nothing to bump. |
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
