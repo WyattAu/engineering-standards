@@ -28,6 +28,7 @@ decimal-money
 delta-kit
 docs-pipeline
 dsp-core
+dsp-spectral
 envstack
 error-classify
 error-classify-derive
