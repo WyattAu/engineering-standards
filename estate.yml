@@ -269,7 +269,7 @@ repos:
       - actor-kit
     _seen:
       last_push: "2026-10-05"
-      actor-kit: 0.2.3
+      actor-kit: 0.2.5
 
   aether-core:
     area: app
@@ -1263,7 +1263,7 @@ repos:
       - shared-state
     _seen:
       last_push: "2026-10-02"
-      shared-state: 0.1.1
+      shared-state: 0.1.2
 
   sheet-core:
     area: money
