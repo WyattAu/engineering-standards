@@ -1652,12 +1652,12 @@ repos:
   webauthn-kit:
     area: auth
     status: support
-    notes: "WebAuthn/FIDO2 verification; not yet composed."
+    notes: "WebAuthn/FIDO2 verification; composed by estate-integration."
     crates:
       - webauthn-kit
     _seen:
-      last_push: "2026-10-03"
-      webauthn-kit: 0.3.1
+      last_push: "2026-10-05"
+      webauthn-kit: 0.3.6
 
   webhookkit:
     area: net
