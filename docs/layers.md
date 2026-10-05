@@ -219,6 +219,7 @@ drift. Justifications are one line per crate.
 | `wire-kit` | L1 | Zero-copy SBE/FIX wire codec substrate; zero estate deps (spec §Cross-references: estate's edge-format leaf) |
 | `a2l-parse` | L1 | ASAP2/A2L ECU-description parser, zero deps; description half of the automotive calibration stack beside xcp-core (automotive protocol stack §L1) |
 | `xcp-core` | L1 | XCP on CAN protocol substrate (commands, responses, DAQ lists) over can-core L0; only estate dep is can-core (automotive protocol stack §L1) |
+| `dsp-spectral` | L1 | Spectral audio analysis and restoration substrate — STFT/ISTFT, mel/MFCC features, spectral gating, HPSS separation — over dsp-core L0's FFT/windows; only estate dep is dsp-core |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |

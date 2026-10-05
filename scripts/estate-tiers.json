@@ -31,6 +31,7 @@
   "delta-kit": "L0",
   "docs-pipeline": "L2",
   "dsp-core": "L0",
+  "dsp-spectral": "L1",
   "envstack": "L2",
   "error-classify": "L1",
   "error-classify-derive": "L0",
