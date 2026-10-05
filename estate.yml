@@ -1,0 +1,1744 @@
+# Estate manifest — the registry of record for the WyattAu estate.
+#
+# One entry per repo: its area, its status, and the crates.io packages it
+# publishes. `scripts/estate-audit.py` verifies this file against GitHub,
+# crates.io, and the exact pins held by consumer suites, and fails when the
+# three disagree. Run it after any publish, repo rename, or pin change.
+#
+# ## status
+#
+# | status | meaning |
+# |---|---|
+# | `core` | published and dogfooded — a consumer suite pins it exactly |
+# | `support` | published and active, not yet composed by a suite |
+# | `orphan` | published but neither composed nor recently active |
+# | `dormant` | no meaningful activity; superseded or shelved |
+# | `template` | scaffolding whose purpose is to seed other repos |
+# | `fork` | upstream fork kept for vendoring or patching |
+# | `personal` | private; not part of the published estate |
+# | `infra` | CI, images, taps, stacks — no published crate |
+
+# ## area
+#
+# `infra` `auth` `net` `obsv` `money` `data` `conc` `ui` `dx` `docs`
+# `app` `research` `personal`
+#
+# `_seen` blocks are generated — refresh with `estate-audit.py --sync`.
+
+# ## pins_held
+#
+# Exact pins a consumer deliberately holds behind the published version,
+# with the reason. Keeping them here rather than in a comment inside the
+# consumer's Cargo.toml means the audit can tell "held on purpose, here is
+# why" apart from "nobody noticed", and CI will fail if a hold loses its
+# reason or names an unknown consumer.
+pins_held:
+  - consumer: WyattAu/estate-integration
+    crate: outbox-kit
+    reason: >-
+      outbox-kit 0.2.0 is a breaking release (DispatcherConfig::batch_size
+      replaced by adaptive FetchBatch, OutboxStore redefined) and
+      ledger-kit 0.1.0 declares outbox-kit = "^0.1", so pinning 0.2.0 puts
+      two majors in one graph and OutboxJournal::with_inner_and_store fails
+      with E0308. Blocks the accounting product's durable journal until
+      ledger-kit ships an outbox-kit 0.2 consumer.
+
+schema: 1
+updated: "2026-10-05"
+owner: WyattAu
+crates_io_user_id: 404181
+
+repos:
+  CivitForge:
+    area: app
+    status: core
+    notes: "Federated forge."
+    _seen:
+      last_push: "2026-10-05"
+
+  EvergreenImageRegistry:
+    area: infra
+    status: infra
+    notes: "Community LTS images."
+    _seen:
+      last_push: "2026-10-04"
+
+  EvergreenShims:
+    area: infra
+    status: infra
+    notes: "Healthcheck shims for images that lack one."
+    _seen:
+      last_push: "2026-09-16"
+
+  FlutterSSG:
+    area: docs
+    status: personal
+    notes: "Dart SSG; private."
+    _seen:
+      last_push: "2026-01-06"
+      private: true
+
+  OmniCPP-docker:
+    area: dx
+    status: dormant
+    notes: "CMake/CPP toolchain image; dormant."
+    _seen:
+      last_push: "2025-07-09"
+
+  OmniCPP-template:
+    area: dx
+    status: template
+    notes: "CMake starter."
+    _seen:
+      last_push: "2026-09-04"
+
+  OmniDocs-template:
+    area: dx
+    status: template
+    notes: "Starlight docs site."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniDotfiles-template:
+    area: dx
+    status: template
+    notes: "chezmoi-first dotfiles."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniEmbedded-template:
+    area: dx
+    status: template
+    notes: "RP2040/RP2350 embedded."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniFlutter-template:
+    area: dx
+    status: dormant
+    notes: "Dart/Flutter starter."
+    _seen:
+      last_push: "2025-08-01"
+      private: true
+
+  OmniGo-template:
+    area: dx
+    status: template
+    notes: "go.work anchor + golangci-lint v2."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniHaskell-template:
+    area: dx
+    status: template
+    notes: "cabal multi-package + nix GHC."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniInfra-template:
+    area: dx
+    status: template
+    notes: "OpenTofu + conftest/OPA."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniLaTeX-CV:
+    area: docs
+    status: dormant
+    notes: "Derived from OmniLaTeX-template."
+    _seen:
+      last_push: "2025-11-02"
+
+  OmniLaTeX-coverletter:
+    area: docs
+    status: dormant
+    notes: "Derived from OmniLaTeX-template."
+    _seen:
+      last_push: "2025-11-24"
+
+  OmniLaTeX-docker:
+    area: docs
+    status: dormant
+    notes: "Image for OmniLaTeX-template."
+    _seen:
+      last_push: "2025-11-01"
+
+  OmniLaTeX-template:
+    area: docs
+    status: template
+    notes: "OmniLaTeX document class; 30 doctypes incl. invoice."
+    _seen:
+      last_push: "2026-09-07"
+
+  OmniLean-template:
+    area: dx
+    status: template
+    notes: "Lean 4 + mathlib."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniPython-template:
+    area: dx
+    status: template
+    notes: "Python starter; description still the placeholder."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniR-template:
+    area: dx
+    status: template
+    notes: "R monorepo starter."
+    _seen:
+      last_push: "2026-10-04"
+
+  OmniRust-template:
+    area: dx
+    status: template
+    notes: "Pinned-toolchain Rust monorepo with estate tier-a gates."
+    _seen:
+      last_push: "2026-10-05"
+
+  OmniTS-template:
+    area: dx
+    status: template
+    notes: "bun workspaces + Astro/SolidJS."
+    _seen:
+      last_push: "2026-10-05"
+
+  PatentSafePermissiveLicense:
+    area: infra
+    status: dormant
+    notes: "License text + tooling; dormant."
+    _seen:
+      last_push: "2025-07-08"
+
+  RunnerImages:
+    area: infra
+    status: infra
+    notes: "Base images for CI."
+    _seen:
+      last_push: "2026-08-19"
+
+  SimpleInfrastructureStack:
+    area: infra
+    status: infra
+    notes: "truenas + terraform stack."
+    _seen:
+      last_push: "2026-10-03"
+
+  Tachyon:
+    area: app
+    status: dormant
+    notes: "JIT documentation server."
+    _seen:
+      last_push: "2026-09-13"
+
+  WyattAu:
+    area: docs
+    status: infra
+    notes: "Profile repo."
+    _seen:
+      last_push: "2026-09-26"
+
+  WyattsNotes:
+    area: docs
+    status: dormant
+    notes: "Deprecated; superseded by starlight-sites."
+    _seen:
+      last_push: "2026-09-15"
+
+  a2l-parse:
+    area: data
+    status: support
+    notes: "ASAP2/A2L parser."
+    crates:
+      - a2l-parse
+    _seen:
+      last_push: "2026-10-04"
+      a2l-parse: 0.1.0
+
+  accessctl:
+    area: auth
+    status: support
+    notes: "Authorization policy checks."
+    crates:
+      - accessctl
+    _seen:
+      last_push: "2026-10-02"
+      accessctl: 0.1.0
+
+  actor-kit:
+    area: conc
+    status: support
+    notes: "Work-stealing OTP runtime."
+    crates:
+      - actor-kit
+    _seen:
+      last_push: "2026-10-05"
+      actor-kit: 0.2.3
+
+  aether-core:
+    area: app
+    status: dormant
+    notes: "Open core logic for aether."
+    _seen:
+      last_push: "2026-09-07"
+
+  aileron:
+    area: app
+    status: orphan
+    notes: "Keyboard-driven web environment (Servo)."
+    _seen:
+      last_push: "2026-09-13"
+
+  api-types:
+    area: data
+    status: support
+    notes: "Shared API types."
+    crates:
+      - api-types
+    _seen:
+      last_push: "2026-10-02"
+      api-types: 0.1.1
+
+  app-error:
+    area: data
+    status: support
+    notes: "Publishes error-classify + derive."
+    crates:
+      - error-classify
+      - error-classify-derive
+    _seen:
+      last_push: "2026-10-02"
+      error-classify: 0.3.1
+      error-classify-derive: 0.1.0
+
+  audiobook-core:
+    area: data
+    status: support
+    notes: "Audiobook domain model over id3-core + mp4-core; not yet published."
+
+  auditlog:
+    area: auth
+    status: support
+    notes: "Publishes tamper-audit."
+    crates:
+      - tamper-audit
+    _seen:
+      last_push: "2026-10-02"
+      tamper-audit: 0.2.0
+
+  axum-server:
+    area: net
+    status: dormant
+    notes: "Duplicate of axum-stack."
+    _seen:
+      last_push: "2026-09-19"
+
+  axum-stack:
+    area: net
+    status: support
+    canonical_of: [axum-server]
+    notes: "Axum server utilities (shutdown, CORS, health routes)."
+    crates:
+      - axum-stack
+    _seen:
+      last_push: "2026-10-02"
+      axum-stack: 0.2.0
+
+  barbican:
+    area: auth
+    status: core
+    notes: "Auth middleware (bearer/session)."
+    crates:
+      - barbican
+    _seen:
+      last_push: "2026-10-02"
+      barbican: 0.2.1
+
+  billing-kit:
+    area: money
+    status: support
+    notes: "Pricing with tax/discount. Accounting core."
+    crates:
+      - billing-kit
+    _seen:
+      last_push: "2026-10-03"
+      billing-kit: 0.1.1
+
+  blobkit:
+    area: data
+    status: core
+    notes: "Typed object storage."
+    crates:
+      - blobkit
+    _seen:
+      last_push: "2026-10-02"
+      blobkit: 0.4.2
+
+  book-kit:
+    area: conc
+    status: core
+    notes: "Lock-free limit order book."
+    crates:
+      - book-kit
+    _seen:
+      last_push: "2026-10-04"
+      book-kit: 0.1.0
+
+  breaker:
+    area: net
+    status: core
+    notes: "Circuit breaker."
+    crates:
+      - breaker
+    _seen:
+      last_push: "2026-10-02"
+      breaker: 2.0.1
+
+  cachekit:
+    area: data
+    status: orphan
+    notes: "Publishes cache-pal; not yet composed."
+    crates:
+      - cache-pal
+    _seen:
+      last_push: "2026-10-05"
+      cache-pal: 0.4.0
+
+  cachyos_sys_dotfiles:
+    area: infra
+    status: dormant
+    notes: "Personal CachyOS dotfiles."
+    _seen:
+      last_push: "2026-09-19"
+
+  can-core:
+    area: data
+    status: support
+    notes: "CAN/FD frame codec."
+    crates:
+      - can-core
+    _seen:
+      last_push: "2026-10-03"
+      can-core: 0.1.0
+
+  cas-kit:
+    area: data
+    status: core
+    notes: "Content-addressed store."
+    crates:
+      - cas-kit
+    _seen:
+      last_push: "2026-10-02"
+      cas-kit: 0.2.1
+
+  cf-worker-utils:
+    area: net
+    status: orphan
+    notes: "Cloudflare Worker helpers."
+    _seen:
+      last_push: "2026-08-30"
+
+  chaos-kit:
+    area: obsv
+    status: core
+    notes: "Deterministic fault injection."
+    crates:
+      - chaos-kit
+    _seen:
+      last_push: "2026-10-02"
+      chaos-kit: 0.1.1
+
+  clawdius:
+    area: app
+    status: orphan
+    notes: "Remote agentic coding sandbox."
+    _seen:
+      last_push: "2026-10-05"
+
+  clock:
+    area: conc
+    status: dormant
+    notes: "Publishes chronoshift; clock-kit supersedes it."
+    crates:
+      - chronoshift
+    _seen:
+      last_push: "2026-10-02"
+      chronoshift: 1.0.1
+
+  clock-kit:
+    area: conc
+    status: core
+    canonical_of: [clock]
+    notes: "Time-source abstraction; overlaps chronoshift."
+    crates:
+      - clock-kit
+    _seen:
+      last_push: "2026-10-03"
+      clock-kit: 0.1.0
+
+  coa:
+    area: docs
+    status: personal
+    notes: "OmniLaTeX monorepo (name is misleading)."
+    _seen:
+      last_push: "2026-09-13"
+      private: true
+
+  conan-center-index:
+    area: infra
+    status: dormant
+    notes: "Conan recipes fork; dormant, kept for the Conan toolchain."
+    _seen:
+      last_push: "2025-11-17"
+
+  config-kit:
+    area: obsv
+    status: core
+    notes: "Layered typed config."
+    crates:
+      - config-kit
+    _seen:
+      last_push: "2026-10-02"
+      config-kit: 0.1.1
+
+  contact-miner:
+    area: data
+    status: support
+    notes: "Web contact discovery."
+    crates:
+      - contact-miner
+    _seen:
+      last_push: "2026-10-02"
+      contact-miner: 0.1.0
+
+  crawlkit:
+    area: data
+    status: orphan
+    notes: "Crawl engine + plugin SDK; own test suite."
+    crates:
+      - crawlkit-engine
+      - crawlkit-plugin-sdk
+    _seen:
+      last_push: "2026-10-05"
+      crawlkit-engine: 2.0.0
+      crawlkit-plugin-sdk: 1.0.0
+
+  crdt-demo:
+    area: ui
+    status: support
+    notes: "Live CRDT demo (crdts-kit + ws-kit)."
+    _seen:
+      last_push: "2026-09-13"
+
+  crdts-kit:
+    area: data
+    status: support
+    notes: "RGA CRDT; crdt-demo exercises it, no estate suite."
+    crates:
+      - crdts-kit
+    _seen:
+      last_push: "2026-10-02"
+      crdts-kit: 0.1.0
+
+  cryptkit:
+    area: auth
+    status: support
+    notes: "Crypto primitives; Tier A."
+    crates:
+      - cryptkit
+    _seen:
+      last_push: "2026-10-02"
+      cryptkit: 0.1.0
+
+  dbc-parse:
+    area: data
+    status: support
+    notes: "DBC signal layout parser."
+    crates:
+      - dbc-parse
+    _seen:
+      last_push: "2026-10-03"
+      dbc-parse: 0.1.0
+
+  delta-kit:
+    area: data
+    status: support
+    notes: "Binary delta codec."
+    crates:
+      - delta-kit
+    _seen:
+      last_push: "2026-10-02"
+      delta-kit: 0.2.1
+
+  docs-pipeline:
+    area: data
+    status: support
+    notes: "Markdown + tree-sitter rendering."
+    crates:
+      - docs-pipeline
+    _seen:
+      last_push: "2026-10-02"
+      docs-pipeline: 0.1.4
+
+  dsp-core:
+    area: data
+    status: support
+    notes: "Audio DSP primitives."
+    crates:
+      - dsp-core
+    _seen:
+      last_push: "2026-10-04"
+      dsp-core: 0.1.0
+
+  engineering-standards:
+    area: infra
+    status: core
+    notes: "Shared CI matrix, policies, templates, estate manifest + audit."
+    _seen:
+      last_push: "2026-10-05"
+
+  envstack:
+    area: obsv
+    status: orphan
+    notes: "Env layering; overlaps config-kit."
+    crates:
+      - envstack
+    _seen:
+      last_push: "2026-10-02"
+      envstack: 0.2.1
+
+  errcode:
+    area: data
+    status: support
+    notes: "Publishes error-codes; no_std."
+    crates:
+      - error-codes
+    _seen:
+      last_push: "2026-10-02"
+      error-codes: 1.1.0
+
+  estate-integration:
+    area: dx
+    status: core
+    notes: "Cross-crate dogfooding suites; the only proof the estate composes."
+    _seen:
+      last_push: "2026-10-03"
+
+  eventbus:
+    area: data
+    status: support
+    notes: "Publishes eventbus-kit."
+    crates:
+      - eventbus-kit
+    _seen:
+      last_push: "2026-10-02"
+      eventbus-kit: 0.3.5
+
+  ferro:
+    area: app
+    status: core
+    notes: "Self-hosted file storage platform."
+    _seen:
+      last_push: "2026-09-29"
+
+  fetch-kit:
+    area: net
+    status: core
+    notes: "HTTP client; supersedes resilient-fetch (still pinned for the migration round)."
+    crates:
+      - fetch-kit
+      - resilient-fetch
+    _seen:
+      last_push: "2026-10-03"
+      fetch-kit: 0.2.0
+      resilient-fetch: 0.1.0
+
+  flag-kit:
+    area: obsv
+    status: support
+    notes: "Feature flags; not yet composed."
+    crates:
+      - flag-kit
+    _seen:
+      last_push: "2026-10-02"
+      flag-kit: 0.2.0
+
+  font-parse:
+    area: data
+    status: support
+    notes: "SFNT/OTF/WOFF2 parser."
+    crates:
+      - font-parse
+    _seen:
+      last_push: "2026-10-03"
+      font-parse: 0.1.0
+
+  forgejo-k8s-runner:
+    area: infra
+    status: dormant
+    notes: "Forgejo runner on k8s; dormant pending CivitForge integration."
+    _seen:
+      last_push: "2026-06-06"
+
+  forgeyard:
+    area: dx
+    status: infra
+    notes: "Repo scaffolder; produces repos green against the shared matrix."
+    _seen:
+      last_push: "2026-09-06"
+
+  formula-lang:
+    area: money
+    status: support
+    notes: "Formula tokenizer/parser/evaluator."
+    crates:
+      - formula-lang
+    _seen:
+      last_push: "2026-10-04"
+      formula-lang: 0.1.1
+
+  geo-kit:
+    area: data
+    status: support
+    notes: "Geo primitives; Tier B."
+    crates:
+      - geo-kit
+    _seen:
+      last_push: "2026-10-02"
+      geo-kit: 1.1.1
+
+  gitea-setup:
+    area: infra
+    status: dormant
+    notes: "Superseded by forgejo-k8s-runner."
+    _seen:
+      last_push: "2025-08-10"
+
+  graceful:
+    area: obsv
+    status: core
+    notes: "Graceful shutdown guards (ShutdownGuard); publishes shutdown-kit."
+    crates:
+      - shutdown-kit
+    _seen:
+      last_push: "2026-10-02"
+      shutdown-kit: 0.3.2
+
+  hdwallet:
+    area: auth
+    status: support
+    notes: "Publishes multi-chain-wallet; Tier A."
+    crates:
+      - multi-chain-wallet
+    _seen:
+      last_push: "2026-10-02"
+      multi-chain-wallet: 0.2.1
+
+  healthkit:
+    area: obsv
+    status: core
+    notes: "Liveness/readiness/startup probes."
+    crates:
+      - healthkit
+    _seen:
+      last_push: "2026-10-02"
+      healthkit: 1.3.1
+
+  homebite_docs:
+    area: docs
+    status: personal
+    notes: "Private docs."
+    _seen:
+      last_push: "2026-09-29"
+      private: true
+
+  homebrew-clawdius:
+    area: infra
+    status: dormant
+    notes: "Homebrew tap for clawdius; dormant while clawdius is dormant."
+    _seen:
+      last_push: "2026-05-27"
+
+  homebrew-suture-merge-driver:
+    area: infra
+    status: orphan
+    notes: "Homebrew tap for the suture git merge driver."
+    _seen:
+      last_push: "2026-09-02"
+
+  http-error:
+    area: data
+    status: support
+    notes: "Publishes http-errors + derive."
+    crates:
+      - http-errors
+    _seen:
+      last_push: "2026-10-02"
+      http-errors: 0.1.0
+
+  hw-kit:
+    area: conc
+    status: core
+    notes: "CPU/NUMA pinning, hugepages."
+    crates:
+      - hw-kit
+    _seen:
+      last_push: "2026-10-03"
+      hw-kit: 0.1.0
+
+  hydrated-personal-site:
+    area: docs
+    status: dormant
+    notes: "Personal site."
+    _seen:
+      last_push: "2026-07-26"
+
+  i18n-kit:
+    area: data
+    status: support
+    notes: "Runtime i18n catalogs; not yet composed."
+    crates:
+      - i18n-kit
+    _seen:
+      last_push: "2026-10-02"
+      i18n-kit: 0.1.3
+
+  id3-core:
+    area: data
+    status: support
+    notes: "ID3v1/v2 tag codec (CHAP/CTOC chapters, APIC art), no_std; not yet published."
+    _seen:
+      last_push: "2026-10-05"
+      private: true
+
+  idempotency-kit:
+    area: net
+    status: core
+    notes: "Idempotency keys; composed by ledger-kit + webhook suite."
+    crates:
+      - idempotency-kit
+    _seen:
+      last_push: "2026-10-02"
+      idempotency-kit: 0.1.0
+
+  ironclaw:
+    area: app
+    status: fork
+    notes: "Fork of nearai/ironclaw."
+    _seen:
+      last_push: "2026-09-11"
+
+  json-envelope:
+    area: data
+    status: support
+    notes: "Standard API envelope."
+    crates:
+      - json-envelope
+    _seen:
+      last_push: "2026-10-02"
+      json-envelope: 0.1.0
+
+  kestrel:
+    area: app
+    status: orphan
+    notes: "tui+gui email client; needs mail-sync-kit + mailkit to ship."
+    _seen:
+      last_push: "2026-09-16"
+
+  latent-oracle:
+    area: research
+    status: core
+    notes: "Neural chess research engine."
+    _seen:
+      last_push: "2026-10-05"
+
+  latent-oracle-data:
+    area: research
+    status: core
+    notes: "PGN -> Stockfish label pipeline."
+    _seen:
+      last_push: "2026-10-05"
+
+  latex2e:
+    area: docs
+    status: fork
+    notes: "LaTeX2e kernel fork."
+    _seen:
+      last_push: "2026-09-04"
+
+  ldir:
+    area: app
+    status: dormant
+    notes: "Low-level document IR."
+    _seen:
+      last_push: "2026-09-13"
+
+  ledger-kit:
+    area: money
+    status: core
+    notes: "Double-entry ledger, outbox journal, tamper chain."
+    crates:
+      - ledger-kit
+    _seen:
+      last_push: "2026-10-02"
+      ledger-kit: 0.1.0
+
+  leptos-capital-markers:
+    area: ui
+    status: support
+    notes: "Capital city markers."
+    crates:
+      - leptos-capital-markers
+    _seen:
+      last_push: "2026-10-02"
+      leptos-capital-markers: 0.1.0
+
+  leptos-crypto-ws:
+    area: ui
+    status: support
+    notes: "Crypto-over-WS component."
+    crates:
+      - leptos-crypto-ws
+    _seen:
+      last_push: "2026-10-02"
+      leptos-crypto-ws: 0.1.0
+
+  leptos-leaflet:
+    area: ui
+    status: support
+    notes: "Publishes leptos-leaflet-wyatt."
+    crates:
+      - leptos-leaflet-wyatt
+    _seen:
+      last_push: "2026-10-05"
+      leptos-leaflet-wyatt: 0.1.1
+
+  leptos-macro:
+    area: ui
+    status: support
+    notes: "Publishes leptos-macros/derive."
+    crates:
+      - leptos-derive
+      - leptos-macros
+    _seen:
+      last_push: "2026-10-02"
+      leptos-derive: 0.1.0
+      leptos-macros: 0.1.0
+
+  leptos-map-search:
+    area: ui
+    status: support
+    notes: "Map search component."
+    crates:
+      - leptos-map-search
+    _seen:
+      last_push: "2026-10-02"
+      leptos-map-search: 0.1.0
+
+  leptos-sparkline:
+    area: ui
+    status: support
+    notes: "Sparkline component."
+    crates:
+      - leptos-sparkline
+    _seen:
+      last_push: "2026-10-02"
+      leptos-sparkline: 0.1.0
+
+  leptos-stale-indicator:
+    area: ui
+    status: support
+    notes: "Data freshness indicator."
+    crates:
+      - leptos-stale-indicator
+    _seen:
+      last_push: "2026-10-02"
+      leptos-stale-indicator: 0.1.0
+
+  luaotfload:
+    area: docs
+    status: fork
+    notes: "OpenType loader for LuaTeX."
+    _seen:
+      last_push: "2026-08-31"
+
+  mail-sync-kit:
+    area: net
+    status: core
+    notes: "IMAP/JMAP/SMTP sync."
+    crates:
+      - mail-sync-kit
+    _seen:
+      last_push: "2026-10-02"
+      mail-sync-kit: 0.1.1
+
+  mailkit:
+    area: net
+    status: core
+    notes: "MIME composition/sending."
+    crates:
+      - mailkit
+    _seen:
+      last_push: "2026-10-04"
+      mailkit: 0.3.1
+
+  media-kit:
+    area: data
+    status: core
+    notes: "Image pipeline."
+    crates:
+      - media-kit
+    _seen:
+      last_push: "2026-10-02"
+      media-kit: 0.2.1
+
+  metrics-kit:
+    area: obsv
+    status: core
+    notes: "Prometheus exposition."
+    crates:
+      - metrics-kit
+    _seen:
+      last_push: "2026-10-04"
+      metrics-kit: 0.2.0
+
+  model-router:
+    area: app
+    status: support
+    notes: "Cost-aware LLM routing."
+    crates:
+      - model-router
+    _seen:
+      last_push: "2026-10-02"
+      model-router: 0.2.0
+
+  money:
+    area: money
+    status: support
+    notes: "Publishes decimal-money. Accounting core."
+    crates:
+      - decimal-money
+    _seen:
+      last_push: "2026-10-05"
+      decimal-money: 1.1.1
+
+  morph:
+    area: app
+    status: dormant
+    notes: "Agentic programming language spec."
+    _seen:
+      last_push: "2026-09-02"
+
+  mp4-core:
+    area: data
+    status: support
+    notes: "ISO-BMFF box codec (ilst metadata, chpl chapters), no_std; not yet published."
+
+  oauth-toolkit:
+    area: auth
+    status: support
+    notes: "OAuth2/OIDC primitives; not yet composed."
+    crates:
+      - oauth-toolkit
+    _seen:
+      last_push: "2026-10-02"
+      oauth-toolkit: 0.2.2
+
+  observability-assets:
+    area: obsv
+    status: infra
+    notes: "VictoriaMetrics + Grafana assets for shipping builds."
+    _seen:
+      last_push: "2026-09-15"
+
+  otel-stack:
+    area: obsv
+    status: dormant
+    notes: "Superseded by otelkit + telemetry-init."
+    crates:
+      - otel-stack
+    _seen:
+      last_push: "2026-10-02"
+      otel-stack: 0.2.0
+
+  otelkit:
+    area: obsv
+    status: core
+    canonical_of: [otel-stack]
+    notes: "Tracing/metrics/OTLP."
+    crates:
+      - otelkit
+    _seen:
+      last_push: "2026-10-05"
+      otelkit: 2.0.3
+
+  outbox-kit:
+    area: net
+    status: core
+    notes: "Transactional outbox; composed by ledger-kit."
+    crates:
+      - outbox-kit
+    _seen:
+      last_push: "2026-10-03"
+      outbox-kit: 0.2.0
+
+  paginate:
+    area: data
+    status: support
+    notes: "Publishes api-paginate."
+    crates:
+      - api-paginate
+    _seen:
+      last_push: "2026-10-02"
+      api-paginate: 0.1.1
+
+  pediment:
+    area: ui
+    status: support
+    notes: "Design tokens/components for Astro+SolidJS+Starlight."
+    _seen:
+      last_push: "2026-09-13"
+
+  pediment-pro:
+    area: ui
+    status: personal
+    notes: "Private design work."
+    _seen:
+      last_push: "2026-09-13"
+      private: true
+
+  peptide-web:
+    area: app
+    status: personal
+    notes: "Private experiment."
+    _seen:
+      last_push: "2026-03-20"
+      private: true
+
+  percentile-kit:
+    area: obsv
+    status: core
+    notes: "Latency budget gates."
+    crates:
+      - percentile-kit
+    _seen:
+      last_push: "2026-10-02"
+      percentile-kit: 0.1.0
+
+  phys-maths-gypt-notes:
+    area: docs
+    status: personal
+    notes: "Private notes."
+    _seen:
+      last_push: "2026-03-27"
+      private: true
+
+  pid-manager:
+    area: obsv
+    status: support
+    notes: "PID file lifecycle."
+    crates:
+      - pid-manager
+    _seen:
+      last_push: "2026-10-02"
+      pid-manager: 0.1.0
+
+  plychart:
+    area: ui
+    status: support
+    notes: "WASM charting family (5 crates)."
+    crates:
+      - ply-viz
+      - plychart
+      - plycharts
+      - plycompute
+      - plycore
+    _seen:
+      last_push: "2026-10-02"
+      ply-viz: 0.1.0
+      plychart: 0.2.0
+      plycharts: 0.1.0
+      plycompute: 0.2.0
+      plycore: 0.2.0
+
+  policy-kit:
+    area: app
+    status: core
+    notes: "Fail-closed Rego policy; used by the accounting product."
+    crates:
+      - policy-kit
+    _seen:
+      last_push: "2026-10-02"
+      policy-kit: 0.1.0
+
+  polyfont:
+    area: ui
+    status: dormant
+    notes: "Multi-font editor plugin family (9 crates)."
+    crates:
+      - polyfont-cli
+      - polyfont-config
+      - polyfont-core
+      - polyfont-fonts
+      - polyfont-lsp
+      - polyfont-parse
+      - polyfont-render
+      - polyfont-scope
+      - polyfont-themes
+    _seen:
+      last_push: "2026-10-02"
+      polyfont-cli: 0.10.0
+      polyfont-config: 0.10.0
+      polyfont-core: 0.10.0
+      polyfont-fonts: 0.10.0
+      polyfont-lsp: 0.10.0
+      polyfont-parse: 0.10.0
+      polyfont-render: 0.10.0
+      polyfont-scope: 0.10.0
+      polyfont-themes: 0.10.0
+
+  poolkit:
+    area: conc
+    status: support
+    notes: "Object pools."
+    crates:
+      - poolkit
+    _seen:
+      last_push: "2026-10-02"
+      poolkit: 0.1.2
+
+  ratelimit:
+    area: net
+    status: core
+    notes: "Publishes throttle-kit."
+    crates:
+      - throttle-kit
+    _seen:
+      last_push: "2026-10-04"
+      throttle-kit: 2.0.0
+
+  retry-backoff:
+    area: net
+    status: support
+    notes: "Async retry with jitter; publishes loop-retry."
+    crates:
+      - loop-retry
+    _seen:
+      last_push: "2026-10-02"
+      loop-retry: 0.1.1
+
+  salting:
+    area: auth
+    status: core
+    notes: "Argon2id+pepper derivation."
+    crates:
+      - salting
+    _seen:
+      last_push: "2026-10-02"
+      salting: 2.0.0
+
+  scim-kit:
+    area: auth
+    status: support
+    notes: "SCIM 2.0 provisioning; target of the accounting product."
+    crates:
+      - scim-kit
+    _seen:
+      last_push: "2026-10-02"
+      scim-kit: 0.1.0
+
+  sensors_rpi_pico:
+    area: research
+    status: dormant
+    notes: "Pico sensor firmware fork; dormant."
+    _seen:
+      last_push: "2025-11-15"
+
+  shared-state:
+    area: conc
+    status: support
+    notes: "Readiness gates, TTL caches, counters."
+    crates:
+      - shared-state
+    _seen:
+      last_push: "2026-10-02"
+      shared-state: 0.1.1
+
+  sheet-core:
+    area: money
+    status: support
+    notes: "Spreadsheet model + DAG."
+    crates:
+      - sheet-core
+    _seen:
+      last_push: "2026-10-04"
+      sheet-core: 0.1.0
+
+  sheet-engine:
+    area: money
+    status: support
+    notes: "Incremental recalc engine."
+    crates:
+      - sheet-engine
+    _seen:
+      last_push: "2026-10-04"
+      sheet-engine: 0.1.0
+
+  sheet-xlsx:
+    area: money
+    status: support
+    notes: "XLSX codec."
+    crates:
+      - sheet-xlsx
+    _seen:
+      last_push: "2026-10-04"
+      sheet-xlsx: 0.1.1
+
+  shm-rings:
+    area: conc
+    status: support
+    notes: "Shared-memory SPMC ring."
+    crates:
+      - shm-rings
+    _seen:
+      last_push: "2026-10-02"
+      shm-rings: 0.2.1
+
+  shroom-theme:
+    area: ui
+    status: dormant
+    notes: "VS Code theme; no activity since 2026-05."
+    _seen:
+      last_push: "2026-05-29"
+
+  sieve-kit:
+    area: net
+    status: core
+    notes: "Mail filtering rules."
+    crates:
+      - sieve-kit
+    _seen:
+      last_push: "2026-10-02"
+      sieve-kit: 0.2.1
+
+  simd-tokenizer:
+    area: data
+    status: support
+    notes: "Token estimation; not yet composed."
+    crates:
+      - simd-tokenizer
+    _seen:
+      last_push: "2026-10-05"
+      simd-tokenizer: 0.1.2
+
+  slab-pool:
+    area: conc
+    status: support
+    notes: "Lock-free slab pool."
+    crates:
+      - slab-pool
+    _seen:
+      last_push: "2026-10-02"
+      slab-pool: 0.1.0
+
+  starlight-content-guard:
+    area: ui
+    status: support
+    notes: "Starlight content guard."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-cross-domain-sync:
+    area: ui
+    status: support
+    notes: "Starlight cross-domain sync."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-dse-test:
+    area: ui
+    status: dormant
+    notes: "DSE exam platform."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-interactive-islands:
+    area: ui
+    status: support
+    notes: "Starlight islands plugin."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-katex:
+    area: ui
+    status: support
+    notes: "Starlight KaTeX plugin."
+    _seen:
+      last_push: "2026-09-11"
+
+  starlight-kit:
+    area: ui
+    status: support
+    notes: "Starlight plugin kit."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-multi-site:
+    area: ui
+    status: support
+    notes: "Starlight multi-site build."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-progress:
+    area: ui
+    status: support
+    notes: "Starlight progress plugin."
+    _seen:
+      last_push: "2026-09-13"
+
+  starlight-sites:
+    area: docs
+    status: core
+    notes: "Wyatt's notes site (Astro + Starlight)."
+    _seen:
+      last_push: "2026-10-05"
+
+  suture:
+    area: app
+    status: orphan
+    notes: "Connector/driver platform; 40 crates, last release 2026-05."
+    crates:
+      - suture-cli
+      - suture-common
+      - suture-connector-airtable
+      - suture-connector-notion
+      - suture-core
+      - suture-daemon
+      - suture-driver
+      - suture-driver-csv
+      - suture-driver-docx
+      - suture-driver-example
+      - suture-driver-feed
+      - suture-driver-html
+      - suture-driver-ical
+      - suture-driver-image
+      - suture-driver-json
+      - suture-driver-markdown
+      - suture-driver-otio
+      - suture-driver-pdf
+      - suture-driver-pptx
+      - suture-driver-sql
+      - suture-driver-svg
+      - suture-driver-toml
+      - suture-driver-xlsx
+      - suture-driver-xml
+      - suture-driver-yaml
+      - suture-git-bridge
+      - suture-hub
+      - suture-lsp
+      - suture-merge
+      - suture-ooxml
+      - suture-platform
+      - suture-plugin-sdk
+      - suture-protocol
+      - suture-raft
+      - suture-s3
+      - suture-tui
+      - suture-vfs
+      - suture-wasm-plugin
+    _seen:
+      last_push: "2026-10-02"
+      suture-cli: 5.3.1
+      suture-common: 5.1.0
+      suture-connector-airtable: 0.1.0
+      suture-connector-notion: 0.1.0
+      suture-core: 5.1.0
+      suture-daemon: 5.1.1
+      suture-driver: 5.1.0
+      suture-driver-csv: 5.1.0
+      suture-driver-docx: 5.1.0
+      suture-driver-example: 5.1.0
+      suture-driver-feed: 5.1.0
+      suture-driver-html: 5.1.0
+      suture-driver-ical: 5.1.0
+      suture-driver-image: 5.1.0
+      suture-driver-json: 5.1.0
+      suture-driver-markdown: 5.1.0
+      suture-driver-otio: 5.1.0
+      suture-driver-pdf: 5.1.0
+      suture-driver-pptx: 5.1.0
+      suture-driver-sql: 5.1.0
+      suture-driver-svg: 5.1.0
+      suture-driver-toml: 5.1.0
+      suture-driver-xlsx: 5.1.0
+      suture-driver-xml: 5.1.0
+      suture-driver-yaml: 5.1.1
+      suture-git-bridge: 0.9.0
+      suture-hub: 5.3.0
+      suture-lsp: 5.1.0
+      suture-merge: 5.1.0
+      suture-ooxml: 5.1.0
+      suture-platform: 0.1.0
+      suture-plugin-sdk: 0.1.0
+      suture-protocol: 5.1.0
+      suture-raft: 5.1.0
+      suture-s3: 5.1.0
+      suture-tui: 5.1.1
+      suture-vfs: 5.1.0
+      suture-wasm-plugin: 0.1.0
+
+  tantivy-ext:
+    area: data
+    status: support
+    notes: "Publishes tantivy-helper."
+    crates:
+      - tantivy-helper
+    _seen:
+      last_push: "2026-10-02"
+      tantivy-helper: 0.3.0
+
+  tao:
+    area: app
+    status: fork
+    notes: "Windowing library fork."
+    _seen:
+      last_push: "2026-06-12"
+
+  tauri:
+    area: app
+    status: fork
+    notes: "Tauri upstream fork."
+    _seen:
+      last_push: "2026-06-15"
+
+  tauri-preset:
+    area: infra
+    status: orphan
+    notes: "Undocumented placeholder."
+    _seen:
+      last_push: "2026-09-13"
+
+  telemetry-init:
+    area: obsv
+    status: core
+    notes: "One-call observability bootstrap."
+    crates:
+      - telemetry-init
+    _seen:
+      last_push: "2026-10-03"
+      telemetry-init: 0.1.1
+
+  testkit:
+    area: dx
+    status: support
+    notes: "Shared test utilities; repo-only, not yet published."
+    _seen:
+      last_push: "2026-09-21"
+
+  tokenkit:
+    area: auth
+    status: core
+    notes: "JWT mint/decode/revocation."
+    crates:
+      - tokenkit
+    _seen:
+      last_push: "2026-10-02"
+      tokenkit: 0.4.1
+
+  traefik-setup:
+    area: infra
+    status: dormant
+    notes: "Superseded by traefik-stack."
+    _seen:
+      last_push: "2025-11-24"
+
+  traefik-stack:
+    area: infra
+    status: dormant
+    notes: "No activity since 2025-08."
+    _seen:
+      last_push: "2025-08-17"
+
+  typed-id:
+    area: data
+    status: support
+    notes: "Typed ID newtypes + derive."
+    crates:
+      - typed-id-derive
+      - typed-id-new
+    _seen:
+      last_push: "2026-10-02"
+      typed-id-derive: 0.1.0
+      typed-id-new: 0.1.0
+
+  uds-kit:
+    area: net
+    status: support
+    notes: "UDS transport helpers."
+    crates:
+      - uds-kit
+    _seen:
+      last_push: "2026-10-02"
+      uds-kit: 0.1.0
+
+  uofg_r_mono:
+    area: research
+    status: support
+    notes: "University of Guelph R monorepo."
+    _seen:
+      last_push: "2026-10-04"
+
+  uring-kit:
+    area: conc
+    status: core
+    notes: "io_uring substrate."
+    crates:
+      - uring-kit
+    _seen:
+      last_push: "2026-10-02"
+      uring-kit: 0.1.0
+
+  validkit:
+    area: data
+    status: support
+    notes: "Typed input validation."
+    crates:
+      - validkit
+      - validkit-derive
+    _seen:
+      last_push: "2026-10-02"
+      validkit: 1.3.1
+      validkit-derive: 0.1.0
+
+  vane:
+    area: net
+    status: core
+    notes: "L4/L7 proxy monorepo; 12 published crates."
+    crates:
+      - vane-client-sdk
+      - vane-control
+      - vane-filters
+      - vane-kernel
+      - vane-observe
+      - vane-plugins
+      - vane-proto
+      - vane-proxy
+      - vane-router
+      - vane-shm
+      - vane-tls
+    _seen:
+      last_push: "2026-10-05"
+      vane-client-sdk: 0.5.3
+      vane-control: 0.6.0
+      vane-filters: 0.5.3
+      vane-kernel: 0.5.3
+      vane-observe: 0.5.3
+      vane-plugins: 0.5.3
+      vane-proto: 0.5.4
+      vane-proxy: 0.6.0
+      vane-router: 0.6.0
+      vane-shm: 0.5.3
+      vane-tls: 0.5.3
+
+  warploom:
+    area: research
+    status: core
+    notes: "Data-oriented C++ engine."
+    _seen:
+      last_push: "2026-10-05"
+
+  webauthn-kit:
+    area: auth
+    status: support
+    notes: "WebAuthn/FIDO2 verification; not yet composed."
+    crates:
+      - webauthn-kit
+    _seen:
+      last_push: "2026-10-03"
+      webauthn-kit: 0.3.1
+
+  webhookkit:
+    area: net
+    status: core
+    notes: "Webhook parsing/verification."
+    crates:
+      - webhookkit
+    _seen:
+      last_push: "2026-10-02"
+      webhookkit: 2.2.0
+
+  windows-dotfiles:
+    area: infra
+    status: personal
+    notes: "Private Windows config."
+    _seen:
+      last_push: "2026-04-02"
+      private: true
+
+  wire-kit:
+    area: net
+    status: core
+    notes: "SBE + FIX codecs."
+    crates:
+      - wire-kit
+    _seen:
+      last_push: "2026-10-03"
+      wire-kit: 0.1.0
+
+  worker-kit:
+    area: obsv
+    status: core
+    notes: "Job scheduling + drain."
+    crates:
+      - worker-kit
+    _seen:
+      last_push: "2026-10-04"
+      worker-kit: 0.3.0
+
+  wry:
+    area: app
+    status: fork
+    notes: "WebView library fork."
+    _seen:
+      last_push: "2026-06-15"
+
+  ws-barbican:
+    area: net
+    status: support
+    notes: "ws-kit + JWT auth wrapper."
+    crates:
+      - ws-barbican
+    _seen:
+      last_push: "2026-10-02"
+      ws-barbican: 0.1.2
+
+  ws-kit:
+    area: net
+    status: support
+    notes: "Typed authenticated WebSocket hub."
+    crates:
+      - ws-kit
+    _seen:
+      last_push: "2026-10-02"
+      ws-kit: 0.4.2
+
+  wyatt-cv:
+    area: docs
+    status: personal
+    notes: "Private CV."
+    _seen:
+      last_push: "2025-11-02"
+      private: true
+
+  xcp-core:
+    area: data
+    status: support
+    notes: "XCP on CAN."
+    crates:
+      - xcp-core
+    _seen:
+      last_push: "2026-10-04"
+      xcp-core: 0.1.0
