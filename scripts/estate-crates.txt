@@ -1,6 +1,7 @@
 # Checked by scripts/check-layers.py — estate membership = published under this owner.
 # Regenerate: curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=N' | jq -r '.crates[].name'
 # WyattAu estate-internal crates (crates.io owner WyattAu, user id 404181).
+a2l-parse
 accessctl
 actor-kit
 api-paginate
@@ -35,12 +36,14 @@ error-codes
 eventbus-kit
 fetch-kit
 flag-kit
+font-parse
 formula-lang
 geo-kit
 healthkit
 http-errors
 hw-kit
 i18n-kit
+id3-core
 idempotency-kit
 json-envelope
 leptos-capital-markers
@@ -152,6 +155,8 @@ vane-shm
 vane-tls
 webauthn-kit
 webhookkit
+wire-kit
 worker-kit
 ws-barbican
 ws-kit
+xcp-core

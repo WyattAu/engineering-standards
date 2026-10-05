@@ -43,6 +43,7 @@
   "http-errors": "L1",
   "hw-kit": "L1",
   "i18n-kit": "L0",
+  "id3-core": "L0",
   "idempotency-kit": "L2",
   "json-envelope": "L0",
   "leptos-capital-markers": "L3",
