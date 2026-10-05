@@ -1,6 +1,3 @@
-# Checked by scripts/check-layers.py — estate membership = published under this owner.
-# Regenerate: curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=N' | jq -r '.crates[].name'
-# WyattAu estate-internal crates (crates.io owner WyattAu, user id 404181).
 a2l-parse
 accessctl
 actor-kit
@@ -60,6 +57,7 @@ mailkit
 media-kit
 metrics-kit
 model-router
+mp4-core
 multi-chain-wallet
 oauth-toolkit
 otel-stack

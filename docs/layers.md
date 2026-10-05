@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (158 crates, 2026-10-05)
+## Classification (159 crates, 2026-10-05)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -140,6 +140,7 @@ drift. Justifications are one line per crate.
 | `hw-kit` | L1 | Linux-only hardware substrate (topology/pinning/NUMA/hugepages); zero estate deps, `libc`-only external edge |
 | `i18n-kit` | L0 | Runtime i18n catalogs; thiserror-only leaf |
 | `id3-core` | L0 | ID3v1/ID3v2 audio tag reader/writer incl. `CHAP`/`CTOC` chapters; thiserror-only leaf, `no_std` + `alloc` |
+| `mp4-core` | L0 | ISO-BMFF (MP4/M4A/M4B) box reader/writer incl. iTunes `ilst` metadata and Nero `chpl` chapters; thiserror-only leaf, `no_std` + `alloc` |
 | `json-envelope` | L0 | API envelope types; http+serde only (task candidate verified) |
 | `leptos-derive` | L0 | Proc-macro companion (host codegen leaf) |
 | `leptos-macros` | L0 | Proc-macro for Leptos components (kits.ts L0) |
