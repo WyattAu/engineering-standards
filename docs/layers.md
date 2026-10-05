@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (155 crates, 2026-10-04)
+## Classification (162 crates, 2026-10-05)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -139,6 +139,8 @@ drift. Justifications are one line per crate.
 | `http-errors` | L1 | Re-export shim over error-codes L0; runtime estate dep forbids L0 (mirrors error-classify) |
 | `hw-kit` | L1 | Linux-only hardware substrate (topology/pinning/NUMA/hugepages); zero estate deps, `libc`-only external edge |
 | `i18n-kit` | L0 | Runtime i18n catalogs; thiserror-only leaf |
+| `id3-core` | L0 | ID3v1/ID3v2 audio tag reader/writer incl. `CHAP`/`CTOC` chapters; thiserror-only leaf, `no_std` + `alloc` |
+| `mp4-core` | L0 | ISO-BMFF (MP4/M4A/M4B) box reader/writer incl. iTunes `ilst` metadata and Nero `chpl` chapters; thiserror-only leaf, `no_std` + `alloc` |
 | `json-envelope` | L0 | API envelope types; http+serde only (task candidate verified) |
 | `leptos-derive` | L0 | Proc-macro companion (host codegen leaf) |
 | `leptos-macros` | L0 | Proc-macro for Leptos components (kits.ts L0) |
@@ -215,9 +217,13 @@ drift. Justifications are one line per crate.
 | `vane-tls` | L1 | TLS termination over shm-rings L1 |
 | `webauthn-kit` | L1 | CTAP2/COSE verification substrate (kits.ts L1) |
 | `wire-kit` | L1 | Zero-copy SBE/FIX wire codec substrate; zero estate deps (spec §Cross-references: estate's edge-format leaf) |
+| `a2l-parse` | L1 | ASAP2/A2L ECU-description parser, zero deps; description half of the automotive calibration stack beside xcp-core (automotive protocol stack §L1) |
+| `xcp-core` | L1 | XCP on CAN protocol substrate (commands, responses, DAQ lists) over can-core L0; only estate dep is can-core (automotive protocol stack §L1) |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
+| `audiobook-conformance` | L3 | Conformance harness — generates a corpus with ffmpeg and cross-checks the audiobook crates against ffprobe and Symphonia; the independent oracle the parsers are measured against |
+| `audiobook-core` | L1 | Audiobook domain model — format-independent `Title`/`Part`/`Chapter`, an MP3 frame walker deriving duration from Xing/Info/VBRI or bitrate, and signature-based container detection; composes `id3-core` + `mp4-core`, `no_std` + `alloc` |
 | `axum-stack` | L2 | Axum middleware stack on healthkit+shutdown-kit (kits.ts L2) |
 | `billing-kit` | L2 | Pricing primitives over decimal-money L0 (kits.ts L2) |
 | `blobkit` | L2 | Object-storage trait w/ S3/local backends (kits.ts L2) |

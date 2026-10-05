@@ -1,1 +1,7 @@
 target/
+__pycache__/
+*.pyc
+
+# estate-audit network snapshot
+.estate-cache.json
+audit.json
