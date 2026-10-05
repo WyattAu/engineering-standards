@@ -158,18 +158,17 @@ jobs:
           ref: main
           path: .standards
           persist-credentials: false
-      # Every repo exempts its whole third-party graph rather than vetting
-      # crate-by-crate (imports.lock/audits.toml are intentionally empty), so
-      # supply-chain/config.toml must name every registry package at its exact
-      # locked version -- it is a pure function of Cargo.lock. Any dependency
-      # change therefore invalidates it. That made a forgotten regeneration the
-      # estate's most frequent CI red, and the hand-rolled fix was itself
-      # order-sensitive (regenerating before writing the lockfile). Check the
-      # drift explicitly and print the one-command fix instead of surfacing a
-      # wall of `missing ["safe-to-deploy"]` from cargo vet.
-      - name: vet exemptions in sync with Cargo.lock
+      # A forgotten exemption update is the estate's most frequent CI red: any
+      # dependency change can leave a package uncovered, and cargo-vet reports
+      # it as one line per crate with no hint at the fix. This wraps the same
+      # `cargo vet --locked` invocation (one run, not two -- the script shells
+      # out to cargo vet itself) and, on failure, names the exact packages and
+      # the exact command to fix them. It deliberately does NOT reimplement
+      # cargo-vet's coverage decision: repos with a populated imports.lock get
+      # no exemptions demanded of them, because cargo vet is the only thing
+      # that decides what is covered. See docs/cargo-vet.md.
+      - name: vet (with an actionable report on missing coverage)
         run: python3 .standards/scripts/resync-vet-exemptions.py --check
-      - run: cargo vet --locked
 
   layer:
     # Estate L0-L3 layer model: dependencies must never point up the stack.

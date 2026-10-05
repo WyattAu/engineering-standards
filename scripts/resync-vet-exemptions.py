@@ -1,185 +1,215 @@
 #!/usr/bin/env python3
-"""Resync (or verify) cargo-vet `exemptions` against `Cargo.lock`.
+"""Fix or explain `cargo vet --locked` failures caused by missing exemptions.
 
 ## Why this exists
 
-Every estate repo gates on `cargo vet --locked`. Because
-`supply-chain/imports.lock` and `supply-chain/audits.toml` are
-deliberately empty — all third-party crates are exempted rather than
-vetted individually — a repo's exemption set must name **every**
-registry-sourced package in `Cargo.lock`, at the **exact** locked version.
+Every estate repo gates on `cargo vet --locked`. Coverage comes from three
+places, and which one applies varies by repo:
 
-That makes `supply-chain/config.toml` a pure function of `Cargo.lock`.
-Any dependency change therefore invalidates it, and a forgotten
-regeneration is a red `quality / vet`. Across the estate this has been
-the single most common CI failure, and it has bitten in at least four
-repos within one week — twice in the same repo within an hour.
+- `supply-chain/imports.lock` — crates vetted to a criterion. Repos with a
+  populated file (e.g. `formula-lang`: 32 fully audited) legitimately need
+  **no** exemption for those crates.
+- `supply-chain/audits.toml` — crates covered by an audit record.
+- `supply-chain/config.toml` `[[exemptions.NAME]]` — everything else.
 
-The fix is mechanical but was being done by hand, with the ordering
-mistake (regenerating the exemptions *before* writing the lockfile)
-producing a second round of red. This script makes it one command, in
-the one correct order, and gives CI a `--check` mode that fails with the
-fix spelled out instead of a wall of `missing ["safe-to-deploy"]`.
+So a package needs an exemption only when neither of the first two apply.
+That decision belongs to cargo-vet, and reimplementing it here was wrong:
+an earlier version of this script derived the required set from
+`Cargo.lock` alone and cheerfully demanded 34 exemptions from
+`formula-lang`, which passes `cargo vet --locked` with 32 crates fully
+audited and none of them exempted. Wiring that version into the gate would
+have turned nineteen green repos red.
+
+This version therefore never decides coverage itself. It runs
+`cargo vet --locked` and uses cargo-vet's own list of unmet packages as
+the ground truth.
 
 ## Usage
 
 ```sh
-# Regenerate (the fix). Run this AFTER Cargo.lock is final.
+# The fix: run after Cargo.lock is final. Appends exemptions for exactly the
+# packages cargo-vet reports as missing, then canonicalises the formatting.
 python3 scripts/resync-vet-exemptions.py --write
 
-# Verify only (the gate). Exits non-zero and prints the fix command.
+# The gate: runs cargo vet and, on failure, prints the missing packages and
+# the fix. Exits with cargo-vet's own status.
 python3 scripts/resync-vet-exemptions.py --check
 ```
 
-`--check` is what the shared `quality / vet` job runs before
-`cargo vet --locked`.
+## Why the write is additive
 
-## What it touches
+`--write` only ever **appends** `[[exemptions.NAME]]` blocks. It never
+deletes or rewrites existing entries, never reorders them, and never
+removes a version cargo-vet is happy with. That matters because:
 
-Only `supply-chain/config.toml`, and only its `[[exemptions.*]]`
-blocks. The `[cargo-vet]` preamble and any `[[criteria]]` / `[[audits]]`
-sections are preserved verbatim. Packages with no `source` key (workspace
-members and path dependencies) are skipped — cargo-vet treats those as
-first-party and never demands an exemption.
+- a repo with real `imports.lock` audits keeps them untouched;
+- an entry a maintainer wrote by hand for a good reason survives;
+- the diff shows exactly which new packages the current lockfile
+  introduced, which is what a reviewer wants to see.
+
+The cost is that genuinely-stale entries (a version no longer in the lock)
+are left behind. `cargo vet` does not complain about those, so they are
+harmless; `cargo vet fmt` keeps the file tidy. Prune them by hand if the
+list ever grows unwieldy.
+
+## Ordering
+
+Regenerate **after** `Cargo.lock` is final. Writing exemptions and then
+regenerating the lockfile leaves them stale again and produces a second
+red run — an ordering mistake that has bitten this estate more than once.
 """
 
 from __future__ import annotations
 
 import argparse
-import collections
 import os
 import re
+import shutil
+import subprocess
 import sys
 
-DEFAULT_LOCK = "Cargo.lock"
 DEFAULT_CONFIG = os.path.join("supply-chain", "config.toml")
 
-_EXEMPTION_HEADER = "[[exemptions."
-_ANCHOR = "cargo-vet config file"
+# cargo-vet reports unmet packages as e.g.
+#     sheet-engine:0.1.0 missing ["safe-to-deploy"]
+_MISSING_RE = re.compile(r'^\s*([A-Za-z0-9_.+-]+):([^\s]+) missing \["([^"]+)"\]', re.M)
 
 
-def locked_registry_packages(lock_path: str) -> dict[str, set[str]]:
-    """Every registry- or git-sourced package in the lockfile.
-
-    Returns ``{name: {versions, ...}}``. Workspace members and path
-    dependencies carry no ``source`` key and are excluded — cargo-vet
-    never requires an exemption for first-party code.
-    """
-    with open(lock_path, encoding="utf-8") as fh:
-        lock = fh.read()
-
-    required: dict[str, set[str]] = collections.defaultdict(set)
-    for block in lock.split("[[package]]")[1:]:
-        name = re.search(r'^name = "(.+)"', block, re.M)
-        version = re.search(r'^version = "(.+)"', block, re.M)
-        source = re.search(r"^source = ", block, re.M)
-        if name and version and source:
-            required[name.group(1)].add(version.group(1))
-    return required
+def run_cargo_vet() -> tuple[int, str]:
+    """Run `cargo vet --locked`; return (exit status, combined output)."""
+    if shutil.which("cargo") is None:
+        sys.exit("error: cargo not on PATH")
+    proc = subprocess.run(
+        ["cargo", "vet", "--locked"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout + proc.stderr
 
 
-def render(config_path: str, required: dict[str, set[str]]) -> str:
-    """The config text with its exemption blocks replaced by `required`."""
+def parse_missing(output: str) -> list[tuple[str, str, str]]:
+    """Unmet `(name, version, criteria)` triples from cargo-vet's output."""
+    seen: set[tuple[str, str, str]] = set()
+    out: list[tuple[str, str, str]] = []
+    for name, version, criteria in _MISSING_RE.findall(output):
+        key = (name, version, criteria)
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return sorted(out)
+
+
+def existing_exemptions(config_path: str) -> set[tuple[str, str, str]]:
+    """`(name, version, criteria)` triples already present in the config."""
     with open(config_path, encoding="utf-8") as fh:
-        existing = fh.read()
-
-    head = existing.split(_EXEMPTION_HEADER)[0].rstrip("\n")
-    if _ANCHOR not in head:
-        sys.exit(
-            f"error: {config_path} does not look like a cargo-vet config "
-            f"(no '{_ANCHOR}' header before the first exemption block)"
-        )
-
-    out = [head, ""]
-    for name in sorted(required):
-        for version in sorted(required[name]):
-            out += [
-                f"{_EXEMPTION_HEADER}{name}]]",
-                f'version = "{version}"',
-                'criteria = "safe-to-deploy"',
-                "",
-            ]
-    return "\n".join(out).rstrip("\n") + "\n"
-
-
-def diff_summary(required: dict[str, set[str]], config_path: str) -> str:
-    """Human-readable drift report, or "" when the config is in sync."""
-    with open(config_path, encoding="utf-8") as fh:
-        existing = fh.read()
-
-    have: dict[str, set[str]] = collections.defaultdict(set)
-    for block in existing.split(_EXEMPTION_HEADER)[1:]:
+        text = fh.read()
+    found: set[tuple[str, str, str]] = set()
+    for block in text.split("[[exemptions.")[1:]:
         name = block.split("]]")[0]
         version = re.search(r'version = "(.+)"', block)
-        if version:
-            have[name].add(version.group(1))
+        criteria = re.search(r'criteria = "(.+)"', block)
+        if version and criteria:
+            found.add((name, version.group(1), criteria.group(1)))
+    return found
 
-    missing = sorted(
-        (n, v) for n, versions in required.items() for v in versions if v not in have.get(n, set())
-    )
-    stale = sorted(
-        (n, v) for n, versions in have.items() for v in versions if v not in required.get(n, set())
-    )
-    if not missing and not stale:
-        return ""
 
-    lines = []
-    if missing:
-        preview = ", ".join(f"{n} {v}" for n, v in missing[:8])
-        lines.append(f"  {len(missing)} missing:  {preview}{' …' if len(missing) > 8 else ''}")
-    if stale:
-        preview = ", ".join(f"{n} {v}" for n, v in stale[:8])
-        lines.append(f"  {len(stale)} stale:    {preview}{' …' if len(stale) > 8 else ''}")
-    return "\n".join(lines)
+def append_exemptions(config_path: str, missing: list[tuple[str, str, str]]) -> int:
+    """Append blocks for `missing` that are not already present. Returns count added."""
+    have = existing_exemptions(config_path)
+    additions = [m for m in missing if m not in have]
+    if not additions:
+        return 0
+    with open(config_path, "a", encoding="utf-8") as fh:
+        if not fh.tell() == 0 and not _ends_with_newline(config_path):
+            fh.write("\n")
+        for name, version, criteria in additions:
+            fh.write(f'\n[[exemptions.{name}]]\nversion = "{version}"\ncriteria = "{criteria}"\n')
+    return len(additions)
+
+
+def _ends_with_newline(path: str) -> bool:
+    with open(path, "rb") as fh:
+        fh.seek(0, os.SEEK_END)
+        if fh.tell() == 0:
+            return True
+        fh.seek(-1, os.SEEK_END)
+        return fh.read(1) == b"\n"
+
+
+def report(missing: list[tuple[str, str, str]], output: str) -> None:
+    print("error: `cargo vet --locked` failed; the following packages need coverage:", file=sys.stderr)
+    for name, version, criteria in missing:
+        print(f"    {name} {version}  ->  criteria {criteria!r}", file=sys.stderr)
+    if not missing:
+        # A failure that is not a missing exemption (bad imports.lock, a real
+        # audit failure, a parse error). Do not pretend it is fixable here.
+        print(file=sys.stderr)
+        print("    This is not a missing-exemption failure. Full cargo-vet output:", file=sys.stderr)
+        print(file=sys.stderr)
+        for line in output.strip().splitlines():
+            print(f"    {line}", file=sys.stderr)
+        print(file=sys.stderr)
+        print("    See docs/cargo-vet.md.", file=sys.stderr)
+        return
+    print(file=sys.stderr)
+    print("    Fix (Cargo.lock must already be final — regenerate in this order):", file=sys.stderr)
+    print("        python3 scripts/resync-vet-exemptions.py --write", file=sys.stderr)
+    print("        cargo vet fmt", file=sys.stderr)
+    print("        cargo vet --locked", file=sys.stderr)
+    print(file=sys.stderr)
+    print("    A repo with a populated supply-chain/imports.lock needs no exemption", file=sys.stderr)
+    print("    for an audited crate; if one of these should be vetted rather than", file=sys.stderr)
+    print("    exempted, add it to imports.lock instead (`cargo vet --import-keys`).", file=sys.stderr)
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--lock", default=DEFAULT_LOCK, help="path to Cargo.lock")
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--config", default=DEFAULT_CONFIG, help="path to supply-chain/config.toml")
     mode = ap.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--check", action="store_true", help="verify only; non-zero exit on drift")
-    mode.add_argument("--write", action="store_true", help="rewrite the exemption blocks")
+    mode.add_argument("--check", action="store_true", help="run cargo vet; explain failures (the gate)")
+    mode.add_argument("--write", action="store_true", help="append exemptions for what cargo vet reports missing")
     args = ap.parse_args()
 
-    if not os.path.exists(args.lock):
-        sys.exit(f"error: {args.lock} not found — run from the repo root")
-    if not os.path.exists(args.config):
-        if args.check:
-            sys.exit(f"error: {args.config} not found — nothing to verify")
-        sys.exit(f"error: {args.config} not found — nothing to resync")
+    status, output = run_cargo_vet()
+    missing = parse_missing(output)
 
-    required = locked_registry_packages(args.lock)
-    if not required:
-        sys.exit(f"error: no registry packages in {args.lock} — refusing to touch {args.config}")
-
-    if args.write:
-        before = open(args.config, encoding="utf-8").read()
-        after = render(args.config, required)
-        if before == after:
-            print(f"vet exemptions already in sync ({len(required)} crates)")
+    if args.check:
+        if status == 0:
+            summary = next(
+                (ln.strip() for ln in output.splitlines() if "Vetting Succeeded" in ln), ""
+            )
+            print(summary or "cargo vet --locked succeeded")
             return 0
-        with open(args.config, "w", encoding="utf-8") as fh:
-            fh.write(after)
-        total = sum(len(v) for v in required.values())
-        print(f"resynced {args.config}: {total} blocks across {len(required)} crates")
-        print("now run `cargo vet fmt` (canonical ordering), then `cargo vet --locked`")
-        return 0
+        report(missing, output)
+        return status or 1
 
-    drift = diff_summary(required, args.config)
-    if not drift:
-        print(f"vet exemptions in sync ({len(required)} crates)")
+    # --write
+    if status == 0:
+        print("cargo vet --locked already succeeds — nothing to add")
         return 0
-    print(f"error: {args.config} is out of sync with {args.lock}:")
-    print(drift)
-    print()
-    print("The exemption set must name every registry package at its exact")
-    print("locked version. Cargo.lock must already be final — regenerate in")
-    print("this order:")
-    print("    python3 scripts/resync-vet-exemptions.py --write")
-    print("    cargo vet fmt")
-    print("    cargo vet --locked")
-    return 1
+    if not missing:
+        report([], output)
+        return status or 1
+    if not os.path.exists(args.config):
+        sys.exit(
+            f"error: {args.config} not found. cargo-vet wants coverage for "
+            f"{len(missing)} package(s) but this repo has no exemption file; add them "
+            "to supply-chain/imports.lock instead (`cargo vet --import-keys`)."
+        )
+
+    added = append_exemptions(args.config, missing)
+    if added:
+        print(f"appended {added} exemption block(s) to {args.config}")
+        print("now run `cargo vet fmt`, then `cargo vet --locked`")
+    else:
+        print("every reported package already has an exemption block")
+        print("the failure is elsewhere — re-running cargo vet for detail:")
+        print()
+        print(output.strip())
+    return 0
 
 
 if __name__ == "__main__":

@@ -340,10 +340,12 @@ keeps 182 repos honest:
 - `docs/layers.md` — the L0–L3 layer model and its enforcement
 - `docs/feature-compatibility.md` — the additive-feature rule (R1–R5), the R3
   ownership subtlety, and the current estate findings
-- `docs/cargo-vet.md` — why `supply-chain/config.toml` is a pure function of
-  `Cargo.lock`, and the four-step regeneration order CI enforces
-- `scripts/resync-vet-exemptions.py` — regenerate (`--write`) or verify
-  (`--check`) the vet exemption set from the lockfile
+- `docs/cargo-vet.md` — the three sources of vet coverage, the four-step
+  exemption repair order, and why the gate must not reimplement cargo-vet's
+  coverage decision
+- `scripts/resync-vet-exemptions.py` — the `quality / vet` gate wrapper:
+  `--check` runs `cargo vet --locked` and reports failures actionably,
+  `--write` appends exactly the exemptions cargo-vet says are missing
 - `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
 - `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
 - `.github/workflows/attest.yml` — per-crate release provenance (dispatch)

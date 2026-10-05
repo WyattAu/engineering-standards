@@ -1,36 +1,39 @@
-# cargo-vet: keeping exemptions in sync
+# cargo-vet: coverage, exemptions, and the gate
 
 ## The rule
 
 Every estate repo gates on `cargo vet --locked`.
 
-`supply-chain/imports.lock` and `supply-chain/audits.toml` are
-deliberately **empty**: the estate does not vet individual third-party
-crates, it exempts them. That means `supply-chain/config.toml` must name
-**every** registry- or git-sourced package in `Cargo.lock`, at that
-package's **exact** locked version, or `cargo vet --locked` fails with
-`missing ["safe-to-deploy"]`.
+Coverage comes from three places, and which one applies varies by repo:
 
-Packages with no `source` key in the lockfile — workspace members and path
-dependencies — are first-party and never need an exemption.
+| Source | Meaning |
+|---|---|
+| `supply-chain/imports.lock` | crates **vetted** to a criterion |
+| `supply-chain/audits.toml` | crates covered by an **audit record** |
+| `supply-chain/config.toml` `[[exemptions.NAME]]` | everything **else** |
 
-## Why this needs a script
+A package needs an exemption only when neither of the first two apply.
+That is a decision for `cargo vet` to make, not for a script to
+reimplement — see [Why not derive it from the
+lockfile](#why-not-derive-it-from-the-lockfile) below.
 
-Because of the rule above, `supply-chain/config.toml` is a **pure
-function of `Cargo.lock`**. Every dependency change invalidates it.
+## The failure this addresses
 
-Regenerating it by hand was, until this script existed, the estate's most
-frequent CI red — and the manual fix was itself order-sensitive:
+Any dependency change can leave a package uncovered, and cargo-vet reports
+it as one line per crate:
 
-```sh
-# WRONG — writes exemptions, then the lockfile moves under them.
-#         Resync again and you have a second red run.
-python3 scripts/resync-vet-exemptions.py --write
-cargo generate-lockfile
+```
+  zerocopy:0.8.59 missing ["safe-to-run"]
+  zerocopy-derive:0.8.59 missing ["safe-to-run"]
+  …
 ```
 
-The correct order is lockfile first, exemptions second. `scripts/resync-vet-exemptions.py`
-owns that ordering so nobody has to remember it.
+with no hint at the fix. A forgotten exemption update has been the
+estate's most frequent CI red, and the hand-rolled repair was itself
+order-sensitive: writing exemptions and *then* regenerating the lockfile
+leaves them stale again, producing a second red run.
+
+`scripts/resync-vet-exemptions.py` fixes both problems.
 
 ## The commands
 
@@ -38,45 +41,89 @@ owns that ordering so nobody has to remember it.
 # 1. Finalise dependencies (bumps, pins, features).
 cargo generate-lockfile
 
-# 2. Regenerate the exemption set from that lockfile.
+# 2. Fix. Appends exemptions for exactly what cargo vet reports missing.
 python3 scripts/resync-vet-exemptions.py --write
 
 # 3. Canonical ordering/formatting — cargo-vet's own formatter.
 cargo vet fmt
 
-# 4. The gate itself.
+# 4. The gate.
 cargo vet --locked
 ```
 
-Verify without writing (what CI runs):
+Verify without writing — this is exactly what CI runs:
 
 ```sh
 python3 scripts/resync-vet-exemptions.py --check
 ```
 
-`--check` exits non-zero on drift and prints the missing/stale counts plus
-the exact four-step fix, instead of leaving you to read cargo-vet's output.
+On success it prints cargo-vet's own summary line. On failure it names the
+packages, the criterion each needs, and the four-step fix above.
 
 ## What CI does
 
-The shared `quality / vet` job in `.github/workflows/rust-kit.yml` runs:
+The shared `quality / vet` job in `.github/workflows/rust-kit.yml` runs
+**one** cargo-vet invocation, through the script:
 
-1. `resync-vet-exemptions.py --check` — fails fast with an actionable
-   message if the exemption set drifted.
-2. `cargo vet --locked` — unchanged.
+```yaml
+- run: python3 .standards/scripts/resync-vet-exemptions.py --check
+```
 
-Step 1 adds no new failure modes: a repo whose exemptions have drifted
-already fails step 2. It only replaces a wall of one-line-per-crate
-`missing ["safe-to-deploy"]` output with a single actionable error, and it
-catches the case where a stale entry happens to still pass.
+The script shells out to `cargo vet --locked` itself, so this is not a
+second, slower run — it is the same run with a better failure message.
+The script exits with cargo-vet's own status, so it can never turn a green
+repo red or a red repo green.
+
+## Why the write is additive
+
+`--write` only ever **appends** `[[exemptions.NAME]]` blocks. It never
+deletes or rewrites existing entries and never reorders them. That matters
+because:
+
+- a repo with real `imports.lock` audits keeps them untouched;
+- a hand-written entry with a good reason survives;
+- the diff shows exactly which packages the current lockfile introduced,
+  which is what a reviewer wants to see.
+
+It also means genuinely-stale entries (a version no longer in the lock) are
+left behind. `cargo vet` does not complain about those, so they are
+harmless; `cargo vet fmt` keeps the file tidy. Prune them by hand if the
+list grows unwieldable.
+
+`--write` is idempotent: running it twice adds nothing the second time.
+
+## Why not derive it from the lockfile
+
+The first version of this script did exactly that — it derived the
+required set from `Cargo.lock` and demanded an exemption for every
+registry package. On `formula-lang`, which has a populated
+`imports.lock`, that produced **34 spurious exemptions**: cargo-vet was
+already satisfied by 32 fully-audited crates plus 2 partial audits, and
+the repo passed.
+
+Wiring that version into the shared gate would have turned **19 green
+repos red**. The lesson generalises: coverage is a property of three files
+plus cargo-vet's own criteria logic, so anything that tries to shortcut it
+will be wrong for some repo. The script therefore uses cargo-vet's output
+as ground truth and adds no coverage logic of its own.
 
 ## Why `cargo vet fmt` is a separate step
 
-The script writes exemptions sorted by name, then version. That is
-deterministic and diff-friendly, but it is not always byte-identical to
-cargo-vet's canonical formatting — `cargo vet fmt` normalises block order
-and spacing. Running it makes the diff show only real dependency changes,
-so a reviewer sees a version bump rather than a reshuffled file.
+`cargo vet fmt` normalises block order and spacing. Running it means the
+diff for a dependency bump shows a version change rather than a reshuffled
+file.
+
+## Vetting rather than exempting
+
+If a package in the `missing` list should be vetted rather than exempted,
+do not add an exemption — add it to `imports.lock`:
+
+```sh
+cargo vet --import-keys <crate>   # prints the key lines to paste
+```
+
+That is the direction the estate should move over time: blanket
+exemption is a pragmatic floor, not a destination.
 
 ## Adding a repo
 
@@ -84,18 +131,10 @@ Copy the layout from any green repo:
 
 ```
 supply-chain/
-  config.toml     # [cargo-vet] header + one [[exemptions.NAME]] block per locked package
-  imports.lock    # intentionally empty (see header comment)
-  audits.toml     # intentionally empty (see header comment)
+  config.toml     # [cargo-vet] header + [[exemptions.NAME]] blocks as needed
+  imports.lock    # vetted crates — may be empty, or nearly so
+  audits.toml     # audit records — may be empty
 ```
 
-Then run the four steps above. If your crate graph is empty
-(no registry dependencies), `resync-vet-exemptions.py` refuses to touch
-the file rather than writing an empty exemption set.
-
-## Refreshing versions
-
-To move a pinned dependency to a new version, expect to re-run the
-regeneration — that is the intended workflow, not an annoyance. If a
-`cargo update` lands without a regeneration, `quality / vet` will say so
-in one line.
+Then run the four steps. If the crate graph has no registry dependencies,
+`cargo vet --locked` simply succeeds and there is nothing to write.
