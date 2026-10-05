@@ -34,7 +34,7 @@ Domain logic with estate semantics; depends on L0/L1 and other L2 kits
 (same-layer composition is normal and legal — e.g. `outbox-kit` → `breaker`).
 
 Examples: `breaker`, `throttle-kit`, `webhookkit`, `outbox-kit`,
-`idempotency-kit`, `healthkit`, `config-kit`, `flag-kit`
+`idempotency-kit`, `healthkit`, `config-kit`, `flag-kit`, `cal-model`
 (reserved for future: `ledger-kit`, `policy-kit`).
 
 ### L3 — composition
@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (163 crates, 2026-10-06)
+## Classification (164 crates, 2026-10-06)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -230,6 +230,7 @@ drift. Justifications are one line per crate.
 | `blobkit` | L2 | Object-storage trait w/ S3/local backends (kits.ts L2) |
 | `breaker` | L2 | Circuit-breaker estate semantics; task §1 L2 anchor |
 | `cache-pal` | L2 | Caching abstractions (kits.ts L2) |
+| `cal-model` | L2 | A2L calibration data model and session layer — characteristic/CAN-signal binding, COMPU_METHOD apply+invert, limit validation, snapshot/restore/diff, curve fitting; composes a2l-parse L1 + xcp-core L1 + dbc-parse L0 (automotive protocol stack §L2) |
 | `chaos-kit` | L2 | Deterministic fault injection domain kit (kits.ts L2) |
 | `config-kit` | L2 | Layered typed configuration, service-config domain (kits.ts L2) |
 | `docs-pipeline` | L2 | Markdown->HTML rendering pipeline (kits.ts L2) |
