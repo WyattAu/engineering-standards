@@ -1,10 +1,13 @@
 {
  "_comment": "WyattAu estate layer table: crate -> L0|L1|L2|L3. Authoritative source: docs/layers.md classification in this repo. Regenerate after any reclassification.",
  "tiers": {
+  "a2l-parse": "L1",
   "accessctl": "L3",
   "actor-kit": "L2",
   "api-paginate": "L2",
   "api-types": "L2",
+  "audiobook-conformance": "L3",
+  "audiobook-core": "L1",
   "axum-stack": "L2",
   "barbican": "L3",
   "billing-kit": "L2",
@@ -12,6 +15,7 @@
   "book-kit": "L1",
   "breaker": "L2",
   "cache-pal": "L2",
+  "cal-model": "L2",
   "can-core": "L0",
   "cas-kit": "L1",
   "chaos-kit": "L2",
@@ -28,6 +32,7 @@
   "delta-kit": "L0",
   "docs-pipeline": "L2",
   "dsp-core": "L0",
+  "dsp-spectral": "L1",
   "envstack": "L2",
   "error-classify": "L1",
   "error-classify-derive": "L0",
@@ -42,6 +47,7 @@
   "http-errors": "L1",
   "hw-kit": "L1",
   "i18n-kit": "L0",
+  "id3-core": "L0",
   "idempotency-kit": "L2",
   "json-envelope": "L0",
   "leptos-capital-markers": "L3",
@@ -58,6 +64,7 @@
   "media-kit": "L2",
   "metrics-kit": "L1",
   "model-router": "L0",
+  "mp4-core": "L0",
   "multi-chain-wallet": "L2",
   "oauth-toolkit": "L3",
   "otel-stack": "L2",
@@ -156,6 +163,7 @@
   "wire-kit": "L1",
   "worker-kit": "L3",
   "ws-barbican": "L3",
-  "ws-kit": "L2"
+  "ws-kit": "L2",
+  "xcp-core": "L1"
  }
 }

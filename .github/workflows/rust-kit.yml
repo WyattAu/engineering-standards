@@ -153,7 +153,24 @@ jobs:
       # the dev toolchain and reads all existing imports.lock files.
       - name: Install cargo-vet
         run: cargo install --locked cargo-vet --version 0.10.2
-      - run: cargo vet --locked
+      - name: checkout engineering-standards (public; vet resync checker)
+        uses: actions/checkout@v4
+        with:
+          repository: WyattAu/engineering-standards
+          ref: main
+          path: .standards
+          persist-credentials: false
+      # A forgotten exemption update is the estate's most frequent CI red: any
+      # dependency change can leave a package uncovered, and cargo-vet reports
+      # it as one line per crate with no hint at the fix. This wraps the same
+      # `cargo vet --locked` invocation (one run, not two -- the script shells
+      # out to cargo vet itself) and, on failure, names the exact packages and
+      # the exact command to fix them. It deliberately does NOT reimplement
+      # cargo-vet's coverage decision: repos with a populated imports.lock get
+      # no exemptions demanded of them, because cargo vet is the only thing
+      # that decides what is covered. See docs/cargo-vet.md.
+      - name: vet (with an actionable report on missing coverage)
+        run: python3 .standards/scripts/resync-vet-exemptions.py --check
 
   layer:
     # Estate L0-L3 layer model: dependencies must never point up the stack.
@@ -175,6 +192,28 @@ jobs:
           python3 .standards/scripts/check-layers.py \
             --cwd . \
             --estate-list .standards/scripts/estate-crates.txt
+
+  feature-compat:
+    # Additive cargo features must not gate public API elements: Cargo unifies
+    # features graph-wide, so a feature-gated variant/field/arm breaks hosts
+    # that enable it anywhere in the graph. See docs/feature-compatibility.md.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: checkout engineering-standards (public; checker)
+        uses: actions/checkout@v4
+        with:
+          repository: WyattAu/engineering-standards
+          ref: main
+          path: .standards
+          persist-credentials: false
+      - name: feature-compatibility check
+        run: |
+          python3 .standards/scripts/check-features.py --cwd .
+      - name: checker self-test (guards against false positives)
+        run: python3 .standards/scripts/test-check-features.py
 
   coverage:
     runs-on: ubuntu-latest

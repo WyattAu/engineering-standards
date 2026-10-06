@@ -23,6 +23,8 @@ jobs:
 | clippy `-D warnings` | ✅ + pedantic | ✅ | ✅ |
 | `unwrap_used` / `indexing_used` / `panic` denied | ✅ | — | — |
 | fmt `--check` | ✅ | ✅ | ✅ |
+| estate layer check (no upward L0–L3 deps) | ✅ | ✅ | ✅ |
+| feature-compatibility check | ✅ | ✅ | ✅ |
 | cargo-deny (advisories / licenses / bans) | ✅ | ✅ | ✅ |
 | cargo-audit (scheduled weekly) | ✅ | ✅ | ✅ |
 | llvm-cov | ≥90% | ≥80% | ≥70% (informational until 2026-10) |
@@ -206,6 +208,31 @@ source commit, toolchain, and artifact hash:
   [`docs/naming-convention.md`](docs/naming-convention.md) — authoritative
   for every naming decision.
 
+### 10. Feature Compatibility
+
+- **An additive cargo feature must not gate a public API element.** Cargo
+  unifies features graph-wide, so a feature-gated enum variant, `pub` struct
+  field, match arm, or required trait method breaks any host that enables that
+  feature *anywhere* in the graph — usually an unrelated crate.
+- Legal additive shapes: a whole gated module, a whole gated type, a whole
+  gated function, a gated trait method **with a default body**, or a field on
+  a `#[non_exhaustive]` struct. Gating anything private or `pub(crate)` is
+  sound — no host can name it.
+- Enforced by the shared workflow's `feature-compat` job
+  ([`scripts/check-features.py`](scripts/check-features.py), rules R1–R5).
+  A deliberate exception needs an inline
+  `// feature-compat: allow — <reason>`; a reasonless `allow` is itself a
+  finding.
+- The rules, the reasoning, the R3 ownership subtlety, and the current estate
+  findings live in
+  [`docs/feature-compatibility.md`](docs/feature-compatibility.md).
+- The estate is **clean**: 0 findings across 33 repositories and 1,100+
+  library files. The 16 the gate found on its first sweep were each fixed with
+  `#[non_exhaustive]` rather than a suppression — that attribute does not
+  merely silence the gate, it changes a future feature-gated variant from a
+  silent downstream build break into one compile error that names the missing
+  arm.
+
 ## Tier Definitions
 
 - **Tier A — Security-critical / load-bearing (14)**: tokenkit, cryptkit,
@@ -310,9 +337,21 @@ keeps 182 repos honest:
 - `docs/naming-convention.md` — estate naming convention: the 6 rules,
   decision flowchart, domain-stack template, grandfathered names, and repo
   rename procedure
+- `docs/layers.md` — the L0–L3 layer model and its enforcement
+- `docs/feature-compatibility.md` — the additive-feature rule (R1–R5), the R3
+  ownership subtlety, and the current estate findings
+- `docs/cargo-vet.md` — the three sources of vet coverage, the four-step
+  exemption repair order, and why the gate must not reimplement cargo-vet's
+  coverage decision
+- `scripts/resync-vet-exemptions.py` — the `quality / vet` gate wrapper:
+  `--check` runs `cargo vet --locked` and reports failures actionably,
+  `--write` appends exactly the exemptions cargo-vet says are missing
 - `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
 - `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
 - `.github/workflows/attest.yml` — per-crate release provenance (dispatch)
+- `scripts/check-layers.py` — L0–L3 layer checker (pure stdlib)
+- `scripts/check-features.py` — feature-compatibility checker (pure stdlib)
+- `scripts/test-check-features.py` — the checker's fixture self-test
 - `templates/deny.toml` — dependency governance config
 - `templates/SECURITY.md`, `templates/THREAT-MODEL.md`,
   `templates/REQUIREMENTS.md`, `templates/CHANGELOG.md`

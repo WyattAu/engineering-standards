@@ -35,6 +35,7 @@ Legend: ✅ ships today · 🔶 partial/advisory · ❌ absent · 🎯 exceeds m
 | llms.txt | 🔶 this loop | d-oit | → ✅ |
 | OpenSSF Scorecard | 🔶 this loop | rare in templates | → 🎯 |
 | zizmor (workflow lint) | 🔶 this loop | rare | → 🎯 |
+| Performance budget gate | ✅ loop 2 | CodSpeed / benchmark-action | 🎯 |
 | osv-scanner | 🔶 this loop (non-Rust) | rare | → ✅ |
 | Linux CI | ✅ all | ✅ | ✅ |
 | macOS CI | 🔶 this loop (Rust/Go/TS/Python) | common | → ✅ |
