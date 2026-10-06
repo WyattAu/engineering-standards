@@ -6,7 +6,7 @@ name: estate-audit
 on:
   push:
     branches: [main]
-    paths: ["estate.yml", "scripts/estate-audit.py"]
+    paths: ["estate.yml", "scripts/estate-audit.py", "scripts/check-repo-crate-alignment.py"]
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -35,6 +35,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python scripts/estate-audit.py
+
+      # Naming-convention rule 1 (one crate per repo, same name). Reported, not
+      # gated: the 17 pending renames are a deliberate owner batch, and every
+      # one of them is enumerated in the checker's GRANDFATHERED table with the
+      # exact `gh repo rename` command. Failing here would only block unrelated
+      # merges until someone runs the batch.
+      - name: Audit repo<->crate name alignment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/check-repo-crate-alignment.py --owner WyattAu             | tee repo-crate-alignment.txt
+          echo "--- summary ---"
+          grep -E "^( +[a-z-]+:|PENDING RENAMES)" repo-crate-alignment.txt || true
 
       - name: Fail on unclaimed crates or unpinned core repos
         # The audit exits 1 on manifest errors. Drift and coverage debt are

@@ -224,6 +224,57 @@ the rename is repo-side only. Nothing is re-published, no version bumps, no
 breaking change. That is the point of Rule 1: it converts every future
 crate/repo mismatch into a zero-crate-impact repo rename.
 
+## Rule 1 is enforced by `scripts/check-repo-crate-alignment.py`
+
+Nothing checked this until now, which is why 17 mismatches accumulated. CI
+runs fine against whatever a repo happens to be called, so the drift is
+invisible until someone looks — and it is not cosmetic: a crate published as
+`shutdown-kit` whose crates.io `repository` field says `.../graceful` sends
+readers somewhere that does not match the crate name, and a doc link that
+looks wrong is a doc link people stop trusting.
+
+```sh
+# audit every repo in the org (needs a token with repo:read)
+python3 scripts/check-repo-crate-alignment.py --owner WyattAu
+
+# audit one local checkout, no network
+python3 scripts/check-repo-crate-alignment.py --cwd ../some-repo
+
+# gate form: fail while any mismatch remains
+python3 scripts/check-repo-crate-alignment.py --owner WyattAu --enforce
+```
+
+It runs in the `estate-audit` workflow (on manifest edits and nightly),
+**reported and not gated** — the outstanding work is a deliberate owner
+batch, and failing the run would block unrelated merges until it happens.
+
+### Monorepos are not violations
+
+Rule 1 applies per *published crate*, so a repo publishing several crates is
+named for the product and needs no rename: `vane` (11 crates), `suture` (38),
+`polyfont` (9), `plychart`, `typed-id`, `crawlkit`, `eventbus`. Telling that
+apart from a single-crate repo is the whole difficulty, and the checker does
+it by counting publishable workspace members.
+
+A repository that publishes nothing at all — services, docs, dotfiles, Homebrew
+taps, the standards repo itself — is likewise fine, and is listed in the
+script's `NO_CRATE` set.
+
+### Current state
+
+| Verdict | Count |
+|---|---|
+| repo name == crate name | 81 |
+| monorepo (named for the product) | 7 |
+| **pending rename** | **17** |
+| not a Rust crate (or an empty repo) | 63 |
+
+The 17 are enumerated in the script's `GRANDFATHERED` table, each with its
+exact `gh repo rename` command and the reason it drifted (a crates.io
+collision forced a crate rename, or the crate was renamed inbound and the repo
+never followed). Remove an entry when its rename lands; the checker then holds
+that repo to Rule 1 permanently.
+
 ## Template estate (Omni)
 
 Templates follow their own namespace, orthogonal to crate names:
