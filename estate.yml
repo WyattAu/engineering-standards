@@ -51,7 +51,7 @@ repos:
       - cal-model
     _seen:
       last_push: "2026-10-06"
-      cal-model: 0.1.0
+      cal-model: 0.1.1
 
   CivitForge:
     area: app
