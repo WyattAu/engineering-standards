@@ -14,7 +14,13 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
-## Determinism checks (loop 3)
+## Assumption hygiene (loop 4)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| A gate ships in a permissive mode ("report, never fail") because the toolchain "can't" be deterministic | The reason was plausible, not measured - and wrong in all three cases (GHC `.hi`, firmware ELF, `tofu plan` all hashed identically) | Measure first, then choose the mode. If a permissive mode is ever needed, the evidence belongs in the ADR next to the claim |
+
+
 
 | Symptom | Cause | Fix |
 |---|---|---|
