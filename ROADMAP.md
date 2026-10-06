@@ -127,6 +127,27 @@ Ordered by (correctness impact × how often it bites).
    integer at exponent 2.
 7. Serialisation: amount + currency together; no bare decimal on the wire.
 
+### Round 15, done
+
+- `multi-chain-wallet 0.3.0`: `bip32 0.6` + `k256 0.14`, with the BIP-32
+  conformance suite written *before* the upgrade so it could prove the migration
+  rather than follow it. All four derivation vectors match the specification byte
+  for byte; derived addresses are unchanged.
+- **Vector 5 measured, not assumed:** `bip32 0.6.0` accepts four of the sixteen
+  invalid extended keys. The wallet now enforces all sixteen itself.
+- **`k256 0.14` removed `sign_prehash_recoverable`** and offers a replacement
+  that *hashes* its input — a silent, total signature failure for a wallet.
+  `signing_prehash` signs the prehash directly, with a regression test asserting
+  the two paths differ.
+- **`webhookkit 2.2.0` stopped compiling** with no change to its own manifest,
+  because `k256 → sec1 → hybrid-array/subtle` enables an `Array::ct_eq(&Array)`
+  impl that shadows `subtle`'s slice impl, and feature unification is
+  workspace-wide. Fixed in `2.2.1`. This is the clearest argument yet for
+  composing crates in one graph.
+- Six repos appeared from another wave while this loop worked; all six are now in
+  the manifest with the status their nature implies, including a *private* TeX
+  repo recorded as `personal` rather than quietly omitted.
+
 ### Now — the product
 
 The estate's library work has reached the point where the remaining defects are
