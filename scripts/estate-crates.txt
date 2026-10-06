@@ -36,7 +36,9 @@ error-codes
 eventbus-kit
 fetch-kit
 flag-kit
+font-model
 font-parse
+font-shape
 formula-lang
 geo-kit
 healthkit

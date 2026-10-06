@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (164 crates, 2026-10-06)
+## Classification (166 crates, 2026-10-06)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -220,6 +220,7 @@ drift. Justifications are one line per crate.
 | `a2l-parse` | L1 | ASAP2/A2L ECU-description parser, zero deps; description half of the automotive calibration stack beside xcp-core (automotive protocol stack §L1) |
 | `xcp-core` | L1 | XCP on CAN protocol substrate (commands, responses, DAQ lists) over can-core L0; only estate dep is can-core (automotive protocol stack §L1) |
 | `dsp-spectral` | L1 | Spectral audio analysis and restoration substrate — STFT/ISTFT, mel/MFCC features, spectral gating, HPSS separation — over dsp-core L0's FFT/windows; only estate dep is dsp-core |
+| `font-model` | L1 | Typed owned editable font model — outlines with exact curve extrema and areas, cmap formats 4 and 12 encode/decode, metrics, validation, subsetting — over font-parse L0's borrowed views; only estate dep is font-parse |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
@@ -236,6 +237,7 @@ drift. Justifications are one line per crate.
 | `docs-pipeline` | L2 | Markdown->HTML rendering pipeline (kits.ts L2) |
 | `envstack` | L2 | Layered env/config loading (kits.ts L2) |
 | `flag-kit` | L2 | Feature flags domain kit over validkit L0 (kits.ts L2) |
+| `font-shape` | L2 | Glyph rasterization and text measurement — exact-coverage scanline fill, stroke expansion, advance/kerning layout, bidirectional reordering — over font-model L1; no rasterizer dependency, `no_std` + `alloc` |
 | `healthkit` | L2 | Health/readiness domain kit; task §1 L2 anchor |
 | `idempotency-kit` | L2 | Idempotency keys domain kit; task §1 L2 anchor |
 | `mail-sync-kit` | L2 | IMAP/JMAP/SMTP sync engines, mailkit sibling (L2) |
