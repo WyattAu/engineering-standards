@@ -14,7 +14,16 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
-## Benchmarks and perf gates (loop 2)
+## Determinism checks (loop 3)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| A determinism script exists, is named in an ADR, and nothing runs it | It was written but never wired | A claim needs a verb *and* a job: `make repro` + the `repro` CI job. Wire it or delete it |
+| `uv build` fails with `setuptools ... get_requires_for_build_sdist` in a uv workspace | A bare `uv build` tries to build the `package = false` root | `uv build --all-packages` (and exclude uv's own `.gitignore` from the out-dir) |
+| A reproducibility check fails only on the *second* run, with a phantom "first run only" line | chezmoi's `run_once_` scripts print to **stdout**, which you captured | Redirect the tool's chatter (`>&2`) and point `HOME` at the scratch dir so the render is hermetic |
+| `site-bytes` differs by hundreds of KB between machines | Pagefind (Starlight search) is generated via `npx`; without node on PATH the site is silently smaller | Measure where CI measures; say so in the baseline file header |
+
+
 
 | Symptom | Cause | Fix |
 |---|---|---|

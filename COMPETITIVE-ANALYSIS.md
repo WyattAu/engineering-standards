@@ -27,7 +27,7 @@ Legend: ✅ ships today · 🔶 partial/advisory · ❌ absent · 🎯 exceeds m
 | Property-based testing | ✅ Rust proptest, Python hypothesis, Haskell hedgehog | rare | 🎯 |
 | Mutation testing (gate policy) | ✅ Rust weekly→gate | d-oit (periodic) | ✅ |
 | Fuzzing | ✅ Rust cargo-fuzz, Go native | rare | 🎯 |
-| Reproducible-build check | ✅ Rust double-build SHA-256 | none | 🎯 |
+| Reproducible-build check | ✅ loop 3: build-twice + hash compare in **all ten** templates, gated where the toolchain allows and reported (with the reason) where it does not | Rust double-build SHA-256 (one template) | 🎯 |
 | Supply chain | ✅ cargo-vet + cargo-deny (Rust) | cargo-deny only | 🎯 |
 | Coverage gates | ✅ tiered per language | VGV 100% (Flutter only) | ✅ |
 | Artifact attestation | ✅ all release paths | cookiecutter-pypackage (Sigstore) | ✅ |
