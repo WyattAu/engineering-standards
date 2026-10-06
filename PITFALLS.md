@@ -14,7 +14,16 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
-## Assumption hygiene (loop 4)
+## Haskell / criterion (loop 4)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| A benchmark reports ~4ns for a batch of 1,000 operations | The batch was a top-level CAF that was only *returned*, so every iteration after the first timed nothing | `nf f x` — criterion applies the argument per iteration. `nfIO`/`whnfIO` take a plain `IO` action and will happily measure a hoisted constant |
+| `cabal test all` fails with `Cabal-7043` after adding a bench component | The new `criterion` dependency backtracks the solver's whole plan | `cabal build/test all --disable-benchmarks`; there is no `benchmarks:` field in `cabal.project` (that parse error is real) |
+| A `.hi`/report JSON parse fails after a criterion upgrade | 1.6.x writes `["criterion", "<version>", [{reportAnalysis: {anMean: {estPoint}}, ...}]]`, not the older flat `mean` | Walk the report for mean-bearing nodes and understand both shapes (see `emit-criterion-bench.py`); keep the emitter as its own script so it is testable without GHC |
+| A CI lint job fails on a file that "looks fine" | Each repo's own formatter config differs — OmniDotfiles runs `shfmt -i 4` over `scripts/` while the estate uses `-i 2` | Format with the *target repo's* setting, and check with it before pushing |
+
+
 
 | Symptom | Cause | Fix |
 |---|---|---|
