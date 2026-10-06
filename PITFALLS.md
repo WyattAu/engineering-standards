@@ -14,6 +14,20 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
+## Benchmarks and perf gates (loop 2)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `cargo bench --workspace --benches -- <args>` fails with `Unrecognized option` | Cargo hands `--` args to **lib test harnesses** too, and libtest rejects criterion flags | Resolve bench targets from `cargo metadata --no-deps` and run `cargo bench -p <pkg> --bench <name> --` per target |
+| `bench is not a function` in a vitest 5 `.bench.ts` | vitest 5 dropped the top-level `bench` DSL (no `bench` export at all) | Don't fight it: gate the metrics users feel (shipped bytes + build time) and keep the TSV contract for a later CodSpeed/mitata swap |
+| A committed byte baseline is "regressed" by +251% on one machine only | Starlight generates its Pagefind search index through **npx**; a machine without node on PATH silently ships a smaller site | Record baselines from **CI** (the supported toolchain) and say so in the file header; the metric must measure the environment users actually get |
+| A naive `+10% fails` perf gate flips red on identical code | Two identical consecutive Astro builds differed by **18% and 88%** wall-clock; CodSpeed measures a 7% gate at ~1% false positives on shared runners | Gate on **statistics + exactness**: z-test noise bands for microbenchmarks, exact byte budgets for sizes, `mode=info` (reported, never failing) for bare wall-clock |
+| A 1-microsecond benchmark has ~120% relative variance | Single-call timing is dominated by timer and loop overhead | Batch the work inside the benchmark (1,000 iterations) so the mean is well above the noise |
+| `shfmt -d` fails in CI after adding a script | The estate uses `-i 2`, but **OmniDotfiles lints `scripts/` with `-i 4`** | Format with the *target repo's* setting: `shfmt -w -i 2` everywhere except Dotfiles (`-i 4`) |
+| `go test -bench=.` produces no output | The template ships no `Benchmark*` functions, and `-run=^$` skips tests | Ship a `*_bench_test.go` with batched benchmarks (`b.Loop()`, `b.ReportAllocs()`) as the gate's input |
+| A CI matrix leg fails at `cabal update` with `403 ... hackage-mirror` | The Hackage mirror 403s intermittently; nothing to do with the code | Retry `cabal update` three times with a 15s backoff before failing the leg |
+
+
 ## Language toolchains
 
 - **TypeScript 7 (native port) ships no programmatic compiler API.** Both
