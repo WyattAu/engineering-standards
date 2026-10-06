@@ -43,12 +43,32 @@ owner: WyattAu
 crates_io_user_id: 404181
 
 repos:
+  cal-model:
+    area: data
+    status: support
+    notes: "A2L calibration data model and session layer; publishes cal-model. Added 2026-10-06."
+    crates:
+      - cal-model
+    _seen:
+      last_push: "2026-10-06"
+      cal-model: 0.1.1
+
   CivitForge:
     area: app
     status: core
     notes: "Federated forge."
     _seen:
       last_push: "2026-10-05"
+
+  dsp-spectral:
+    area: data
+    status: support
+    notes: "Spectral audio analysis and restoration; publishes dsp-spectral. Added 2026-10-06."
+    crates:
+      - dsp-spectral
+    _seen:
+      last_push: "2026-10-06"
+      dsp-spectral: 0.1.0
 
   EvergreenImageRegistry:
     area: infra
@@ -64,6 +84,13 @@ repos:
     _seen:
       last_push: "2026-09-16"
 
+  flaglab:
+    area: dx
+    status: infra
+    notes: "Audits feature flags across repos and emits removal candidates. Added 2026-10-05."
+    _seen:
+      last_push: "2026-10-05"
+
   FlutterSSG:
     area: docs
     status: personal
@@ -71,6 +98,20 @@ repos:
     _seen:
       last_push: "2026-01-06"
       private: true
+
+  hosting-api:
+    area: infra
+    status: infra
+    notes: "Control-plane API for the hosting platform: tenant state, backup triggers, metrics. Added 2026-10-05."
+    _seen:
+      last_push: "2026-10-05"
+
+  kit-conformance:
+    area: dx
+    status: infra
+    notes: "Shared conformance harness for the Rust kit ecosystem. Added 2026-10-05."
+    _seen:
+      last_push: "2026-10-05"
 
   OmniCPP-docker:
     area: dx
@@ -226,6 +267,14 @@ repos:
     notes: "JIT documentation server."
     _seen:
       last_push: "2026-09-13"
+
+  uofg_sml_soc_docs:
+    area: personal
+    status: personal
+    notes: "Private TeX repo for University of Glasgow small-open-source-contributions paperwork. Not part of the published library estate; recorded so the audit stops reporting it as missing."
+    _seen:
+      last_push: "2026-10-06"
+      private: true
 
   WyattAu:
     area: docs
@@ -733,7 +782,7 @@ repos:
       - multi-chain-wallet
     _seen:
       last_push: "2026-10-02"
-      multi-chain-wallet: 0.2.2
+      multi-chain-wallet: 0.3.0
 
   healthkit:
     area: obsv
@@ -1677,7 +1726,7 @@ repos:
       - webhookkit
     _seen:
       last_push: "2026-10-02"
-      webhookkit: 2.2.0
+      webhookkit: 2.2.1
 
   windows-dotfiles:
     area: infra
