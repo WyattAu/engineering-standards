@@ -88,6 +88,33 @@ def run_cargo_vet() -> tuple[int, str]:
     return proc.returncode, proc.stdout + proc.stderr
 
 
+def semver_key(version: str) -> tuple:
+    """Sort key that orders versions numerically, the way cargo-vet does.
+
+    A plain string sort puts "0.10.2" before "0.9.6", so a crate present at two
+    versions is appended in the wrong order and `cargo vet fmt` then rewrites the
+    file -- which makes `--write` output unstable and every subsequent run look
+    like a change. Parse the numeric components and fall back to the raw string
+    for anything unparseable, so a pre-release or build suffix still sorts
+    deterministically.
+    """
+    core = version.split("+", 1)[0]
+    pre = ""
+    if "-" in core:
+        core, pre = core.split("-", 1)
+    parts: list[int] = []
+    for segment in core.split("."):
+        try:
+            parts.append(int(segment))
+        except ValueError:
+            return (1, (), version)
+    # Pad so 1.2 and 1.2.0 compare equal, and any pre-release sorts after the
+    # plain release of the same version.
+    while len(parts) < 3:
+        parts.append(0)
+    return (0, tuple(parts), "~" + pre if pre else "")
+
+
 def parse_missing(output: str) -> list[tuple[str, str, str]]:
     """Unmet `(name, version, criteria)` triples from cargo-vet's output."""
     seen: set[tuple[str, str, str]] = set()
@@ -97,7 +124,7 @@ def parse_missing(output: str) -> list[tuple[str, str, str]]:
         if key not in seen:
             seen.add(key)
             out.append(key)
-    return sorted(out)
+    return sorted(out, key=lambda t: (t[0], semver_key(t[1]), t[2]))
 
 
 def existing_exemptions(config_path: str) -> set[tuple[str, str, str]]:
@@ -135,6 +162,26 @@ def _ends_with_newline(path: str) -> bool:
             return True
         fh.seek(-1, os.SEEK_END)
         return fh.read(1) == b"\n"
+
+
+def canonicalise_store() -> bool:
+    """Run `cargo vet fmt`. Returns True when it succeeded.
+
+    cargo-vet refuses to *report* coverage while the store is unformatted --
+    an out-of-order `[[exemptions.NAME]]` block for a crate present at two
+    versions makes it emit a store-consistency error instead of the missing
+    package list, so `--write` has nothing to act on. Formatting first is what
+    makes the tool single-command; doing it inside the script removes the
+    ordering footgun rather than documenting it.
+    """
+    if shutil.which("cargo") is None:
+        return False
+    return (
+        subprocess.run(
+            ["cargo", "vet", "fmt"], capture_output=True, text=True, check=False
+        ).returncode
+        == 0
+    )
 
 
 def report(missing: list[tuple[str, str, str]], output: str) -> None:
@@ -191,6 +238,16 @@ def main() -> int:
         print("cargo vet --locked already succeeds — nothing to add")
         return 0
     if not missing:
+        # An unformatted store hides the coverage list. Canonicalise and retry
+        # once; only report a dead end if cargo-vet still cannot enumerate.
+        if "consistency errors" in output or "not correctly formatted" in output:
+            if canonicalise_store():
+                status, output = run_cargo_vet()
+                missing = parse_missing(output)
+                if status == 0:
+                    print("cargo vet fmt was all that was needed; the store is now clean")
+                    return 0
+    if not missing:
         report([], output)
         return status or 1
     if not os.path.exists(args.config):
@@ -203,7 +260,17 @@ def main() -> int:
     added = append_exemptions(args.config, missing)
     if added:
         print(f"appended {added} exemption block(s) to {args.config}")
-        print("now run `cargo vet fmt`, then `cargo vet --locked`")
+        # Canonicalise so the next run is a no-op and the diff shows only the
+        # version bumps rather than a reshuffled file.
+        if canonicalise_store():
+            final, _ = run_cargo_vet()
+            if final == 0:
+                summary = next(
+                    (ln.strip() for ln in _ if "Vetting Succeeded" in ln), ""
+                )
+                print(summary or "cargo vet --locked now succeeds")
+                return 0
+        print("run `cargo vet fmt`, then `cargo vet --locked`")
     else:
         print("every reported package already has an exemption block")
         print("the failure is elsewhere — re-running cargo vet for detail:")
