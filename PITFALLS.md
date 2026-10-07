@@ -15,7 +15,15 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
 
-## Devcontainers and validation (loop 5)
+## Licensing and verification honesty (loop 7)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `reuse lint` passes on 9 repos and one extra file appears (`criterion.json`) | Benchmark reports land in the tree; REUSE covers `**` so it is fine, but scratch artifacts still belong in `.gitignore` | Keep the emitter output ignored; the REUSE manifest covers whatever is tracked |
+| A pin script writes an unresolved placeholder into a workflow | The API hiccuped and the error body was treated as a SHA | **Never write a value that has not passed a full-SHA assertion** — assert `[0-9a-f]{40}` before substituting, and grep the tree for the failure marker afterwards |
+| An e2e job is ~50% red with identical code | The browser install is a single unguarded CDN download | Move the install into the canonical e2e script with retry + fallback; CI runs the same script developers do |
+
+
 
 | Symptom | Cause | Fix |
 |---|---|---|
