@@ -5,6 +5,7 @@ api-paginate
 api-types
 audiobook-conformance
 audiobook-core
+audiobook-shelf
 axum-stack
 barbican
 billing-kit
@@ -12,6 +13,7 @@ blobkit
 book-kit
 breaker
 cache-pal
+cal-model
 can-core
 cas-kit
 chaos-kit
