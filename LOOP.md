@@ -53,3 +53,9 @@ vat-rules extracted, invoice-kit rounding fixed, ap-kit born. The estate suite
 found the missing re-export on its first run, which is the loop working: the
 extraction was half done and only a consumer depending on both crates could see
 it. Audit 196/169/83, 0 errors, 0 drift, 40 green.
+
+## Round 19 (2026-10-07)
+
+IPC stack composed: axum-stack + poolkit + uds-kit over a real Unix socket,
+clearing three debt crates in one suite. Debt 14 → 11. Audit 197/169/86,
+0 errors, 0 drift, 41 green.

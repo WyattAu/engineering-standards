@@ -233,6 +233,29 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Two concurrent repos (`audiobook-shelf`, `crawlkit-testbed`) registered on
   sight; `media` is not a schema area, so audiobook-shelf is `personal`.
 
+
+### Round 19, done
+
+- **`tests/ipc_stack.rs` — the IPC stack, clearing three debt crates at once.**
+  `axum-stack 0.2.0` (health routes), `poolkit 0.1.2` (sqlite pool behind the
+  `Any` facade) and `uds-kit 0.1.0` compose in the shape a real local service
+  takes: HTTP over a Unix domain socket, backed by pooled storage, with a
+  client that formats its own HTTP/1.0 frames because uds-kit is transport only.
+- The deadline tests run against live peers, not mocks: ENOENT must surface as
+  an immediate `UdsError::Io` and never as `ConnectTimeout` — collapsing the two
+  would make a misconfigured path indistinguishable from a hung one — and a
+  peer that accepts and stays silent must hit the read deadline rather than the
+  test timeout, which is the exact ClamAV-shaped hang the crate was written to
+  close.
+- The health check is a real `SELECT 1` through the pool, so an unhealthy
+  database makes `/health` unhealthy instead of the check being a constant.
+  Working detail worth knowing before designing around `DbPool`: it is not
+  `Clone`, so shared state carries an `Arc` and the health closure clones the
+  inner sqlx pool.
+- Debt 14 → 11. Estate at 197 repos, 169 crates, 86 exact pins, 0 errors,
+  0 drift. 41 test groups green, clippy clean, fmt clean.
+- `hosting-dashboard` registered on sight (area `app`).
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

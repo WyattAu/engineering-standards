@@ -143,6 +143,13 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  hosting-dashboard:
+    area: app
+    status: core
+    notes: "Customer dashboard for the hosting platform: tenants, backup jobs, health. Astro + SolidJS, dogfoods pediment. Registered on sight during the round-19 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-07"
+
   crawlkit-testbed:
     area: dx
     status: infra
