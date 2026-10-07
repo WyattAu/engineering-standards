@@ -36,19 +36,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout engineering-standards (provenance store)
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           path: eng
 
       - name: checkout kit repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           repository: WyattAu/${{ inputs.repo }}
           ref: ${{ inputs.ref }}
           path: kit
           fetch-depth: 1
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         id: toolchain
 
       - name: build (--release --locked)
@@ -101,7 +101,7 @@ jobs:
 
       - name: GitHub artifact attestation (best-effort)
         continue-on-error: true
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@ef244123eb79f2f7a7e75d99086184180e6d0018 # v1
         with:
           subject-path: kit/target/release
 
