@@ -148,6 +148,26 @@ Ordered by (correctness impact × how often it bites).
   the manifest with the status their nature implies, including a *private* TeX
   repo recorded as `personal` rather than quietly omitted.
 
+### Round 17, done
+
+- **`invoice-kit 0.1.0` — the product's AR layer**, published with a consumer
+  suite in the same loop. Three orthogonal document states because EN 16931
+  defines no lifecycle at all; direction on the document type because Peppol's two
+  credit conventions must never be mixed; a required `RoundingPolicy` because four
+  jurisdictions mandate mutually incompatible arithmetic; integer-minor-unit
+  allocation because three production incidents in a deployed accounting system
+  were caused by float arithmetic on allocation.
+- **Five bugs caught by its own tests before publication**, the worst being a
+  division that inflated every quotient by a power of ten, and a line arithmetic
+  that used `rescale_exact` where the specification requires a *rounding* — so
+  any unit price that was not an exact multiple of its base quantity produced no
+  amount at all.
+- **Three money types now in the workspace** that disagree about what an amount
+  is: a decimal value (`ledger-kit`), an integer count of minor units
+  (`double-entry`), and an integer at an explicit scale (`invoice-kit`). The
+  sharpest consequence is pinned: 1000 minor units is $10.00 and ¥1000 depending
+  only on the exponent, and the two do not even render as the same string.
+
 ### Now — the product
 
 The estate's library work has reached the point where the remaining defects are

@@ -99,12 +99,42 @@ repos:
       last_push: "2026-01-06"
       private: true
 
+  font-model:
+    area: ui
+    status: support
+    notes: "Typed owned editable font model: glyph outlines, cmap formats 4 and 12, metrics. Added 2026-10-06."
+    crates:
+      - font-model
+    _seen:
+      last_push: "2026-10-06"
+      font-model: 0.1.0
+
+  font-shape:
+    area: ui
+    status: support
+    notes: "Glyph rasterization and text measurement: exact-coverage scanline fill. Added 2026-10-06."
+    crates:
+      - font-shape
+    _seen:
+      last_push: "2026-10-06"
+      font-shape: 0.1.0
+
   hosting-api:
     area: infra
     status: infra
     notes: "Control-plane API for the hosting platform: tenant state, backup triggers, metrics. Added 2026-10-05."
     _seen:
       last_push: "2026-10-05"
+
+  invoice-kit:
+    area: money
+    status: core
+    notes: "Accounts-receivable invoicing for an SME ledger: three orthogonal document states, Peppol/EN 16931 arithmetic, per-jurisdiction rounding policy, integer-minor-unit allocation, gapless hash-chained numbering. Published 2026-10-06 with an estate-integration suite in the same loop. Uses the CreditNote convention so direction is the document type and no amount is negative; see ROADMAP.md round 17."
+    crates:
+      - invoice-kit
+    _seen:
+      last_push: "2026-10-06"
+      invoice-kit: 0.1.0
 
   kit-conformance:
     area: dx
