@@ -175,6 +175,7 @@ drift. Justifications are one line per crate.
 | `polyfont-scope` | L1 | Font scoping over polyfont-core L0 |
 | `polyfont-themes` | L1 | Theme layer over polyfont-config L1 |
 | `shared-state` | L1 | Shared-state plumbing substrate (kits.ts L1) |
+| `sheet-engine` | L2 | Spreadsheet formula evaluation engine over `sheet-core` L1 — recalculation, cycle detection and error propagation across the dependency DAG; composes `sheet-core` L1 + `formula-lang` L0 |
 | `sheet-core` | L1 | Spreadsheet data model substrate (sparse cells, dependency DAG, topological order); zero estate deps |
 | `sheet-xlsx` | L1 | XLSX codec over sheet-core L1 (same-layer composition) |
 | `shm-rings` | L1 | Shared-memory ring substrate (task §1 L1 anchor) |
@@ -225,6 +226,7 @@ drift. Justifications are one line per crate.
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
 | `audiobook-conformance` | L3 | Conformance harness — generates a corpus with ffmpeg and cross-checks the audiobook crates against ffprobe and Symphonia; the independent oracle the parsers are measured against |
+| `audiobook-shelf` | L3 | Audiobook-first library manager — decides which files form one book and in what order they play (disc first, then track), parses the folder-name conventions a library is actually named with, and reports what is inconsistent; composes `audiobook-core` L1 + `mp4-core` L2 + `id3-core` L1 |
 | `audiobook-core` | L1 | Audiobook domain model — format-independent `Title`/`Part`/`Chapter`, an MP3 frame walker deriving duration from Xing/Info/VBRI or bitrate, and signature-based container detection; composes `id3-core` + `mp4-core`, `no_std` + `alloc` |
 | `axum-stack` | L2 | Axum middleware stack on healthkit+shutdown-kit (kits.ts L2) |
 | `billing-kit` | L2 | Pricing primitives over decimal-money L0 (kits.ts L2) |
