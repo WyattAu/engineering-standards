@@ -15,7 +15,14 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
 
-## Licensing and verification honesty (loop 7)
+## Pipelines and scaffolding (loop 10)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `tar: Exiting with failure status` inside a CI step that "clearly pipes the archive in" | `git archive \| mkdir X && tar -x` binds as `(archive \| mkdir) && tar` — tar reads an empty stdin | Put the extraction target on its own line: `mkdir -p X` then `git archive HEAD \| tar -x -C X -f -` |
+| The scaffold diff flags directories that "aren't in the repo" | The *working tree* carries untracked debris (`dist/`, `node_modules/`, `.venv/`); `copier copy` of a fresh clone does not | Compare against `git archive HEAD` (tracked content), not the working tree |
+
+
 
 | Symptom | Cause | Fix |
 |---|---|---|
