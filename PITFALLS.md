@@ -14,6 +14,15 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
 | A major bump lands and a gate explodes (e.g. knip crashing with `Cannot read properties of undefined`) | The new major of a *dev tool* is incompatible with the pinned *language* toolchain | Reproduce locally before merging a major; when the language toolchain itself is the blocker, pin the toolchain and add a documented dependabot `ignore` until upstream support lands (see TypeScript below). |
 
+
+## Devcontainers and validation (loop 5)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| The image-flavor container build 404s inside the `common-utils` feature (`E: Failed to fetch ... sudo_...deb`) | The feature apt-installs packages without refreshing the mirror index first, so a stale mirror fails the build | Drop the feature on `mcr.microsoft.com/devcontainers/base:*` images — the base image already contains common-utils. Less network, less flake, same capability |
+| A workflow parse error CI-side while PyYAML validated the file locally | PyYAML silently allows duplicate mapping keys (last wins); GitHub Actions does not | Validate workflow YAML with a duplicate-key-rejecting loader — `yaml.safe_load` is not enough |
+| Scratch clones vanish between sessions | `/tmp` is disposable; only pushed state survives | Re-clone from origin and continue — the repos are canonical. Never let unpushed work accumulate past one verified commit |
+
 ## Haskell / criterion (loop 4)
 
 | Symptom | Cause | Fix |
