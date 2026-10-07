@@ -46,3 +46,10 @@ for the whole loop. Nothing jumps straight to blocking.
 ## Backlog
 
 See [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md) § "Backlog".
+
+## Round 18 (2026-10-07)
+
+vat-rules extracted, invoice-kit rounding fixed, ap-kit born. The estate suite
+found the missing re-export on its first run, which is the loop working: the
+extraction was half done and only a consumer depending on both crates could see
+it. Audit 196/169/83, 0 errors, 0 drift, 40 green.

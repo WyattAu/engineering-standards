@@ -187,6 +187,52 @@ in the *product* semantics, not the primitives. So the product starts now.
     reconciliation, reports. Each gets an estate-integration suite from the day
     it is published — a crate with no suite is not finished.
 
+
+### Round 18, done
+
+- **`vat-rules 0.1.0` — the tax vocabulary both sides of a ledger share.**
+  Extracted from invoice-kit rather than duplicated, because AP needs the same
+  UNCL5305 categories, CEF `VATEX-*` reasons, UNTDID 1001 codes and rounding
+  regimes. Zero dependencies by design: `TieMode` is policy vocabulary, not
+  arithmetic machinery, so a table of tax codes does not depend on a
+  double-entry engine to say "round ties away from zero".
+- **`invoice-kit 0.2.0/0.2.1` — re-exports plus a real rounding fix.** The
+  0.2.1 finding matters more than the extraction: **the three Australian
+  rounding modes were one algorithm wearing three names.** `GstTotalInvoice`
+  rounded per (category, rate) group, so it was `En16931Group` with a different
+  label, but GST Act s9-90's total-invoice method adds *unrounded* GST per
+  supply and rounds once — two lines of 5c at 10% and 5c at 30% are 3c per-group
+  and 2c total-invoice. Real money. `GstTaxableSupply` rounded per group, not
+  per supply. Under a single rounding the breakdown cannot be built from
+  independently-rounded groups and still satisfy BR-S-08/S-09, so the residual
+  is attributed to the largest unrounded group. `Decimal::round_div` also lost
+  a cent on negative ties: the tie comparison runs on the magnitude now, because
+  truncation toward zero makes "which neighbour is even" ill-defined for a
+  negative quotient. Six new tests; three fail against the previous code.
+- **`ap-kit 0.1.0/0.1.1` — accounts payable, where tax is a three-way split.**
+  A purchase bill produces three outcomes, not two, because the gross payable
+  always includes the full tax whether or not Article 168 lets the business
+  claim it back: payable (gross), deductible tax (asset), non-deductible tax
+  (expense). Two documented asymmetries: recoverability never changes what is
+  owed to the supplier; and the supplier's line net is **authoritative data**,
+  not a derivation — AP receives documents, it does not issue them. Rates above
+  100% are refused, because 19% entered as 1900 per-mille is a 190% posting no
+  other check catches.
+- **The estate suite caught a half-done extraction on its first run**: ap-kit
+  did not re-export the shared vocabulary, so a consumer of both crates could
+  not name one `TaxCategory` through either path. Fixed in 0.1.1 and now
+  asserted at runtime: the suite requires `invoice_kit::TaxCategory ==
+  ap_kit::TaxCategory` to compile.
+- The payable suite also pins the ledger identity behind a VAT return: the same
+  19.00 is a credit to output VAT when charged and a debit to input VAT when
+  reclaimed, so the two net to zero by construction. Six `double-entry`
+  integration tests post the original-then-reversal pair for a supplier credit
+  note, which is where the optimistic-concurrency guard earned its keep.
+- Estate at 196 repos, 169 crates, 83 exact pins, 0 errors, 0 drift, debt 14.
+  All-features: 40 test groups green, clippy clean, fmt clean.
+- Two concurrent repos (`audiobook-shelf`, `crawlkit-testbed`) registered on
+  sight; `media` is not a schema area, so audiobook-shelf is `personal`.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

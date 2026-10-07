@@ -129,12 +129,46 @@ repos:
   invoice-kit:
     area: money
     status: core
-    notes: "Accounts-receivable invoicing for an SME ledger: three orthogonal document states, Peppol/EN 16931 arithmetic, per-jurisdiction rounding policy, integer-minor-unit allocation, gapless hash-chained numbering. Published 2026-10-06 with an estate-integration suite in the same loop. Uses the CreditNote convention so direction is the document type and no amount is negative; see ROADMAP.md round 17."
+    notes: "Accounts-receivable invoicing for an SME ledger: three orthogonal document states, Peppol/EN 16931 arithmetic, per-jurisdiction rounding policy, integer-minor-unit allocation, gapless hash-chained numbering. Published 2026-10-06 with an estate-integration suite in the same loop. Uses the CreditNote convention so direction is the document type and no amount is negative; see ROADMAP.md round 17. Round 18: the tax vocabulary moved to vat-rules and 0.2.1 fixed the three rounding regimes being one algorithm."
     crates:
       - invoice-kit
     _seen:
       last_push: "2026-10-06"
-      invoice-kit: 0.1.0
+      invoice-kit: 0.2.1
+
+  audiobook-shelf:
+    area: personal
+    status: core
+    notes: "Audiobook-first library manager: decides which files form one book, orders them by disc then track, parses folder-name conventions, reports inconsistencies. Registered on sight during the round-18 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-07"
+
+  crawlkit-testbed:
+    area: dx
+    status: infra
+    notes: "Ground-truth conformance testbed for crawlkit: a site with planted, documented defects, and a scorer measuring precision and recall. Registered on sight during the round-18 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-07"
+
+  vat-rules:
+    area: money
+    status: core
+    notes: "The tax vocabulary both sides of a ledger share: UNCL5305 categories with their CEF VATEX-* reasons, UNTDID 1001 document types, ZATCA's five issue reasons, the four rounding regimes, and TieMode. Zero dependencies by design \u2014 TieMode is policy vocabulary, not arithmetic machinery, so a table of tax codes does not depend on a double-entry engine to say round-ties-away-from-zero. Extracted 2026-10-06 so AP imports the same table AR does."
+    crates:
+      - vat-rules
+    _seen:
+      last_push: "2026-10-06"
+      vat-rules: 0.1.0
+
+  ap-kit:
+    area: money
+    status: core
+    notes: "Accounts payable: supplier bills, input-VAT recoverability (Article 168), and the three-way split between gross payable, deductible tax and expense. The line net is authoritative data, not a derivation \u2014 AP receives documents, it does not issue them. Recoverability never changes what is owed to the supplier. Published 2026-10-06 with a double-entry ledger suite posting the original-then-reversal pair for a supplier credit note."
+    crates:
+      - ap-kit
+    _seen:
+      last_push: "2026-10-06"
+      ap-kit: 0.1.1
 
   kit-conformance:
     area: dx
