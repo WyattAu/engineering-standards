@@ -256,6 +256,23 @@ in the *product* semantics, not the primitives. So the product starts now.
   0 drift. 41 test groups green, clippy clean, fmt clean.
 - `hosting-dashboard` registered on sight (area `app`).
 
+
+### Round 20, done
+
+- **`tests/spreadsheet_diff.rs` — `sheet-xlsx 0.1.1` + `delta-kit 0.2.1`,
+  clearing two more debt crates.** A versioned spreadsheet needs two diffs that
+  agree: the semantic one a user is shown, and the byte one history stores. The
+  suite computes both and closes the loop — the byte reconstruction is read
+  back through `read_xlsx` and its semantic diff must equal the original's,
+  because byte equality alone proves only that two `Vec`s matched.
+- Documented rather than worked around: delta-kit has **no inverse in its
+  API**. Undo is the forward delta from target back to base, computed at save
+  time before the old bytes are gone — an API-shaped fact worth writing down.
+- Corruption pinned at every cut point: a truncated delta is an error at 0,
+  half, and len-1; the empty delta has its own variant; a delta applied to the
+  wrong base must never silently pass as the target.
+- Debt 11 → 9, 88 exact pins, 42 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

@@ -60,3 +60,8 @@ it. Audit 196/169/83, 0 errors, 0 drift, 40 green.
 IPC stack composed: axum-stack + poolkit + uds-kit over a real Unix socket,
 clearing three debt crates in one suite. Debt 14 → 11. Audit 197/169/86,
 0 errors, 0 drift, 41 green.
+
+## Round 20 (2026-10-07)
+
+spreadsheet-diff pair composed: sheet-xlsx + delta-kit, semantic and byte diffs
+required to agree. Debt 11 → 9. Audit 197/169/88, 0 errors, 0 drift, 42 green.
