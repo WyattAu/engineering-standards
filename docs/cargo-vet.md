@@ -41,15 +41,26 @@ leaves them stale again, producing a second red run.
 # 1. Finalise dependencies (bumps, pins, features).
 cargo generate-lockfile
 
-# 2. Fix. Appends exemptions for exactly what cargo vet reports missing.
+# 2. Fix. Appends exemptions for exactly what cargo vet reports missing,
+#    then canonicalises the store itself. This is the whole repair.
 python3 scripts/resync-vet-exemptions.py --write
 
-# 3. Canonical ordering/formatting — cargo-vet's own formatter.
-cargo vet fmt
-
-# 4. The gate.
+# 3. The gate.
 cargo vet --locked
 ```
+
+`--write` runs `cargo vet fmt` for you, before and after. That is not
+tidiness: cargo-vet refuses to *report* coverage while the store is
+unformatted, so an out-of-order `[[exemptions.NAME]]` block for a crate
+present at two versions makes it emit a store-consistency error instead of
+the missing-package list — leaving `--write` with nothing to act on and no
+way to tell that from a genuine dead end. Earlier revisions of this script
+made the caller do the formatting first, which meant the documented order
+was load-bearing; now it is not.
+
+Version blocks for a crate present at two versions are ordered
+numerically (`0.9.6` before `0.10.2`), not lexicographically, so the output
+is stable and a second run is a no-op.
 
 Verify without writing — this is exactly what CI runs:
 
@@ -109,9 +120,9 @@ as ground truth and adds no coverage logic of its own.
 
 ## Why `cargo vet fmt` is a separate step
 
-`cargo vet fmt` normalises block order and spacing. Running it means the
-diff for a dependency bump shows a version change rather than a reshuffled
-file.
+`cargo vet fmt` normalises block order and spacing, and `--write` calls it,
+so the diff for a dependency bump shows a version change rather than a
+reshuffled file.
 
 ## Vetting rather than exempting
 
