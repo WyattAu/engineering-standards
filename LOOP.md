@@ -54,6 +54,7 @@ for the whole loop. Nothing jumps straight to blocking.
 | 16 | 2026-10-08 | Steady-state pass: the graduated blocking matrix held green across all ten templates on the first post-graduation pushes (no flaps from reuse or scaffold). No new work needed this iteration — the loop's own graduation policy was the change under test, and it passed. Loop 17 contract: copier answer-drift notices, zizmor low/medium leftovers, `ty` upstream re-check, legacy templates owner-gated. |
 | 17 | 2026-10-08 | zizmor ref-version-mismatch leftovers cleared on the three shared-workflow pins (comment said `# main`, which is not a version). Loop-17 contract carried to 18: answer-drift notices, remaining artipacked variants, `ty` upstream re-check. |
 | 18 | 2026-10-08 | Audit pass: every checkout step estate-wide already carries `persist-credentials: false` (loop-6 sweep was complete); remaining artipacked signals originate inside devcontainer feature installs and copier's own clone — outside workflow control, documented. No drift found; steady-state pass. Loop-19 contract unchanged: answer-drift notices in template-update, `ty` upstream re-check. |
+| 19 | 2026-10-08 | Verification pass: estate green (10/10) with the full blocking matrix. Unblocked backlog exhausted — remaining items are upstream-gated (`ty` workspace support, copier replay follow-ups) or owner-gated (legacy templates, Renovate app, release secrets). The loop resumes when one of those gates opens. |
 
 ## Backlog
 
