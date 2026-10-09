@@ -115,6 +115,11 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 - New advisory jobs stay advisory for exactly one loop, then graduate to a
   blocking gate (see `LOOP.md`).
 
+
+### Evaluating a tool is not the same as configuring it
+
+Loop 8 rejected `ty` for "14 false positives" that were entirely missing `[tool.ty.environment]` config — the same version passes cleanly once configured. Before recording a tool as unfit, check its configuration surface: a rejection measured against a default config measures the defaults, not the tool. Any "X does not support Y" claim in an ADR must be re-checked with Y configured.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
