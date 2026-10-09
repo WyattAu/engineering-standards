@@ -61,3 +61,15 @@ static→jinja transition where `_commit` advanced `ccad64b → v0.1.9`):
   (`${{ }}`); the migration must set Copier's `skip_if_exists`/renderer
   options per file type.
 - **Not chosen**: `degit`-style re-scaffold (loses local history and edits).
+
+## Amendment (loop 23): derived-repo runbook
+
+Proven end-to-end on a second template (OmniPython, `omni-python-e2e`): the
+channel requires two one-time settings in each derived repo:
+
+1. **Allow GitHub Actions to create pull requests** — default OFF for
+   personal-account repos; set via `PUT /repos/{repo}/actions/permissions/workflow`
+   with `can_approve_pull_request_reviews: true`. Non-workflow drift (the
+   common case) needs nothing else.
+2. **UPDATE_TOKEN** (PAT, `workflow` scope) — only for replays that touch
+   `.github/workflows/*`; see loop 22.
