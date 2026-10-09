@@ -120,6 +120,11 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 
 Loop 8 rejected `ty` for "14 false positives" that were entirely missing `[tool.ty.environment]` config — the same version passes cleanly once configured. Before recording a tool as unfit, check its configuration surface: a rejection measured against a default config measures the defaults, not the tool. Any "X does not support Y" claim in an ADR must be re-checked with Y configured.
 
+
+### copier renders only `*.jinja` -- every other file is a raw byte copy
+
+`templates_suffix` defaults to `.jinja`; a file with Jinja syntax but no suffix is copied verbatim (loop 21). Consequences that each cost hours: (1) a static `.copier-answers.yml` never renders, so a baked `_commit` regresses every derived repo on every update; (2) untracking the answers file makes `copier update` delete it (the old-version diff reads the removal literally); (3) the update diff hard-excludes the answers path, so nothing heals it. The only correct pattern: ship `.copier-answers.yml.jinja` containing `{{ _copier_answers|to_nice_yaml -}}`. Verify any "copier does X automatically" assumption against the installed source before building on it.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell

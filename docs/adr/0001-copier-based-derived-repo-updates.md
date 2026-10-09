@@ -1,7 +1,7 @@
 # ADR-0001: Copier adoption for derived-repo updates
 
-- **Status**: Accepted (loop 9 — implementation lands in loop 10)
-- **Date**: 2026-10-08
+- **Status**: Accepted (loop 9) — **phase 2 complete (loop 21)**: answers file ships as `.copier-answers.yml.jinja` rendering `_copier_answers`; update channel verified end-to-end
+- **Date**: 2026-10-08 (loop 21 amendment 2026-10-09)
 
 ## Context
 
@@ -28,6 +28,27 @@ repo while preserving the answers and local edits.
 
 Non-goals: converting consumers' local edits into template variables;
 supporting Copier < 9.
+
+## Amendment (loop 21): the answers file must be a `.jinja` template
+
+Loops 10–12 shipped a **static** `.copier-answers.yml` (to make scaffolds carry
+it). That was a latent defect: copier renders only `*.jinja` files, so the
+static file — with its baked `_commit` — was replayed verbatim on every update,
+pinning every derived repo's merge base to the bake-time commit. Untracking the
+file instead makes `copier update` delete it (the old-version diff reads the
+removal literally), and the update diff hard-excludes the answers path, so
+nothing self-heals. Audit finding: 9 of 10 templates had never received the
+file at all — their scaffolds could not update, period.
+
+The corrected contract, verified end-to-end (mini-repo v1→v2, then a real
+static→jinja transition where `_commit` advanced `ccad64b → v0.1.9`):
+
+- every template ships `.copier-answers.yml.jinja` = `{{ _copier_answers|to_nice_yaml -}}`
+- the scaffold invariant excludes both `.copier-answers.yml` (rendered) and
+  `.copier-answers.yml.jinja` (archive) from the byte comparison
+- `update.yml` needs no flags: rendered answers advance `_commit` themselves
+- template improvements reach derived repos when the template cuts a release
+  (copier resolves the newest non-prerelease tag) — releases are the channel
 
 ## Consequences
 
