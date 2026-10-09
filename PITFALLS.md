@@ -125,6 +125,11 @@ Loop 8 rejected `ty` for "14 false positives" that were entirely missing `[tool.
 
 `templates_suffix` defaults to `.jinja`; a file with Jinja syntax but no suffix is copied verbatim (loop 21). Consequences that each cost hours: (1) a static `.copier-answers.yml` never renders, so a baked `_commit` regresses every derived repo on every update; (2) untracking the answers file makes `copier update` delete it (the old-version diff reads the removal literally); (3) the update diff hard-excludes the answers path, so nothing heals it. The only correct pattern: ship `.copier-answers.yml.jinja` containing `{{ _copier_answers|to_nice_yaml -}}`. Verify any "copier does X automatically" assumption against the installed source before building on it.
 
+
+### GITHUB_TOKEN can never write `.github/workflows/*`
+
+The push error ("refusing to allow a GitHub App to create or update workflow") is a platform rule, not a permission problem: the workflows scope is denied to GITHUB_TOKEN by design, and `permissions: workflows:` is not a valid GITHUB_TOKEN key -- GitHub's dispatch parser rejects the file outright (loop 22 verified at both job and workflow level; both 422 with `Unexpected value 'workflows'`). If automation must modify workflow files, it needs a PAT (workflow scope) passed as a secret. Any bot design that assumes a permissions block can lift this is dead on arrival.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
