@@ -77,3 +77,7 @@ channel requires two one-time settings in each derived repo:
    docs inherit the docs gate, and `deploy-pages` 404s on repos where Pages
    was never enabled. Set via `POST /repos/{repo}/pages`. Verified: both e2e
    repos went fully green after enabling (loop 23).
+4. **Close Dependabot's `github-actions` PRs** — action pins are
+   template-managed; merging divergent pins breeds conflicts with every
+   future replay. Ecosystem deps (cargo/uv) stay Dependabot-managed
+   per-repo. The template's `dependabot.yml` carries this note (loop 24).
