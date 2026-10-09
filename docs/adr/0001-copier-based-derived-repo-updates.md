@@ -73,3 +73,7 @@ channel requires two one-time settings in each derived repo:
    common case) needs nothing else.
 2. **UPDATE_TOKEN** (PAT, `workflow` scope) — only for replays that touch
    `.github/workflows/*`; see loop 22.
+3. **GitHub Pages enabled** (`build_type: workflow`) — templates that deploy
+   docs inherit the docs gate, and `deploy-pages` 404s on repos where Pages
+   was never enabled. Set via `POST /repos/{repo}/pages`. Verified: both e2e
+   repos went fully green after enabling (loop 23).
