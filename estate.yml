@@ -297,6 +297,27 @@ repos:
     _seen:
       last_push: "2026-10-04"
 
+  omni-python-e2e:
+    area: dx
+    status: template
+    notes: "Derived repo verifying the OmniPython update channel (ADR-0001); template-managed."
+    _seen:
+      last_push: "2026-10-10"
+
+  omni-copier-e2e:
+    area: dx
+    status: template
+    notes: "Derived repo verifying the OmniRust update channel (ADR-0001); template-managed."
+    _seen:
+      last_push: "2026-10-09"
+
+  cuesheet-core:
+    area: app
+    status: support
+    notes: "CDRWIN cue sheet reader/writer at 75 fps: tracks, indices, MM:SS:FF, CD-TEXT, no_std."
+    _seen:
+      last_push: "2026-10-09"
+
   OmniRust-template:
     area: dx
     status: template
