@@ -1,5 +1,6 @@
 {
   "_comment": "WyattAu estate layer table: crate -> L0|L1|L2|L3. Authoritative source: docs/layers.md classification in this repo. Regenerate after any reclassification.",
+  "aperture-vault": "L3",
   "cuesheet-core": "L0",
   "tiers": {
     "a2l-parse": "L1",

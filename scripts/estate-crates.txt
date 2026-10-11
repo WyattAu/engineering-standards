@@ -3,6 +3,7 @@ accessctl
 actor-kit
 api-paginate
 api-types
+aperture-vault
 audiobook-conformance
 audiobook-core
 audiobook-shelf
