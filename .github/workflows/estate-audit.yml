@@ -11,6 +11,7 @@ on:
     - "scripts/estate-audit.py"
     - "scripts/check-repo-crate-alignment.py"
     - "scripts/check-llms-links.py"
+    - "scripts/test-estate-audit-private-scope.py"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -54,6 +55,12 @@ jobs:
           python scripts/check-repo-crate-alignment.py --owner WyattAu             | tee repo-crate-alignment.txt
           echo "--- summary ---"
           grep -E "^( +[a-z-]+:|PENDING RENAMES)" repo-crate-alignment.txt || true
+
+      # The audit's severity for "manifest repo not returned" depends on token
+      # scope: GITHUB_TOKEN cannot see private repos, a PAT can. Loop 25 shipped
+      # a six-day red because CI asserted absence it was not entitled to see.
+      - name: Self-test the private-scope severity rule
+        run: python scripts/test-estate-audit-private-scope.py
 
       - name: Fail on unclaimed crates or unpinned core repos
         # The audit exits 1 on manifest errors. Drift and coverage debt are

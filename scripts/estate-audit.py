@@ -124,6 +124,27 @@ def fetch_repos() -> list[dict]:
     return json.loads(raw)
 
 
+def token_sees_private_repos() -> bool | None:
+    """Can this token see other private repos? True/False, or None if unknown.
+
+    A GITHUB_TOKEN is an installation token: it sees only the current repo, so
+    every private repo in the manifest looks deleted. A PAT sees them. The
+    probe is `GET /user`, which installation tokens cannot call and user
+    tokens can. Without this, CI invents 14 phantom "repo does not return"
+    errors (loop 25) and a six-day red gate nobody could trust.
+    """
+    result = subprocess.run(
+        ["gh", "api", "user", "--jq", ".login"],
+        capture_output=True, text=True,
+    )
+    if result.returncode == 0 and result.stdout.strip():
+        return True
+    stderr = result.stderr.lower()
+    if "resource not accessible" in stderr or "integration" in stderr or "404" in stderr:
+        return False
+    return None
+
+
 def fetch_crates() -> dict:
     """Every package published under the WyattAu crates.io account."""
     out: dict[str, dict] = {}
@@ -272,10 +293,18 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
         return finding
 
     # --- manifest vs GitHub ------------------------------------------------
+    # Absence is only evidence from a token that could have seen the repo.
+    sees_private = token_sees_private_repos()
+    missing_kind = "error" if sees_private is not False else "info"
     for name in man.repos:
         if name not in gh:
-            add("error", name, "manifest lists a repo GitHub does not return",
-                "archive it, or fix the name")
+            if missing_kind == "error":
+                add("error", name, "manifest lists a repo GitHub does not return",
+                    "archive it, or fix the name")
+            else:
+                add("info", name,
+                    "manifest repo not visible to this token (private, or gone)",
+                    "run the audit with a PAT (`gh auth login`) to verify private repos")
     for name in gh:
         if name not in man.repos:
             add("error", name, "repo is missing from estate.yml",
