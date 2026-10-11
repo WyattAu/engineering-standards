@@ -130,6 +130,11 @@ Loop 8 rejected `ty` for "14 false positives" that were entirely missing `[tool.
 
 The push error ("refusing to allow a GitHub App to create or update workflow") is a platform rule, not a permission problem: the workflows scope is denied to GITHUB_TOKEN by design, and `permissions: workflows:` is not a valid GITHUB_TOKEN key -- GitHub's dispatch parser rejects the file outright (loop 22 verified at both job and workflow level; both 422 with `Unexpected value 'workflows'`). If automation must modify workflow files, it needs a PAT (workflow scope) passed as a secret. Any bot design that assumes a permissions block can lift this is dead on arrival.
 
+
+### A gate run with a weaker token is a lying gate
+
+`estate-audit` was red for six consecutive runs: fourteen private repos reported as deleted, because CI's GITHUB_TOKEN is an installation token that cannot see them while a PAT can. The same manifest audited locally was clean. Absence is only evidence from a credential entitled to see the thing's absence -- and the check has to prove that entitlement positively, because a step missing its `env:` silently falls back to asserting absence. Corollary: a gate nobody looked at for six days is not a gate; check the history of any gate you inherit, not just its latest run.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
