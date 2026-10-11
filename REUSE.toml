@@ -1,0 +1,11 @@
+version = 1
+
+# Every file in every Omni template is Apache-2.0 (commercial use permitted).
+# This file is the machine-readable licensing manifest the REUSE tooling and
+# the reuse CI job validate; `make`-adjacent tooling never duplicates it.
+
+[[annotations]]
+path = ["**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Wyatt Au"
+SPDX-License-Identifier = "Apache-2.0"
