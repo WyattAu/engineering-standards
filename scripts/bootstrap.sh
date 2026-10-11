@@ -83,6 +83,15 @@ for crate in "${CRATES[@]}"; do
     else
         echo "  does not resolve: $crate"
         unbuildable=$((unbuildable + 1))
+        # Name the unsatisfied requirement, not just the fact of one. "Does not resolve"
+        # sends the user into cargo's output themselves; the version gap is usually one
+        # line, and it is the difference between knowing the fix and knowing a problem
+        # exists. Path dependencies resolve against the sibling checkout, so a gap here
+        # means exactly: the sibling's main is older than what this crate's main wants,
+        # and the fix is merging the branch that has it.
+        reason=$(cd "$DEST/$crate" && cargo metadata --format-version 1 2>&1 >/dev/null | \
+            grep -m1 -E 'failed to select a version|required by package' || true)
+        [[ -n "$reason" ]] && echo "    because: $reason"
     fi
 done
 
