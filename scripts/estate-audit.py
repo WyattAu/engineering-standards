@@ -124,8 +124,8 @@ def fetch_repos() -> list[dict]:
     return json.loads(raw)
 
 
-def token_sees_private_repos() -> bool | None:
-    """Can this token see other private repos? True/False, or None if unknown.
+def token_sees_private_repos() -> bool:
+    """Can this token see other private repos? Positive proof or False.
 
     A GITHUB_TOKEN is an installation token: it sees only the current repo, so
     every private repo in the manifest looks deleted. A PAT sees them. The
@@ -137,12 +137,12 @@ def token_sees_private_repos() -> bool | None:
         ["gh", "api", "user", "--jq", ".login"],
         capture_output=True, text=True,
     )
-    if result.returncode == 0 and result.stdout.strip():
-        return True
-    stderr = result.stderr.lower()
-    if "resource not accessible" in stderr or "integration" in stderr or "404" in stderr:
-        return False
-    return None
+    # Positive proof only. Anything else -- installation token, missing
+    # credentials, an unfamiliar error -- means we cannot see private repos,
+    # so we must not claim a manifest repo is gone. Loop 25 shipped the
+    # stricter half of this rule, but a step without GH_TOKEN in its env
+    # still fell back to asserting absence it had not earned.
+    return bool(result.returncode == 0 and result.stdout.strip())
 
 
 def fetch_crates() -> dict:
@@ -295,7 +295,7 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
     # --- manifest vs GitHub ------------------------------------------------
     # Absence is only evidence from a token that could have seen the repo.
     sees_private = token_sees_private_repos()
-    missing_kind = "error" if sees_private is not False else "info"
+    missing_kind = "error" if sees_private else "info"
     for name in man.repos:
         if name not in gh:
             if missing_kind == "error":

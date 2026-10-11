@@ -63,6 +63,10 @@ jobs:
         run: python scripts/test-estate-audit-private-scope.py
 
       - name: Fail on unclaimed crates or unpinned core repos
+        env:
+          # The audit's severity rules read the token's reach; without a token
+          # here it cannot prove visibility and every private repo looks gone.
+          GH_TOKEN: ${{ github.token }}
         # The audit exits 1 on manifest errors. Drift and coverage debt are
         # reported but do not fail the run: they are work items, not schema
         # violations, and blocking merges on them would stall the estate.
