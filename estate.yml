@@ -184,6 +184,34 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+  deploy-webhook-rs:
+    area: infra
+    status: support
+    notes: "Rust twin of the infra deploy webhook: webhookkit-verified HMAC, shadow-first rollout."
+    _seen:
+      last_push: "2026-10-12"
+
+  aperture-vault:
+    area: app
+    status: support
+    notes: "Photo/video vault: single binary, content-addressed, Immich-compatible API."
+    _seen:
+      last_push: "2026-10-12"
+
+  eventbusd:
+    area: data
+    status: support
+    notes: "Durable event-bus daemon on eventbus: HTTP publish + replay, SQLite persistence."
+    _seen:
+      last_push: "2026-10-12"
+
+  flagsd:
+    area: infra
+    status: support
+    notes: "Feature-flag sidecar on flag-kit: HTTP evaluation + rollout control with audit history."
+    _seen:
+      last_push: "2026-10-12"
+
   OmniCPP-docker:
     area: dx
     status: dormant
@@ -199,6 +227,8 @@ repos:
       last_push: "2026-09-04"
 
   OmniDocs-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "Starlight docs site."
@@ -206,6 +236,8 @@ repos:
       last_push: "2026-10-05"
 
   OmniDotfiles-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "chezmoi-first dotfiles."
@@ -213,6 +245,8 @@ repos:
       last_push: "2026-10-05"
 
   OmniEmbedded-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "RP2040/RP2350 embedded."
@@ -228,6 +262,8 @@ repos:
       private: true
 
   OmniGo-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "go.work anchor + golangci-lint v2."
@@ -235,6 +271,8 @@ repos:
       last_push: "2026-10-05"
 
   OmniHaskell-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "cabal multi-package + nix GHC."
@@ -242,6 +280,8 @@ repos:
       last_push: "2026-10-05"
 
   OmniInfra-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "OpenTofu + conftest/OPA."
@@ -277,6 +317,8 @@ repos:
       last_push: "2026-09-07"
 
   OmniLean-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "Lean 4 + mathlib."
@@ -284,6 +326,8 @@ repos:
       last_push: "2026-10-05"
 
   OmniPython-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "Python starter; description still the placeholder."
@@ -298,6 +342,8 @@ repos:
       last_push: "2026-10-04"
 
   omni-python-e2e:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "Derived repo verifying the OmniPython update channel (ADR-0001); template-managed."
@@ -305,6 +351,8 @@ repos:
       last_push: "2026-10-10"
 
   omni-copier-e2e:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "Derived repo verifying the OmniRust update channel (ADR-0001); template-managed."
@@ -319,6 +367,8 @@ repos:
       last_push: "2026-10-09"
 
   OmniRust-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "Pinned-toolchain Rust monorepo with estate tier-a gates."
@@ -326,6 +376,8 @@ repos:
       last_push: "2026-10-05"
 
   OmniTS-template:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: dx
     status: template
     notes: "bun workspaces + Astro/SolidJS."
@@ -733,6 +785,8 @@ repos:
       dsp-core: 0.1.0
 
   engineering-standards:
+    # Loop-owned: estate gates (one pin per action, llms contract)
+    gated: true
     area: infra
     status: core
     notes: "Shared CI matrix, policies, templates, estate manifest + audit."

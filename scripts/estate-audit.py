@@ -60,7 +60,8 @@ CONSUMERS = ("WyattAu/estate-integration",)
 UA = "wyatt-estate-audit (+https://github.com/WyattAu/engineering-standards)"
 NET_TIMEOUT = 30
 
-REPO_KEYS = {"area", "status", "notes", "crates", "canonical_of", "fork", "_seen"}
+REPO_KEYS = {"area", "status", "notes", "crates", "canonical_of", "fork", "gated",
+             "_seen"}
 
 AREAS = {
     "infra",  # CI, templates, dotfiles, infra stacks, images

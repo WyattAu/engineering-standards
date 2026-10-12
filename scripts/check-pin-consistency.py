@@ -27,6 +27,23 @@ import urllib.error
 import urllib.request
 
 UA = "estate-pin-consistency"
+
+
+def _headers() -> dict[str, str]:
+    """Authenticate when a token is available.
+
+    Scanning 197 repos is ~400 API calls; the anonymous limit is 60/hour, so
+    an unauthenticated run cannot finish. CI's GITHUB_TOKEN raises that to
+    5,000/hour. Without a token the gate would fail on rate limits rather
+    than on drift, which is its own kind of lie.
+    """
+    import os
+
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    headers = {"User-Agent": UA, "Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
 PINS = re.compile(r"uses:\s*([\w.-]+/[\w.-]+)@([0-9a-f]{40})(?:\s*#\s*(\S+))?")
 # Refs that track a branch by design; two SHAs there are two branches.
 MOVING_REFS = {"master", "stable", "main", "release/v1", "nightly"}
@@ -53,35 +70,58 @@ def collect(files: list[pathlib.Path]) -> dict[str, dict[str, list[str]]]:
     return pins
 
 
-def fetch_remote(owner: str, repo: str, ref: str = "main") -> list[str] | None:
-    """Workflow sources of one repo, or None if it has none."""
+def fetch_remote(owner: str, repo: str, ref: str = "main") -> list[tuple[str, str]] | None:
+    """(filename, source) pairs for one repo's workflows, or None if it has none."""
     url = (
         f"https://api.github.com/repos/{owner}/{repo}/contents/.github/workflows?ref={ref}"
     )
     try:
-        with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}),
+        with urllib.request.urlopen(urllib.request.Request(url, headers=_headers()),
                                     timeout=30) as fh:
             listing = json.loads(fh.read())
     except urllib.error.HTTPError as error:
         if error.code == 404:
             return None
         raise
-    bodies: list[str] = []
+    bodies: list[tuple[str, str]] = []
     for item in listing:
+        # A workflows *directory* entry carries download_url: null and would
+        # crash urllib -- skip anything that is not a downloadable file.
+        download = item.get("download_url")
+        if not download or item.get("type") != "file":
+            continue
         with urllib.request.urlopen(
-            urllib.request.Request(item["download_url"], headers={"User-Agent": UA}),
-            timeout=30,
+            urllib.request.Request(download, headers=_headers()), timeout=30
         ) as fh:
-            bodies.append(fh.read().decode("utf-8"))
+            bodies.append((item.get("name") or download.rsplit("/", 1)[-1],
+                           fh.read().decode("utf-8")))
     return bodies
 
 
 def repos_from_manifest(manifest: pathlib.Path) -> list[tuple[str, str]]:
+    """Loop-owned repos only: those carrying the `# Loop-owned` marker.
+
+    The manifest is the whole estate (~200 repos); the pin invariant is the
+    loop's responsibility for the Omni family, the standards repo, and their
+    derived e2e repos -- not for every personal repo the owner maintains.
+    Enforcing estate-wide would fail on repos this loop has never been asked
+    to touch; ignoring them entirely would hide drift in the ones it owns.
+    The marker makes the scope explicit and reviewable in one file.
+    """
     import yaml
 
     data = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
     owner = data.get("owner") or "WyattAu"
-    return [(owner, str(name)) for name in sorted(data.get("repos") or {})]
+    repos = data.get("repos") or {}
+    gated: list[tuple[str, str]] = []
+    for name, entry in repos.items():
+        if isinstance(entry, dict) and entry.get("gated"):
+            gated.append((owner, str(name)))
+    if not gated:
+        raise ValueError(
+            f"{manifest}: no repo carries `gated: true` -- refusing to pass vacuously"
+        )
+    return sorted(gated)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -98,7 +138,7 @@ def main(argv: list[str] | None = None) -> int:
             if bodies is None:
                 continue
             scanned += 1
-            for name, body in zip(sorted(bodies), bodies):
+            for name, body in bodies:
                 for action, sha, comment in PINS.findall(body):
                     if comment and comment in MOVING_REFS:
                         continue
