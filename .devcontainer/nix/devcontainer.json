@@ -1,0 +1,14 @@
+{
+  // Nix flavor: the container bootstraps Nix; the flake (when present) then
+  // provides the exact toolchain. Mirrors the template family (loop 5: the
+  // GHCR nix feature 401s anonymously, so the official installer is used).
+  "name": "engineering-standards (nix)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {},
+  "postCreateCommand": "bash .devcontainer/nix/bootstrap.sh && bash .devcontainer/nix/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig", "github.vscode-github-actions", "kamadorueda.alejandra", "ms-python.python"]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+version: 2
+# The standards repo has no package manifest -- its dependencies are the
+# shared gate workflows it publishes and the actions they use. Dependabot
+# keeps those fresh; scripts/check-pin-consistency.py keeps the estate on one
+# SHA per action, so a merged bump lands everywhere coherently.
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

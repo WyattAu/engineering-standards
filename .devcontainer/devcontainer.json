@@ -1,0 +1,14 @@
+{
+  // Image flavor: official installers, pinned majors. The standards repo's
+  // toolchain is small -- Python for the gate scripts, gh for repo work.
+  "name": "Omni standards",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": { "ghcr.io/devcontainers/features/github-cli:1": {} },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3-pip python3-venv shfmt shellcheck",
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig", "github.vscode-github-actions", "tamasfe.even-better-toml", "ms-python.python"],
+      "settings": { "editor.formatOnSave": true, "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" } }
+    }
+  }
+}

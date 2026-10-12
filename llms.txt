@@ -1,0 +1,43 @@
+# engineering-standards
+
+> The shared contract, gates, and workflows every WyattAu Omni repo derives from.
+
+Every WyattAu estate repo runs its CI from this repository's shared workflow
+kits and checks its own drift against `estate.yml`, the registry of record.
+
+## Read first
+
+- [README](https://github.com/WyattAu/engineering-standards/blob/main/README.md): what this repo is for
+- [OMNI-CORE](https://github.com/WyattAu/engineering-standards/blob/main/OMNI-CORE.md): the family-wide contract templates implement
+- [LOOP](https://github.com/WyattAu/engineering-standards/blob/main/LOOP.md): iteration log, doctrine, and the current contract
+- [PITFALLS](https://github.com/WyattAu/engineering-standards/blob/main/PITFALLS.md): lessons that must not be relearned
+- [COMPETITIVE-ANALYSIS](https://github.com/WyattAu/engineering-standards/blob/main/COMPETITIVE-ANALYSIS.md): market matrix vs leading templates
+- [AGENTS.md](https://github.com/WyattAu/engineering-standards/blob/main/AGENTS.md): instructions for AI coding agents
+
+## Machine-readable
+
+- [estate.yml](https://github.com/WyattAu/engineering-standards/blob/main/estate.yml): every repo, its area, status, and gate scope
+- [scripts](https://github.com/WyattAu/engineering-standards/tree/main/scripts): canonical gate implementations and their self-tests
+
+## Shared workflows
+
+Templates consume these by pinned SHA (`tier`-based quality kits):
+`rust-kit.yml`, `go-kit.yml`, `haskell-kit.yml`, `python-kit.yml`, `node-ci.yml`.
+
+## Decisions
+
+- [ADRs](https://github.com/WyattAu/engineering-standards/tree/main/docs/adr): including superseded ones, kept verbatim
+- [ADR-0001 copier](https://github.com/WyattAu/engineering-standards/blob/main/docs/adr/0001-copier-based-derived-repo-updates.md): derived-repo updates
+
+## Templates
+
+- [OmniRust-template](https://github.com/WyattAu/OmniRust-template)
+- [OmniTS-template](https://github.com/WyattAu/OmniTS-template)
+- [OmniGo-template](https://github.com/WyattAu/OmniGo-template)
+- [OmniHaskell-template](https://github.com/WyattAu/OmniHaskell-template)
+- [OmniLean-template](https://github.com/WyattAu/OmniLean-template)
+- [OmniEmbedded-template](https://github.com/WyattAu/OmniEmbedded-template)
+- [OmniInfra-template](https://github.com/WyattAu/OmniInfra-template)
+- [OmniDotfiles-template](https://github.com/WyattAu/OmniDotfiles-template)
+- [OmniDocs-template](https://github.com/WyattAu/OmniDocs-template)
+- [OmniPython-template](https://github.com/WyattAu/OmniPython-template)
