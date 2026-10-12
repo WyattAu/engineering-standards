@@ -135,6 +135,11 @@ The push error ("refusing to allow a GitHub App to create or update workflow") i
 
 `estate-audit` was red for six consecutive runs: fourteen private repos reported as deleted, because CI's GITHUB_TOKEN is an installation token that cannot see them while a PAT can. The same manifest audited locally was clean. Absence is only evidence from a credential entitled to see the thing's absence -- and the check has to prove that entitlement positively, because a step missing its `env:` silently falls back to asserting absence. Corollary: a gate nobody looked at for six days is not a gate; check the history of any gate you inherit, not just its latest run.
 
+
+### Reproducible is not the same as consistent
+
+Loop 26: nine actions were pinned to two SHAs across the estate. Every pin was a real 40-hex commit, every workflow was green, and no gate objected -- yet the estate ran two major versions of its own checkout and CI behaved differently depending on which repo you looked at. Pin discipline answers "can I rebuild this?"; it does not answer "is everyone running the same thing?" Both questions need gates.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
