@@ -145,6 +145,11 @@ Loop 26: nine actions were pinned to two SHAs across the estate. Every pin was a
 
 Loop 28: `error[cache-poisoning]` had been live on OmniPython's main since the advisory security job shipped. The job was "working" -- it ran, it reported, it stayed advisory -- and the run conclusion was success because advisory meant non-blocking. An error-class finding can therefore live for weeks inside a green run. Read advisory output on a schedule (the same schedule that produces it), and treat an error-class finding as blocking regardless of the job's severity setting. Corollary from the same loop: a bot PR proposing a bump is a proposal, not a decision -- three of the four pending PRs this loop were closed with reasoning rather than merged.
 
+
+### Read the layer before you fear the number
+
+Loop 28 deferred `astral-sh/setup-uv` 7.6.0 -> 10.3.0 as "three majors of the resolver". Measured in loop 29: the action's default is `version: latest`, and the latest uv release is 0.13.0 -- the same version the lock (revision 5) is already validated against. The numbers belonged to the action wrapper; the resolver was never at risk. A deferral justified by a version number is not a measurement. Before escalating a bump, establish (a) which layer the number describes and (b) what the other layer is currently pinned at. The deferral procedure was right; the reasoning was not.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
