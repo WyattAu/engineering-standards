@@ -140,6 +140,11 @@ The push error ("refusing to allow a GitHub App to create or update workflow") i
 
 Loop 26: nine actions were pinned to two SHAs across the estate. Every pin was a real 40-hex commit, every workflow was green, and no gate objected -- yet the estate ran two major versions of its own checkout and CI behaved differently depending on which repo you looked at. Pin discipline answers "can I rebuild this?"; it does not answer "is everyone running the same thing?" Both questions need gates.
 
+
+### An advisory finding nobody reads is a silent regression
+
+Loop 28: `error[cache-poisoning]` had been live on OmniPython's main since the advisory security job shipped. The job was "working" -- it ran, it reported, it stayed advisory -- and the run conclusion was success because advisory meant non-blocking. An error-class finding can therefore live for weeks inside a green run. Read advisory output on a schedule (the same schedule that produces it), and treat an error-class finding as blocking regardless of the job's severity setting. Corollary from the same loop: a bot PR proposing a bump is a proposal, not a decision -- three of the four pending PRs this loop were closed with reasoning rather than merged.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
