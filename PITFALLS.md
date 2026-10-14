@@ -150,6 +150,11 @@ Loop 28: `error[cache-poisoning]` had been live on OmniPython's main since the a
 
 Loop 28 deferred `astral-sh/setup-uv` 7.6.0 -> 10.3.0 as "three majors of the resolver". Measured in loop 29: the action's default is `version: latest`, and the latest uv release is 0.13.0 -- the same version the lock (revision 5) is already validated against. The numbers belonged to the action wrapper; the resolver was never at risk. A deferral justified by a version number is not a measurement. Before escalating a bump, establish (a) which layer the number describes and (b) what the other layer is currently pinned at. The deferral procedure was right; the reasoning was not.
 
+
+### A suppression that does not suppress is worse than no suppression
+
+Loop 30 spent three rounds on zizmor's `# zizmor: ignore[...]` comment for the impostor-commit audit: wrong placement, then correct adjacency, still firing. The giveaway was not the syntax -- it was **identical finding counts across three consecutive pushes**, which meant my change had no effect rather than a partial one. Then `.zizmor.yml` appeared to fix it and did nothing, because zizmor-action does not discover a config file; it takes one as an input. Rules this loop earned: verify a suppression by *changing the number it suppresses*; a suppression that cannot be shown to work is an assumption; and a config that a tool does not read is not configuration. When a gate cannot be satisfied, demote it with the evidence -- do not leave it red and do not quietly green it.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
