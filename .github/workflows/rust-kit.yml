@@ -79,14 +79,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: check (all-features, locked)
@@ -101,14 +93,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: test (all-features)
@@ -121,14 +105,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: clippy
@@ -154,14 +130,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: rustfmt
@@ -173,14 +141,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - name: install cargo-deny
         run: cargo install --locked cargo-deny || true
@@ -274,14 +234,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: llvm-tools-preview
@@ -322,14 +274,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - name: install cargo-semver-checks
         run: cargo install --locked cargo-semver-checks
@@ -348,14 +292,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: loom models
@@ -368,14 +304,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@0e28dd9a7764e5f83064112bb1f24025a14c313c # nightly
         with:
           components: miri
@@ -392,14 +320,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           targets: wasm32-unknown-unknown
@@ -414,14 +334,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           targets: thumbv7em-none-eabihf
@@ -439,14 +351,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps the
-      # toolchain reproducible (and keeps the MSRV gate un-bumpable); zizmor's
-      # online audit looks for a commit in the default branch's history and does
-      # not find these branch-head commits there. Verified in loop 30: all three
-      # pinned SHAs resolve as real commits in the upstream repository.
-      # Accepted deviation; recorded in engineering-standards PITFALLS.md.
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: benches (regression visibility)

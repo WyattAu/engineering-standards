@@ -48,13 +48,6 @@ jobs:
           path: kit
           fetch-depth: 1
 
-      # dtolnay/rust-toolchain publishes no immutable release SHAs: `stable`,
-      # `nightly`, and `master` are moving branches. Pinning the SHA keeps
-      # the toolchain reproducible; zizmor's online audit looks for a commit
-      # in the default branch's history and does not find these branch-head
-      # commits there. Verified in loop 30: the pinned SHA resolves as a real
-      # upstream commit. Accepted deviation (engineering-standards PITFALLS.md).
-      # zizmor: ignore[impostor-commit]
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         id: toolchain
 
