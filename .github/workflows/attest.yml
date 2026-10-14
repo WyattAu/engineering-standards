@@ -43,8 +43,8 @@ jobs:
       - name: checkout kit repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          repository: WyattAu/${{ inputs.repo }}
-          ref: ${{ inputs.ref }}
+          repository: WyattAu/$CRATE
+          ref: $REF
           path: kit
           fetch-depth: 1
 
@@ -58,12 +58,17 @@ jobs:
       - name: collect artifact hashes
         id: hashes
         working-directory: kit
+        # Inputs arrive as environment variables, never interpolated into the
+        # script body (zizmor template-injection, error-class, fixed in loop 30).
+        env:
+          CRATE: $CRATE
+          TOOLCHAIN: ${{ steps.toolchain.outputs.version }}
         run: |
           set -euo pipefail
-          crate="${{ inputs.repo }}"
+          crate="$CRATE"
           version=$(grep -m1 '^version = ' Cargo.toml | sed 's/.*"\(.*\)".*/\1/')
           commit=$(git rev-parse HEAD)
-          toolchain="${{ steps.toolchain.outputs.version }}"
+          toolchain="$TOOLCHAIN"
           primary=$(find target/release -maxdepth 1 -type f ! -name '*.d' \
             ! -name 'CACHEDIR.TAG' ! -name '.cargo-lock' | sort)
           primary_hash=$(sha256sum $primary | sha256sum | awk '{print $1}')
@@ -78,25 +83,36 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: write provenance note
+        # Same rule as above: `${{ }}` inside a `run:` body is shell code.
+        env:
+          CRATE: $CRATE
+          REF: $REF
+          VERSION: $OUT_VERSION
+          OUT_CRATE: $OUT_CRATE
+          OUT_VERSION: $OUT_VERSION
+          OUT_COMMIT: $OUT_COMMIT
+          OUT_TOOLCHAIN: $OUT_TOOLCHAIN
+          OUT_HASH: $OUT_HASH
+          OUT_RUNNER: $OUT_RUNNER
         run: |
           set -euo pipefail
           mkdir -p eng/provenance
-          f="eng/provenance/${{ inputs.repo }}-${{ steps.hashes.outputs.version }}.json"
+          f="eng/provenance/${CRATE}-${VERSION}.json"
           {
             echo '{'
-            echo "  \"crate\": \"${{ steps.hashes.outputs.crate }}\","
-            echo "  \"version\": \"${{ steps.hashes.outputs.version }}\","
-            echo "  \"commit\": \"${{ steps.hashes.outputs.commit }}\","
-            echo "  \"repo\": \"${{ inputs.repo }}\","
-            echo "  \"ref\": \"${{ inputs.ref }}\","
-            echo "  \"toolchain\": \"${{ steps.hashes.outputs.toolchain }}\","
-            echo "  \"hash\": \"${{ steps.hashes.outputs.primary_hash }}\","
+            echo "  \"crate\": \"$OUT_CRATE\","
+            echo "  \"version\": \"$OUT_VERSION\","
+            echo "  \"commit\": \"$OUT_COMMIT\","
+            echo "  \"repo\": \"$CRATE\","
+            echo "  \"ref\": \"$REF\","
+            echo "  \"toolchain\": \"$OUT_TOOLCHAIN\","
+            echo "  \"hash\": \"$OUT_HASH\","
             echo "  \"built\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
-            echo "  \"runner\": \"${{ runner.os }}/${{ runner.arch }}\","
+            echo "  \"runner\": \"$OUT_RUNNER\","
             echo '  "flags": "--release --locked"'
             echo '}'
           } > "$f"
-          cp kit/SHA256SUMS "eng/provenance/${{ inputs.repo }}-${{ steps.hashes.outputs.version }}.SHA256SUMS"
+          cp kit/SHA256SUMS "eng/provenance/${CRATE}-${VERSION}.SHA256SUMS"
           cat "$f"
 
       - name: GitHub artifact attestation (best-effort)
@@ -112,5 +128,5 @@ jobs:
           git config user.name "provenance-bot"
           git config user.email "provenance-bot@users.noreply.github.com"
           git add provenance/
-          git commit -m "chore(provenance): ${{ inputs.repo }} ${{ steps.hashes.outputs.version }} @ ${{ steps.hashes.outputs.commit }}"
+          git commit -m "chore(provenance): $CRATE $OUT_VERSION @ $OUT_COMMIT"
           git push

@@ -78,6 +78,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: check (all-features, locked)
@@ -91,6 +97,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: test (all-features)
@@ -102,6 +114,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: clippy
@@ -126,6 +144,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: rustfmt
@@ -136,6 +160,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - name: install cargo-deny
         run: cargo install --locked cargo-deny || true
@@ -228,6 +258,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: llvm-tools-preview
@@ -235,19 +271,29 @@ jobs:
       - name: install cargo-llvm-cov
         run: cargo install --locked cargo-llvm-cov
       - name: coverage (tier threshold)
+        # Inputs arrive as environment variables, never interpolated into the
+        # script text: `${{ }}` in a `run:` body is executed as shell (zizmor
+        # template-injection, error-class, fixed in loop 30). Arguments are
+        # built as an array so no interpolated text is ever re-split by the
+        # shell.
+        env:
+          TIER: ${{ inputs.tier }}
+          PKG: ${{ inputs.package }}
+          IGNORE_REGEX: ${{ inputs.coverage-ignore-regex }}
         run: |
-          case "${{ inputs.tier }}" in
+          set -euo pipefail
+          case "$TIER" in
             a) THRESHOLD=90 ;;
             b) THRESHOLD=80 ;;
             *) THRESHOLD=70; INFO=1 ;;
           esac
-          ARGS="--all-features"
-          [ -n "${{ inputs.package }}" ] && ARGS="$ARGS -p ${{ inputs.package }}"
-          [ -n "${{ inputs.coverage-ignore-regex }}" ] && ARGS="$ARGS --ignore-filename-regex=${{ inputs.coverage-ignore-regex }}"
+          set -- --all-features
+          [ -n "${PKG:-}" ] && set -- "$@" -p "$PKG"
+          [ -n "${IGNORE_REGEX:-}" ] && set -- "$@" --ignore-filename-regex="$IGNORE_REGEX"
           if [ "${INFO:-0}" = "1" ]; then
-            cargo llvm-cov --summary-only $ARGS
+            cargo llvm-cov --summary-only "$@"
           else
-            cargo llvm-cov --fail-under-lines "$THRESHOLD" $ARGS
+            cargo llvm-cov --fail-under-lines "$THRESHOLD" "$@"
           fi
 
   semver:
@@ -257,6 +303,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - name: install cargo-semver-checks
         run: cargo install --locked cargo-semver-checks
@@ -274,6 +326,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: loom models
@@ -285,6 +343,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@0e28dd9a7764e5f83064112bb1f24025a14c313c # nightly
         with:
           components: miri
@@ -300,6 +364,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           targets: wasm32-unknown-unknown
@@ -313,6 +383,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           targets: thumbv7em-none-eabihf
@@ -329,6 +405,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # zizmor: ignore[impostor-commit] -- dtolnay/rust-toolchain publishes no
+      # immutable release SHAs: `stable`/`nightly`/`master` are moving branches.
+      # Pinning the SHA keeps the toolchain reproducible; the online audit
+      # cannot verify a branch head against a tag, so it reports an impostor.
+      # Accepted deviation, recorded in engineering-standards PITFALLS.md.
+
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: benches (regression visibility)
