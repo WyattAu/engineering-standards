@@ -44,7 +44,12 @@ def _headers() -> dict[str, str]:
     if token:
         headers["Authorization"] = f"Bearer {token}"
     return headers
-PINS = re.compile(r"uses:\s*([\w.-]+/[\w.-]+)@([0-9a-f]{40})(?:\s*#\s*(\S+))?")
+# Reusable workflow references look like `owner/repo/.github/workflows/kit.yml@sha`
+# and are pins too -- loop 31 proved the original regex was blind to them, which
+# is how six templates sat on kit references the gate could not see.
+PINS = re.compile(
+    r"uses:\s*([\w.-]+/[\w.-]+(?:/[^\s@]+)?)@([0-9a-f]{40})(?:\s*#\s*(\S+))?"
+)
 # Refs that track a branch by design; two SHAs there are two branches.
 MOVING_REFS = {"master", "stable", "main", "release/v1", "nightly"}
 
