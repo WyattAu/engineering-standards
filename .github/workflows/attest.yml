@@ -43,6 +43,10 @@ jobs:
       - name: checkout kit repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
+          # read-only: this checkout is built and hashed, never pushed. The
+          # `eng` checkout below is the only one that keeps credentials,
+          # because the provenance note is committed and pushed through it.
+          persist-credentials: false
           repository: WyattAu/$CRATE
           ref: $REF
           path: kit
