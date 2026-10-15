@@ -155,6 +155,11 @@ Loop 28 deferred `astral-sh/setup-uv` 7.6.0 -> 10.3.0 as "three majors of the re
 
 Loop 30 spent three rounds on zizmor's `# zizmor: ignore[...]` comment for the impostor-commit audit: wrong placement, then correct adjacency, still firing. The giveaway was not the syntax -- it was **identical finding counts across three consecutive pushes**, which meant my change had no effect rather than a partial one. Then `.zizmor.yml` appeared to fix it and did nothing, because zizmor-action does not discover a config file; it takes one as an input. Rules this loop earned: verify a suppression by *changing the number it suppresses*; a suppression that cannot be shown to work is an assumption; and a config that a tool does not read is not configuration. When a gate cannot be satisfied, demote it with the evidence -- do not leave it red and do not quietly green it.
 
+
+### Hand-rolled YAML edits on shared infrastructure: use a rejecting loader or don't touch it
+
+Loop 31 swept `persist-credentials: false` across the shared kit and inserted a second `with:` key next to checkouts that already had one. PyYAML accepted the file; GitHub's parser rejected it, so the kit failed to load and every consumer inherited the breakage. The estate wrote this pitfall down in loop 6 and it still happened -- because the check ran with a tolerating loader. Never trust `yaml.safe_load` alone for workflow files: parse with a duplicate-rejecting loader, assert the structural property you intended, and run zizmor locally before pushing. The kit file in particular is load-bearing for the whole estate.
+
 ## Shell/sweep scripting
 
 - Never pass markdown containing backticks as a **double-quoted** shell
