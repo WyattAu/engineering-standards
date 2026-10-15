@@ -56,7 +56,18 @@ jobs:
           key: cabal-${{ inputs.ghc-version }}-${{ hashFiles('cabal.project', '**/*.cabal') }}
           restore-keys: cabal-${{ inputs.ghc-version }}-
 
-      - run: cabal update
+      # Hackage mirrors 403 intermittently (estate PITFALLS): retry before
+      # failing, or the kit flaps for reasons that have nothing to do with
+      # the code under test.
+      - name: cabal update (mirrors 403 intermittently; retry before failing)
+        run: |
+          for attempt in 1 2 3; do
+            if cabal update; then exit 0; fi
+            echo "cabal update attempt ${attempt} failed; retrying in 15s" >&2
+            sleep 15
+          done
+          echo "cabal update failed after 3 attempts" >&2
+          exit 1
       - name: build (warnings are errors via cabal.project)
         run: cabal build all
 
@@ -64,11 +75,16 @@ jobs:
         if: ${{ inputs.test }}
         run: cabal test all
 
-      - name: hlint
+      - name: hlint (pinned)
         if: ${{ inputs.lint }}
+        # Pinned, not 'latest': a new hlint release can introduce findings and
+        # break every consumer's gate with no code change of its own. Bump the
+        # pin deliberately, with CI green across consumers.
         run: |
-          curl -sSfL https://github.com/ndmitchell/hlint/releases/latest/download/hlint-x86_64-linux.tar.gz | tar xz
-          ./hlint-x86_64-linux/hlint .
+          rm -rf /tmp/hlint && mkdir -p /tmp/hlint
+          curl -sSfL https://github.com/ndmitchell/hlint/releases/download/v3.10/hlint-3.10-x86_64-linux.tar.gz | tar xz -C /tmp/hlint
+          HLINT="$(find /tmp/hlint -type f -name hlint | head -1)"
+          "$HLINT" .
 
       - name: fourmolu + cabal-fmt check
         if: ${{ inputs.format }}
