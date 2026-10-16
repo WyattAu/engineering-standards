@@ -1,4 +1,12 @@
 version: 2
+
+# Update cooldown (loop 36, research note 36): package releases must age
+# before Dependabot proposes them -- the 2026 TeamPCP/axios campaigns had
+# malicious versions live for only 2-3 hours, and a 7-day cooldown makes
+# that attack window structurally unexploitable. Security updates are NOT
+# delayed (Dependabot applies cooldowns to version updates only).
+# github-actions entries support default-days only (semver fields are
+# invalid there -- strapi/strapi#26438).
 # The standards repo has no package manifest -- its dependencies are the
 # shared gate workflows it publishes and the actions they use. Dependabot
 # keeps those fresh; scripts/check-pin-consistency.py keeps the estate on one
@@ -12,3 +20,5 @@ updates:
       github-actions:
         patterns:
           - "*"
+    cooldown:
+      default-days: 7
