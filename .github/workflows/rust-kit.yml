@@ -99,9 +99,23 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
-      - name: test (all-features)
+      - name: install cargo-nextest
+        uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad  # v2
+        with:
+          tool: cargo-nextest
+      # nextest: per-test process isolation (kills shared-state order flakiness
+      # at the root) and --retries 1 implements the loop-37 policy -- failed
+      # tests retry once and the retry is reported as flake data, never
+      # silently swallowed. Doctests are NOT covered by nextest and are run
+      # explicitly below so the gate does not shrink.
+      - name: test (all-features, nextest)
         if: ${{ inputs.all-features }}
-        run: cargo test --all-features ${{ env.PKG_FLAG }}
+        run: |
+          cargo test --all-features --no-run ${{ env.PKG_FLAG }}
+          cargo nextest run --all-features --retries 1 ${{ env.PKG_FLAG }}
+      - name: doctests (nextest does not run these)
+        if: ${{ inputs.all-features }}
+        run: cargo test --doc --all-features ${{ env.PKG_FLAG }}
 
   clippy:
     runs-on: ubuntu-latest
