@@ -66,6 +66,14 @@ repos:
     _seen:
       last_push: "2026-10-17"
 
+  chisel-platform:
+    area: app
+    status: support
+    notes: "Platform side of Chisel Docs: chisel-audit (document vocabulary over tamper-audit's SHA-256 chain) and chisel-kernel (config-kit settings + validated ids). Born-blocking Tier-A gates. Exact-pinned by WyattAu/chisel-doc's pdfcraft-audit trail seam (git rev), so it is dogfooded; graduates to core on first crates.io publish. Added 2026-10-17."
+    crates: []
+    _seen:
+      last_push: "2026-10-17"
+
   CivitForge:
     area: app
     status: core
