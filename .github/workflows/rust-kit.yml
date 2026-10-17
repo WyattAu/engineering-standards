@@ -76,11 +76,6 @@ on:
         required: false
         default: ""
         type: string
-      estate-siblings:
-        description: "Newline-separated estate sibling repos (WyattAu/<name>) to check out beside the caller, so ../<name> path dependencies resolve. Requires the estate-siblings secret (a PAT with estate read access)."
-        required: false
-        default: ""
-        type: string
 
 env:
   CARGO_TERM_COLOR: always
