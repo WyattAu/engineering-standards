@@ -1,0 +1,31 @@
+# Checks out the estate siblings a caller's path dependencies name, beside
+# the caller's checkout — bootstrap.sh's layout, for a runner. Public estate
+# repos need no auth; pass `token` for private ones.
+#
+# Input: `siblings` — space-separated repo names (WyattAu/<name> implied).
+name: "Check out estate siblings"
+description: "Clones each named estate repo one directory above the caller, so ../<name> path dependencies resolve."
+inputs:
+  siblings:
+    description: "Space-separated estate repo names (e.g. 'mp4-core id3-core')"
+    required: true
+  token:
+    description: "PAT with read access to the estate (only needed while siblings are private)"
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        for sibling in ${{ inputs.siblings }}; do
+          if [ -d "$GITHUB_WORKSPACE/../$sibling" ]; then
+            echo "sibling $sibling already present"
+            continue
+          fi
+          if [ -n "${{ inputs.token }}" ]; then
+            git clone --depth 1 "https://x-access-token:${{ inputs.token }}@github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          else
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          fi
+        done

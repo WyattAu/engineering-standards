@@ -66,6 +66,21 @@ on:
         required: false
         default: ""
         type: string
+      estate-siblings:
+        description: "Space-separated estate sibling repo names to clone beside the caller, so ../<name> path dependencies resolve (e.g. 'mp4-core id3-core')"
+        required: false
+        default: ""
+        type: string
+      estate-siblings-token:
+        description: "PAT with estate read access — only needed while the named siblings are private"
+        required: false
+        default: ""
+        type: string
+      estate-siblings:
+        description: "Newline-separated estate sibling repos (WyattAu/<name>) to check out beside the caller, so ../<name> path dependencies resolve. Requires the estate-siblings secret (a PAT with estate read access)."
+        required: false
+        default: ""
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -77,6 +92,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -93,6 +114,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -121,6 +148,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -161,6 +194,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -180,6 +219,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -238,6 +283,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -258,6 +309,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -298,6 +355,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -367,6 +430,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        uses: WyattAu/engineering-standards/actions/estate-siblings@main
+        with:
+          siblings: ${{ inputs.estate-siblings }}
+          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
