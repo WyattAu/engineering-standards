@@ -168,15 +168,15 @@ jobs:
           components: clippy
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: clippy (deny warnings)
-        run: cargo clippy --all-features --all-targets -- -D warnings ${{ env.PKG_FLAG }}
+        run: cargo clippy --all-features --all-targets ${{ env.PKG_FLAG }} -- -D warnings
       - name: clippy (pedantic — tier a)
         if: ${{ inputs.tier == 'a' }}
         # Pedantic findings are reported but must be fixed or allowed with
         # justification at the lint site (never blanket-suppressed).
         run: |
-          cargo clippy --all-features --all-targets -- -W clippy::pedantic \
+          cargo clippy --all-features --all-targets ${{ env.PKG_FLAG }} -- -W clippy::pedantic \
             -W clippy::unwrap_used -W clippy::expect_used \
-            -W clippy::indexing_slicing -W clippy::panic ${{ env.PKG_FLAG }} \
+            -W clippy::indexing_slicing -W clippy::panic \
             2>&1 | tee pedantic.log
           # Gate on NEW pedantic findings is tracked separately; this job
           # surfaces them. Hard gate: the default-deny lints above already run
