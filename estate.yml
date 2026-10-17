@@ -59,6 +59,13 @@ repos:
     notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
     crates: []
 
+  chisel-doc:
+    area: app
+    status: fork
+    notes: "Chisel Docs — industrial fork of storytold/pdfcraft (Apache-2.0/MIT): PDF reader+editor in pure Rust, rebrand-complete, estate gate matrix (fuzz harnesses for cos+js, vendor-ledger checker, blocking rebrand gate). Dogfoods the kit estate at app scale via the planned chisel-platform repo. Added 2026-10-17."
+    _seen:
+      last_push: "2026-10-17"
+
   CivitForge:
     area: app
     status: core
