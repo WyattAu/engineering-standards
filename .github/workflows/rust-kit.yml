@@ -94,10 +94,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -116,10 +119,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -150,10 +156,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -196,10 +205,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -221,10 +233,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -285,10 +300,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -311,10 +329,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -357,10 +378,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -432,10 +456,13 @@ jobs:
     steps:
       - name: check out estate siblings (when the caller names any)
         if: ${{ inputs.estate-siblings != '' }}
-        uses: WyattAu/engineering-standards/actions/estate-siblings@main
-        with:
-          siblings: ${{ inputs.estate-siblings }}
-          token: ${{ secrets.ESTATE_SIBLINGS_TOKEN }}
+        shell: bash
+        run: |
+          # The estate siblings are public, so an unauthenticated clone works;
+          # a private-sibling window would add the token back here.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
