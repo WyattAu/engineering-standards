@@ -71,11 +71,6 @@ on:
         required: false
         default: ""
         type: string
-      estate-siblings-token:
-        description: "PAT with estate read access — only needed while the named siblings are private"
-        required: false
-        default: ""
-        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -91,8 +86,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -116,8 +113,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -153,8 +152,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -202,8 +203,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -230,8 +233,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -297,8 +302,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -326,8 +333,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -375,8 +384,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
@@ -453,8 +464,10 @@ jobs:
         if: ${{ inputs.estate-siblings != '' }}
         shell: bash
         run: |
-          # The estate siblings are public, so an unauthenticated clone works;
-          # a private-sibling window would add the token back here.
+          # The estate siblings are public, so an unauthenticated clone
+          # works. If one ever goes private again, this step grows a token
+          # passed through the caller's `secrets: inherit` — `secrets` is
+          # not available in a call's `with:` block.
           for sibling in ${{ inputs.estate-siblings }}; do
             git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
           done
