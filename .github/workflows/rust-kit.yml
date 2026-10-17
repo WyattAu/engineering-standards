@@ -275,6 +275,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: check out estate siblings (when the caller names any)
+        if: ${{ inputs.estate-siblings != '' }}
+        shell: bash
+        run: |
+          # The layer checker runs cargo metadata over the manifest, which
+          # resolves path dependencies — the siblings must be present.
+          for sibling in ${{ inputs.estate-siblings }}; do
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          done
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
