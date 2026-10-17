@@ -53,6 +53,12 @@ repos:
       last_push: "2026-10-06"
       cal-model: 0.1.1
 
+  mcp-doctor:
+    area: dx
+    status: support
+    notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
+    crates: []
+
   CivitForge:
     area: app
     status: core
