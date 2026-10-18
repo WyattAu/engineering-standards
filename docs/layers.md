@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (166 crates, 2026-10-06)
+## Classification (174 crates, 2026-10-18)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -136,6 +136,7 @@ drift. Justifications are one line per crate.
 | `geo-kit` | L0 | Geocoding utils, thiserror only (kits.ts L0) |
 | `font-parse` | L0 | SFNT/OTF/TrueType/WOFF2 binary font parser leaf, font-types + thiserror only; zero estate deps |
 | `formula-lang` | L0 | Spreadsheet formula language leaf — tokenizer, Pratt parser, AST, evaluator; thiserror + libm only, zero estate deps |
+| `color-kit` | L0 | Colour science leaf — linear-sRGB working type, Oklab/OkLCH with chroma-reduction gamut mapping, WCAG 2.1 AA contrast, neutral-named perceptual lightness contrast (brand/licence constraints, ADR-0004), Brettel–Viénot CVD simulation, deterministic seeded quantisation; `libm` only, zero estate deps, `no_std` |
 | `http-errors` | L1 | Re-export shim over error-codes L0; runtime estate dep forbids L0 (mirrors error-classify) |
 | `hw-kit` | L1 | Linux-only hardware substrate (topology/pinning/NUMA/hugepages); zero estate deps, `libc`-only external edge |
 | `i18n-kit` | L0 | Runtime i18n catalogs; thiserror-only leaf |
@@ -222,6 +223,9 @@ drift. Justifications are one line per crate.
 | `xcp-core` | L1 | XCP on CAN protocol substrate (commands, responses, DAQ lists) over can-core L0; only estate dep is can-core (automotive protocol stack §L1) |
 | `dsp-spectral` | L1 | Spectral audio analysis and restoration substrate — STFT/ISTFT, mel/MFCC features, spectral gating, HPSS separation — over dsp-core L0's FFT/windows; only estate dep is dsp-core |
 | `font-model` | L1 | Typed owned editable font model — outlines with exact curve extrema and areas, cmap formats 4 and 12 encode/decode, metrics, validation, subsetting — over font-parse L0's borrowed views; only estate dep is font-parse |
+| `a11y-kit` | L1 | Accessibility semantics — platform-free node model (role, name, states, relations) plus the headless tree audit that is the estate's a11y CI gate (nobody else ships one; ADR-0004 §2). Zero runtime estate deps; AccessKit conversion behind the `accesskit` feature (Wave 2.1) |
+| `theme-kit` | L1 | Typed design-token contract — DTCG 2025.10 in/out, closed role vocabulary, build-failing WCAG 2.1 gate, derived light/high-contrast/monochrome/CVD variants, CSS/VS Code/ANSI emitters; only estate dep is `color-kit` L0 |
+| `input-kit` | L1 | Toolkit-neutral text-composition semantics — IME preedit state machine, grapheme-cluster caret mapping normalising all four platform cursor units (Win32/macOS/web UTF-16, Wayland/X11 bytes), dead-key composition. `no_std` + `alloc`, zero estate deps. The gap was measured: no crate in the ledger provided composition semantics and every GUI stack in the estate reimplements it per platform. Complements `tui-actions` L2 (keymap) rather than overlapping it; distinct from `font-shape` L2, which rasterises rather than composes |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
@@ -259,6 +263,9 @@ drift. Justifications are one line per crate.
 | `vane-control` | L2 | Proxy control plane; max estate dep envstack L2 |
 | `vane-filters` | L2 | Filter engine over breaker/throttle-kit L2 |
 | `webhookkit` | L2 | Signed webhook domain kit; idempotency-kit L2 dep same-layer legal (task §1 anchor) |
+| `docs-core` | L2 | Rust docs pipeline core — CommonMark+GFM → HTML with astro-island-compatible island emission and the JS shim; consolidates Tachyon + `docs-pipeline` + the `starlight-*` stack (ADR-0004 §2.5) |
+| `theme-egui` | L2 | egui/epaint lowering for `theme-kit` L1 — places approved roles into `Visuals` with no colour maths (the per-field byte-identity test is THM-008's contract); first of the one-crate-per-toolkit adapters (ADR-0004 §2.3) |
+| `tui-actions` | L2 | Terminal input layer — chord parsing (`ctrl+s`, `g g`), modal mode stack, conflict and unbound-key detection, help rows derived from the live keymap; pure logic with zero estate and zero terminal deps, so three TUIs can share one table-tested model |
 | `ws-kit` | L2 | WebSocket server/session management (kits.ts L2) |
 | `accessctl` | L3 | Authz service composition on tokenkit (kits.ts L3) |
 | `barbican` | L3 | Secrets-custody service toolkit (kits.ts L3) |
@@ -289,6 +296,7 @@ drift. Justifications are one line per crate.
 | `vane-proxy` | L3 | L4/L7 proxy composition: axum + full estate (max dep L2) |
 | `worker-kit` | L3 | Job scheduling composition over breaker L2+shutdown-kit L1 (task §1 L3 anchor) |
 | `ws-barbican` | L3 | WS transport to barbican; barbican L3 dep same-layer legal (kits.ts L3) |
+| `font-conformance` | L3 | Differential oracle for the text stack — hostile corpus, `font-parse` vs `read-fonts`, `font-shape` vs `tiny-skia` (`zeno`/`vello_cpu` next), Err-not-panic watchdog with HANG findings. Dev-only: never a runtime dep (pattern donor: `audiobook-conformance`) |
 
 ## Notes and flagged ambiguities
 

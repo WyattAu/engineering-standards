@@ -54,8 +54,23 @@ CACHE = ROOT / ".estate-cache.json"
 OWNER = "WyattAu"
 # crates.io numeric owner id for the WyattAu account (from /api/v1/users/WyattAu)
 CRATES_OWNER_ID = "404181"
-# Repos that pin estate crates by exact version, and the file that does it.
-CONSUMERS = ("WyattAu/estate-integration",)
+# Repos that consume estate crates, and where to read them from. `owner/repo`
+# reads the default branch; `owner/repo@ref` reads that ref.
+#
+# These are the repos the "composed by a consumer" claim is made against, so
+# this list is the audit's *entitlement* (engineering-standards AGENTS.md
+# rule 7: a gate must prove it is entitled to the claim it makes). A crate
+# consumed by a product repo that is not listed here is reported as uncomposed
+# even though it is not. `estate-integration` is the test suite and pins
+# exactly, which is what makes the drift check meaningful; product repos pin
+# caret ranges, which counts as consumption but not as a pin.
+CONSUMERS = (
+    "WyattAu/estate-integration",
+    # The PDF editor. Its `rebrand` branch carries the theme-kit dogfood
+    # (commit 5c9e7fac); `main` does not, so a branch ref is required here or
+    # the audit reports theme-kit and color-kit as uncomposed.
+    "WyattAu/chisel-doc@rebrand",
+)
 
 UA = "wyatt-estate-audit (+https://github.com/WyattAu/engineering-standards)"
 NET_TIMEOUT = 30
@@ -166,15 +181,42 @@ def fetch_crates() -> dict:
         page += 1
 
 
-def fetch_consumer_pins(repo: str, ref: str = "HEAD") -> dict[str, str]:
-    """crate -> exact pinned version, from a consumer repo's Cargo.toml."""
+def split_consumer(spec: str) -> tuple[str, str]:
+    """`owner/repo@ref` -> (`owner/repo`, `ref`); bare `owner/repo` -> HEAD."""
+    if "@" in spec:
+        repo, ref = spec.rsplit("@", 1)
+        return repo, ref
+    return spec, "HEAD"
+
+
+def fetch_consumer_pins(repo_spec: str) -> tuple[dict[str, str], dict[str, str]]:
+    """Read a consumer's manifest.
+
+    Returns `(exact, loose)`:
+      * `exact`  crate -> version, for `=1.2.3` specs only. These are the pins
+        the drift check is entitled to reason about.
+      * `loose`  crate -> version, for every version spec including caret
+        ranges. These count as consumption.
+
+    The split matters because the two questions were previously conflated: a
+    product pinning `theme-kit = "0.1.0"` consumes it, and reporting that as
+    "never composed" is a false claim. But a caret range is not a pin, so it
+    must not produce a drift finding.
+
+    `[workspace.dependencies]` is read alongside the root sections. A
+    workspace that declares `theme-kit = { workspace = true }` in its member
+    crates keeps the version in the workspace table, so reading only the root
+    sections would miss every pin in such a repo.
+    """
+    repo, ref = split_consumer(repo_spec)
     try:
         raw = subprocess.run(
             ["gh", "api", f"repos/{repo}/contents/Cargo.toml?ref={ref}"],
             capture_output=True, text=True, check=True,
         ).stdout
     except subprocess.CalledProcessError:
-        return {}
+        print(f"warn: could not read {repo_spec}/Cargo.toml", file=sys.stderr)
+        return {}, {}
     import base64
     import tomllib
 
@@ -183,21 +225,40 @@ def fetch_consumer_pins(repo: str, ref: str = "HEAD") -> dict[str, str]:
         data = tomllib.loads(text)
     except tomllib.TOMLDecodeError as exc:
         print(f"warn: could not parse {repo}/Cargo.toml: {exc}", file=sys.stderr)
-        return {}
+        return {}, {}
 
-    pins: dict[str, str] = {}
-    for section in ("dependencies", "dev-dependencies", "build-dependencies"):
-        for name, spec in (data.get(section) or {}).items():
+    sections = [
+        data.get("dependencies"),
+        data.get("dev-dependencies"),
+        data.get("build-dependencies"),
+        (data.get("workspace") or {}).get("dependencies"),
+    ]
+    exact: dict[str, str] = {}
+    loose: dict[str, str] = {}
+    for section in sections:
+        for name, spec in (section or {}).items():
             if isinstance(spec, str):
                 ver, real = spec, name
             elif isinstance(spec, dict):
+                # `pkg = { workspace = true }`: the member names the crate but
+                # carries no version, because the real one lives in
+                # `[workspace.dependencies]` (read above). That is still
+                # consumption, so the crate must be counted or a member-only
+                # consumer reads as absent.
+                if spec.get("workspace") is True and not spec.get("version"):
+                    real = spec.get("package", name)
+                    loose.setdefault(real, "*")
+                    continue
                 # `pkg = { package = "other", version = "=1.2.3" }` renames.
                 ver, real = spec.get("version"), spec.get("package", name)
             else:
                 continue
-            if isinstance(ver, str) and ver.startswith("="):
-                pins[real] = ver[1:]
-    return pins
+            if not isinstance(ver, str):
+                continue
+            loose[real] = ver
+            if ver.startswith("="):
+                exact[real] = ver[1:]
+    return exact, loose
 
 
 def load_cache() -> dict:
@@ -342,8 +403,8 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
         holds[(hold["consumer"], hold["crate"])] = hold["reason"]
 
     pinned_any: dict[str, str] = {}
-    for consumer, pins in pins_by_repo.items():
-        for crate, ver in sorted(pins.items()):
+    for consumer, (exact, _loose) in pins_by_repo.items():
+        for crate, ver in sorted(exact.items()):
             if crate not in crates:
                 severity = "error" if crate in declared else "info"
                 add(severity, crate,
@@ -363,6 +424,16 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
                 if held:
                     finding["held"] = held
 
+    # Consumption is a weaker claim than pinning: any version spec counts, in
+    # any tracked consumer, including a workspace member that only says
+    # `{ workspace = true }`. This is the set the coverage check below may use,
+    # and it is deliberately not derived from `pinned_any`, which requires an
+    # exact pin that a product repo legitimately does not make.
+    composed_by: dict[str, list[str]] = {}
+    for consumer, (_exact, loose) in pins_by_repo.items():
+        for crate in loose:
+            composed_by.setdefault(crate, []).append(consumer)
+
     # --- coverage debt -----------------------------------------------------
     # A repo's `core` status is satisfied when a consumer pins *any* crate it
     # publishes: sibling crates (derive macros, proc-macro halves, renamed
@@ -375,7 +446,11 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
             pinned_by_repo.setdefault(repo, set()).add(crate)
 
     for crate, repo in sorted(declared.items()):
-        if crate in pinned_any or exempt(crate):
+        if exempt(crate):
+            continue
+        # Composed at all, by any tracked consumer, exact pin or not.
+        consumers = sorted(set(composed_by.get(crate, [])))
+        if crate in pinned_any:
             continue
         siblings = pinned_by_repo.get(repo, set())
         if siblings:
@@ -384,14 +459,22 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
                 "fine if intentional; pin it directly if it has its own surface")
             continue
         entry = man.repos[repo]
+        if consumers:
+            add("debt", crate,
+                f"consumed by {', '.join(consumers)} but not exact-pinned by a suite, "
+                f"so nothing proves the published artifact still composes (repo {repo})",
+                "add it to a consumer suite's exact pins")
+            continue
         if entry.get("status") == "core":
             add("error", crate,
-                "status=core but no consumer pins it — the suite does not prove it",
-                "pin it in a consumer suite, or demote the status")
+                "status=core but no consumer composes it — nothing proves it works",
+                "compose it from a consumer repo listed in CONSUMERS, or demote the status")
         else:
             add("debt", crate,
-                f"published, never composed by a consumer suite (repo {repo})",
-                "add a suite that wires it, or record an exemption")
+                f"published, composed by no repo listed in CONSUMERS (repo {repo})",
+                f"add a suite that wires it, list its consumer in CONSUMERS, "
+                f"or record an exemption. Consumers seen: "
+                f"{', '.join(sorted(CONSUMERS))}")
 
     # --- dormancy ----------------------------------------------------------
     for name, entry in sorted(man.repos.items()):
@@ -436,8 +519,13 @@ def report(findings: list[dict], man: Manifest, repos: list[dict], crates: dict,
     print("  status: " + "  ".join(f"{k}={v}" for k, v in sorted(statuses.items())))
     print("  area:   " + "  ".join(f"{k}={v}" for k, v in sorted(areas.items())))
 
-    n_pins = sum(len(p) for p in pins_by_repo.values())
-    print(f"  exact pins: {n_pins} across {len(pins_by_repo)} consumer repo(s)")
+    # `pins_by_repo` values are `(exact, loose)` tuples. Summing `len(p)`
+    # would count the tuple, not the pins: it reports 2 per consumer no matter
+    # how many pins there are.
+    n_pins = sum(len(exact) for exact, _loose in pins_by_repo.values())
+    n_consumed = len({c for _e, loose in pins_by_repo.values() for c in loose})
+    print(f"  exact pins: {n_pins} across {len(pins_by_repo)} consumer repo(s)"
+          f"   crates consumed: {n_consumed}")
 
     for kind in ("error", "drift", "debt", "dormant", "info"):
         items = by_kind.get(kind, [])

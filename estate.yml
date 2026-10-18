@@ -12,6 +12,15 @@
 # | `core` | published and dogfooded — a consumer suite pins it exactly |
 # | `support` | published and active, not yet composed by a suite |
 # | `orphan` | published but neither composed nor recently active |
+#
+# The six ui/docs crates added 2026-10-18 (`color-kit`, `theme-kit`,
+# `theme-egui`, `a11y-kit`, `tui-actions`, `docs-core`) are `support`,
+# deliberately **not** `core`: `core` means a consumer suite pins them
+# exactly, and none is wired yet — `estate-audit` enforces that claim, so
+# calling them `core` early would be a gate lying. They graduate when
+# dogfooded (`theme-egui` → `chisel-doc` is the first). `font-conformance`
+# is `personal`: it publishes no crate (a differential harness, not a
+# library). |
 # | `dormant` | no meaningful activity; superseded or shelved |
 # | `template` | scaffolding whose purpose is to seed other repos |
 # | `fork` | upstream fork kept for vendoring or patching |
@@ -62,9 +71,9 @@ repos:
   chisel-doc:
     area: app
     status: fork
-    notes: "Chisel Docs — industrial fork of storytold/pdfcraft (Apache-2.0/MIT): PDF reader+editor in pure Rust, rebrand-complete, estate gate matrix (fuzz harnesses for cos+js, vendor-ledger checker, blocking rebrand gate). Dogfoods the kit estate at app scale via the planned chisel-platform repo. Added 2026-10-17."
+    notes: "Chisel Docs — industrial fork of storytold/pdfcraft (Apache-2.0/MIT): PDF reader+editor in pure Rust, rebrand-complete, estate gate matrix (fuzz harnesses for cos+js, vendor-ledger checker, blocking rebrand gate). Dogfoods the kit estate at app scale. Consumes `theme-kit` and `color-kit` since 2026-10-18 (branch `rebrand`, commit 5c9e7fac): the chrome palette moved out of 764 lines of hand-picked hex into gated DTCG, which surfaced three real contrast findings (border 1.23–1.39:1; success 4.45:1 and error 4.29:1 under protanopia) that no prior tooling could see. Listed in estate-audit CONSUMERS so that product consumption is visible to the coverage claim. Added 2026-10-17."
     _seen:
-      last_push: "2026-10-17"
+      last_push: "2026-10-18"
 
   chisel-platform:
     area: app
@@ -139,6 +148,74 @@ repos:
     _seen:
       last_push: "2026-10-06"
       font-shape: 0.1.0
+
+  color-kit:
+    area: ui
+    status: support
+    notes: "Colour science leaf (L0): linear sRGB core, Oklab/OkLCH gamut mapping, WCAG 2.1 AA contrast, neutral-named perceptual lightness contrast, Brettel-Vienot CVD simulation, deterministic quantisation. The numeric base under theme-kit (ADR-0004 §2). Added 2026-10-18."
+    crates:
+      - color-kit
+    _seen:
+      last_push: "2026-10-18"
+      color-kit: 0.1.0
+
+  theme-kit:
+    area: ui
+    status: support
+    notes: "Typed design-token contract (L1): DTCG 2025.10 round-trip, closed role vocabulary, build-failing WCAG gate, derived light/high-contrast/monochrome/CVD variants, CSS/VS Code/ANSI emitters. The only cross-L2 coupling in the UI family. Added 2026-10-18."
+    crates:
+      - theme-kit
+    _seen:
+      last_push: "2026-10-18"
+      theme-kit: 0.1.0
+
+  theme-egui:
+    area: ui
+    status: support
+    notes: "egui/epaint lowering for theme-kit (L2): places approved roles into Visuals with no colour maths. First cross-stack dogfood of the token contract; the first of the one-crate-per-toolkit adapters. Added 2026-10-18."
+    crates:
+      - theme-egui
+    _seen:
+      last_push: "2026-10-18"
+      theme-egui: 0.1.0
+
+  a11y-kit:
+    area: ui
+    status: support
+    notes: "Accessibility semantics layer (L1): platform-free node model plus the headless tree audit that is the estate's a11y CI gate — the layer nobody else funds (AccessKit runs on one maintainer's spare time). Added 2026-10-18."
+    crates:
+      - a11y-kit
+    _seen:
+      last_push: "2026-10-18"
+      a11y-kit: 0.1.0
+
+  tui-actions:
+    area: ui
+    status: support
+    notes: "Terminal input layer (L2): chord parsing, modal mode stacks, conflict and unbound-key detection, help rows derived from the live keymap. Consolidates the keymaps hand-rolled in kestrel-tui, suture-tui and aileron. Added 2026-10-18."
+    crates:
+      - tui-actions
+    _seen:
+      last_push: "2026-10-18"
+      tui-actions: 0.1.0
+
+  docs-core:
+    area: docs
+    status: support
+    notes: "Rust docs pipeline core (L2): CommonMark+GFM to HTML with astro-island-compatible island emission and the JS shim — the seam that lets a Rust shell hydrate the estate's existing SolidJS islands (Leptos/Dioxus islands are Rust/WASM-only). Consolidates Tachyon, docs-pipeline and the starlight-* stack (ADR-0004 §2.5). Added 2026-10-18."
+    crates:
+      - docs-core
+    _seen:
+      last_push: "2026-10-18"
+      docs-core: 0.1.0
+
+  font-conformance:
+    area: ui
+    status: personal
+    notes: "Differential oracle for the text stack (L3, dev-only, UNPUBLISHED — publish=false; a differential harness is not a library anyone depends on): hostile corpus, font-parse vs read-fonts, font-shape vs tiny-skia, Err-not-panic watchdog with HANG findings. Found and fixed the font-shape hostile-extent hang. Added 2026-10-18."
+    crates: []
+    _seen:
+      last_push: "2026-10-18"
 
   hosting-api:
     area: infra
@@ -1019,6 +1096,16 @@ repos:
     _seen:
       last_push: "2026-10-02"
       i18n-kit: 0.1.3
+
+  input-kit:
+    area: ui
+    status: core
+    notes: "Toolkit-neutral text-composition semantics (L1): IME preedit state machine, grapheme-cluster caret mapping for all four platform cursor units (Win32/macOS/web UTF-16, Wayland/X11 bytes), dead-key composition. no_std + alloc, zero estate deps. The gap was measured, not assumed: no crate in the ledger provided composition semantics. Published 2026-10-18 with a consumer already in place per ADR-0005; the composing suite recorded the a11y-kit `busy`-state gap."
+    crates:
+      - input-kit
+    _seen:
+      last_push: "2026-10-18"
+      input-kit: 0.1.0
 
   id3-core:
     area: data
