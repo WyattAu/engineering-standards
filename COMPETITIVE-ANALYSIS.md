@@ -97,3 +97,8 @@ dependabot guard, detailed in [PITFALLS.md](PITFALLS.md).
    one feature uv-forge has that GitHub template repos lack.
 6. Migrate legacy Omni templates (LaTeX/CPP/Flutter/R) to the Omni Core
    Contract — owner-gated, per "don't touch OmniCPP" exception.
+
+
+## Research-program delta (Oct 2026, iterations 34-43)
+
+Ten research iterations (docs/research/) moved the estate past the market matrix on: input-recorded reproducibility (`.buildinfo` + bytecode-cache guard — the 2026 PyPI-scale attack), OIDC-bound provenance on every distributable artifact, age-gated dependency adoption (30/7/3/7 cooldowns; security PRs exempt), flaky-test policy with per-test isolation (cargo-nextest) and order randomization (pytest-randomly), machine-checked properties with axiom audits (Lean; `#print axioms` + no-sorry CI gate), merge-queue readiness, CycloneDX SBOM on releases, a blocking dependency-review PR gate, the agent-interface standard (AGENTS.md single-source; CLAUDE.md pointer; llms.txt gated), and harden-runner audit mode on tag-triggered publishers. Open items are tracked in LOOP.md (iterations 40/43 triage list) — not silently dropped.
