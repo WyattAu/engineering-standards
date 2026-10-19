@@ -87,7 +87,7 @@ repos:
       - script-gate-kit
     _seen:
       last_push: "2026-10-18"
-      chisel-audit: 0.1.0
+      chisel-audit: 0.1.1
       chisel-kernel: 0.1.0
       chisel-assets: 0.1.0
       chisel-auth: 0.1.0
