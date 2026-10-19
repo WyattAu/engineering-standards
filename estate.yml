@@ -78,10 +78,20 @@ repos:
   chisel-platform:
     area: app
     status: support
-    notes: "Platform side of Chisel Docs: chisel-audit (document vocabulary over tamper-audit's SHA-256 chain) and chisel-kernel (config-kit settings + validated ids). Born-blocking Tier-A gates. Exact-pinned by WyattAu/chisel-doc's pdfcraft-audit trail seam (git rev), so it is dogfooded; graduates to core on first crates.io publish. Added 2026-10-17."
-    crates: []
+    notes: "Platform side of Chisel Docs: chisel-audit (document vocabulary over tamper-audit's SHA-256 chain), chisel-kernel (config-kit settings + validated ids), chisel-assets (cas-kit content-addressed store), chisel-auth (tokenkit JWT sessions, oauth-toolkit OIDC loopback, closed four-role vocabulary), script-gate-kit (static resource gate for embedded scripts - extracted from chisel-doc's fuzz-converged refuse()). Born-blocking Tier-A gates. Published 0.1.0 to crates.io 2026-10-18. chisel-audit + script-gate-kit are COMPOSED by WyattAu/chisel-doc (exact-pins from the registry); kernel/assets/auth graduate to core when the editor's platform slice composes them (W11-13). Added 2026-10-17."
+    crates:
+      - chisel-audit
+      - chisel-kernel
+      - chisel-assets
+      - chisel-auth
+      - script-gate-kit
     _seen:
-      last_push: "2026-10-17"
+      last_push: "2026-10-18"
+      chisel-audit: 0.1.0
+      chisel-kernel: 0.1.0
+      chisel-assets: 0.1.0
+      chisel-auth: 0.1.0
+      script-gate-kit: 0.1.0
 
   CivitForge:
     area: app
