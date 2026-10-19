@@ -1117,6 +1117,16 @@ repos:
       last_push: "2026-10-18"
       input-kit: 0.1.0
 
+  ui-text-edit:
+    area: ui
+    status: core
+    notes: "Text-field semantics (L2): a buffer-agnostic TextBuffer trait (insurance against ropey 2.0 flipping char indexing to byte), a grapheme-correct caret/selection/edit model, an IME bridge over input-kit, and an a11y bridge over a11y-kit behind the `a11y` feature. Deliberately NOT an editing engine: the estate's four UI surfaces include no code editor, so a Helix-class engine would have zero consumers. ADR-0006 records the survey of five existing crates and why none was adopted. Published 2026-10-18; its composing suite found a real bug in the crate (unbounded accessible announcement) before publication."
+    crates:
+      - ui-text-edit
+    _seen:
+      last_push: "2026-10-18"
+      ui-text-edit: 0.1.0
+
   id3-core:
     area: data
     status: support

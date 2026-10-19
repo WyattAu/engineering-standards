@@ -113,7 +113,7 @@ curl -s 'https://crates.io/api/v1/crates?user_id=404181&per_page=100&page=1' \
 `scripts/estate-tiers.json` is updated in this repo together with the table
 below.
 
-## Classification (174 crates, 2026-10-18)
+## Classification (175 crates, 2026-10-18)
 
 Derived from the actual estate dependency graph (crates.io `dependencies`
 endpoint, fixpoint over the graph) and the kit registry in `site/src/lib/kits.ts`;
@@ -226,6 +226,7 @@ drift. Justifications are one line per crate.
 | `a11y-kit` | L1 | Accessibility semantics — platform-free node model (role, name, states, relations) plus the headless tree audit that is the estate's a11y CI gate (nobody else ships one; ADR-0004 §2). Zero runtime estate deps; AccessKit conversion behind the `accesskit` feature (Wave 2.1) |
 | `theme-kit` | L1 | Typed design-token contract — DTCG 2025.10 in/out, closed role vocabulary, build-failing WCAG 2.1 gate, derived light/high-contrast/monochrome/CVD variants, CSS/VS Code/ANSI emitters; only estate dep is `color-kit` L0 |
 | `input-kit` | L1 | Toolkit-neutral text-composition semantics — IME preedit state machine, grapheme-cluster caret mapping normalising all four platform cursor units (Win32/macOS/web UTF-16, Wayland/X11 bytes), dead-key composition. `no_std` + `alloc`, zero estate deps. The gap was measured: no crate in the ledger provided composition semantics and every GUI stack in the estate reimplements it per platform. Complements `tui-actions` L2 (keymap) rather than overlapping it; distinct from `font-shape` L2, which rasterises rather than composes |
+| `ui-text-edit` | L2 | Text-field semantics — `TextBuffer` trait (buffer-agnostic by design: `ropey` 2.0 flips char indexing to byte and a crate exposing `Rope` would break with it), grapheme-correct caret/selection/edit model, IME bridge over `input-kit`, a11y bridge over `a11y-kit` behind the `a11y` feature. Deliberately **not** an editing engine (ADR-0006): no multiple carets, transactions, revision tree, undo, or folds. Composes both L1 substrates rather than duplicating them |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |

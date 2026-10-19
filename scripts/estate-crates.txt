@@ -154,6 +154,7 @@ tui-actions
 typed-id-derive
 typed-id-new
 uds-kit
+ui-text-edit
 validkit
 validkit-derive
 vane-client-sdk
