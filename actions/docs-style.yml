@@ -1,0 +1,17 @@
+name: docs-style
+on:
+  workflow_call:
+
+jobs:
+  docs-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: DOC-STYLE rule 1 (no em-dash in tracked Markdown)
+        run: |
+          DIRTY=$(git ls-files -- '*.md' | xargs -r grep -l -- $'\u2014' 2>/dev/null || true)
+          if [ -n "$DIRTY" ]; then
+            echo "em-dash found (DOC-STYLE rule 1; sweep per DOC-STYLE section 4):"
+            echo "$DIRTY"
+            exit 1
+          fi
