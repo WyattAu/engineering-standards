@@ -2074,3 +2074,81 @@ repos:
     _seen:
       last_push: "2026-10-04"
       xcp-core: 0.1.0
+
+  # --- registered 2026-10-19: repos that existed on GitHub and on crates.io
+  # without an estate.yml entry, which estate-audit reported as errors. Crates
+  # and versions taken from each repo's manifest, not guessed.
+
+  authbox:
+    area: auth
+    status: support
+    notes: "OIDC decision-shadow sidecar over oauth-toolkit + accessctl + auditlog. UNPUBLISHED, and the crates.io name is taken by an unrelated project (authbox 1.1.6, a general auth framework), so publishing needs a rename first. Registered so the repo stops reading as missing."
+    crates: []
+    _seen:
+      last_push: "2026-10-19"
+
+  continuwuity:
+    area: infra
+    status: fork
+    notes: "Community-driven Matrix homeserver (upstream fork). No crates published under this account."
+    crates: []
+    _seen:
+      last_push: "2026-10-19"
+
+  pele-rehype:
+    area: docs
+    status: support
+    notes: "Rehype plugin rendering mermaid fences with Pele in Astro/Starlight. npm package, not a crates.io crate."
+    crates: []
+    _seen:
+      last_push: "2026-10-19"
+
+  signalkit:
+    area: data
+    status: support
+    notes: "Snapshot, store, and score any counter: subjects, observations, clamped velocity. Workspace of three."
+    crates:
+      - signalkit
+      - signalkit-core
+      - signalkit-integrity
+    _seen:
+      last_push: "2026-10-19"
+      signalkit: 0.1.0
+      signalkit-core: 0.1.0
+      signalkit-integrity: 0.1.0
+
+  skillkit:
+    area: dx
+    status: support
+    notes: "Tooling for the agent-skill economy: lint, package, verify, and audit SKILL.md skills. Workspace of three; validates OmniSkill-template in CI."
+    crates:
+      - skillkit
+      - skillkit-core
+      - skillkit-store
+    _seen:
+      last_push: "2026-10-19"
+      skillkit: 0.1.0
+      skillkit-core: 0.1.0
+      skillkit-store: 0.1.0
+
+  trendkit:
+    area: research
+    status: support
+    notes: "Dev-trend crawler: GitHub / crates.io / Hacker News snapshots, velocity scoring, personal relevance ranking. Workspace of three."
+    crates:
+      - trendkit
+      - trendkit-core
+      - trendkit-profile
+    _seen:
+      last_push: "2026-10-19"
+      trendkit: 0.3.1
+      trendkit-core: 0.3.1
+      trendkit-profile: 0.3.1
+
+  OmniSkill-template:
+    area: dx
+    status: template
+    notes: "Canonical agent-skill skeleton, validated by skillkit in CI. No crate."
+    crates: []
+    _seen:
+      last_push: "2026-10-19"
