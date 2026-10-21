@@ -70,6 +70,13 @@ CONSUMERS = (
     # (commit 5c9e7fac); `main` does not, so a branch ref is required here or
     # the audit reports theme-kit and color-kit as uncomposed.
     "WyattAu/chisel-doc@rebrand",
+    # The composition suite's second crate: a separate manifest with its own
+    # lockfile, because its signalkit/skillkit/trendkit pins need rusqlite 0.40
+    # while the root's eventbus-kit needs 0.32 and rusqlite links native
+    # sqlite3, so the two majors cannot share one graph. The suites in that
+    # directory are real coverage; without this entry the audit would report
+    # nine crates as uncomposed that are in fact composed one directory over.
+    "WyattAu/estate-integration@HEAD sqlite-side",
 )
 
 UA = "wyatt-estate-audit (+https://github.com/WyattAu/engineering-standards)"
@@ -181,12 +188,22 @@ def fetch_crates() -> dict:
         page += 1
 
 
-def split_consumer(spec: str) -> tuple[str, str]:
-    """`owner/repo@ref` -> (`owner/repo`, `ref`); bare `owner/repo` -> HEAD."""
+def split_consumer(spec: str) -> tuple[str, str, str]:
+    """Split a consumer spec into (repo, ref, manifest path).
+
+    `owner/repo`            -> (owner/repo, HEAD, Cargo.toml)
+    `owner/repo@ref`        -> (owner/repo, ref, Cargo.toml)
+    `owner/repo@ref subdir` -> (owner/repo, ref, subdir/Cargo.toml)
+    """
+    path = "Cargo.toml"
+    spec = spec.strip()
+    if " " in spec:
+        spec, path = spec.rsplit(" ", 1)
+        path = f"{path}/Cargo.toml"
     if "@" in spec:
         repo, ref = spec.rsplit("@", 1)
-        return repo, ref
-    return spec, "HEAD"
+        return repo, ref, path
+    return spec, "HEAD", path
 
 
 def fetch_consumer_pins(repo_spec: str) -> tuple[dict[str, str], dict[str, str]]:
@@ -208,14 +225,14 @@ def fetch_consumer_pins(repo_spec: str) -> tuple[dict[str, str], dict[str, str]]
     crates keeps the version in the workspace table, so reading only the root
     sections would miss every pin in such a repo.
     """
-    repo, ref = split_consumer(repo_spec)
+    repo, ref, manifest_path = split_consumer(repo_spec)
     try:
         raw = subprocess.run(
-            ["gh", "api", f"repos/{repo}/contents/Cargo.toml?ref={ref}"],
+            ["gh", "api", f"repos/{repo}/contents/{manifest_path}?ref={ref}"],
             capture_output=True, text=True, check=True,
         ).stdout
     except subprocess.CalledProcessError:
-        print(f"warn: could not read {repo_spec}/Cargo.toml", file=sys.stderr)
+        print(f"warn: could not read {repo_spec}/{manifest_path}", file=sys.stderr)
         return {}, {}
     import base64
     import tomllib
@@ -224,7 +241,7 @@ def fetch_consumer_pins(repo_spec: str) -> tuple[dict[str, str], dict[str, str]]
     try:
         data = tomllib.loads(text)
     except tomllib.TOMLDecodeError as exc:
-        print(f"warn: could not parse {repo}/Cargo.toml: {exc}", file=sys.stderr)
+        print(f"warn: could not parse {repo}/{manifest_path}: {exc}", file=sys.stderr)
         return {}, {}
 
     sections = [

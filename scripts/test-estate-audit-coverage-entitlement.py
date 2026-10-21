@@ -125,11 +125,24 @@ class ConsumerPinTest(unittest.TestCase):
         """CONSUMERS entries carry `owner/repo@ref` for non-default branches."""
         self.assertEqual(
             estate_audit.split_consumer("WyattAu/chisel-doc@rebrand"),
-            ("WyattAu/chisel-doc", "rebrand"),
+            ("WyattAu/chisel-doc", "rebrand", "Cargo.toml"),
         )
         self.assertEqual(
             estate_audit.split_consumer("WyattAu/estate-integration"),
-            ("WyattAu/estate-integration", "HEAD"),
+            ("WyattAu/estate-integration", "HEAD", "Cargo.toml"),
+        )
+
+    def test_split_consumer_parses_a_manifest_path(self):
+        """`owner/repo@ref subdir` reads that directory's manifest.
+
+        The sqlite-side crate exists precisely because its rusqlite major
+        cannot resolve against the root's; without path support the audit
+        would only ever read the root manifest and report nine crates as
+        uncomposed that are composed one directory over.
+        """
+        self.assertEqual(
+            estate_audit.split_consumer("WyattAu/estate-integration@HEAD sqlite-side"),
+            ("WyattAu/estate-integration", "HEAD", "sqlite-side/Cargo.toml"),
         )
 
     def test_a_product_repo_is_a_tracked_consumer(self):

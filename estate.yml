@@ -616,7 +616,12 @@ repos:
   audiobook-core:
     area: data
     status: support
-    notes: "Audiobook domain model over id3-core + mp4-core; not yet published."
+    notes: "Audiobook domain model over id3-core + mp4-core. Published 2026-10-21 (by concurrent work); the crates list below was added the same day so the audit stops reading it as unclaimed."
+    crates:
+      - audiobook-core
+    _seen:
+      last_push: "2026-10-21"
+      audiobook-core: 0.5.0
 
   auditlog:
     area: auth
@@ -1130,10 +1135,12 @@ repos:
   id3-core:
     area: data
     status: support
-    notes: "ID3v1/v2 tag codec (CHAP/CTOC chapters, APIC art), no_std; not yet published."
+    notes: "ID3v1/v2 tag codec (CHAP/CTOC chapters, APIC art), no_std. Published 2026-10-21 (by concurrent work)."
+    crates:
+      - id3-core
     _seen:
-      last_push: "2026-10-05"
-      private: true
+      last_push: "2026-10-21"
+      id3-core: 0.3.0
 
   idempotency-kit:
     area: net
@@ -1366,7 +1373,12 @@ repos:
   mp4-core:
     area: data
     status: support
-    notes: "ISO-BMFF box codec (ilst metadata, chpl chapters), no_std; not yet published."
+    notes: "ISO-BMFF box codec (ilst metadata, chpl chapters), no_std. Published 2026-10-21 (by concurrent work)."
+    crates:
+      - mp4-core
+    _seen:
+      last_push: "2026-10-21"
+      mp4-core: 0.3.1
 
   oauth-toolkit:
     area: auth
