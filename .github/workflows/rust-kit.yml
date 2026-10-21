@@ -404,7 +404,11 @@ jobs:
           # Crates whose tests cannot run on a plain runner (GPU rendering):
           # excluded from the informational workspace number, on the caller's
           # declaration.
-          [ -n "${COVEXCL:-}" ] && for c in $COVEXCL; do set -- "$@" --exclude "$c"; done
+          if [ -n "${COVEXCL:-}" ]; then
+            # --exclude is only legal alongside --workspace (cargo error).
+            set -- "$@" --workspace
+            for c in $COVEXCL; do set -- "$@" --exclude "$c"; done
+          fi
           [ -n "${IGNORE_REGEX:-}" ] && set -- "$@" --ignore-filename-regex="$IGNORE_REGEX"
           # The passthrough stays last: everything after `--` reaches the
           # test binary, so a flag appended after it silently becomes a
