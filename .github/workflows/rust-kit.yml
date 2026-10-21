@@ -369,6 +369,7 @@ jobs:
           TIER: ${{ inputs.tier }}
           PKG: ${{ inputs.package }}
           IGNORE_REGEX: ${{ inputs.coverage-ignore-regex }}
+          ALLF: ${{ inputs.all-features }}
         run: |
           set -euo pipefail
           case "$TIER" in
@@ -381,7 +382,13 @@ jobs:
           # OOMs a 7 GB runner (33-crate workspaces). Two jobs keep the peak
           # under the ceiling at the cost of a few minutes; per-package tier-A
           # gates barely notice.
-          set -- -j 2 --all-features
+          set -- -j 2
+          # Honour the caller's feature choice the same way the check/test jobs
+          # do. The hardcoded --all-features broke real workspaces: optional
+          # features can flip GPU-dependent tests on (ui-egui's kittest wgpu
+          # path needs an adapter plain runners do not have), and the coverage
+          # job then fails on tests that pass in the default-feature test job.
+          [ "$ALLF" = "true" ] && set -- "$@" --all-features
           [ -n "${PKG:-}" ] && set -- "$@" -p "$PKG"
           [ -n "${IGNORE_REGEX:-}" ] && set -- "$@" --ignore-filename-regex="$IGNORE_REGEX"
           if [ "${INFO:-0}" = "1" ]; then
