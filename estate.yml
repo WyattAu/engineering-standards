@@ -2109,6 +2109,22 @@ repos:
       last_push: "2026-10-21"
       comfyui-kit: 0.1.0
 
+  pdfcraft:
+    area: app
+    status: fork
+    notes: "Upstream PdfCraft (storytold/pdfcraft, Apache-2.0/MIT) mirrored into the org: the fork source chisel-doc was cut from, kept as provenance and an upstream diff base. 34 workspace crates named pdfcraft-* are upstream's unpublished identifiers (chisel-doc AGENTS.md: rename deferred by decision), so crates is empty here despite the workspace. Upstream branding, contributor rules and CLAUDE.md are preserved unmodified; do not estate-adapt this mirror. Registered 2026-10-21 when the audit flagged it missing, with workspace layout and publication status verified rather than assumed."
+    crates: []
+    _seen:
+      last_push: "2026-10-20"
+
+  estate-site:
+    area: docs
+    status: support
+    notes: "The WyattAu estate index page, rendered by docs-core — the estate's own docs engine rendering the estate's own page. publish = false by declaration: it is a site, not a crate, so crates is empty. A second real consumer of docs-core alongside the ui_semantics suite."
+    crates: []
+    _seen:
+      last_push: "2026-10-21"
+
   continuwuity:
     area: infra
     status: fork
