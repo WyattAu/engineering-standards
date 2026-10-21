@@ -1846,15 +1846,15 @@ repos:
 
   tao:
     area: app
-    status: fork
-    notes: "Windowing library fork."
+    status: dormant
+    notes: "Windowing library fork, held at its pin for chisel-doc's wry stack. No development since 2026-06; a fork held at a version is dormant by the estate's definition even though it is still consumed."
     _seen:
       last_push: "2026-06-12"
 
   tauri:
     area: app
-    status: fork
-    notes: "Tauri upstream fork."
+    status: dormant
+    notes: "Tauri upstream fork, held at its pin. No development since 2026-06; consumed but not worked on."
     _seen:
       last_push: "2026-06-15"
 
@@ -2044,8 +2044,8 @@ repos:
 
   wry:
     area: app
-    status: fork
-    notes: "WebView library fork."
+    status: dormant
+    notes: "WebView library fork, held at its pin for chisel-doc's Leptos-WASM shell. No development since 2026-06; consumed but not worked on."
     _seen:
       last_push: "2026-06-15"
 
