@@ -71,11 +71,6 @@ on:
         required: false
         default: ""
         type: string
-      coverage-exclude:
-        description: "Space-separated crate names for cargo-llvm-cov --exclude (crates whose tests cannot run on a plain runner, e.g. GPU rendering)"
-        required: false
-        default: ""
-        type: string
       estate-siblings:
         description: "Space-separated estate sibling repo names to clone beside the caller, so ../<name> path dependencies resolve (e.g. 'mp4-core id3-core')"
         required: false
