@@ -2099,6 +2099,16 @@ repos:
     _seen:
       last_push: "2026-10-19"
 
+  comfyui-kit:
+    area: net
+    status: support
+    notes: "Typed Rust client for the ComfyUI HTTP API: queue workflows, track history, fetch generations. Published 2026-10-21 (by concurrent work); registered the same day the audit flagged it."
+    crates:
+      - comfyui-kit
+    _seen:
+      last_push: "2026-10-21"
+      comfyui-kit: 0.1.0
+
   continuwuity:
     area: infra
     status: fork
