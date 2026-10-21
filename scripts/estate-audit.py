@@ -123,6 +123,14 @@ COVERAGE_EXEMPT = {
     "ply*": "charting library, wasm-first",
     "resilient-fetch": "superseded by fetch-kit; kept pinned for the migration round",
     "loop-retry": "repo retry-backoff; renamed package, same crate",
+    # The skillkit and trendkit facade crates are CLIs with no lib target, so
+    # no consumer can pin them: a dependency on a lib-less crate does not
+    # resolve. Their library surface (skillkit-core/-store, trendkit-core/
+    # -profile) is exact-pinned and exercised by tests/token_routing.rs, and
+    # the facades themselves are exercised by their own repos' CI. Recorded
+    # 2026-10-21 when the coverage ledger was driven to zero otherwise.
+    "skillkit": "CLI facade, no lib target; its library members are pinned directly (skillkit-core, skillkit-store)",
+    "trendkit": "CLI facade, no lib target; its library members are pinned directly (trendkit-core, trendkit-profile)",
 }
 
 DORMANT_DAYS = 120  # no push for this long = dormant, unless pinned as core
