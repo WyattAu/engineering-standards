@@ -66,6 +66,16 @@ on:
         required: false
         default: ""
         type: string
+      coverage-exclude:
+        description: "Space-separated crate names for cargo-llvm-cov --exclude (crates whose tests cannot run on a plain runner, e.g. GPU rendering)"
+        required: false
+        default: ""
+        type: string
+      coverage-exclude:
+        description: "Space-separated crate names for cargo-llvm-cov --exclude (crates whose tests cannot run on a plain runner, e.g. GPU rendering)"
+        required: false
+        default: ""
+        type: string
       estate-siblings:
         description: "Space-separated estate sibling repo names to clone beside the caller, so ../<name> path dependencies resolve (e.g. 'mp4-core id3-core')"
         required: false
@@ -370,6 +380,7 @@ jobs:
           PKG: ${{ inputs.package }}
           IGNORE_REGEX: ${{ inputs.coverage-ignore-regex }}
           ALLF: ${{ inputs.all-features }}
+          COVEXCL: ${{ inputs.coverage-exclude }}
         run: |
           set -euo pipefail
           case "$TIER" in
@@ -394,9 +405,16 @@ jobs:
           # adapter on runners (3 of 14 ui-egui content tests failed at
           # create_render_state while the rest passed). Test binaries still
           # overlap; only the tests inside one binary serialize.
-          set -- "$@" -- --test-threads=1
           [ -n "${PKG:-}" ] && set -- "$@" -p "$PKG"
+          # Crates whose tests cannot run on a plain runner (GPU rendering):
+          # excluded from the informational workspace number, on the caller's
+          # declaration.
+          [ -n "${COVEXCL:-}" ] && for c in $COVEXCL; do set -- "$@" --exclude "$c"; done
           [ -n "${IGNORE_REGEX:-}" ] && set -- "$@" --ignore-filename-regex="$IGNORE_REGEX"
+          # The passthrough stays last: everything after `--` reaches the
+          # test binary, so a flag appended after it silently becomes a
+          # test-binary option (observed as "Unrecognized option: 'p'").
+          set -- "$@" -- --test-threads=1
           if [ "${INFO:-0}" = "1" ]; then
             cargo llvm-cov --summary-only "$@"
           else
