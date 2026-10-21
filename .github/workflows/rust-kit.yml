@@ -376,7 +376,12 @@ jobs:
             b) THRESHOLD=80 ;;
             *) THRESHOLD=70; INFO=1 ;;
           esac
-          set -- --all-features
+          # -j 2: an instrumented rustc invocation holds several times a normal
+          # build's memory, and a whole-workspace run at default parallelism
+          # OOMs a 7 GB runner (33-crate workspaces). Two jobs keep the peak
+          # under the ceiling at the cost of a few minutes; per-package tier-A
+          # gates barely notice.
+          set -- -j 2 --all-features
           [ -n "${PKG:-}" ] && set -- "$@" -p "$PKG"
           [ -n "${IGNORE_REGEX:-}" ] && set -- "$@" --ignore-filename-regex="$IGNORE_REGEX"
           if [ "${INFO:-0}" = "1" ]; then
