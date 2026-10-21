@@ -389,6 +389,12 @@ jobs:
           # path needs an adapter plain runners do not have), and the coverage
           # job then fails on tests that pass in the default-feature test job.
           [ "$ALLF" = "true" ] && set -- "$@" --all-features
+          # One test thread per binary: GPU-rendering integration tests create
+          # a wgpu adapter each, and parallel creation exhausts the software
+          # adapter on runners (3 of 14 ui-egui content tests failed at
+          # create_render_state while the rest passed). Test binaries still
+          # overlap; only the tests inside one binary serialize.
+          set -- "$@" -- --test-threads=1
           [ -n "${PKG:-}" ] && set -- "$@" -p "$PKG"
           [ -n "${IGNORE_REGEX:-}" ] && set -- "$@" --ignore-filename-regex="$IGNORE_REGEX"
           if [ "${INFO:-0}" = "1" ]; then
