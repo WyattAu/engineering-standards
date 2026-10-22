@@ -53,6 +53,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install cargo-vet
         run: cargo install --locked cargo-vet --version 0.10.2
+      - name: Refresh imports
+        run: cargo vet regenerate imports
       - name: Reconcile the store
         run: |
           set -e
