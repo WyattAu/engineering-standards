@@ -54,15 +54,31 @@ def check_remote(owner: str, repo: str, ref: str = "main") -> tuple[list[str], b
     import urllib.request
 
     url = f"https://raw.githubusercontent.com/{owner}/{repo}/{ref}/llms.txt"
-    try:
-        with urllib.request.urlopen(url, timeout=30) as response:  # noqa: S310
-            body = response.read().decode("utf-8")
-    except urllib.error.HTTPError as error:
-        if error.code == 404:
-            return [], True
-        return [f"{owner}/{repo}: llms.txt not fetchable ({error.code}) at {url}"], False
-    except urllib.error.URLError as error:
-        return [f"{owner}/{repo}: llms.txt fetch failed ({error.reason})"], False
+    # Connection-level failures are retried before being reported. The CDN
+    # edge alternates between clean answers and resets under load (measured
+    # 2026-10-22: the same URL returned HTTPError 404 and then URLError
+    # "connection reset" on consecutive probes), and a single-attempt fetch
+    # turns that flakiness into a spurious gate failure. HTTPErrors are
+    # decisive server answers and are never retried.
+    body = None
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            request = urllib.request.Request(url)
+            with urllib.request.urlopen(request, timeout=30) as response:  # noqa: S310
+                body = response.read().decode("utf-8")
+            break
+        except urllib.error.HTTPError as error:
+            last_error = error
+            break
+        except urllib.error.URLError as error:
+            last_error = error.reason
+    if body is None:
+        if isinstance(last_error, urllib.error.HTTPError):
+            if last_error.code == 404:
+                return [], True
+            return [f"{owner}/{repo}: llms.txt not fetchable ({last_error.code}) at {url}"], False
+        return [f"{owner}/{repo}: llms.txt fetch failed ({last_error})"], False
 
     scratch = pathlib.Path(tempfile.gettempdir()) / f"llms-{repo}.txt"
     scratch.write_text(body, encoding="utf-8")
