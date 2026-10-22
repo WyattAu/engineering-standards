@@ -71,6 +71,11 @@ on:
         required: false
         default: ""
         type: string
+      semver-exclude:
+        description: "Space-separated crate names for cargo-semver-checks --exclude (crates whose rustdoc the tool cannot build, e.g. behind [patch.crates-io] path patches it drops from generated manifests)"
+        required: false
+        default: ""
+        type: string
       estate-siblings:
         description: "Space-separated estate sibling repo names to clone beside the caller, so ../<name> path dependencies resolve (e.g. 'mp4-core id3-core')"
         required: false
@@ -444,9 +449,20 @@ jobs:
       - name: install cargo-semver-checks
         run: cargo install --locked cargo-semver-checks
       - name: semver-checks (gate breaking changes without version bump)
+        env:
+          PKG_FLAG: ${{ inputs.package }}
+          SEMVER_EXCL: ${{ inputs.semver-exclude }}
         run: |
           if git describe --tags --abbrev=0 >/dev/null 2>&1; then
-            cargo semver-checks ${{ env.PKG_FLAG }} --baseline-rev "$(git describe --tags --abbrev=0)"
+            set -- --baseline-rev "$(git describe --tags --abbrev=0)"
+            [ -n "${PKG_FLAG:-}" ] && set -- "$@" $PKG_FLAG
+            # Crates whose rustdoc the tool cannot build: its generated
+            # manifests drop [patch.crates-io], so a patched dependency
+            # re-resolves to crates.io and the build aborts (see
+            # obi1kenobi/cargo-semver-checks#1777). Excluded on the caller's
+            # declaration; the per-crate gates still check the rest.
+            for c in ${SEMVER_EXCL:-}; do set -- "$@" --exclude "$c"; done
+            cargo semver-checks "$@"
           else
             echo "::notice::no tags yet — semver baseline will begin at first release"
           fi
