@@ -2125,6 +2125,14 @@ repos:
     _seen:
       last_push: "2026-10-21"
 
+  cargo-semver-checks:
+    area: dx
+    status: fork
+    notes: "GitHub fork of obi1kenobi/cargo-semver-checks (semver-violation linter). The crates.io crate of this name is upstream's own publication (repository field names obi1kenobi/cargo-semver-checks), NOT the estate's -- first registration claimed 0.51.0 under the account and the audit caught it. crates is empty; the fork exists as a provenance mirror, and estate-local changes upstream per the vendored-patch policy."
+    crates: []
+    _seen:
+      last_push: "2026-10-22"
+
   continuwuity:
     area: infra
     status: fork
