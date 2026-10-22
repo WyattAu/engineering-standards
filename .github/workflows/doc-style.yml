@@ -1,0 +1,58 @@
+name: doc-style
+
+# DOC-STYLE.md rule 1: the em-dash does not appear in any Markdown document.
+# The check is scripts/check-doc-style.py; this workflow is how the rule
+# stays enforced after the manual sweep, per "new jobs land advisory for
+# exactly one loop, then graduate" (LOOP.md doctrine).
+
+on:
+  push:
+    branches: [main]
+    paths:
+    - "**/*.md"
+    - "scripts/check-doc-style.py"
+    - "scripts/test-check-doc-style.py"
+    - ".github/workflows/doc-style.yml"
+  schedule:
+    - cron: "41 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: doc-style-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  em-dash:
+    runs-on: ubuntu-latest
+    # Advisory for the first loop: engineering-standards currently carries 41
+    # em-dashes in three files under an in-flight rebrand, tracked in the
+    # estate ledger. When those are swept, drop continue-on-error and the gate
+    # graduates to blocking.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Self-test the checker
+        run: python scripts/test-check-doc-style.py
+
+      - name: Em-dash check (whole tree)
+        run: python scripts/check-doc-style.py
+
+      - name: Em-dash check (the shared kit repositories)
+        # The kit repos' READMEs are the estate-facing contracts; a stray
+        # em-dash there ships to every derived repo's front page.
+        run: |
+          for repo in input-kit ui-text-edit a11y-kit theme-kit color-kit tui-actions docs-core; do
+            if [ -d "../$repo" ]; then
+              python scripts/check-doc-style.py "../$repo"
+            fi
+          done
