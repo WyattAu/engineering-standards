@@ -9,13 +9,13 @@ Two **from-scratch** `cargo build --release --locked` runs compared by SHA-256
 of every artifact (top-level `release/` outputs plus `deps/*.rlib`,
 `deps/*.rmeta`, `deps/*.so`). Each build gets:
 
-- the **same absolute target dir and CARGO_HOME**, wiped in between — rustc
+- the **same absolute target dir and CARGO_HOME**, wiped in between: rustc
   embeds absolute paths of the target dir and dependency sources in
   rlib/rmeta, so distinct paths would legitimately hash differently;
 - a **sanitized environment** (`env -i`: no `RUSTFLAGS`, no ccache/sccache
   wrappers, no incremental state, `SOURCE_DATE_EPOCH` pinned to the HEAD
   commit time, `TZ=UTC`, `LC_ALL=C`);
-- a **fresh dependency download** — the registry cache is wiped, so every
+- a **fresh dependency download**: the registry cache is wiped, so every
   crate is re-fetched and its checksum re-verified (catches registry drift).
 
 A run passes only if all artifact hashes are identical across builds.

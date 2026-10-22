@@ -1,4 +1,4 @@
-# Feature compatibility — the additive-feature rule
+# Feature compatibility: the additive-feature rule
 
 Cargo unifies features **graph-wide**. If any crate in a consumer's dependency
 graph enables `dep/feat`, then *every* crate in that graph is compiled with
@@ -31,7 +31,7 @@ Concretely, a feature may **not** control whether any of these exist:
 - a variant of a `pub enum` (R1)
 - a `pub` field of a `pub struct` that is not `#[non_exhaustive]` (R2)
 - a match arm over an enum the crate does not own (R3)
-- a required method of a `pub trait` — one with no default body (R4)
+- a required method of a `pub trait`: one with no default body (R4)
 
 A feature **may** add capability, as long as it adds whole new things rather
 than reshaping existing ones. All of these are fine:
@@ -79,7 +79,7 @@ by pinning `timeout` in its own manifest. Every host that pulled both crates
 failed with `E0004: non-exhaustive patterns`, and the only reason it was ever
 found is that a human happened to write an integration suite combining them.
 
-The fix for each instance was local and reasonable — enable the feature
+The fix for each instance was local and reasonable: enable the feature
 yourself, or add a catch-all arm. But nothing prevented the next crate from
 repeating it, and the failure mode is a *consumer* build breaking on an
 unrelated dependency's feature change. That is the shape of defect a gate
@@ -106,12 +106,12 @@ match breaker_result {
 ```
 
 If instead the enum is declared in this crate, gating both the variant and the
-arm is self-consistent — the crate owns both sides of the invariant and no host
+arm is self-consistent: the crate owns both sides of the invariant and no host
 can observe the difference. (If the enum is `pub` *and* its variant is gated,
 that is R1, reported once at the variant.) So the checker resolves enum
 ownership crate-wide, including `Self` through the nearest enclosing `impl`.
 
-R3 also requires the gated line to actually be an arm — a pattern followed by
+R3 also requires the gated line to actually be an arm: a pattern followed by
 `=>`. Gating a *statement* inside a match body is common and sound, and the
 estate does it constantly:
 
@@ -128,7 +128,7 @@ match outcome {
 The shared CI workflow runs a `feature-compat` job on every kit repo. It checks
 out this repo and runs [`scripts/check-features.py`](../scripts/check-features.py),
 which fails the build on R1–R4 and on undocumented suppressions. It is pure
-stdlib — no third-party Python deps, nothing to install in kit repos.
+stdlib: no third-party Python deps, nothing to install in kit repos.
 
 ```sh
 python3 scripts/check-features.py --cwd .          # human-readable
@@ -143,12 +143,12 @@ bug this checker had during adoption.
 
 ### Suppressing a finding
 
-Sometimes a gate genuinely cannot apply — a vendored enum you do not control,
+Sometimes a gate genuinely cannot apply: a vendored enum you do not control,
 a type whose shape is frozen by an external ABI. Document it inline:
 
 ```rust
 #[cfg(feature = "exemplars")]
-// feature-compat: allow — `Exemplar` is appended by the wire-format spec we
+// feature-compat: allow: `Exemplar` is appended by the wire-format spec we
 // mirror; a host enabling it must handle the variant, and the spec is frozen.
 Exemplar,
 ```
@@ -179,7 +179,7 @@ re-reports zero across the estate.
 of these, and the reason is worth stating: it does not merely silence the gate,
 it changes *which* failure a future feature produces. A new gated variant behind
 `#[non_exhaustive]` yields one compile error at the point of use, with the
-compiler naming the missing arm — instead of a build break in a downstream
+compiler naming the missing arm: instead of a build break in a downstream
 crate that never asked for the feature. That is why the checker stands R1 down
 when it sees the attribute.
 
@@ -187,8 +187,8 @@ Two of the fixes found further breakage on their own, which is the argument for
 doing this before merging the gate rather than after:
 
 - `crawlkit-engine`'s `IsRetryable` matched two `cfg`-gated arms for
-  `RequestFailed`. The variant exists in *both* feature states — only its
-  payload type changes — so the gating bought nothing while putting the
+  `RequestFailed`. The variant exists in *both* feature states: only its
+  payload type changes: so the gating bought nothing while putting the
   match's totality at risk. One arm with a `cfg`-gated body is strictly
   better.
 - `AdminState` → `#[non_exhaustive]` immediately failed
@@ -207,11 +207,11 @@ look alarming and neither is as bad as the raw count suggests:
   `clawdius/.cargo-vendor/half/src/slice.rs`. These rules are the estate's;
   holding a dependency to them is a false accusation.
 - What remains in `clawdius` is 6 findings across three real libraries,
-  including `clawdius/src/cli/mod.rs` — which *does* have an 8-line `lib.rs`
+  including `clawdius/src/cli/mod.rs`: which *does* have an 8-line `lib.rs`
   re-exporting `pub mod cli`, so its `Commands` enum is technically public
   even though the crate is an application.
 
-`outbox-kit` and `breaker` — the crates that started this — were never in the
+`outbox-kit` and `breaker`: the crates that started this: were never in the
 table: they are already clean. `outbox-kit` is defended twice over, each with
 the reasoning recorded at the site: it enables `breaker/timeout` in its own
 manifest, *and* ends its dispatch match with a catch-all arm. That is the shape
@@ -221,21 +221,21 @@ does not own, for instance).
 ## Adoption
 
 The gate is in `rust-kit.yml` and every kit picks it up by calling the shared
-workflow — no per-repo wiring, and no `continue-on-error` crutch needed,
+workflow: no per-repo wiring, and no `continue-on-error` crutch needed,
 because the estate is already green.
 
-1. **Done** — checker, 13 fixtures, and this document.
-2. **Done** — all 16 findings fixed across 6 crates, each with a
+1. **Done**: checker, 13 fixtures, and this document.
+2. **Done**: all 16 findings fixed across 6 crates, each with a
    `CHANGELOG.md` entry naming the gate as the reason.
-3. **Next** — merge `rust-kit.yml` to `main` and confirm the first kit runs.
+3. **Next**: merge `rust-kit.yml` to `main` and confirm the first kit runs.
 
 New code should be written against the rule rather than fixed afterwards. The
-three always-legal shapes — a whole gated module, a whole gated type, a
-defaulted trait method — cover nearly every case anyone actually wants, so the
+three always-legal shapes: a whole gated module, a whole gated type, a
+defaulted trait method: cover nearly every case anyone actually wants, so the
 gate should rarely fire on new work.
 
 ## See also
 
-- [`layers.md`](layers.md) — the L0–L3 model, enforced by `check-layers.py`
-- [`naming-convention.md`](naming-convention.md) — the 6 naming rules
+- [`layers.md`](layers.md): the L0–L3 model, enforced by `check-layers.py`
+- [`naming-convention.md`](naming-convention.md): the 6 naming rules
 - `README.md` §7 (Dependencies) and §10 (Feature compatibility)

@@ -1,25 +1,25 @@
-# book-kit — lock-free order book substrate (SPEC, pre-implementation)
+# book-kit: lock-free order book substrate (SPEC, pre-implementation)
 
 > **Status: SPEC-ONLY.** No implementation exists or is authorized before owner
 > sign-off on this file. `REQ-BOOK-NNN` tags are the traceability anchors the
 > future implementation must cite (doc-comment tags on public items; every REQ
 > maps to ≥ 1 named test).
 
-**Layer:** L1 — substrate · **REQs:** 10 (BOOK-001…010) · **Estate deps:** none at v1 (clock-kit edge considered and *rejected* — see §Decisions) · **Scope:** the BOOK, not the engine · **Date:** 2026-10-02
+**Layer:** L1: substrate · **REQs:** 10 (BOOK-001…010) · **Estate deps:** none at v1 (clock-kit edge considered and *rejected*: see §Decisions) · **Scope:** the BOOK, not the engine · **Date:** 2026-10-02
 
 | Field | Value |
 |---|---|
-| Layer | **L1 — substrate** (new registration: `docs/layers.md` table + `scripts/estate-tiers.json` entry due at repo creation; manifest carries `tier = "L1"`) |
-| Estate deps | **zero** at v1. Arenas re-implement the `slab-pool` (L1) pattern locally; the seqlock follows the `shm-rings` (L1) ordering standard; the ring re-implements the `percentile-kit` (L2) pattern — none of these are edges. |
+| Layer | **L1: substrate** (new registration: `docs/layers.md` table + `scripts/estate-tiers.json` entry due at repo creation; manifest carries `tier = "L1"`) |
+| Estate deps | **zero** at v1. Arenas re-implement the `slab-pool` (L1) pattern locally; the seqlock follows the `shm-rings` (L1) ordering standard; the ring re-implements the `percentile-kit` (L2) pattern: none of these are edges. |
 | External deps | none mandatory. `alloc`-optional. No rand, no serde. |
 | Concurrency model | single writer (the matching/feed thread), many lock-free readers |
-| Layer note | zero estate deps + core-only internals would satisfy L0's letter; L1 declared per the `slab-pool` precedent ("lift only, never lower") — flagged in §Decisions |
+| Layer note | zero estate deps + core-only internals would satisfy L0's letter; L1 declared per the `slab-pool` precedent ("lift only, never lower"): flagged in §Decisions |
 
 ## §Semantics
 
 book-kit maintains a price-time-priority limit order book with two
-synchronized views: **L2** — quantity aggregated per price level — and **L3**
-— the FIFO of individual orders within each level (REQ-BOOK-001). It is the
+synchronized views: **L2**: quantity aggregated per price level: and **L3**
+: the FIFO of individual orders within each level (REQ-BOOK-001). It is the
 state substrate *under* a matching engine or feed handler, not one: it applies
 typed lifecycle commands (add/cancel/replace/execute) and publishes
 consistent reads (REQ-BOOK-003). Matching logic, order routing, and
@@ -42,7 +42,7 @@ variant remains the designated alternative if retry costs measure poorly
 ### Numeric discipline (REQ-BOOK-004)
 
 Prices are `i64` ticks; quantities are `u64` fixed-point units. **No `f64`
-exists on the hot path** — not in keys, comparisons, quantities, or checksums.
+exists on the hot path**: not in keys, comparisons, quantities, or checksums.
 Float conversion is an edge concern for presentation layers only, and the
 crate ships no such conversion.
 
@@ -88,7 +88,7 @@ pub sealed trait Side { fn opposite() -> Self; /* … */ }
 impl Side for Bid {}
 impl Side for Ask {}
 
-pub enum Command {                                             // REQ-BOOK-003 — side carried by
+pub enum Command {                                             // REQ-BOOK-003: side carried by
                                                                // distinct variants, never bool
     AddBid { id: OrderId, price: Price, qty: Qty, ts_mono: u64 },
     AddAsk { id: OrderId, price: Price, qty: Qty, ts_mono: u64 },
@@ -128,12 +128,12 @@ impl<'a, S: Side> LevelView<'a, S> {
     pub fn orders(&self) -> impl Iterator<Item = OrderRef<'a>>;// L3 FIFO (REQ-BOOK-001)
 }
 
-// REQ-BOOK-009 — replay/journal
+// REQ-BOOK-009: replay/journal
 pub fn replay<I>(book: &mut Book, feed: I, policy: GapPolicy) -> Result<ReplayReport, ReplayError>
 where I: IntoIterator<Item = (u64 /*seq*/, Command)>;
 pub enum GapPolicy { Fail, Skip }                              // sequence-gap handling, explicit
 
-// REQ-BOOK-010 — snapshot verification
+// REQ-BOOK-010: snapshot verification
 impl Book { pub fn checksum(&self) -> u64; }                   // integer-only FNV-1a-64 over full state
 ```
 
@@ -144,7 +144,7 @@ impl Book { pub fn checksum(&self) -> u64; }                   // integer-only F
 | ID | Requirement | Priority |
 |----|-------------|----------|
 | REQ-BOOK-001 | The book maintains price-time priority with an aggregated-per-price-level (L2) view and an order-by-order (L3) view, and the two views are mutually consistent at any version | MUST |
-| REQ-BOOK-003 | Commands add/cancel/replace/execute mutate the book and every failure mode returns a typed `Reject` variant — no panics, no silent drops | MUST |
+| REQ-BOOK-003 | Commands add/cancel/replace/execute mutate the book and every failure mode returns a typed `Reject` variant: no panics, no silent drops | MUST |
 | REQ-BOOK-004 | Prices are `i64` ticks and quantities `u64`; the public hot-path API contains no `f64` (float conversion exists only at consumer edges, outside this crate) | MUST |
 | REQ-BOOK-005 | Bid/Ask are distinct types behind a sealed `Side` trait; no public API accepts `bool` for side | MUST |
 | REQ-BOOK-006 | Best bid and best ask are O(1); depth iteration yields price levels best→worst without heap allocation | MUST |
@@ -159,7 +159,7 @@ impl Book { pub fn checksum(&self) -> u64; }                   // integer-only F
 | REQ-BOOK-007 | The reader protocol (sequence counter ordering matrix) is verified under loom and follows the `shm-rings` estate ordering standard, so the two crates' memory-ordering evidence is interchangeable | MUST |
 | REQ-BOOK-008 | `add`/`cancel`/`replace`/`execute` perform zero heap allocation; orders live in pre-allocated arenas addressed by generational indices (slab-pool pattern) that defeat ABA reuse hazards | MUST |
 
-### Traceability matrix (provisional — names fixed at implementation)
+### Traceability matrix (provisional: names fixed at implementation)
 
 | Requirement | Planned test | Property class |
 |-------------|--------------|----------------|
@@ -176,20 +176,20 @@ impl Book { pub fn checksum(&self) -> u64; }                   // integer-only F
 
 ## §Out of scope
 
-- **Matching** — no crossing logic, no order admission policy, no self-trade prevention. `Execute` applies a fill to resting quantity; deciding *which* orders fill is the engine's job.
-- Networking, feed parsers, and wire decoders — `wire-kit` / transport crates.
-- Persistence (journal *format* on disk) — book-kit consumes an in-memory command iterator; file formats live elsewhere.
-- Historical/interval book analytics — consumers build on `SideView`/snapshots.
+- **Matching**: no crossing logic, no order admission policy, no self-trade prevention. `Execute` applies a fill to resting quantity; deciding *which* orders fill is the engine's job.
+- Networking, feed parsers, and wire decoders: `wire-kit` / transport crates.
+- Persistence (journal *format* on disk): book-kit consumes an in-memory command iterator; file formats live elsewhere.
+- Historical/interval book analytics: consumers build on `SideView`/snapshots.
 - Serialization of `Book` (serde or otherwise).
 
 ## §Gate plan
 
-Tier A — full estate matrix, with these adjustments:
+Tier A: full estate matrix, with these adjustments:
 
 | Adjustment | Rationale |
 |---|---|
 | **loom is the headline gate**: dedicated `--cfg loom` job over the seqlock protocol, arena reuse, and generation counters; loom-cfg'd shims excluded from mutation-testing globs (`mutants.toml`, breaker precedent) with the loom harness named as the covering evidence | Tier A concurrency-primitive gate; this crate's core risk *is* the lock-free protocol |
-| miri runs arena, generation/ABA, replay, and checksum suites (non-atomic pure logic). Miri does **not** arbitrate the concurrent seqlock itself — that is loom's job (data-race detection at the protocol level) | miri + loom division of labor per MUTATION.md policy 4 |
+| miri runs arena, generation/ABA, replay, and checksum suites (non-atomic pure logic). Miri does **not** arbitrate the concurrent seqlock itself: that is loom's job (data-race detection at the protocol level) | miri + loom division of labor per MUTATION.md policy 4 |
 | Coverage floor: loom/`cfg(loom)` branches excluded from the host-coverage denominator via `COVERAGE-NOTES.md` documentation (covered by the loom job, not the host suite) | MUTATION.md cfg-unviable doctrine applied to coverage |
 | alloc-counter harness (`#[global_allocator]` counting wrapper) is a required test utility, not optional polish | REQ-BOOK-008 is unenforceable by compiler alone |
 | criterion baselines: `apply(Add|Cancel|Execute)` ns/op, `read()` snapshot ns/op vs writer contention level | latency-relevant Tier A |
@@ -204,15 +204,15 @@ Tier A — full estate matrix, with these adjustments:
 | Memory-ordering bug (missing acquire/release) ships | Torn state observed in production | loom verification is a blocking gate (REQ-BOOK-007); ordering matrix textually shared with shm-rings for cross-review |
 | Snapshot buffer undersized for deep books | Truncated depth read | `BookBuf` capacity is explicit; truncation returns typed error/flag, never silent partial state |
 | Generation-counter wrap (u32) after ~2³² reuses | ABA resurrected | Document wrap bound; optional u64 generation feature for ultra-long-running processes; replay test drives reuse cycles |
-| Caller mutates from two threads | Data race (UB) — protocol violated | `&mut self` writer API makes misuse a compile error; reader API takes `&self` only; document the contract loudly |
+| Caller mutates from two threads | Data race (UB): protocol violated | `&mut self` writer API makes misuse a compile error; reader API takes `&self` only; document the contract loudly |
 | Checksum collisions hide state divergence | False "verified" snapshots | Non-cryptographic checksum is documented as integrity *detection*, not adversarial protection; FNV-1a-64 choice flagged for owner review (cryptkit L0 edge is legal if owner wants stronger hashing) |
 | Replay depends on out-of-crate event ordering conventions | "Deterministic" only per undocumented assumption | Feed is a total-ordered `(seq, Command)` iterator; gap semantics explicit via `GapPolicy`; determinism property test is the contract |
 | Scope creep toward a matching engine | Review burden, wrong layer | Out-of-scope list above is part of the spec; PRs touching crossing logic rejected at review |
 
 ## §Cross-references
 
-- **clock-kit** (L1): *considered and rejected* for v1 — commands carry raw `u64` nanos (`ts_mono`) so book-kit keeps zero estate deps and stays freely reusable; a clock-kit edge stays legal (same-layer) if the owner overturns. Decided per the task mandate to "prefer raw u64 nanos … decide and document".
-- **slab-pool** (L1): pattern donor (generational indices). Same-layer dep would be legal; v1 re-implements locally to stay dep-free — flagged.
+- **clock-kit** (L1): *considered and rejected* for v1: commands carry raw `u64` nanos (`ts_mono`) so book-kit keeps zero estate deps and stays freely reusable; a clock-kit edge stays legal (same-layer) if the owner overturns. Decided per the task mandate to "prefer raw u64 nanos … decide and document".
+- **slab-pool** (L1): pattern donor (generational indices). Same-layer dep would be legal; v1 re-implements locally to stay dep-free: flagged.
 - **shm-rings** (L1): ordering-standard donor (REQ-BOOK-007); natural downstream publisher of book deltas.
 - **percentile-kit** (L2): ring-pattern donor only; dependency forbidden (upward edge).
 - **cryptkit** (L0): optional stronger-hash donor for REQ-BOOK-010 if FNV-1a is judged too weak.
@@ -221,7 +221,7 @@ Tier A — full estate matrix, with these adjustments:
 
 1. **clock-kit edge: rejected for v1 (raw `u64` nanos).** Book stays estate-dep-free; timestamp *semantics* live with the producer. Overturnable at review.
 2. **Seqlock vs epoch.** Seqlock chosen (simpler header, matches shm-rings discipline); epoch scheme is the named fallback if contention benches show reader starvation. REQ-BOOK-002 wording admits both so the swap is not a spec break.
-3. **Layer declaration L1 despite L0-eligible dependency graph** — `slab-pool` precedent (substrate infra, "lift only, never lower"); keeps future same-layer composition (clock-kit, shm-rings) open.
-4. **L3 storage shape** — per-level intrusive FIFO inside one slab arena (proposed) vs flat order array with per-level lists. Complexity contract (REQ-BOOK-006) is fixed; internal layout is free until benches decide.
-5. **Checksum primitive** — dependency-free FNV-1a-64 (proposed) vs cryptkit (L0) edge. Non-cryptographic status must be documented either way.
-6. **`no_std` claim deferred** — internals are core-only but the v1 target is Linux hosts; announcing `no_std` support would activate embedded gates prematurely.
+3. **Layer declaration L1 despite L0-eligible dependency graph**: `slab-pool` precedent (substrate infra, "lift only, never lower"); keeps future same-layer composition (clock-kit, shm-rings) open.
+4. **L3 storage shape**: per-level intrusive FIFO inside one slab arena (proposed) vs flat order array with per-level lists. Complexity contract (REQ-BOOK-006) is fixed; internal layout is free until benches decide.
+5. **Checksum primitive**: dependency-free FNV-1a-64 (proposed) vs cryptkit (L0) edge. Non-cryptographic status must be documented either way.
+6. **`no_std` claim deferred**: internals are core-only but the v1 target is Linux hosts; announcing `no_std` support would activate embedded gates prematurely.

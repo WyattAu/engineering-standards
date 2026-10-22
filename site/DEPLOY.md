@@ -1,6 +1,6 @@
 # Deploying kit-registry (site/)
 
-Pure static Astro site — `bun run build` emits fully static HTML into
+Pure static Astro site: `bun run build` emits fully static HTML into
 `dist/`. No server, no runtime, no database. Deploy `dist/` as a static
 site (same hosting options as crdt-demo).
 
@@ -30,7 +30,7 @@ Create a **New + → Static Site**, point it at this repo, build command
 
 ## Option C: Fly.io
 
-Fly needs an app to serve files — use their static template (Caddy or
+Fly needs an app to serve files: use their static template (Caddy or
 nginx serving `dist/`):
 
 ```sh

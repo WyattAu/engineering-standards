@@ -1,4 +1,4 @@
-# ADR-0002: adopt setup-uv v10.3.0 — read the layer before you fear the number
+# ADR-0002: adopt setup-uv v10.3.0: read the layer before you fear the number
 
 - **Status**: Accepted (loop 29)
 - **Date**: 2026-10-13
@@ -7,7 +7,7 @@
 ## Context
 
 Loop 28 received a Dependabot wave and closed this PR as "three majors of the
-tool that owns `sync`/`lock`/`build` — that is an ADR plus a measurement, not
+tool that owns `sync`/`lock`/`build`: that is an ADR plus a measurement, not
 a bot merge". The deferral was correct procedure, and the conclusion behind it
 was wrong.
 
@@ -23,14 +23,14 @@ different ones:
 
 Facts measured in loop 29:
 
-1. Both action versions declare `version: {default: ""}` — "Defaults to the
+1. Both action versions declare `version: {default: ""}`: "Defaults to the
    version in pyproject.toml or 'latest'".
-2. `astral-sh/uv`'s latest release is **0.13.0** (2026-10-09) — the exact
+2. `astral-sh/uv`'s latest release is **0.13.0** (2026-10-09): the exact
    version this repo's `uv.lock` (`revision = 5`) is already validated
    against in green CI, and the exact version on the maintainer's machine.
 3. Every input this estate passes (`python-version`, `enable-cache`) still
    exists in v10.3.0.
-4. v10.3.0 runs on **node24**; the v7 line ran on the deprecated node20 — the
+4. v10.3.0 runs on **node24**; the v7 line ran on the deprecated node20: the
    same deprecation class loop 28 just eliminated for `setup-python`.
 
 So the bump changes the wrapper's runtime and its code, not the resolver.
@@ -52,6 +52,6 @@ what the *other* layer's current version is.
 
 - Node 20 deprecation warnings stop for the Python kit.
 - The resolver is unchanged, so the existing lock and its byte-for-byte
-  reproducibility gate stay valid — verified by CI, not assumed.
+  reproducibility gate stay valid: verified by CI, not assumed.
 - Dependabot's setup-uv PRs close themselves as superseded; the estate keeps
   one SHA per action (`check-pin-consistency`).

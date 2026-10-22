@@ -1,8 +1,8 @@
-# Research note 39 — merge queues & trunk-based discipline
+# Research note 39: merge queues & trunk-based discipline
 
 **Sources.** GitHub Docs, *Managing a merge queue* (merge_group semantics,
 FIFO, required checks against the grouped future state); GitHub community
-#203246 (REST merge API bypasses "require merge queue" — a documented hole);
+#203246 (REST merge API bypasses "require merge queue": a documented hole);
 #154383 (merge queue incompatible with wildcard branch-protection patterns);
 Mergify docs (batch vs in-place checks; "require up-to-date branches" fights
 batch queues); rust-lang's bors/homu lineage (the original batch queue).
@@ -22,11 +22,11 @@ temporary `gh-readonly-queue/...` branch and land FIFO only if green.
    `merge_group` events; none of the estate's workflows listened for them, so
    an enabled queue would wait forever for checks that never report. All
    loop-owned repos now trigger CI + security on `merge_group` (no-op until
-   the queue is enabled — the arm-by-default principle).
+   the queue is enabled: the arm-by-default principle).
 2. **The estate's protections are bypassable by admin**, and this loop itself
    pushed straight to main using that bypass (recorded deviation: the
    no-stop loop mandate vs PR-review latency). "Require merge queue" +
-   `enforce_admins` would close it — an owner decision, exactly like
+   `enforce_admins` would close it: an owner decision, exactly like
    UPDATE_TOKEN. Documented, not hidden.
 3. **Wildcards**: merge queues require exact-branch protection rules; the
    estate's rules target `main` exactly, so no conflict.

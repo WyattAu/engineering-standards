@@ -1,4 +1,4 @@
-# Threat Model — <crate>
+# Threat Model: <crate>
 
 Reference: STRIDE. Scope: the crate's public API surface as used by a
 downstream service. Trust boundaries: (1) bytes/strings entering public parse
@@ -28,4 +28,4 @@ dependency tree.
 
 ## Residual Risks
 
-- <Known, accepted, documented — with rationale>
+- <Known, accepted, documented: with rationale>

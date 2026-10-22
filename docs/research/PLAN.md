@@ -1,12 +1,12 @@
-# Research program — 10 iterations (Oct 2026)
+# Research program: 10 iterations (Oct 2026)
 
 Method per iteration: **pull → analyze → compare → implement → re-prove.**
 
-1. Pull the state of the art (papers, standards, tool docs — primary sources).
+1. Pull the state of the art (papers, standards, tool docs: primary sources).
 2. Analyze it against what this estate actually does today; find the delta in
    both directions (what we lack, and what we already do that others cannot).
 3. Compare against the strongest reference repos (nixpkgs, deno, zig, rustc,
-   Home Assistant, Google OSS Rebuild, step-security) — did they solve it
+   Home Assistant, Google OSS Rebuild, step-security): did they solve it
    better, or is it an unsolved problem for them too?
 4. Land the conclusion in the spec (`OMNI-CORE.md` / ADR / gate code).
 5. Where the Lean template models an invariant, adjust the proof.

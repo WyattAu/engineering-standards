@@ -2,23 +2,22 @@
 
 Authoritative naming reference for the WyattAu estate. Every repository name,
 crate name, and rename decision is governed by this document. When a name
-disagrees with this convention, either the name or this document is wrong —
-fix one of them.
+disagrees with this convention, either the name or this document is wrong: fix one of them.
 
 ## The 6 Rules
 
-### Rule 1 — Repo name = crate name
+### Rule 1: Repo name = crate name
 
 Every repository publishes exactly one crate, and the two names are identical.
 
 **Rationale.** A repo and its published crate are the same artifact with two
 doors. Divergent names force a lookup table to answer "where does this crate
 live?" (the estate previously carried exactly such a table in
-`docs/layers.md` — 17 mismatches), break `gh repo clone WyattAu/X` ↔
+`docs/layers.md`: 17 mismatches), break `gh repo clone WyattAu/X` ↔
 `cargo add X` symmetry, and make `scripts/apply-standards.sh`-style tooling
 guess. One name, zero translation.
 
-### Rule 2 — Domain-specific: `{domain}-{concern}`
+### Rule 2: Domain-specific: `{domain}-{concern}`
 
 A crate that only makes sense inside one vertical domain is named
 `{domain}-{concern}`: a short lowercase domain prefix, then the specific
@@ -29,9 +28,9 @@ reverse-dependency pages, and in `Cargo.toml` files, every member of a stack
 sorts and reads together. The name states scope (which domain) and function
 (which concern) without opening the README.
 
-### Rule 3 — Cross-cutting: `{concern}-kit`
+### Rule 3: Cross-cutting: `{concern}-kit`
 
-A crate usable across many domains — retry, shutdown, fetch, outbox — is named
+A crate usable across many domains: retry, shutdown, fetch, outbox: is named
 `{concern}-kit`, hyphenated. The hyphenated form is canonical for all new
 names; the legacy unhyphenated `*kit` form is closed to new crates.
 
@@ -39,9 +38,9 @@ names; the legacy unhyphenated `*kit` form is closed to new crates.
 marks "this is general-purpose, bring it anywhere." The hyphen keeps the
 concern readable at a glance (`fetch-kit`, not `fetchkit`) and cleanly
 separates new-convention crates from grandfathered legacy names (Rule 6), so
-a reader can tell at a glance which era — and which owner — a name came from.
+a reader can tell at a glance which era: and which owner: a name came from.
 
-### Rule 4 — Unique primitives: short names
+### Rule 4: Unique primitives: short names
 
 A crate that is a foundational primitive with no meaningful domain/concern
 decomposition gets a short, memorable name: `chronoshift`, `breaker`,
@@ -49,11 +48,11 @@ decomposition gets a short, memorable name: `chronoshift`, `breaker`,
 
 **Rationale.** Forcing taxonomy onto a primitive produces noise
 (`time-source-kit`), while a short name is cheap to type, easy to remember,
-and — precisely because the crate has no peers — loses nothing by not
+and: precisely because the crate has no peers: loses nothing by not
 encoding structure. These names function as brands; spend the effort there
 instead.
 
-### Rule 5 — Products: product name
+### Rule 5: Products: product name
 
 A crate or repo that *is* a product keeps the product's name: `homebite`,
 `clawdius`, `forgeyard`, `kestrel`. Do not force product repos into the kit
@@ -64,7 +63,7 @@ taxonomy.
 crates share the `meal-planning` stack when none do. Taxonomy naming is for
 libraries composed into things; products are the things.
 
-### Rule 6 — Grandfathering: established names stay until next major
+### Rule 6: Grandfathering: established names stay until next major
 
 Established names that predate this convention keep their names. They are
 renamed only at their next major (semver-breaking) release, where the rename
@@ -78,16 +77,16 @@ instead of two.
 ## Repo/Crate Mismatches
 
 Rule 1 violations in the estate, and the fix for each. The crate name is
-already convention-correct in every case — the **repo is renamed to match the
+already convention-correct in every case: the **repo is renamed to match the
 crate**, never the reverse:
 
 | Repo (current) | Published crate | Fix | Convention violated |
 |---|---|---|---|
-| `graceful` | `shutdown-kit` | rename repo → `shutdown-kit` | Rule 3 — an adjective with no concern; this is a cross-cutting graceful-shutdown kit |
-| `money` | `decimal-money` | rename repo → `decimal-money` | Rule 2 — `money` is too generic; the decimal representation (the actual scope) is invisible |
-| `auditlog` | `tamper-audit` | rename repo → `tamper-audit` | Rules 2/3 — the defining property (tamper-evidence) is missing from the name |
-| `retry-backoff` | `loop-retry` | rename repo → `loop-retry` | Rule 3 — names the mechanism (backoff) instead of the concern (retrying loops) |
-| `fetchkit` | `fetch-kit` | ✅ done (repo + crates.io) | Rule 3 — legacy unhyphenated form; `fetchkit` on crates.io was also owned by an unrelated project |
+| `graceful` | `shutdown-kit` | rename repo → `shutdown-kit` | Rule 3: an adjective with no concern; this is a cross-cutting graceful-shutdown kit |
+| `money` | `decimal-money` | rename repo → `decimal-money` | Rule 2: `money` is too generic; the decimal representation (the actual scope) is invisible |
+| `auditlog` | `tamper-audit` | rename repo → `tamper-audit` | Rules 2/3: the defining property (tamper-evidence) is missing from the name |
+| `retry-backoff` | `loop-retry` | rename repo → `loop-retry` | Rule 3: names the mechanism (backoff) instead of the concern (retrying loops) |
+| `fetchkit` | `fetch-kit` | ✅ done (repo + crates.io) | Rule 3: legacy unhyphenated form; `fetchkit` on crates.io was also owned by an unrelated project |
 
 See [Renaming existing repos](#renaming-existing-repos) for the exact
 commands. The remaining four require owner execution.
@@ -103,8 +102,7 @@ their next major release:
 - `validkit`
 - `tokenkit`
 
-These are Tier A security-critical crates with large downstream surfaces —
-exactly the case where rename churn must ride a breaking release. Do not
+These are Tier A security-critical crates with large downstream surfaces: exactly the case where rename churn must ride a breaking release. Do not
 "fix" them opportunistically. New crates may not use the unhyphenated `*kit`
 form (Rule 3).
 
@@ -219,8 +217,7 @@ git remote set-url origin https://github.com/WyattAu/<new-name>.git
 #    third-party services pinned to the old name may not).
 ```
 
-Note the asymmetry: the crate names above are already fixed and published —
-the rename is repo-side only. Nothing is re-published, no version bumps, no
+Note the asymmetry: the crate names above are already fixed and published: the rename is repo-side only. Nothing is re-published, no version bumps, no
 breaking change. That is the point of Rule 1: it converts every future
 crate/repo mismatch into a zero-crate-impact repo rename.
 
@@ -228,7 +225,7 @@ crate/repo mismatch into a zero-crate-impact repo rename.
 
 Nothing checked this until now, which is why 17 mismatches accumulated. CI
 runs fine against whatever a repo happens to be called, so the drift is
-invisible until someone looks — and it is not cosmetic: a crate published as
+invisible until someone looks: and it is not cosmetic: a crate published as
 `shutdown-kit` whose crates.io `repository` field says `.../graceful` sends
 readers somewhere that does not match the crate name, and a doc link that
 looks wrong is a doc link people stop trusting.
@@ -245,7 +242,7 @@ python3 scripts/check-repo-crate-alignment.py --owner WyattAu --enforce
 ```
 
 It runs in the `estate-audit` workflow (on manifest edits and nightly),
-**reported and not gated** — the outstanding work is a deliberate owner
+**reported and not gated**: the outstanding work is a deliberate owner
 batch, and failing the run would block unrelated merges until it happens.
 
 ### Monorepos are not violations
@@ -256,8 +253,8 @@ named for the product and needs no rename: `vane` (11 crates), `suture` (38),
 apart from a single-crate repo is the whole difficulty, and the checker does
 it by counting publishable workspace members.
 
-A repository that publishes nothing at all — services, docs, dotfiles, Homebrew
-taps, the standards repo itself — is likewise fine, and is listed in the
+A repository that publishes nothing at all: services, docs, dotfiles, Homebrew
+taps, the standards repo itself: is likewise fine, and is listed in the
 script's `NO_CRATE` set.
 
 ### Current state
@@ -279,11 +276,11 @@ that repo to Rule 1 permanently.
 
 Templates follow their own namespace, orthogonal to crate names:
 
-- **`Omni{Lang}-template`** — the scaffold. `OmniRust`, `OmniTS`, `OmniGo`,
+- **`Omni{Lang}-template`**: the scaffold. `OmniRust`, `OmniTS`, `OmniGo`,
   `OmniHaskell`, `OmniEmbedded`, `OmniInfra`, `OmniDotfiles`, plus the
   originals (`OmniR`, `OmniLaTeX`, `OmniCPP`, `OmniFlutter`, `OmniPython`).
-  `OmniR` is taken by R, hence Rust is `OmniRust` — no collisions.
-- **`Omni{Lang}-{variant}`** — derivatives (`OmniLaTeX-CV`,
+  `OmniR` is taken by R, hence Rust is `OmniRust`: no collisions.
+- **`Omni{Lang}-{variant}`**: derivatives (`OmniLaTeX-CV`,
   `OmniLaTeX-coverletter`, `OmniCPP-docker`, `OmniLaTeX-docker`).
 - **Topics**: `omni-template` + language + `template` on every member
   (+ `monorepo`, `nix`, `devcontainer` where applicable). Every Omni is a

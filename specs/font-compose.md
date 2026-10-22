@@ -1,4 +1,4 @@
-# font-compose — script shaping over the font stack (SPEC, pre-implementation)
+# font-compose: script shaping over the font stack (SPEC, pre-implementation)
 
 > **Status: SPEC-ONLY.** No implementation exists or is authorized before owner
 > sign-off on this file (and on [ADR-0003](../docs/adr/0003-adopt-harfrust-extend-font-stack-in-layers.md)).
@@ -6,14 +6,14 @@
 > cite: doc comments on public items carry the tags, every REQ maps to ≥ 1
 > named test (provisional matrix in §Requirements).
 
-**Layer:** L2 — domain · **REQs:** 8 (FCO-001…008) · **Deps:** `font-model` (L1) + external `harfrust` 0.14, `thiserror` — nothing else · **no_std:** open question · **Date:** 2026-10-17
+**Layer:** L2: domain · **REQs:** 8 (FCO-001…008) · **Deps:** `font-model` (L1) + external `harfrust` 0.14, `thiserror`: nothing else · **no_std:** open question · **Date:** 2026-10-17
 
 | Field | Value |
 |---|---|
-| Layer | **L2 — domain.** Ceiling rule: only estate dep is `font-model` (L1). Same-layer composition with `font-shape` (L2) is legal but v0.1 has none — see §Cross-references. |
+| Layer | **L2: domain.** Ceiling rule: only estate dep is `font-model` (L1). Same-layer composition with `font-shape` (L2) is legal but v0.1 has none: see §Cross-references. |
 | Manifest declaration | `[package.metadata.layers] tier = "L2"` at repo creation |
 | External deps | `harfrust` 0.14 (MIT; pulls `read-fonts` 0.45, `bitflags`, `bytemuck`, `smallvec`, optional `icu_normalizer`/`icu_properties`/`core_maths`), `thiserror` 2. No `rustybuzz` (RUSTSEC-2026-0206), no `ttf-parser`, no `swash`. |
-| Name | `font-compose` — verified unclaimed (crates.io API 404, 2026-10-17) |
+| Name | `font-compose`: verified unclaimed (crates.io API 404, 2026-10-17) |
 | Sibling | `font-shape` (L2) owns **drawing and measuring** (rasterize, kern-advance, bidi levels); `font-compose` owns **substitution and positioning** (GSUB/GPOS, script itemization). Neither subsumes the other. |
 
 ## §Semantics
@@ -21,7 +21,7 @@
 font-compose turns a Unicode run plus a font into the glyph sequence a
 rasterizer can draw: which glyphs (GSUB), where they sit (GPOS), and which
 input characters they answer for (clusters). It is a thin, disciplined shell
-around harfrust — the estate adds the vocabulary, the error taxonomy, the
+around harfrust: the estate adds the vocabulary, the error taxonomy, the
 plan cache, and the never-panic guarantee; it does not re-implement the
 engine.
 
@@ -45,12 +45,12 @@ the typed `font-model::Font`. The bridge is deliberately boring:
   owned outline/glyph model the *rasterizer* consumes next;
 - glyph ids are font-global, so `font_model::GlyphId` (u16 domain) and
   harfrust's 32-bit `GlyphId` convert by checked widening/narrowing
-  (REQ-FCO-006) — no mapping table exists or is needed;
+  (REQ-FCO-006): no mapping table exists or is needed;
 - variable-font locations are harfrust `Font` coordinates built from
   `font-parse`'s parsed `fvar` axes (REQ-FCO-003).
 
 If a future harfrust makes the read-fonts coupling pluggable beyond
-`FontFuncs` (cmap/metrics only — not enough for shaping), re-evaluate; until
+`FontFuncs` (cmap/metrics only: not enough for shaping), re-evaluate; until
 then the byte bridge is the whole integration surface.
 
 ### Plans are reused, runs are cheap
@@ -65,7 +65,7 @@ same commit that adds the cache (contract §1).
 Hostile bytes are the norm: every font-compose entry point takes data an
 untrusted caller supplied. A truncated GPOS, a lying table offset, a glyph
 id outside the u16 domain all yield a typed `ComposeError` naming the table
-and reason — never a panic (REQ-FCO-005). read-fonts does the bounds
+and reason: never a panic (REQ-FCO-005). read-fonts does the bounds
 checking; this crate wraps it and owns the guarantee. The fuzz target is
 byte-entry `shape`, and its corpus seeds from `font-conformance`'s hostile
 set.
@@ -74,7 +74,7 @@ set.
 
 ```rust
 // features: std (default) · icu (harfrust normalization, on by default upstream)
-// no_std: open question — harfrust is core_maths-lean but unproven end-to-end;
+// no_std: open question: harfrust is core_maths-lean but unproven end-to-end;
 // v0.1 ships std+alloc and records the answer, it does not promise it.
 
 /// REQ-FCO-001: GSUB/GPOS/GDEF shaping with cluster mapping preserved.
@@ -90,7 +90,7 @@ impl Composer {
 }
 
 /// REQ-FCO-002: levels come from the caller (font-shape's resolve_bidi);
-/// this crate itemizes scripts and drives harfrust — it never re-derives bidi.
+/// this crate itemizes scripts and drives harfrust: it never re-derives bidi.
 pub struct Run<'a> {
     pub text: &'a str,
     pub level: u8,                 // explicit bidi level from font-shape
@@ -112,7 +112,7 @@ impl ShapedGlyph {
 }
 ```
 
-Open at implementation time: the hand-off type to `font-shape` — feed
+Open at implementation time: the hand-off type to `font-shape`: feed
 `ShapedGlyph` positions into `rasterize_glyph` directly, or widen
 `font-shape`'s `ShapedLine`/`GlyphPlacement` to accept GPOS offsets. Decide
 with the first consumer in front of you, not in this spec.
@@ -132,8 +132,8 @@ with the first consumer in front of you, not in this spec.
 
 ## §Cross-references
 
-- `font-shape` (L2) — owns bidi levels and rasterization; consumes `ShapedGlyph`s.
-- `font-model` (L1) / `font-parse` (L0) — the owned model and byte views under everything.
-- `font-conformance` (L3, specced alongside) — the oracle; FCO-001/005 verdicts land there.
-- [ADR-0003](../docs/adr/0003-adopt-harfrust-extend-font-stack-in-layers.md) — the adopt-vs-extract decision this spec implements.
+- `font-shape` (L2): owns bidi levels and rasterization; consumes `ShapedGlyph`s.
+- `font-model` (L1) / `font-parse` (L0): the owned model and byte views under everything.
+- `font-conformance` (L3, specced alongside): the oracle; FCO-001/005 verdicts land there.
+- [ADR-0003](../docs/adr/0003-adopt-harfrust-extend-font-stack-in-layers.md): the adopt-vs-extract decision this spec implements.
 - Boundary: `polyfont-*` is the parallel estate; no dependency either way until the consolidation ADR.

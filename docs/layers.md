@@ -1,27 +1,27 @@
-# Estate layer model — L0–L3
+# Estate layer model: L0–L3
 
 Every crate published under the WyattAu crates.io owner belongs to exactly one
-layer. Layers constrain **estate-internal dependencies only** — external
+layer. Layers constrain **estate-internal dependencies only**: external
 dependencies (tokio, axum, reqwest, serde, …) are unconstrained and curated
 separately via `cargo-deny` (`bans`, `advisories`, `licenses`).
 
 **Estate-internal** means: published under the WyattAu crates.io owner. The
 authoritative list is [`scripts/estate-crates.txt`](../scripts/estate-crates.txt);
 the authoritative per-crate layers are [`scripts/estate-tiers.json`](../scripts/estate-tiers.json)
-(both regenerated from the crates.io ownership API — see below).
+(both regenerated from the crates.io ownership API: see below).
 
 ## The layers
 
-### L0 — leaf
+### L0: leaf
 Zero runtime estate-internal dependencies. Minimal, curated external
 dependencies; `no_std`-capable where the domain allows. The only estate
 dependency an L0 crate may have is its own **proc-macro companion** (host
-codegen, no runtime edge — e.g. `typed-id-new` → `typed-id-derive`).
+codegen, no runtime edge: e.g. `typed-id-new` → `typed-id-derive`).
 
 Examples: `decimal-money`, `typed-id-new`, `chronoshift`, `simd-tokenizer`,
 `salting`, `error-codes`, `geo-kit`, `json-envelope`, `dsp-core`.
 
-### L1 — substrate
+### L1: substrate
 Runtime/platform infrastructure and core primitives; depends on L0 (plus
 essential external infra like tokio). Linux/platform-scoped crates are allowed
 here with declared `#[cfg(target_os)]` targets.
@@ -29,15 +29,15 @@ here with declared `#[cfg(target_os)]` targets.
 Examples: `metrics-kit`, `cas-kit`, `shm-rings`, `uds-kit`, `tokenkit`,
 `shutdown-kit`, `wire-kit`, `clock-kit`, `hw-kit`, `sheet-core` (future: `uring-kit`).
 
-### L2 — domain
+### L2: domain
 Domain logic with estate semantics; depends on L0/L1 and other L2 kits
-(same-layer composition is normal and legal — e.g. `outbox-kit` → `breaker`).
+(same-layer composition is normal and legal: e.g. `outbox-kit` → `breaker`).
 
 Examples: `breaker`, `throttle-kit`, `webhookkit`, `outbox-kit`,
 `idempotency-kit`, `healthkit`, `config-kit`, `flag-kit`, `cal-model`
 (reserved for future: `ledger-kit`, `policy-kit`).
 
-### L3 — composition
+### L3: composition
 Composes L0–L2 plus the external world: HTTP clients, frameworks, servers,
 UI frameworks, application front-ends.
 
@@ -52,7 +52,7 @@ Examples: `fetch-kit`, `telemetry-init`, `worker-kit`, `scim-kit`,
    `layer(crate) >= max(layer(d) for d in estate deps)`.
    Dependencies must never point up the stack. Same-layer estate dependencies
    are permitted (kits compose); a crate whose estate deps max out at L2 may
-   declare L2 or L3 — never L1.
+   declare L2 or L3: never L1.
 2. **L0 is strict.** An L0 crate has zero *runtime* estate dependencies. Its
    only permitted estate dependency is a proc-macro companion crate.
 3. **Dev-dependencies are exempt** (test-only edges do not create runtime
@@ -76,8 +76,8 @@ tier = "L2"
 ```
 
 `cargo package` preserves `[package.metadata]`, so the declaration ships with
-the published `.crate`. The declaration lives in the manifest — not in a
-central file — so the crate's repo CI gates the crate's own layer claim.
+the published `.crate`. The declaration lives in the manifest: not in a
+central file: so the crate's repo CI gates the crate's own layer claim.
 
 A missing declaration is a **warning** during the rollout (undeclared crates
 are not enforced against). Once the estate is fully declared, undeclared
@@ -100,7 +100,7 @@ runs [`scripts/check-layers.py`](../scripts/check-layers.py), which:
 5. **Logs only** for L3 crates, undeclared crates, and deps of undeclared
    crates (rollout mode).
 
-The checker is pure stdlib (`json` + `subprocess` to `cargo metadata`) — no
+The checker is pure stdlib (`json` + `subprocess` to `cargo metadata`): no
 third-party Python deps, nothing to install in kit repos.
 
 Regenerate the estate list and tier table after publishing or reclassifying:
@@ -135,8 +135,8 @@ drift. Justifications are one line per crate.
 | `error-codes` | L0 | Stable numeric error-code registry leaf (task candidate errcode) |
 | `geo-kit` | L0 | Geocoding utils, thiserror only (kits.ts L0) |
 | `font-parse` | L0 | SFNT/OTF/TrueType/WOFF2 binary font parser leaf, font-types + thiserror only; zero estate deps |
-| `formula-lang` | L0 | Spreadsheet formula language leaf — tokenizer, Pratt parser, AST, evaluator; thiserror + libm only, zero estate deps |
-| `color-kit` | L0 | Colour science leaf — linear-sRGB working type, Oklab/OkLCH with chroma-reduction gamut mapping, WCAG 2.1 AA contrast, neutral-named perceptual lightness contrast (brand/licence constraints, ADR-0004), Brettel–Viénot CVD simulation, deterministic seeded quantisation; `libm` only, zero estate deps, `no_std` |
+| `formula-lang` | L0 | Spreadsheet formula language leaf: tokenizer, Pratt parser, AST, evaluator; thiserror + libm only, zero estate deps |
+| `color-kit` | L0 | Colour science leaf: linear-sRGB working type, Oklab/OkLCH with chroma-reduction gamut mapping, WCAG 2.1 AA contrast, neutral-named perceptual lightness contrast (brand/licence constraints, ADR-0004), Brettel–Viénot CVD simulation, deterministic seeded quantisation; `libm` only, zero estate deps, `no_std` |
 | `http-errors` | L1 | Re-export shim over error-codes L0; runtime estate dep forbids L0 (mirrors error-classify) |
 | `hw-kit` | L1 | Linux-only hardware substrate (topology/pinning/NUMA/hugepages); zero estate deps, `libc`-only external edge |
 | `i18n-kit` | L0 | Runtime i18n catalogs; thiserror-only leaf |
@@ -176,7 +176,7 @@ drift. Justifications are one line per crate.
 | `polyfont-scope` | L1 | Font scoping over polyfont-core L0 |
 | `polyfont-themes` | L1 | Theme layer over polyfont-config L1 |
 | `shared-state` | L1 | Shared-state plumbing substrate (kits.ts L1) |
-| `sheet-engine` | L2 | Spreadsheet formula evaluation engine over `sheet-core` L1 — recalculation, cycle detection and error propagation across the dependency DAG; composes `sheet-core` L1 + `formula-lang` L0 |
+| `sheet-engine` | L2 | Spreadsheet formula evaluation engine over `sheet-core` L1: recalculation, cycle detection and error propagation across the dependency DAG; composes `sheet-core` L1 + `formula-lang` L0 |
 | `sheet-core` | L1 | Spreadsheet data model substrate (sparse cells, dependency DAG, topological order); zero estate deps |
 | `sheet-xlsx` | L1 | XLSX codec over sheet-core L1 (same-layer composition) |
 | `shm-rings` | L1 | Shared-memory ring substrate (task §1 L1 anchor) |
@@ -221,30 +221,30 @@ drift. Justifications are one line per crate.
 | `wire-kit` | L1 | Zero-copy SBE/FIX wire codec substrate; zero estate deps (spec §Cross-references: estate's edge-format leaf) |
 | `a2l-parse` | L1 | ASAP2/A2L ECU-description parser, zero deps; description half of the automotive calibration stack beside xcp-core (automotive protocol stack §L1) |
 | `xcp-core` | L1 | XCP on CAN protocol substrate (commands, responses, DAQ lists) over can-core L0; only estate dep is can-core (automotive protocol stack §L1) |
-| `dsp-spectral` | L1 | Spectral audio analysis and restoration substrate — STFT/ISTFT, mel/MFCC features, spectral gating, HPSS separation — over dsp-core L0's FFT/windows; only estate dep is dsp-core |
-| `font-model` | L1 | Typed owned editable font model — outlines with exact curve extrema and areas, cmap formats 4 and 12 encode/decode, metrics, validation, subsetting — over font-parse L0's borrowed views; only estate dep is font-parse |
-| `a11y-kit` | L1 | Accessibility semantics — platform-free node model (role, name, states, relations) plus the headless tree audit that is the estate's a11y CI gate (nobody else ships one; ADR-0004 §2). Zero runtime estate deps; AccessKit conversion behind the `accesskit` feature (Wave 2.1) |
-| `theme-kit` | L1 | Typed design-token contract — DTCG 2025.10 in/out, closed role vocabulary, build-failing WCAG 2.1 gate, derived light/high-contrast/monochrome/CVD variants, CSS/VS Code/ANSI emitters; only estate dep is `color-kit` L0 |
-| `input-kit` | L1 | Toolkit-neutral text-composition semantics — IME preedit state machine, grapheme-cluster caret mapping normalising all four platform cursor units (Win32/macOS/web UTF-16, Wayland/X11 bytes), dead-key composition. `no_std` + `alloc`, zero estate deps. The gap was measured: no crate in the ledger provided composition semantics and every GUI stack in the estate reimplements it per platform. Complements `tui-actions` L2 (keymap) rather than overlapping it; distinct from `font-shape` L2, which rasterises rather than composes |
-| `ui-text-edit` | L2 | Text-field semantics — `TextBuffer` trait (buffer-agnostic by design: `ropey` 2.0 flips char indexing to byte and a crate exposing `Rope` would break with it), grapheme-correct caret/selection/edit model, IME bridge over `input-kit`, a11y bridge over `a11y-kit` behind the `a11y` feature. Deliberately **not** an editing engine (ADR-0006): no multiple carets, transactions, revision tree, undo, or folds. Composes both L1 substrates rather than duplicating them |
+| `dsp-spectral` | L1 | Spectral audio analysis and restoration substrate: STFT/ISTFT, mel/MFCC features, spectral gating, HPSS separation: over dsp-core L0's FFT/windows; only estate dep is dsp-core |
+| `font-model` | L1 | Typed owned editable font model: outlines with exact curve extrema and areas, cmap formats 4 and 12 encode/decode, metrics, validation, subsetting: over font-parse L0's borrowed views; only estate dep is font-parse |
+| `a11y-kit` | L1 | Accessibility semantics: platform-free node model (role, name, states, relations) plus the headless tree audit that is the estate's a11y CI gate (nobody else ships one; ADR-0004 §2). Zero runtime estate deps; AccessKit conversion behind the `accesskit` feature (Wave 2.1) |
+| `theme-kit` | L1 | Typed design-token contract: DTCG 2025.10 in/out, closed role vocabulary, build-failing WCAG 2.1 gate, derived light/high-contrast/monochrome/CVD variants, CSS/VS Code/ANSI emitters; only estate dep is `color-kit` L0 |
+| `input-kit` | L1 | Toolkit-neutral text-composition semantics: IME preedit state machine, grapheme-cluster caret mapping normalising all four platform cursor units (Win32/macOS/web UTF-16, Wayland/X11 bytes), dead-key composition. `no_std` + `alloc`, zero estate deps. The gap was measured: no crate in the ledger provided composition semantics and every GUI stack in the estate reimplements it per platform. Complements `tui-actions` L2 (keymap) rather than overlapping it; distinct from `font-shape` L2, which rasterises rather than composes |
+| `ui-text-edit` | L2 | Text-field semantics: `TextBuffer` trait (buffer-agnostic by design: `ropey` 2.0 flips char indexing to byte and a crate exposing `Rope` would break with it), grapheme-correct caret/selection/edit model, IME bridge over `input-kit`, a11y bridge over `a11y-kit` behind the `a11y` feature. Deliberately **not** an editing engine (ADR-0006): no multiple carets, transactions, revision tree, undo, or folds. Composes both L1 substrates rather than duplicating them |
 | `actor-kit` | L2 | Actor runtime/supervision domain semantics (kits.ts L2) |
 | `api-paginate` | L2 | Cursor/offset pagination primitives (kits.ts L2) |
 | `api-types` | L2 | Shared API request/response DTOs (kits.ts L2) |
-| `audiobook-conformance` | L3 | Conformance harness — generates a corpus with ffmpeg and cross-checks the audiobook crates against ffprobe and Symphonia; the independent oracle the parsers are measured against |
-| `audiobook-shelf` | L3 | Audiobook-first library manager — decides which files form one book and in what order they play (disc first, then track), parses the folder-name conventions a library is actually named with, and reports what is inconsistent; composes `audiobook-core` L1 + `mp4-core` L2 + `id3-core` L1 |
-| `audiobook-core` | L1 | Audiobook domain model — format-independent `Title`/`Part`/`Chapter`, an MP3 frame walker deriving duration from Xing/Info/VBRI or bitrate, and signature-based container detection; composes `id3-core` + `mp4-core`, `no_std` + `alloc` |
+| `audiobook-conformance` | L3 | Conformance harness: generates a corpus with ffmpeg and cross-checks the audiobook crates against ffprobe and Symphonia; the independent oracle the parsers are measured against |
+| `audiobook-shelf` | L3 | Audiobook-first library manager: decides which files form one book and in what order they play (disc first, then track), parses the folder-name conventions a library is actually named with, and reports what is inconsistent; composes `audiobook-core` L1 + `mp4-core` L2 + `id3-core` L1 |
+| `audiobook-core` | L1 | Audiobook domain model: format-independent `Title`/`Part`/`Chapter`, an MP3 frame walker deriving duration from Xing/Info/VBRI or bitrate, and signature-based container detection; composes `id3-core` + `mp4-core`, `no_std` + `alloc` |
 | `axum-stack` | L2 | Axum middleware stack on healthkit+shutdown-kit (kits.ts L2) |
 | `billing-kit` | L2 | Pricing primitives over decimal-money L0 (kits.ts L2) |
 | `blobkit` | L2 | Object-storage trait w/ S3/local backends (kits.ts L2) |
 | `breaker` | L2 | Circuit-breaker estate semantics; task §1 L2 anchor |
 | `cache-pal` | L2 | Caching abstractions (kits.ts L2) |
-| `cal-model` | L2 | A2L calibration data model and session layer — characteristic/CAN-signal binding, COMPU_METHOD apply+invert, limit validation, snapshot/restore/diff, curve fitting; composes a2l-parse L1 + xcp-core L1 + dbc-parse L0 (automotive protocol stack §L2) |
+| `cal-model` | L2 | A2L calibration data model and session layer: characteristic/CAN-signal binding, COMPU_METHOD apply+invert, limit validation, snapshot/restore/diff, curve fitting; composes a2l-parse L1 + xcp-core L1 + dbc-parse L0 (automotive protocol stack §L2) |
 | `chaos-kit` | L2 | Deterministic fault injection domain kit (kits.ts L2) |
 | `config-kit` | L2 | Layered typed configuration, service-config domain (kits.ts L2) |
 | `docs-pipeline` | L2 | Markdown->HTML rendering pipeline (kits.ts L2) |
 | `envstack` | L2 | Layered env/config loading (kits.ts L2) |
 | `flag-kit` | L2 | Feature flags domain kit over validkit L0 (kits.ts L2) |
-| `font-shape` | L2 | Glyph rasterization and text measurement — exact-coverage scanline fill, stroke expansion, advance/kerning layout, bidirectional reordering — over font-model L1; no rasterizer dependency, `no_std` + `alloc` |
+| `font-shape` | L2 | Glyph rasterization and text measurement: exact-coverage scanline fill, stroke expansion, advance/kerning layout, bidirectional reordering: over font-model L1; no rasterizer dependency, `no_std` + `alloc` |
 | `healthkit` | L2 | Health/readiness domain kit; task §1 L2 anchor |
 | `idempotency-kit` | L2 | Idempotency keys domain kit; task §1 L2 anchor |
 | `mail-sync-kit` | L2 | IMAP/JMAP/SMTP sync engines, mailkit sibling (L2) |
@@ -264,9 +264,9 @@ drift. Justifications are one line per crate.
 | `vane-control` | L2 | Proxy control plane; max estate dep envstack L2 |
 | `vane-filters` | L2 | Filter engine over breaker/throttle-kit L2 |
 | `webhookkit` | L2 | Signed webhook domain kit; idempotency-kit L2 dep same-layer legal (task §1 anchor) |
-| `docs-core` | L2 | Rust docs pipeline core — CommonMark+GFM → HTML with astro-island-compatible island emission and the JS shim; consolidates Tachyon + `docs-pipeline` + the `starlight-*` stack (ADR-0004 §2.5) |
-| `theme-egui` | L2 | egui/epaint lowering for `theme-kit` L1 — places approved roles into `Visuals` with no colour maths (the per-field byte-identity test is THM-008's contract); first of the one-crate-per-toolkit adapters (ADR-0004 §2.3) |
-| `tui-actions` | L2 | Terminal input layer — chord parsing (`ctrl+s`, `g g`), modal mode stack, conflict and unbound-key detection, help rows derived from the live keymap; pure logic with zero estate and zero terminal deps, so three TUIs can share one table-tested model |
+| `docs-core` | L2 | Rust docs pipeline core: CommonMark+GFM → HTML with astro-island-compatible island emission and the JS shim; consolidates Tachyon + `docs-pipeline` + the `starlight-*` stack (ADR-0004 §2.5) |
+| `theme-egui` | L2 | egui/epaint lowering for `theme-kit` L1: places approved roles into `Visuals` with no colour maths (the per-field byte-identity test is THM-008's contract); first of the one-crate-per-toolkit adapters (ADR-0004 §2.3) |
+| `tui-actions` | L2 | Terminal input layer: chord parsing (`ctrl+s`, `g g`), modal mode stack, conflict and unbound-key detection, help rows derived from the live keymap; pure logic with zero estate and zero terminal deps, so three TUIs can share one table-tested model |
 | `ws-kit` | L2 | WebSocket server/session management (kits.ts L2) |
 | `accessctl` | L3 | Authz service composition on tokenkit (kits.ts L3) |
 | `barbican` | L3 | Secrets-custody service toolkit (kits.ts L3) |
@@ -297,12 +297,12 @@ drift. Justifications are one line per crate.
 | `vane-proxy` | L3 | L4/L7 proxy composition: axum + full estate (max dep L2) |
 | `worker-kit` | L3 | Job scheduling composition over breaker L2+shutdown-kit L1 (task §1 L3 anchor) |
 | `ws-barbican` | L3 | WS transport to barbican; barbican L3 dep same-layer legal (kits.ts L3) |
-| `font-conformance` | L3 | Differential oracle for the text stack — hostile corpus, `font-parse` vs `read-fonts`, `font-shape` vs `tiny-skia` (`zeno`/`vello_cpu` next), Err-not-panic watchdog with HANG findings. Dev-only: never a runtime dep (pattern donor: `audiobook-conformance`) |
+| `font-conformance` | L3 | Differential oracle for the text stack: hostile corpus, `font-parse` vs `read-fonts`, `font-shape` vs `tiny-skia` (`zeno`/`vello_cpu` next), Err-not-panic watchdog with HANG findings. Dev-only: never a runtime dep (pattern donor: `audiobook-conformance`) |
 
 ## Notes and flagged ambiguities
 
 - **Proc-macro companions at L0.** `typed-id-new` and `validkit` are L0 with a
-  single estate dep each — their derive-macro companions. The checker exempts
+  single estate dep each: their derive-macro companions. The checker exempts
   proc-macro targets at L0. `error-classify` builds on `error-codes` (a
   *runtime* lib dep) and is therefore L1, not L0.
 - **kits.ts registry drift corrected.** The hand-transcribed registry in
@@ -321,11 +321,11 @@ drift. Justifications are one line per crate.
   (S3 client backend, consistent with `blobkit`) though its only estate dep is
   L0. Both are safe under the ceiling rule; lift only, never lower.
 - **No cycles.** The estate dependency graph is acyclic (verified over all 186
-  estate-internal edges). A cycle would make classification impossible — flag
+  estate-internal edges). A cycle would make classification impossible: flag
   it immediately rather than forcing a layer.
 - **Sweep reclassification.** `http-errors` started as an L0 candidate but its
-  repo HEAD turned it into a thin re-export shim over `error-codes` — a
-  runtime estate dep — so it is declared **L1** (the same shape as
+  repo HEAD turned it into a thin re-export shim over `error-codes`: a
+  runtime estate dep: so it is declared **L1** (the same shape as
   `error-classify`). Found by the checker itself on the first estate-wide run;
   the crate's repo carries the L0→L1 commit.
 - **Published but absent from repo HEAD.** Four crates were published and
@@ -333,8 +333,8 @@ drift. Justifications are one line per crate.
   those names in their repo's default branch: `ply-viz` and `plycharts`
   (plychart), `leptos-derive` (leptos-macro), and `resilient-fetch`
   (superseded by `fetch-kit`; only `fetch-kit` remains). Their tiers are
-  recorded in `scripts/estate-tiers.json` — registry consumers are still
-  checked — but their repos cannot carry a manifest declaration. Two more
+  recorded in `scripts/estate-tiers.json`: registry consumers are still
+  checked: but their repos cannot carry a manifest declaration. Two more
   were renamed in HEAD: `typed-id-new` → `typedids` (declared L0) and
   `suture-git-bridge` → `git-remote-suture` (declared L1); the tier follows
   the crate, and the rename should be reflected on crates.io at the next

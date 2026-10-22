@@ -14,7 +14,7 @@ Coverage comes from three places, and which one applies varies by repo:
 
 A package needs an exemption only when neither of the first two apply.
 That is a decision for `cargo vet` to make, not for a script to
-reimplement — see [Why not derive it from the
+reimplement: see [Why not derive it from the
 lockfile](#why-not-derive-it-from-the-lockfile) below.
 
 ## The failure this addresses
@@ -53,7 +53,7 @@ cargo vet --locked
 tidiness: cargo-vet refuses to *report* coverage while the store is
 unformatted, so an out-of-order `[[exemptions.NAME]]` block for a crate
 present at two versions makes it emit a store-consistency error instead of
-the missing-package list — leaving `--write` with nothing to act on and no
+the missing-package list: leaving `--write` with nothing to act on and no
 way to tell that from a genuine dead end. Earlier revisions of this script
 made the caller do the formatting first, which meant the documented order
 was load-bearing; now it is not.
@@ -62,7 +62,7 @@ Version blocks for a crate present at two versions are ordered
 numerically (`0.9.6` before `0.10.2`), not lexicographically, so the output
 is stable and a second run is a no-op.
 
-Verify without writing — this is exactly what CI runs:
+Verify without writing: this is exactly what CI runs:
 
 ```sh
 python3 scripts/resync-vet-exemptions.py --check
@@ -81,7 +81,7 @@ The shared `quality / vet` job in `.github/workflows/rust-kit.yml` runs
 ```
 
 The script shells out to `cargo vet --locked` itself, so this is not a
-second, slower run — it is the same run with a better failure message.
+second, slower run: it is the same run with a better failure message.
 The script exits with cargo-vet's own status, so it can never turn a green
 repo red or a red repo green.
 
@@ -105,7 +105,7 @@ list grows unwieldable.
 
 ## Why not derive it from the lockfile
 
-The first version of this script did exactly that — it derived the
+The first version of this script did exactly that: it derived the
 required set from `Cargo.lock` and demanded an exemption for every
 registry package. On `formula-lang`, which has a populated
 `imports.lock`, that produced **34 spurious exemptions**: cargo-vet was
@@ -127,7 +127,7 @@ reshuffled file.
 ## Vetting rather than exempting
 
 If a package in the `missing` list should be vetted rather than exempted,
-do not add an exemption — add it to `imports.lock`:
+do not add an exemption: add it to `imports.lock`:
 
 ```sh
 cargo vet --import-keys <crate>   # prints the key lines to paste
@@ -143,8 +143,8 @@ Copy the layout from any green repo:
 ```
 supply-chain/
   config.toml     # [cargo-vet] header + [[exemptions.NAME]] blocks as needed
-  imports.lock    # vetted crates — may be empty, or nearly so
-  audits.toml     # audit records — may be empty
+  imports.lock    # vetted crates: may be empty, or nearly so
+  audits.toml     # audit records: may be empty
 ```
 
 Then run the four steps. If the crate graph has no registry dependencies,

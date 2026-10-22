@@ -1,4 +1,4 @@
-# PITFALLS.md — recurring failure modes and their fixes
+# PITFALLS.md: recurring failure modes and their fixes
 
 Every entry here was hit for real across the estate. Each one cost a red
 build; the fix is the pattern to reuse. Add new entries at the top of the
@@ -8,7 +8,7 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `Dependabot Updates` fails with `Unsupported bun.lock 'lockfileVersion' 2` | Dependabot's bun updater only understands lockfile v1 | Known upstream gap. Action bumps (the `github-actions` ecosystem) still work, so security updates flow; **package** updates must be applied by hand until Dependabot (or a Renovate `bun` manager) supports v2. Verify each major locally before landing it — that is the only review path left for package deps. |
+| `Dependabot Updates` fails with `Unsupported bun.lock 'lockfileVersion' 2` | Dependabot's bun updater only understands lockfile v1 | Known upstream gap. Action bumps (the `github-actions` ecosystem) still work, so security updates flow; **package** updates must be applied by hand until Dependabot (or a Renovate `bun` manager) supports v2. Verify each major locally before landing it: that is the only review path left for package deps. |
 |---|---|---|
 | A toolchain job starts testing the wrong language version (e.g. `msrv` suddenly builds with a version that does not exist) | Dependabot reads `some/action@1.85.0` as an *action version* and bumps it to `@1.120.0` | Keep the version in an **input**, not the ref: `dtolnay/rust-toolchain@master` + `with: {toolchain: "1.85.0"}`. Dependabot has nothing to bump. |
 | `--frozen-lockfile` fails with "lockfile had changes, but lockfile is frozen" | A dependency was added to `package.json` without refreshing the lock | Always run the installer in the same commit as the manifest change; CI's frozen install is the gate that proves it. |
@@ -19,7 +19,7 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `tar: Exiting with failure status` inside a CI step that "clearly pipes the archive in" | `git archive \| mkdir X && tar -x` binds as `(archive \| mkdir) && tar` — tar reads an empty stdin | Put the extraction target on its own line: `mkdir -p X` then `git archive HEAD \| tar -x -C X -f -` |
+| `tar: Exiting with failure status` inside a CI step that "clearly pipes the archive in" | `git archive \| mkdir X && tar -x` binds as `(archive \| mkdir) && tar`: tar reads an empty stdin | Put the extraction target on its own line: `mkdir -p X` then `git archive HEAD \| tar -x -C X -f -` |
 | The scaffold diff flags directories that "aren't in the repo" | The *working tree* carries untracked debris (`dist/`, `node_modules/`, `.venv/`); `copier copy` of a fresh clone does not | Compare against `git archive HEAD` (tracked content), not the working tree |
 
 
@@ -27,25 +27,25 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 | Symptom | Cause | Fix |
 |---|---|---|
 | `reuse lint` passes on 9 repos and one extra file appears (`criterion.json`) | Benchmark reports land in the tree; REUSE covers `**` so it is fine, but scratch artifacts still belong in `.gitignore` | Keep the emitter output ignored; the REUSE manifest covers whatever is tracked |
-| A pin script writes an unresolved placeholder into a workflow | The API hiccuped and the error body was treated as a SHA | **Never write a value that has not passed a full-SHA assertion** — assert `[0-9a-f]{40}` before substituting, and grep the tree for the failure marker afterwards |
+| A pin script writes an unresolved placeholder into a workflow | The API hiccuped and the error body was treated as a SHA | **Never write a value that has not passed a full-SHA assertion**: assert `[0-9a-f]{40}` before substituting, and grep the tree for the failure marker afterwards |
 | An e2e job is ~50% red with identical code | The browser install is a single unguarded CDN download | Move the install into the canonical e2e script with retry + fallback; CI runs the same script developers do |
 
 
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| The image-flavor container build 404s inside the `common-utils` feature (`E: Failed to fetch ... sudo_...deb`) | The feature apt-installs packages without refreshing the mirror index first, so a stale mirror fails the build | Drop the feature on `mcr.microsoft.com/devcontainers/base:*` images — the base image already contains common-utils. Less network, less flake, same capability |
-| A workflow parse error CI-side while PyYAML validated the file locally | PyYAML silently allows duplicate mapping keys (last wins); GitHub Actions does not | Validate workflow YAML with a duplicate-key-rejecting loader — `yaml.safe_load` is not enough |
-| Scratch clones vanish between sessions | `/tmp` is disposable; only pushed state survives | Re-clone from origin and continue — the repos are canonical. Never let unpushed work accumulate past one verified commit |
+| The image-flavor container build 404s inside the `common-utils` feature (`E: Failed to fetch ... sudo_...deb`) | The feature apt-installs packages without refreshing the mirror index first, so a stale mirror fails the build | Drop the feature on `mcr.microsoft.com/devcontainers/base:*` images: the base image already contains common-utils. Less network, less flake, same capability |
+| A workflow parse error CI-side while PyYAML validated the file locally | PyYAML silently allows duplicate mapping keys (last wins); GitHub Actions does not | Validate workflow YAML with a duplicate-key-rejecting loader: `yaml.safe_load` is not enough |
+| Scratch clones vanish between sessions | `/tmp` is disposable; only pushed state survives | Re-clone from origin and continue: the repos are canonical. Never let unpushed work accumulate past one verified commit |
 
 ## Haskell / criterion (loop 4)
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| A benchmark reports ~4ns for a batch of 1,000 operations | The batch was a top-level CAF that was only *returned*, so every iteration after the first timed nothing | `nf f x` — criterion applies the argument per iteration. `nfIO`/`whnfIO` take a plain `IO` action and will happily measure a hoisted constant |
+| A benchmark reports ~4ns for a batch of 1,000 operations | The batch was a top-level CAF that was only *returned*, so every iteration after the first timed nothing | `nf f x`: criterion applies the argument per iteration. `nfIO`/`whnfIO` take a plain `IO` action and will happily measure a hoisted constant |
 | `cabal test all` fails with `Cabal-7043` after adding a bench component | The new `criterion` dependency backtracks the solver's whole plan | `cabal build/test all --disable-benchmarks`; there is no `benchmarks:` field in `cabal.project` (that parse error is real) |
 | A `.hi`/report JSON parse fails after a criterion upgrade | 1.6.x writes `["criterion", "<version>", [{reportAnalysis: {anMean: {estPoint}}, ...}]]`, not the older flat `mean` | Walk the report for mean-bearing nodes and understand both shapes (see `emit-criterion-bench.py`); keep the emitter as its own script so it is testable without GHC |
-| A CI lint job fails on a file that "looks fine" | Each repo's own formatter config differs — OmniDotfiles runs `shfmt -i 4` over `scripts/` while the estate uses `-i 2` | Format with the *target repo's* setting, and check with it before pushing |
+| A CI lint job fails on a file that "looks fine" | Each repo's own formatter config differs: OmniDotfiles runs `shfmt -i 4` over `scripts/` while the estate uses `-i 2` | Format with the *target repo's* setting, and check with it before pushing |
 
 
 
@@ -99,7 +99,7 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 ## Docs publishing
 
 - `mkdocs gh-deploy` pushes a `gh-pages` **branch**. When Pages is enabled with
-  `build_type=workflow`, that push fails (`git push` exit 128) — the two
+  `build_type=workflow`, that push fails (`git push` exit 128): the two
   mechanisms conflict. Use the artifact flow like every other docs job:
   `mkdocs build --strict --site-dir site` → `actions/upload-pages-artifact` →
   `actions/deploy-pages`.
@@ -110,7 +110,7 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
   green while the job still shows red. Read the run conclusion, not the job
   matrix, when auditing the estate.
 - `zizmor` exits **14** when it finds anything; with `continue-on-error` the
-  run stays green and the job is the signal. Findings are the report — don't
+  run stays green and the job is the signal. Findings are the report: don't
   `|| true` them away.
 - New advisory jobs stay advisory for exactly one loop, then graduate to a
   blocking gate (see `LOOP.md`).
@@ -118,7 +118,7 @@ build; the fix is the pattern to reuse. Add new entries at the top of the
 
 ### Evaluating a tool is not the same as configuring it
 
-Loop 8 rejected `ty` for "14 false positives" that were entirely missing `[tool.ty.environment]` config — the same version passes cleanly once configured. Before recording a tool as unfit, check its configuration surface: a rejection measured against a default config measures the defaults, not the tool. Any "X does not support Y" claim in an ADR must be re-checked with Y configured.
+Loop 8 rejected `ty` for "14 false positives" that were entirely missing `[tool.ty.environment]` config: the same version passes cleanly once configured. Before recording a tool as unfit, check its configuration surface: a rejection measured against a default config measures the defaults, not the tool. Any "X does not support Y" claim in an ADR must be re-checked with Y configured.
 
 
 ### copier renders only `*.jinja` -- every other file is a raw byte copy

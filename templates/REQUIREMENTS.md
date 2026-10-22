@@ -1,4 +1,4 @@
-# Requirements — <crate>
+# Requirements: <crate>
 
 Numbered, testable requirements. Every requirement maps to at least one named
 test; every security-relevant test cites at least one requirement. Doc

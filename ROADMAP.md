@@ -1,4 +1,4 @@
-# ROADMAP — loop 2
+# ROADMAP: loop 2
 
 Recreated 2026-10-05, after the research step in [LOOP.md](LOOP.md). Loop 1
 hardened the *templates*. Loop 2 hardens the *library estate* and starts the
@@ -7,8 +7,8 @@ product that the estate exists to serve.
 The premise of this loop: **a published crate is a claim, not a proof.** Every
 crate in the manifest is published, versioned, documented, and green on CI, and
 five of them were still wrong in ways that cost users money or lock them out.
-This loop therefore treats *dogfooding across crate boundaries* — and *checking
-implementations against primary sources rather than against themselves* — as the
+This loop therefore treats *dogfooding across crate boundaries*: and *checking
+implementations against primary sources rather than against themselves*: as the
 primary work, not a side effect of it.
 
 ## What loop 1 produced (and why loop 2 exists)
@@ -24,7 +24,7 @@ this loop:
 |---|---|---|
 | `multi-chain-wallet` | 41 tests passing | **Every BIP-39 phrase shorter than 24 words was refused.** A wallet's recovery phrase did not restore. Two of its own suites asserted the limitation as intended behaviour. |
 | `webauthn-kit` | 166 tests passing, 6 red | The red ones were *fixtures with the wrong COSE label*, so they could never have agreed with a real authenticator. `clippy --all-targets` failed on master. |
-| `webauthn-kit` | sign-count check "monotonic" | Accepted an equal counter — the signature of a replayed assertion. |
+| `webauthn-kit` | sign-count check "monotonic" | Accepted an equal counter: the signature of a replayed assertion. |
 | `actor-kit` | `pause()` documented | A permanent deadlock. Then, once fixed, messages queued during suspension were silently never processed. |
 | `hdwallet`/`actor-kit`/`shared-state` | fix merged to `main` | Fixes **never released**. The pinned versions still carried the bugs. |
 
@@ -53,7 +53,7 @@ Primary sources pulled and analysed. The findings that change what we build:
   necessarily supports SHA-256."* Our `oauth-toolkit` takes the method as a
   `&str`, so a typo'd method is indistinguishable from a wrong verifier.
 - **WebAuthn L3 is a W3C Recommendation (2026-08-25).** §7.2 step 18: a counter
-  that does not increase is *"a signal, but not proof"* — and explicitly
+  that does not increase is *"a signal, but not proof"*: and explicitly
   includes *"a race condition where the Relying Party is processing assertion
   responses in an order other than the order they were generated."* This
   **corrects our own 0.3.6 fix**: hard-failing on `<=` will produce spurious
@@ -87,13 +87,13 @@ Primary sources pulled and analysed. The findings that change what we build:
 - **FAPI 2.0** (Final, 2025-02-22): auth codes ≤ 60 s, PAR mandatory,
   sender-constrained tokens, ≥ 128-bit credential entropy.
 
-### Where the sources disagree — the most valuable findings
+### Where the sources disagree: the most valuable findings
 
 - `plain` PKCE: forbidden by OAuth 2.1 `-16` and FAPI 2.0, still permitted by
   RFC 7636. Our crate followed the oldest document.
 - Rounding: ISO 80000-1 / ASTM E29 / OPC UA say half-even; ZATCA and the
   European Pharmacopoeia say half-up. "Swiss rounding" is not an ISO term.
-- BIP-39's checksum catches ~255/256 of errors — the checksum is
+- BIP-39's checksum catches ~255/256 of errors: the checksum is
   error-*detection*, not a security property, so 24 words is 2²⁵⁶ bits of
   entropy, never 264. The real attack surface is the entropy source (Milk Sad /
   CVE-2023-39910 drained 227k+ addresses).
@@ -102,7 +102,7 @@ Primary sources pulled and analysed. The findings that change what we build:
 
 Ordered by (correctness impact × how often it bites).
 
-### Now — security, primary-source-backed
+### Now: security, primary-source-backed
 
 1. `oauth-toolkit`: reject `plain` at the AS; `S256` only. Distinguish an unknown
    method from a wrong verifier. *(OAuth 2.1 -16 §7.5.2)*
@@ -117,7 +117,7 @@ Ordered by (correctness impact × how often it bites).
    vectors; refuse to derive a non-hardened child from an exported account
    xpub, since BIP-32 says that is the parent private key.
 
-### Now — money correctness
+### Now: money correctness
 
 5. `decimal-money`: `RoundingMode` becomes an explicit parameter with **no
    default**; a named `round_at` boundary type so a caller cannot round twice.
@@ -136,7 +136,7 @@ Ordered by (correctness impact × how often it bites).
 - **Vector 5 measured, not assumed:** `bip32 0.6.0` accepts four of the sixteen
   invalid extended keys. The wallet now enforces all sixteen itself.
 - **`k256 0.14` removed `sign_prehash_recoverable`** and offers a replacement
-  that *hashes* its input — a silent, total signature failure for a wallet.
+  that *hashes* its input: a silent, total signature failure for a wallet.
   `signing_prehash` signs the prehash directly, with a regression test asserting
   the two paths differ.
 - **`webhookkit 2.2.0` stopped compiling** with no change to its own manifest,
@@ -150,7 +150,7 @@ Ordered by (correctness impact × how often it bites).
 
 ### Round 17, done
 
-- **`invoice-kit 0.1.0` — the product's AR layer**, published with a consumer
+- **`invoice-kit 0.1.0`: the product's AR layer**, published with a consumer
   suite in the same loop. Three orthogonal document states because EN 16931
   defines no lifecycle at all; direction on the document type because Peppol's two
   credit conventions must never be mixed; a required `RoundingPolicy` because four
@@ -159,7 +159,7 @@ Ordered by (correctness impact × how often it bites).
   were caused by float arithmetic on allocation.
 - **Five bugs caught by its own tests before publication**, the worst being a
   division that inflated every quotient by a power of ten, and a line arithmetic
-  that used `rescale_exact` where the specification requires a *rounding* — so
+  that used `rescale_exact` where the specification requires a *rounding*: so
   any unit price that was not an exact multiple of its base quantity produced no
   amount at all.
 - **Three money types now in the workspace** that disagree about what an amount
@@ -168,7 +168,7 @@ Ordered by (correctness impact × how often it bites).
   sharpest consequence is pinned: 1000 minor units is $10.00 and ¥1000 depending
   only on the exponent, and the two do not even render as the same string.
 
-### Now — the product
+### Now: the product
 
 The estate's library work has reached the point where the remaining defects are
 in the *product* semantics, not the primitives. So the product starts now.
@@ -176,32 +176,31 @@ in the *product* semantics, not the primitives. So the product starts now.
 8. New repo, immutable double-entry core: append-only journals, balanced
    debits/credits enforced at post time, `draft → posted → void` states,
    **reversal by counter-entry** rather than deletion or mutation, period close,
-   and audit trail. No standard defines draft/posted/void for journal entries —
-   TigerBeetle is the closest implementable model and IFRS specifies only
-   recognition/derecognition — so this is a documented decision, not a derived
+   and audit trail. No standard defines draft/posted/void for journal entries:    TigerBeetle is the closest implementable model and IFRS specifies only
+   recognition/derecognition: so this is a documented decision, not a derived
    one.
 9. Posting concurrency designed from PostgreSQL §13.2.3: the ledger must not
    rely on check-then-insert under SERIALIZABLE, because SSI can raise a unique
    violation that true serial execution never would.
 10. New domain crates as the product grows: `invoice-kit` (AR), AP, tax,
     reconciliation, reports. Each gets an estate-integration suite from the day
-    it is published — a crate with no suite is not finished.
+    it is published: a crate with no suite is not finished.
 
 
 ### Round 18, done
 
-- **`vat-rules 0.1.0` — the tax vocabulary both sides of a ledger share.**
+- **`vat-rules 0.1.0`: the tax vocabulary both sides of a ledger share.**
   Extracted from invoice-kit rather than duplicated, because AP needs the same
   UNCL5305 categories, CEF `VATEX-*` reasons, UNTDID 1001 codes and rounding
   regimes. Zero dependencies by design: `TieMode` is policy vocabulary, not
   arithmetic machinery, so a table of tax codes does not depend on a
   double-entry engine to say "round ties away from zero".
-- **`invoice-kit 0.2.0/0.2.1` — re-exports plus a real rounding fix.** The
+- **`invoice-kit 0.2.0/0.2.1`: re-exports plus a real rounding fix.** The
   0.2.1 finding matters more than the extraction: **the three Australian
   rounding modes were one algorithm wearing three names.** `GstTotalInvoice`
   rounded per (category, rate) group, so it was `En16931Group` with a different
   label, but GST Act s9-90's total-invoice method adds *unrounded* GST per
-  supply and rounds once — two lines of 5c at 10% and 5c at 30% are 3c per-group
+  supply and rounds once: two lines of 5c at 10% and 5c at 30% are 3c per-group
   and 2c total-invoice. Real money. `GstTaxableSupply` rounded per group, not
   per supply. Under a single rounding the breakdown cannot be built from
   independently-rounded groups and still satisfy BR-S-08/S-09, so the residual
@@ -209,13 +208,13 @@ in the *product* semantics, not the primitives. So the product starts now.
   a cent on negative ties: the tie comparison runs on the magnitude now, because
   truncation toward zero makes "which neighbour is even" ill-defined for a
   negative quotient. Six new tests; three fail against the previous code.
-- **`ap-kit 0.1.0/0.1.1` — accounts payable, where tax is a three-way split.**
+- **`ap-kit 0.1.0/0.1.1`: accounts payable, where tax is a three-way split.**
   A purchase bill produces three outcomes, not two, because the gross payable
   always includes the full tax whether or not Article 168 lets the business
   claim it back: payable (gross), deductible tax (asset), non-deductible tax
   (expense). Two documented asymmetries: recoverability never changes what is
   owed to the supplier; and the supplier's line net is **authoritative data**,
-  not a derivation — AP receives documents, it does not issue them. Rates above
+  not a derivation: AP receives documents, it does not issue them. Rates above
   100% are refused, because 19% entered as 1900 per-mille is a 190% posting no
   other check catches.
 - **The estate suite caught a half-done extraction on its first run**: ap-kit
@@ -236,14 +235,14 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 19, done
 
-- **`tests/ipc_stack.rs` — the IPC stack, clearing three debt crates at once.**
+- **`tests/ipc_stack.rs`: the IPC stack, clearing three debt crates at once.**
   `axum-stack 0.2.0` (health routes), `poolkit 0.1.2` (sqlite pool behind the
   `Any` facade) and `uds-kit 0.1.0` compose in the shape a real local service
   takes: HTTP over a Unix domain socket, backed by pooled storage, with a
   client that formats its own HTTP/1.0 frames because uds-kit is transport only.
 - The deadline tests run against live peers, not mocks: ENOENT must surface as
-  an immediate `UdsError::Io` and never as `ConnectTimeout` — collapsing the two
-  would make a misconfigured path indistinguishable from a hung one — and a
+  an immediate `UdsError::Io` and never as `ConnectTimeout`: collapsing the two
+  would make a misconfigured path indistinguishable from a hung one: and a
   peer that accepts and stays silent must hit the read deadline rather than the
   test timeout, which is the exact ClamAV-shaped hang the crate was written to
   close.
@@ -259,15 +258,15 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 20, done
 
-- **`tests/spreadsheet_diff.rs` — `sheet-xlsx 0.1.1` + `delta-kit 0.2.1`,
+- **`tests/spreadsheet_diff.rs`: `sheet-xlsx 0.1.1` + `delta-kit 0.2.1`,
   clearing two more debt crates.** A versioned spreadsheet needs two diffs that
   agree: the semantic one a user is shown, and the byte one history stores. The
-  suite computes both and closes the loop — the byte reconstruction is read
+  suite computes both and closes the loop: the byte reconstruction is read
   back through `read_xlsx` and its semantic diff must equal the original's,
   because byte equality alone proves only that two `Vec`s matched.
 - Documented rather than worked around: delta-kit has **no inverse in its
   API**. Undo is the forward delta from target back to base, computed at save
-  time before the old bytes are gone — an API-shaped fact worth writing down.
+  time before the old bytes are gone: an API-shaped fact worth writing down.
 - Corruption pinned at every cut point: a truncated delta is an error at 0,
   half, and len-1; the empty delta has its own variant; a delta applied to the
   wrong base must never silently pass as the target.

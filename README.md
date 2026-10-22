@@ -13,7 +13,7 @@ jobs:
   quality:
     uses: WyattAu/engineering-standards/.github/workflows/rust-kit.yml@main
     with:
-      tier: a        # a | b | c — selects coverage threshold + lint depth
+      tier: a        # a | b | c: selects coverage threshold + lint depth
 ```
 
 | Gate | Tier A | Tier B | Tier C |
@@ -21,7 +21,7 @@ jobs:
 | build `--locked` (all-features + no-default-features) | ✅ | ✅ | ✅ |
 | test `--all-features` | ✅ | ✅ | ✅ |
 | clippy `-D warnings` | ✅ + pedantic | ✅ | ✅ |
-| `unwrap_used` / `indexing_used` / `panic` denied | ✅ | — | — |
+| `unwrap_used` / `indexing_used` / `panic` denied | ✅ |: |: |
 | fmt `--check` | ✅ | ✅ | ✅ |
 | estate layer check (no upward L0–L3 deps) | ✅ | ✅ | ✅ |
 | feature-compatibility check | ✅ | ✅ | ✅ |
@@ -29,10 +29,10 @@ jobs:
 | cargo-audit (scheduled weekly) | ✅ | ✅ | ✅ |
 | llvm-cov | ≥90% | ≥80% | ≥70% (informational until 2026-10) |
 | cargo-semver-checks | ✅ on version diff | ✅ | ✅ |
-| criterion baseline regression | ✅ (latency-relevant) | optional | — |
-| loom (`--cfg loom` job) | ✅ (concurrency primitives) | — | — |
-| miri (pure-logic modules) | ✅ nightly job | — | — |
-| wasm32 check | ✅ if wasm claimed | — | — |
+| criterion baseline regression | ✅ (latency-relevant) | optional |: |
+| loom (`--cfg loom` job) | ✅ (concurrency primitives) |: |: |
+| miri (pure-logic modules) | ✅ nightly job |: |: |
+| wasm32 check | ✅ if wasm claimed |: |: |
 | thumbv7em check (`embedded: true`) | ✅ if no_std claimed | ✅ if no_std claimed | ✅ if no_std claimed |
 
 ## no_std / Embedded
@@ -51,7 +51,7 @@ jobs:
 ```
 
 Pattern: `#![cfg_attr(not(feature = "std"), no_std)]` + `extern crate alloc`,
-with a `std` feature (default-on) for std-bound surface area — gate whole
+with a `std` feature (default-on) for std-bound surface area: gate whole
 modules behind it rather than silently degrading behavior (e.g. webhookkit
 gates timestamp/replay/Stripe verification, which need a wall clock or std
 mutex). `alloc` has no `HashMap`; use `hashbrown` with `default-hasher`.
@@ -73,14 +73,13 @@ critical-section fallback elsewhere (see chronoshift's `MockClock`).
 | http-error (http-errors) | ✅ fixed | pure `#![no_std]` + alloc; unused deps removed |
 | json-envelope | ✅ fixed | pure `#![no_std]` + alloc; `axum` adapter now a real optional dep |
 | simd-tokenizer | ✅ fixed | SWAR estimator core-only; `tiktoken` implies `std` |
-| model-router | ⚠ std-bound | `std::sync::Mutex` in `CostTracker` — fixable via spin/critical-section lock swap (follow-up) |
+| model-router | ⚠ std-bound | `std::sync::Mutex` in `CostTracker`: fixable via spin/critical-section lock swap (follow-up) |
 | cas-kit | ⚠ std-bound | genuinely std-bound: filesystem blob store (`fs`, `Path`, `tempfile`) |
 
 ### Status update (2026-09-26)
 
 - **Gate adoption complete (2026-09):** every kit repository in the estate now
-  runs the shared `rust-kit.yml` matrix via one reusable-workflow call —
-  including the newest wave: metrics-kit, config-kit, idempotency-kit,
+  runs the shared `rust-kit.yml` matrix via one reusable-workflow call:   including the newest wave: metrics-kit, config-kit, idempotency-kit,
   outbox-kit, percentile-kit, chaos-kit, telemetry-init, worker-kit.
 - **cargo-vet enforcement is live:** the shared workflow's `vet` job
   (`cargo vet --locked`) fails CI on unaudited dependencies; kit repos carry a
@@ -99,21 +98,21 @@ critical-section fallback elsewhere (see chronoshift's `MockClock`).
   matching version bump **fails CI**.
 - **No publish without**: green gate matrix, `CHANGELOG.md` entry for the
   version, git tag `v<version>` matching `Cargo.toml`.
-- Release procedure: `scripts/release.sh <crate-dir> <version>` — bump,
+- Release procedure: `scripts/release.sh <crate-dir> <version>`: bump,
   changelog check, dry-run, semver-checks, tag, publish, registry verify.
 - MSRV floor: **1.85**. Exceptions require an entry below:
-  - `tantivy-helper` — 1.86 (tantivy 0.26 requirement)
+  - `tantivy-helper`: 1.86 (tantivy 0.26 requirement)
 
 #### Release provenance
 
 Releases carry a provenance note so any published artifact can be traced to
 source commit, toolchain, and artifact hash:
 
-- `scripts/verify-reproducible.sh <crate-dir>` — two from-scratch
+- `scripts/verify-reproducible.sh <crate-dir>`: two from-scratch
   `--release --locked` builds through identical sanitized paths, compared by
   SHA-256 of every artifact. Results in `REPRODUCIBILITY.md`. (Caveat:
   verifies same-machine determinism, not cross-machine reproducibility.)
-- `.github/workflows/attest.yml` — workflow_dispatch per crate: builds from
+- `.github/workflows/attest.yml`: workflow_dispatch per crate: builds from
   the kit repo ref, emits `SHA256SUMS` + `provenance/<crate>-<version>.json`
   (`{crate, version, commit, toolchain, hash, ...}`), commits them here, and
   attempts GitHub build attestation (best-effort; needs id-token perms).
@@ -151,7 +150,7 @@ source commit, toolchain, and artifact hash:
 ### 5. Performance (ECN/HFT discipline)
 
 - Latency-relevant crates publish **measured P50/P99** in their README
-  (benchmark: hardware, date, numbers) — claims without numbers are removed.
+  (benchmark: hardware, date, numbers): claims without numbers are removed.
 - Criterion baselines are committed on `main`; CI fails on regression >20%
   for P99 latency benches.
 - Hot paths are allocation-profiled (dhat). "Zero-alloc" claims require
@@ -178,11 +177,9 @@ source commit, toolchain, and artifact hash:
 - dependabot weekly. cargo-vet audits are **enforcing** via the shared
   workflow's `vet` job (`cargo vet --locked`, installed with
   `taiki-e/install-action`): every kit repo must carry a committed
-  `supply-chain/` plus a committed `Cargo.lock` (`--locked` requires it —
-  cargo-vet never generates one). New repos: run `cargo vet init` to
+  `supply-chain/` plus a committed `Cargo.lock` (`--locked` requires it:   cargo-vet never generates one). New repos: run `cargo vet init` to
   bootstrap `supply-chain/` from crates.io peer audits (mozilla, google,
-  isrg, bytecode-alliance, embark-studios, fermyon, zcash) —
-  `scripts/apply-standards.sh <repo>` does it automatically. Burn down any
+  isrg, bytecode-alliance, embark-studios, fermyon, zcash):   `scripts/apply-standards.sh <repo>` does it automatically. Burn down any
   exemption backlog surfaced by `cargo vet` before it turns the gate red.
 - Vendoring is a deliberate act: vendored copies get a drift-check script
   (see ecom-engine `scripts/check_vendor_drift.sh` pattern).
@@ -205,7 +202,7 @@ source commit, toolchain, and artifact hash:
   for unique primitives, product names for products.
 - The full rules, the decision flowchart, the grandfathered-name list, and
   the pending repo-rename commands live in
-  [`docs/naming-convention.md`](docs/naming-convention.md) — authoritative
+  [`docs/naming-convention.md`](docs/naming-convention.md): authoritative
   for every naming decision.
 
 ### 10. Feature Compatibility
@@ -213,34 +210,34 @@ source commit, toolchain, and artifact hash:
 - **An additive cargo feature must not gate a public API element.** Cargo
   unifies features graph-wide, so a feature-gated enum variant, `pub` struct
   field, match arm, or required trait method breaks any host that enables that
-  feature *anywhere* in the graph — usually an unrelated crate.
+  feature *anywhere* in the graph: usually an unrelated crate.
 - Legal additive shapes: a whole gated module, a whole gated type, a whole
   gated function, a gated trait method **with a default body**, or a field on
   a `#[non_exhaustive]` struct. Gating anything private or `pub(crate)` is
-  sound — no host can name it.
+  sound: no host can name it.
 - Enforced by the shared workflow's `feature-compat` job
   ([`scripts/check-features.py`](scripts/check-features.py), rules R1–R5).
   A deliberate exception needs an inline
-  `// feature-compat: allow — <reason>`; a reasonless `allow` is itself a
+  `// feature-compat: allow: <reason>`; a reasonless `allow` is itself a
   finding.
 - The rules, the reasoning, the R3 ownership subtlety, and the current estate
   findings live in
   [`docs/feature-compatibility.md`](docs/feature-compatibility.md).
 - The estate is **clean**: 0 findings across 33 repositories and 1,100+
   library files. The 16 the gate found on its first sweep were each fixed with
-  `#[non_exhaustive]` rather than a suppression — that attribute does not
+  `#[non_exhaustive]` rather than a suppression: that attribute does not
   merely silence the gate, it changes a future feature-gated variant from a
   silent downstream build break into one compile error that names the missing
   arm.
 
 ## Tier Definitions
 
-- **Tier A — Security-critical / load-bearing (14)**: tokenkit, cryptkit,
+- **Tier A: Security-critical / load-bearing (14)**: tokenkit, cryptkit,
   salting, webauthn-kit, multi-chain-wallet, barbican, validkit, breaker,
   throttle-kit, ws-kit, blobkit, decimal-money, healthkit, otelkit
-- **Tier B — Flagship infra (10)**: actor-kit, cas-kit, eventbus-kit,
+- **Tier B: Flagship infra (10)**: actor-kit, cas-kit, eventbus-kit,
   cache-pal, fetch-kit, media-kit, docs-pipeline, axum-stack, geo-kit, mailkit
-- **Tier C — Long tail**: everything else
+- **Tier C: Long tail**: everything else
 
 ## Adopting the Standards
 
@@ -259,7 +256,7 @@ benches) live alongside the shared call.
 
 ### Node/TS repositories (astro-solidjs, starlight, ts-package, ...)
 
-Proportionate gate matrix via the shared Node workflow — locked install,
+Proportionate gate matrix via the shared Node workflow: locked install,
 typecheck, lint, build, test:
 
 ```yaml
@@ -296,7 +293,7 @@ Status is a claim about *proof*, not about activity:
 
 | status | meaning |
 |---|---|
-| `core` | published **and** dogfooded — a consumer suite exact-pins one of its crates |
+| `core` | published **and** dogfooded: a consumer suite exact-pins one of its crates |
 | `support` | published, active, not yet composed by any suite |
 | `orphan` | published, neither composed nor recently active |
 | `dormant` | no meaningful activity; superseded or shelved |
@@ -313,7 +310,7 @@ The audit enforces four invariants, and fails CI on any of them:
 Beyond the schema it reports three classes of drift, which is what actually
 keeps 182 repos honest:
 
-- **pin drift** — a consumer tests an artifact nobody ships any more. This
+- **pin drift**: a consumer tests an artifact nobody ships any more. This
   is not hypothetical: the audit's first run found **17 stale pins** in
   `estate-integration`, all fixed, plus one `outbox-kit` pin held behind
   because `ledger-kit` could not consume the newer major. That hold has since
@@ -322,48 +319,48 @@ keeps 182 repos honest:
   so "held on purpose" is distinguishable from "nobody noticed".
 
   The audit has already paid for itself twice over. Its findings led
-  directly to two published releases — `billing-kit 0.2.0` (closing a
+  directly to two published releases: `billing-kit 0.2.0` (closing a
   decimal-money major split that made a price unpostable) and
-  `ledger-kit 0.1.1` (unblocking the outbox-kit pin) — and to one bug fix in
+  `ledger-kit 0.1.1` (unblocking the outbox-kit pin): and to one bug fix in
   `actor-kit`, where a suspended actor could never be resumed or stopped.
-- **coverage debt** — a published crate no suite composes (53 at last
+- **coverage debt**: a published crate no suite composes (53 at last
   count). Each round of `estate-integration` suites exists to retire some
   of this.
-- **dormancy** — a repo whose status claims activity its push history does
+- **dormancy**: a repo whose status claims activity its push history does
   not support.
 
 ## Repo Layout
 
-- `docs/naming-convention.md` — estate naming convention: the 6 rules,
+- `docs/naming-convention.md`: estate naming convention: the 6 rules,
   decision flowchart, domain-stack template, grandfathered names, and repo
   rename procedure
-- `docs/layers.md` — the L0–L3 layer model and its enforcement
-- `docs/feature-compatibility.md` — the additive-feature rule (R1–R5), the R3
+- `docs/layers.md`: the L0–L3 layer model and its enforcement
+- `docs/feature-compatibility.md`: the additive-feature rule (R1–R5), the R3
   ownership subtlety, and the current estate findings
-- `docs/cargo-vet.md` — the three sources of vet coverage, the four-step
+- `docs/cargo-vet.md`: the three sources of vet coverage, the four-step
   exemption repair order, and why the gate must not reimplement cargo-vet's
   coverage decision
-- `scripts/resync-vet-exemptions.py` — the `quality / vet` gate wrapper:
+- `scripts/resync-vet-exemptions.py`: the `quality / vet` gate wrapper:
   `--check` runs `cargo vet --locked` and reports failures actionably,
   `--write` appends exactly the exemptions cargo-vet says are missing
-- `.github/workflows/rust-kit.yml` — shared reusable CI (the Rust gate matrix)
-- `.github/workflows/node-ci.yml` — shared reusable CI (Node/TS gate matrix)
-- `.github/workflows/attest.yml` — per-crate release provenance (dispatch)
-- `scripts/check-layers.py` — L0–L3 layer checker (pure stdlib)
-- `scripts/check-features.py` — feature-compatibility checker (pure stdlib)
-- `scripts/test-check-features.py` — the checker's fixture self-test
-- `templates/deny.toml` — dependency governance config
+- `.github/workflows/rust-kit.yml`: shared reusable CI (the Rust gate matrix)
+- `.github/workflows/node-ci.yml`: shared reusable CI (Node/TS gate matrix)
+- `.github/workflows/attest.yml`: per-crate release provenance (dispatch)
+- `scripts/check-layers.py`: L0–L3 layer checker (pure stdlib)
+- `scripts/check-features.py`: feature-compatibility checker (pure stdlib)
+- `scripts/test-check-features.py`: the checker's fixture self-test
+- `templates/deny.toml`: dependency governance config
 - `templates/SECURITY.md`, `templates/THREAT-MODEL.md`,
   `templates/REQUIREMENTS.md`, `templates/CHANGELOG.md`
 - `templates/dependabot.yml` (cargo), `templates/dependabot-npm.yml` (npm)
-- `scripts/release.sh` — release automation
-- `scripts/verify-reproducible.sh` — same-machine build determinism check
-- `REPRODUCIBILITY.md` — reproducibility method, caveat, and results
-- `provenance/` — committed release provenance notes + SHA256SUMS
-- `scripts/apply-standards.sh` — bulk-apply templates to a kit repo
-- `estate.yml` — the estate manifest: one entry per repo (area, status,
+- `scripts/release.sh`: release automation
+- `scripts/verify-reproducible.sh`: same-machine build determinism check
+- `REPRODUCIBILITY.md`: reproducibility method, caveat, and results
+- `provenance/`: committed release provenance notes + SHA256SUMS
+- `scripts/apply-standards.sh`: bulk-apply templates to a kit repo
+- `estate.yml`: the estate manifest: one entry per repo (area, status,
   published crates, supersession pointers) plus any deliberately-held pins
-- `scripts/estate-audit.py` — verifies the manifest against GitHub,
+- `scripts/estate-audit.py`: verifies the manifest against GitHub,
   crates.io, and consumer pin sets; reports pin drift, coverage debt and
   dormancy, and fails on schema violations (`.github/workflows/estate-audit.yml`)
 ---
@@ -373,7 +370,7 @@ keeps 182 repos honest:
 The [Omni templates](https://github.com/WyattAu?tab=repositories&q=omni-template)
 are thin per-language scaffolds that consume these shared gates (rust-kit,
 node-ci, python-kit, go-kit, haskell-kit) and ship housekeeping pre-baked.
-The contract every template satisfies — and the coverage-tier table — lives
+The contract every template satisfies: and the coverage-tier table: lives
 in [OMNI-CORE.md](OMNI-CORE.md). `apply-standards.sh` (+ per-language
 variants `apply-standards-python.sh`, `apply-standards-go.sh`,
 `apply-standards-haskell.sh`) remain the idempotent re-application path for
@@ -384,10 +381,10 @@ derived repos.
 | Check | R / Rust | TS | Python | Go | Haskell | C++ | Flutter | Infra/Dotfiles |
 |---|---|---|---|---|---|---|---|---|
 | quality (reusable gate) | rust-kit tier a | node-ci | python-kit | go-kit | haskell-kit | test.yml | reusable-analyze | lint |
-| contract | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
-| devcontainer (image) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
-| msrv / matrix leg | ✅ (1.85) | — | ✅ (3.12+) | ✅ (oldstable) | ✅ (9.6/9.8) | — | — | — |
-| e2e / fuzz / size budgets | fuzz+bench | ✅ playwright | — | ✅ fuzz | — | — | — | plan |
+| contract | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |: | ✅ |
+| devcontainer (image) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |: | ✅ |
+| msrv / matrix leg | ✅ (1.85) |: | ✅ (3.12+) | ✅ (oldstable) | ✅ (9.6/9.8) |: |: |: |
+| e2e / fuzz / size budgets | fuzz+bench | ✅ playwright |: | ✅ fuzz |: |: |: | plan |
 
 Recipe: require the `quality` + `contract` checks, require 1 approval
 (self-owned repos: disable), require linear history, allow the marked
@@ -397,11 +394,11 @@ experimental legs to fail.
 
 The estate runs a monthly improvement loop against the market:
 
-- [LOOP.md](LOOP.md) — the loop itself (survey → matrix diff → implement →
+- [LOOP.md](LOOP.md): the loop itself (survey → matrix diff → implement →
   test → publish) and its log, plus the advisory-to-gate graduation policy.
-- [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md) — feature-by-feature
+- [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md): feature-by-feature
   matrix against the leading templates per language, with the backlog.
-- [PITFALLS.md](PITFALLS.md) — failure modes already paid for (Dependabot
+- [PITFALLS.md](PITFALLS.md): failure modes already paid for (Dependabot
   misreading toolchain refs, TypeScript 7 vs `astro check`, GHCR feature 401s,
   `mkdocs gh-deploy` vs workflow-built Pages, advisory-job semantics).
 

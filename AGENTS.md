@@ -1,6 +1,6 @@
-# AGENTS.md — instructions for AI coding agents
+# AGENTS.md: instructions for AI coding agents
 
-Project: **engineering-standards** — the shared contract, gates, and shared
+Project: **engineering-standards**: the shared contract, gates, and shared
 workflows every repo in the WyattAu estate derives from. Changes here move
 faster and further than anywhere else in the estate: this repo *is* the
 standard.
@@ -26,7 +26,7 @@ standard.
    an inline copy of a script. A gate that exists only in YAML is a gate a
    developer cannot run locally.
 6. **Decisions get ADRs** (`docs/adr/NNNN-*.md`): Status, Context, Decision,
-   Consequences. Superseding an ADR keeps the original text visible — the
+   Consequences. Superseding an ADR keeps the original text visible: the
    record of being wrong is more valuable than the record of being right.
 7. **Gates must be able to lie.** Any check whose result depends on the
    credential it runs with must prove it is entitled to the claim it makes
@@ -57,12 +57,12 @@ written for the next agent, not for the record.
 
 ## Gates owned here
 
-- `estate-audit` — manifest vs GitHub vs crates.io vs consumer pins
-- `llms.txt links` — no unresolved placeholders in any LLM contract
-- `one pin per action` — one SHA per action across loop-owned repos
-- `REUSE 3.3` — licensing compliance
-- `zizmor` — workflow security lint (advisory)
-- `scorecard` — OpenSSF posture (advisory)
+- `estate-audit`: manifest vs GitHub vs crates.io vs consumer pins
+- `llms.txt links`: no unresolved placeholders in any LLM contract
+- `one pin per action`: one SHA per action across loop-owned repos
+- `REUSE 3.3`: licensing compliance
+- `zizmor`: workflow security lint (advisory)
+- `scorecard`: OpenSSF posture (advisory)
 
 ## Stack
 
