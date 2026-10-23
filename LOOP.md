@@ -105,3 +105,10 @@ required to agree. Debt 11 → 9. Audit 197/169/88, 0 errors, 0 drift, 42 green.
 | 42 | 2026-10-18 | **Research iteration 9/10: runner hardening & cache poisoning** (docs/research/42-runner-hardening.md; OMNI-CORE 11j). Survey verified per repo: all six 
 
 | 43 | 2026-10-18 | **Research iteration 10/10: synthesis.** The ten-iteration research program (docs/research/PLAN.md) landed: reproducible-build gate v2 (.buildinfo + bytecode guard), OIDC-bound provenance on every distributable artifact, cooldown-based update policy (30/7/3/7), flaky-test policy (nextest isolation + reported retries, pytest-randomly), formal-verification hygiene (axiom audit + no-sorry gate; REQ-002 now proven), merge-queue readiness (merge_group triggers), SBOM + dependency-review PR gate, the agent-interface standard (one contract, many projections), and harden-runner audit mode on the four tag-triggered publishers (SHA resolved via the tags API: ccd8616d). Open triage: dependency-review on Dependabot PRs flags the group bumps (needs log triage -- probable license-resolution edge on action refs); estate-audit manifest re-sync after new estate repos; harden-runner audit->block flip after egress review. The research notes are the competitive delta: each records what the estate does that the references do not. |
+
+## Round 21 (2026-10-07)
+
+lead pipeline composed (contact-miner + geo-kit, storage gate), merged a
+concurrent suite for the same pair, resolved a rustc 1.95 toolchain requirement
+locally. Concurrent rounds cleared all remaining debt. Audit 227/195/124,
+0 errors, 0 drift, debt 0, 55 green.

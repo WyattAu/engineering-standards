@@ -272,6 +272,34 @@ in the *product* semantics, not the primitives. So the product starts now.
   wrong base must never silently pass as the target.
 - Debt 11 → 9, 88 exact pins, 42 test groups green, clippy clean, fmt clean.
 
+
+### Round 21, done
+
+- **`tests/lead_pipeline.rs` — `contact-miner 0.1.0` + `geo-kit 1.1.1`.**
+  A lead-gen pipeline mines contacts out of profile pages, validates them, and
+  files them with a postal address. The composition gate is the point: a lead
+  is stored only if its email validates **and** its postcode parses, and
+  neither crate can enforce that alone.
+- The fixture carries what real scraped pages carry, including an anti-bot
+  artifact planted in the bio — the validator's vendor-domain filter is what
+  keeps it out of the store, which is the crate's own knowledge proving itself
+  against a live fixture. `display_name` comes from `og:title` metadata, not
+  headings, which the first fixture got wrong and the parser correctly refused
+  to invent.
+- UK postcodes normalise on the way in (`S118PM` and `S11 8PM` land
+  identically); an impossible postcode closes the gate; coordinates are
+  validated before reaching a lead, and latitude beyond ±90 is refused while
+  (0, 0) — the scraper's "unknown" — is valid but documented as useless.
+- A concurrent agent shipped `tests/geo_contacts.rs` for the same pair; the
+  merge kept one pin set and both suites, which now cover the pair from
+  extraction and storage angles respectively.
+- Toolchain note: the merge brought `egui`/`comfyui-kit` pins requiring
+  rustc ≥ 1.95; the box's default was 1.94.1, so estate-integration now runs
+  under a directory-local override to 1.97.1. Global default untouched.
+- Debt reached **0** — the concurrent rounds cleared the rest. Estate at
+  227 repos, 195 crates, 124 exact pins across 3 consumer repos, 0 errors,
+  0 drift. 55 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
