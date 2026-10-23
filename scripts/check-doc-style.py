@@ -44,7 +44,12 @@ def check_file(path: pathlib.Path) -> list[str]:
     return findings
 
 
-SKIP_DIRS = {"target", "node_modules", ".git", "vendor", "dist", "build"}
+SKIP_DIRS = {"target", "node_modules", ".git", "vendor", "dist", "build", "reports"}
+# "reports" holds generated output: trendkit's weekly report records external
+# data verbatim (a dash inside a crates.io one-line description is that
+# project's punctuation, not this estate's prose), so rewriting it would
+# falsify the artifact. The generator is the thing to fix, not its output.
+
 
 
 def files_from(roots: list[pathlib.Path]) -> list[pathlib.Path]:
