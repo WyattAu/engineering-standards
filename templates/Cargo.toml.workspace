@@ -1,0 +1,27 @@
+# Cargo.toml.workspace-template: the stanza a repo adds when it grows a
+# second crate (docs/research/45, finding 1, as corrected). Until then a
+# single Cargo.toml needs none of this. signalkit is the in-estate reference
+# implementation; zed's pin-site comment rule (docs/research/46, section 2)
+# governs the entries: every non-obvious pin carries its reason and expiry.
+
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+# Inherited by every member: one place to bump the release, one place to
+# raise the MSRV. Per-crate `version` stays literal in member manifests when
+# the crates release independently.
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/WyattAu/<repo>"
+
+[workspace.dependencies]
+# Internal crates first: path + version, so the graph is exact inside the
+# repo and resolvable from the registry outside it.
+# <member-core> = { path = "crates/<member-core>", version = "0.1.0" }
+
+# External crates after, one entry each, with the pin-site comment when the
+# choice is not obvious:
+# image = { version = "1", default-features = false }  # decoder only; the AVIF encoder drags rav1e

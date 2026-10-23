@@ -114,5 +114,7 @@ repo's lockfile is present in its checkout). Same rebrand block as section
 1. rust-kit: MSRV matrix leg (section 3), advisory first loop.
 2. rust-kit: duplicate-majors advisory job (section 6).
 3. Kit template: pin-site comment examples from section 2.
-4. Deferred from study 45: workspace.dependencies centralization for the
-   five multi-crate repos, still the largest open item.
+4. Deferred from study 45, with its correction applied: workspace
+   centralization now applies to trendkit (in flight by its maintainer)
+   and to the kit template for any repo that grows a second crate.
+   signalkit is the in-estate reference implementation.

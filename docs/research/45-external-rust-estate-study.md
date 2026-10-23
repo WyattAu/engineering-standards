@@ -45,10 +45,15 @@ counter-examples prove the rule: nih-plug (0 entries; its 29 manifests are
 mostly per-example plugin crates) and cosmic-edit (a single crate) are not
 workspaces that share versions, because they have nothing to share.
 
-The estate's multi-crate repos (trendkit, healthkit, hw-kit, fetch-kit,
-signalkit) have zero `workspace = true` occurrences: each member crate pins
-its own versions, so the same external crate can drift between siblings
-inside one repo. This is the single highest-value adoption in this study.
+Correction (2026-10-23, same day): the estate-side claim below was measured
+wrong in scope. signalkit is already fully migrated (its root carries the
+full `[workspace.package]` and `[workspace.dependencies]` tables, members
+inherit with `.workspace = true`, and it runs workspace-level lints), and
+healthkit, hw-kit, and fetch-kit are single-crate repositories to which the
+practice does not apply. The estate's true multi-crate surface is trendkit
+(migration in flight by its maintainer) and any repo that later grows a
+second crate. signalkit is the in-estate reference implementation.
+
 The kit template should gain a `[workspace.dependencies]` stanza, and
 multi-crate repos should migrate member crates to `workspace = true` for
 external deps. Exact pins (`=x.y.z`) stay for estate-internal cross-repos;
