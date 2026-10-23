@@ -285,6 +285,16 @@ repos:
       last_push: "2026-10-07"
       recon-kit: 0.1.0
 
+  report-kit:
+    area: money
+    status: core
+    notes: "Trial balance and aging reports over double-entry (the estate's ledger crate). Per-currency by construction: the balance identity is checked per currency, and a ledger balanced in GBP and unbalanced in JPY is reported as exactly that. The accounting equation is a runtime check with the period's result still sitting in revenue and expense -- no closing entries are required for a truthful report. Aging buckets escalate on the promised date, never the issue date, per the item's own currency. The cut-off is a YYYY-MM-DD string comparison. Registered 2026-10-23 the day it appeared; composed the same day in estate-integration's reporting suite."
+    crates:
+      - report-kit
+    _seen:
+      last_push: "2026-10-23"
+      report-kit: 0.1.0
+
   vat-rules:
     area: money
     status: core
