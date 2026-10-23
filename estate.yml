@@ -288,12 +288,12 @@ repos:
   report-kit:
     area: money
     status: core
-    notes: "Trial balance and aging over a double-entry ledger. Per currency by construction \u2014 summing a GBP bank account with a JPY fee account is a number in no currency \u2014 with the accounting equation (assets + expenses = liabilities + equity + revenue) as a per-currency runtime check. Aging runs from the due date, not the issue date; abnormal balances are a predicate, not a normalization. Published 2026-10-07 with a reporting suite over the month-close ledger."
+    notes: "Trial balance and aging over a double-entry ledger. Per currency by construction \u2014 summing a GBP bank account with a JPY fee account is a number in no currency \u2014 with the accounting equation (assets + expenses = liabilities + equity + revenue) as a per-currency runtime check. Aging runs from the due date, not the issue date; abnormal balances are a predicate, not a normalization. Published 2026-10-07 with a reporting suite over the month-close ledger. 0.2.1 adds the P&L and balance sheet \u2014 one trial balance read two ways, the retained result carried where it actually is; 0.2.0 shipped without the module and is recorded as an error in its changelog."
     crates:
       - report-kit
     _seen:
       last_push: "2026-10-07"
-      report-kit: 0.1.0
+      report-kit: 0.2.1
 
   recon-kit:
     area: money
@@ -313,7 +313,7 @@ repos:
       - report-kit
     _seen:
       last_push: "2026-10-23"
-      report-kit: 0.1.0
+      report-kit: 0.2.1
 
   vat-rules:
     area: money

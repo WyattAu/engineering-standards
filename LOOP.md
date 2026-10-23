@@ -139,3 +139,10 @@ drift, debt 0, 58 green.
 vat-return born: the VAT return from the documents, deductible-only input tax,
 per-currency, tax-point filtered. The AR/AP/vat-rules triangle closes. Audit
 231/199/128, 0 errors, 0 drift, debt 0, 59 green.
+
+## Round 26 (2026-10-07)
+
+P&L + balance sheet in report-kit 0.2.1, one trial balance read two ways.
+0.2.0 shipped without the module — a silently failed edit and an unmoved test
+count — recorded in the changelog, fixed in 0.2.1. Audit 231/199/128, 0
+errors, 0 drift, debt 0, 59 green.

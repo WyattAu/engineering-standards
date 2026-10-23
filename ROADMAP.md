@@ -407,6 +407,33 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 231 repos, 199 crates, 128 pins, 0 errors, 0 drift, debt 0.
   59 test groups green, clippy clean, fmt clean.
 
+
+### Round 26, done
+
+- **`report-kit 0.2.1` — the P&L and the balance sheet, one trial balance read
+  two ways.** A balance sheet drawn mid-period does not satisfy
+  `assets == liabilities + equity`, because the period's profit is still
+  sitting in the revenue and expense accounts. The honest statement adds the
+  **retained result** where it actually is:
+  `assets == liabilities + equity + retained result`. The retained result is
+  the P&L's result by construction — both statements derive from one trial
+  balance, so a profit on the P&L that is missing from the balance sheet is a
+  bug the structure cannot express. `is_balanced` refuses to plug an
+  "unexplained difference" line.
+- **The process finding of the round: 0.2.0 shipped without the module.** The
+  statements file existed but was never declared in `lib.rs` — an edit whose
+  target string rustfmt had reordered failed silently, the file compiled into
+  nothing, and the release went out as 0.1.0 under a new number. The tell was
+  the test count: 8, not 13. Recorded in the changelog so nobody trusts the
+  version; the feature is 0.2.1. Lesson: a silent `str.replace` is not an
+  edit, and a test count that does not move when a feature lands is a feature
+  that did not land.
+- Estate suite pins the composition: the P&L result equals the balance
+  sheet's retained result, the sheet balances, and the revenue is the same
+  pennies invoice-kit priced.
+- Estate at 231 repos, 199 crates, 128 pins, 0 errors, 0 drift, debt 0.
+  59 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
