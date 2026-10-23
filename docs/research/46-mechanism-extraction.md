@@ -109,6 +109,42 @@ Wiring note: the check belongs as an advisory job in rust-kit (every kit
 repo's lockfile is present in its checkout). Same rebrand block as section
 3; both wire in after the rebrand lands.
 
+## 7. Profile matrices: evaluated and rejected, with the measurement
+
+rerun ships 13 cargo profiles (bench, web-release, debugging, dev-fast,
+each with package overrides) and zed overrides codegen-units per package;
+study 43 flagged this as adopt-selectively. The estate's heaviest consumer
+measured: `cargo test` over estate-integration's 54 suites runs 20 seconds
+wall, dominated by per-target linking (54 test binaries) rather than
+dependency execution. The rerun-style lever, `opt-level = 2` on
+dependencies, makes every dependency rebuild slower to speed up test
+execution that is already trivial, and does not touch link time at all.
+Neither condition that makes rerun's profiles pay (minutes-long dev builds,
+simulation-heavy test execution) holds in the estate. Rejected on the
+measurement; revisit if a suite ever runs compute over large inputs.
+
+Related measurement while there: kit CI already runs `cargo nextest run`
+(rust-kit.yml), so the local 20-second loop is a development convenience,
+not the gate path.
+
+## 8. Dependency-update bots: 3 of 13, and the strictest toolkit opts out
+
+Only lapce and slint run dependabot and zed runs renovate; the other ten
+flagships update dependencies by hand. slint's dependabot covers
+github-actions, uv, and npm but not cargo: the strictest toolkit in the
+corpus does not let a bot touch its Cargo.tomls. zed's renovate is
+human-gated (`dependencyDashboardApproval`), batches on a schedule
+(Wednesday after 3pm), groups monorepo ecosystems (serde, wasmtime), and
+pins action digests.
+
+The estate's template already covers cargo weekly with grouped
+minor-and-patch plus github-actions, which is more than slint does, and
+the estate's exact-pin discipline adds what no bot provides: every newer
+publication is caught by the audit's drift check and landed with the
+composition suites run against it (today: accessctl 0.1.1, comfyui-kit
+0.2.2, json-envelope 0.1.1, report-kit 0.2.1, all bumped with 434 tests
+green). Nothing to adopt; the estate's loop is the stricter bot.
+
 ## Open from this round
 
 1. rust-kit: MSRV matrix leg (section 3). Status: the check now exists as
