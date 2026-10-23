@@ -126,3 +126,10 @@ reconciliation is matching, not merging, so Suture has no role here. Audit
 report-kit born: trial balance + aging, per-currency by construction, with the
 accounting equation as a runtime check. Reporting suite over the month-close
 ledger. Audit 229/197/126, 0 errors, 0 drift, debt 0, 57 green.
+
+## Round 24 (2026-10-07)
+
+statement-ofx born: the OFX adapter feeding recon-kit, float-free amounts,
+sign-normalising at the boundary. OFX close suite in estate-integration,
+including the one-penny-drift regression. Audit 230/198/127, 0 errors, 0
+drift, debt 0, 58 green.

@@ -357,6 +357,31 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 229 repos, 197 crates, 126 pins, 0 errors, 0 drift, debt 0.
   57 test groups green, clippy clean, fmt clean.
 
+
+### Round 24, done
+
+- **`statement-ofx 0.1.0` — the OFX adapter feeding `recon-kit`.** Two
+  normalisations, performed exactly: signs become `Direction` at the boundary
+  (the invoice-side lesson applied to bank files), and decimal strings become
+  integer minor units **without a float anywhere on the path** — `0.07`
+  through a float is `6.999999999999999`, and which way that rounds decides
+  whether a statement line matches. More fraction digits than the declared
+  scale is an error, not a truncation: a truncated penny is a line that no
+  longer matches.
+- Recorded rather than papered over: OFX publishes the closing balance but not
+  the opening one, so the adapter derives it and the balance identity is
+  therefore trivial for this format — the truncated-import check that format
+  can offer is CAMT.053's, which carries both balances.
+- Scale is explicit because OFX does not declare it; JPY statements parse at
+  scale 0, and the default-2 assumption would have moved every decimal point
+  in the file.
+- The estate suite runs the whole close off a real-shaped OFX file — SGML's
+  unclosed tags, a MEMO-only transaction — and pins the zero-tolerance story:
+  one penny of drift in the bank's file stops the line matching at any window,
+  with both sides naming the discrepancy.
+- Estate at 230 repos, 198 crates, 127 pins, 0 errors, 0 drift, debt 0.
+  58 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

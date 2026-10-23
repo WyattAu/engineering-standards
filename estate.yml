@@ -265,6 +265,16 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  statement-ofx:
+    area: money
+    status: core
+    notes: "OFX 1.x bank-statement adapter producing recon-kit Statements. Signs become direction at the boundary; amounts go from decimal string to integer minor units without a float on the path (0.07 through a float is 6.999999999999999, and which way that rounds decides whether a line matches). OFX publishes the closing balance but not the opening, so the adapter derives it and records that the balance identity is trivial for this format. Scale is explicit because OFX does not declare it. Published 2026-10-07."
+    crates:
+      - statement-ofx
+    _seen:
+      last_push: "2026-10-07"
+      statement-ofx: 0.1.0
+
   report-kit:
     area: money
     status: core
