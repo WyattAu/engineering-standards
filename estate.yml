@@ -265,6 +265,16 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  vat-return:
+    area: money
+    status: core
+    notes: "VAT return boxes computed from the documents: AR invoices via invoice-kit, AP bills via ap-kit, vocabulary from vat-rules. Only deductible input tax reaches Box 4 \u2014 the crate takes bills, not numbers, so it cannot be handed a raw tax total by mistake; the non-deductible part's net still counts in Box 7. Currencies are refused rather than converted; a document outside the period is a loud error. Domestic reverse-charge filing rules out of scope and documented. Published 2026-10-07."
+    crates:
+      - vat-return
+    _seen:
+      last_push: "2026-10-07"
+      vat-return: 0.1.0
+
   statement-ofx:
     area: money
     status: core

@@ -382,6 +382,31 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 230 repos, 198 crates, 127 pins, 0 errors, 0 drift, debt 0.
   58 test groups green, clippy clean, fmt clean.
 
+
+### Round 25, done
+
+- **`vat-return 0.1.0` — the AR/AP/vat-rules triangle closes.** The VAT return
+  computed from the documents themselves, and the rule the crate exists to
+  enforce: **only deductible input tax reaches Box 4.** A bill's gross
+  includes tax the business may never reclaim (Article 168), and returns that
+  net it into the box are overclaims — small per line, systematic, expensive
+  when an authority finds them. The crate takes bills, not numbers, so it
+  cannot be handed a raw tax total by mistake; the non-deductible part's net
+  still counts in Box 7, because the cost is a purchase even when the tax is
+  not reclaimable.
+- Currencies are refused rather than converted — a wrong FX rate in a tax
+  filing is worse than a missing filing. A document outside the period is a
+  loud error, because a wrongly pre-filtered return shifts tax between periods
+  silently.
+- Reverse charge contributes net to Box 6 and no tax to Box 1 — what EN 16931
+  puts on the document. UK domestic reverse-charge filing rules are out of
+  scope and documented, rather than half-guessed.
+- The estate suite runs a whole quarter period-by-period: July's £24,000
+  output tax, August's half-deductible bill, September's reverse-charge sale —
+  and Box 1 is asserted to be the same tax the invoices charged, to the penny.
+- Estate at 231 repos, 199 crates, 128 pins, 0 errors, 0 drift, debt 0.
+  59 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

@@ -133,3 +133,9 @@ statement-ofx born: the OFX adapter feeding recon-kit, float-free amounts,
 sign-normalising at the boundary. OFX close suite in estate-integration,
 including the one-penny-drift regression. Audit 230/198/127, 0 errors, 0
 drift, debt 0, 58 green.
+
+## Round 25 (2026-10-07)
+
+vat-return born: the VAT return from the documents, deductible-only input tax,
+per-currency, tax-point filtered. The AR/AP/vat-rules triangle closes. Audit
+231/199/128, 0 errors, 0 drift, debt 0, 59 green.
