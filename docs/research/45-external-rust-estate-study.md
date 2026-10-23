@@ -108,11 +108,16 @@ link-bearing crates to the whole watchlist.
 thiserror + anyhow is universal. Beyond that: loom (zed, rerun, cosmic),
 miri in CI (zed, slint), proptest (zed), insta snapshots (rerun), criterion
 benches (lapce, rerun, zed), arbitrary (slint, rnote, nih-plug). The estate's
-suites already run miri and loom on tier-A crates via rust-kit; the gaps are
-snapshot testing (insta, a fit for docs-core and theme renderers where the
-current style is hand-written expected strings) and property testing
-(proptest, a fit for the parsers: sheet-xlsx, a2l-parse, dbc-parse). Advisory;
-adopt where a concrete flake or coverage gap appears, not as a blanket rule.
+suites already run miri and loom on tier-A crates via rust-kit.
+
+Correction (2026-10-23, same day): the adoption suggestion below the line
+was measured wrong. The estate's parsers already run proptest round-trips
+(a2l-parse, sheet-xlsx, cal-model, formula-lang, simd-tokenizer, dbc-parse
+all carry property suites; dbc-parse pins encode/decode bit-exactness over
+500 cases per property). The only genuinely unadopted piece is insta, and
+per the study's own rule it stays unadopted until a concrete flake or
+coverage gap appears: a snapshot dependency added without a snapshot
+problem is cargo culting.
 
 ## Finding 7: COSMIC is the counter-model to the estate's composition doctrine
 

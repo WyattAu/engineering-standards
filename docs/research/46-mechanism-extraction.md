@@ -111,10 +111,21 @@ repo's lockfile is present in its checkout). Same rebrand block as section
 
 ## Open from this round
 
-1. rust-kit: MSRV matrix leg (section 3), advisory first loop.
-2. rust-kit: duplicate-majors advisory job (section 6).
-3. Kit template: pin-site comment examples from section 2.
+1. rust-kit: MSRV matrix leg (section 3). Status: the check now exists as
+   `scripts/check-msrv.py` (missing/non-canonical block; above-floor is
+   informational; forks, orphans, and dormant repos are exempt as upstream
+   trees). Baseline: 57 estate-authored repos declare rust-version, all
+   canonical at 1.85, with five repos legitimately above floor and listed.
+   Wiring into rust-kit is blocked by the rebrand's unstaged rust-kit.yml
+   edits.
+2. rust-kit: duplicate-majors advisory job (section 6). Same wiring block.
+3. Kit template: pin-site comment examples from section 2; landed as
+   `templates/Cargo.toml.workspace` with the workspace stanza.
 4. Deferred from study 45, with its correction applied: workspace
    centralization now applies to trendkit (in flight by its maintainer)
    and to the kit template for any repo that grows a second crate.
    signalkit is the in-estate reference implementation.
+5. process: research-note numbering collided twice in one day (two
+   independent 44s, then two 45s and two 46s). Distinct slugs keep the
+   files findable, but the loop should either allocate numbers centrally
+   or drop the numeric prefix; pick one at the next loop review.
