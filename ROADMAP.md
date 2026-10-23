@@ -300,6 +300,37 @@ in the *product* semantics, not the primitives. So the product starts now.
   227 repos, 195 crates, 124 exact pins across 3 consumer repos, 0 errors,
   0 drift. 55 test groups green, clippy clean, fmt clean.
 
+
+### Round 22, done
+
+- **`recon-kit 0.1.0` — bank statements and a matching engine that proposes
+  instead of guessing.** Three deliberate absences: no format parsing (OFX,
+  CAMT.053 and the forty CSV dialects are adapters; the model beneath them is
+  format-independent), no tolerance (exact integer comparison only — a
+  one-cent allowance hides drift that compounds while the recon report looks
+  clean), and no silent auto-matching (`Proposal::Ambiguous` surfaces both
+  candidates instead of picking one; a wrong auto-match misattributes money in
+  the books while the reconciliation still balances, so nothing downstream
+  ever catches it).
+- Direction is a value, not a sign — the invoice-side lesson applied to
+  statements. OFX signs amounts, CAMT carries an indicator;
+  `Direction::from_signed` normalises at the boundary and the sign convention
+  never reaches the engine.
+- The balance identity (`opening + Σ(±lines) == closing`) is the import check,
+  because a bank guarantees it — so a violation means the import lost lines,
+  which is exactly the failure that looks like fine individual rows. Day
+  arithmetic is Hinnant's `days_from_civil`, pinned against leap years and
+  century boundaries.
+- The estate suite runs a real month-end close: invoice-kit prices the
+  invoices, double-entry posts the settlements, the statement matches against
+  the postings, and the leftovers split into in-transit lines versus
+  unrecorded entries — opposite kinds of follow-up. The follow-through test
+  enters the missing card charge and re-closes: the ledger's movement then
+  equals the statement's movement to the penny. And matching never mutates the
+  ledger, because the close is a report.
+- Estate at 228 repos, 196 crates, 125 pins, 0 errors, 0 drift, debt 0.
+  56 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

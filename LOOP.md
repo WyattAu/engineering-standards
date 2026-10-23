@@ -112,3 +112,11 @@ lead pipeline composed (contact-miner + geo-kit, storage gate), merged a
 concurrent suite for the same pair, resolved a rustc 1.95 toolchain requirement
 locally. Concurrent rounds cleared all remaining debt. Audit 227/195/124,
 0 errors, 0 drift, debt 0, 55 green.
+
+## Round 22 (2026-10-07)
+
+recon-kit born: statement types + a proposing matching engine, published with a
+double-entry month-close estate suite. The Suture evaluation is also closed:
+bank statements are append-only external facts, not mergeable documents —
+reconciliation is matching, not merging, so Suture has no role here. Audit
+228/196/125, 0 errors, 0 drift, debt 0, 56 green.

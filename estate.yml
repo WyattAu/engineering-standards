@@ -265,6 +265,16 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  recon-kit:
+    area: money
+    status: core
+    notes: "Bank statement types and a matching engine for reconciling statements against a ledger. No format parsing (OFX/CAMT adapters are separate), no tolerance (exact integer comparison only), no silent auto-matching (ambiguity is surfaced, never resolved). Direction is a value, not a sign \u2014 OFX's signed amounts normalise at the boundary. The balance identity is the import check that catches a truncated import. Published 2026-10-07 with a double-entry month-close suite."
+    crates:
+      - recon-kit
+    _seen:
+      last_push: "2026-10-07"
+      recon-kit: 0.1.0
+
   vat-rules:
     area: money
     status: core
