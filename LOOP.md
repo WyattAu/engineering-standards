@@ -120,3 +120,9 @@ double-entry month-close estate suite. The Suture evaluation is also closed:
 bank statements are append-only external facts, not mergeable documents —
 reconciliation is matching, not merging, so Suture has no role here. Audit
 228/196/125, 0 errors, 0 drift, debt 0, 56 green.
+
+## Round 23 (2026-10-07)
+
+report-kit born: trial balance + aging, per-currency by construction, with the
+accounting equation as a runtime check. Reporting suite over the month-close
+ledger. Audit 229/197/126, 0 errors, 0 drift, debt 0, 57 green.

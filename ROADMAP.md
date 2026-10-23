@@ -331,6 +331,32 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 228 repos, 196 crates, 125 pins, 0 errors, 0 drift, debt 0.
   56 test groups green, clippy clean, fmt clean.
 
+
+### Round 23, done
+
+- **`report-kit 0.1.0` — the trial balance and aging, per currency by
+  construction.** Summing a GBP bank account with a JPY fee account is a
+  number in no currency; the double-entry invariant is stated per posting, so
+  debits-equal-credits is checked per currency, and a ledger balanced in GBP
+  and unbalanced in JPY is reported as exactly that.
+- The accounting equation (`assets + expenses == liabilities + equity +
+  revenue`) is a runtime check at any cut-off. It holds without closing
+  entries because the period's result is still sitting in the revenue and
+  expense accounts — a violation means the report was built over something
+  that is not a balanced ledger, and the correct response is to stop, never
+  to fudge a row.
+- Aging runs from the **due date**, not the issue date: net-60 terms are
+  current for two months, and aging from issue would show a healthy customer
+  as sixty days late. Abnormal balances are a predicate, not a normalization —
+  a credit balance on a bank account is an overdraft, a real state a reader
+  can find.
+- The estate suite pins the composition's quiet invariant: the aging
+  population derived from the invoices equals the debtor balance derived from
+  the postings. If they ever disagree, an invoice was never posted or a
+  payment was never applied — visible, never averaged away.
+- Estate at 229 repos, 197 crates, 126 pins, 0 errors, 0 drift, debt 0.
+  57 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

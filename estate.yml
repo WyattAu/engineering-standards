@@ -265,6 +265,16 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  report-kit:
+    area: money
+    status: core
+    notes: "Trial balance and aging over a double-entry ledger. Per currency by construction \u2014 summing a GBP bank account with a JPY fee account is a number in no currency \u2014 with the accounting equation (assets + expenses = liabilities + equity + revenue) as a per-currency runtime check. Aging runs from the due date, not the issue date; abnormal balances are a predicate, not a normalization. Published 2026-10-07 with a reporting suite over the month-close ledger."
+    crates:
+      - report-kit
+    _seen:
+      last_push: "2026-10-07"
+      report-kit: 0.1.0
+
   recon-kit:
     area: money
     status: core
