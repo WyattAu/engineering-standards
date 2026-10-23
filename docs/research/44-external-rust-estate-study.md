@@ -1,11 +1,13 @@
 # External Rust estate study: what flagship Rust projects standardize, and where the estate stands
 
-Date: 2026-10-23. Method: shallow clones (`--depth 1`) of 12 flagship Rust
+Date: 2026-10-23. Method: shallow clones (`--depth 1`) of 13 flagship Rust
 repositories into `/home/wyatt/dev/reference/`, measured by a metrics script
 (manifests, workspace tables, lockfiles, workflows) plus manual reading of the
 workspace roots, CI, and crate layout. All numbers below are from the cloned
 HEAD on that date; the repos move daily, so treat figures as scale markers,
-not exact contracts.
+not exact contracts. Note: the first clone attempt of sniffnet failed on an
+owner-name typo (GyulyVGF); the correct repository is
+`GyulyVGC/sniffnet`.
 
 Requested but not found: "glowwave synth" does not exist on GitHub as a Rust
 synthesizer. The only repositories matching the name are unrelated (a 0-star
@@ -29,6 +31,7 @@ quietly study something else.
 | [rnote](https://github.com/flxzt/rnote) | 54,647 | 5 | 66 | 571 | sketch app; engine/app split |
 | [nih-plug](https://github.com/robbert-vdh/nih-plug) | 43,757 | 29 | 0 | 721 | VST/CLAP plugin framework |
 | [neovide](https://github.com/neovide/neovide) | 37,497 | 2 | 0 | 436 | Neovim GUI |
+| [sniffnet](https://github.com/GyulyVGC/sniffnet) | 35,494 | 2 | 2 | 701 | network monitor; single-crate app done carefully |
 | [cosmic-files](https://github.com/pop-os/cosmic-files) | 27,652 | 3 | 2 | 914 | COSMIC file manager (app reference) |
 | [cosmic-edit](https://github.com/pop-os/cosmic-edit) | 6,706 | 1 | 0 | 906 | COSMIC editor (minimal app reference) |
 
@@ -72,10 +75,11 @@ Fyrox, vizia, libcosmic do not). No change needed; this is confirmation.
 
 ## Finding 4: the estate's gate battery leads the field
 
-None of the 12 reference repos runs `cargo-semver-checks`, `cargo-deny`, or
+None of the 13 reference repos runs `cargo-semver-checks`, `cargo-deny`, or
 `cargo-vet` in the workflows on their default branch. The strongest CI seen:
 slint (MSRV job, miri, clippy `-D warnings`), zed (miri, nextest, scorecard),
-rerun (cargo-hack across features, 50 workflows), neovide (nextest). The
+rerun (cargo-hack across features, 50 workflows), sniffnet (cargo-hack,
+clippy deny-warnings), neovide (nextest). The
 estate runs semver-checks, vet, clippy deny-warnings, a feature matrix, the
 estate audit, pin consistency, llms.txt links, and doc-style, advisory or
 blocking per LOOP doctrine. Conclusion: keep investing in gates; this is
