@@ -315,6 +315,14 @@ repos:
       last_push: "2026-10-23"
       report-kit: 0.2.1
 
+  graphify:
+    area: dx
+    status: support
+    notes: "Turns a codebase (docs, SQL schemas, configs, PDFs) into a queryable knowledge base. A Python project (pyproject.toml, uv.lock), not a Rust crate. The crates.io crate of the same name is an unrelated 2016 graph library that has sat in this account's namespace since before the estate existed; the audit pairs them because both match the name, but the 2016 crate is not the account's and not a publication of this repo (the owner-id check rejects it). Repo registered 2026-10-23 the day it appeared."
+    crates: []
+    _seen:
+      last_push: "2026-10-23"
+
   vat-rules:
     area: money
     status: core
