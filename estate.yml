@@ -363,6 +363,26 @@ repos:
       last_push: "2026-10-24"
       fx-kit: 0.1.0
 
+  group-kit:
+    area: money
+    status: core
+    notes: "Multi-entity consolidation over the double-entry stack: intercompany matching that surfaces mismatches instead of guessing, eliminations that must cancel (a non-cancelling elimination is surfaced, never absorbed), same-currency matching first. The group close sits above the entity close (recon-kit -> report-kit -> group-kit). Registered 2026-10-24."
+    crates:
+      - group-kit
+    _seen:
+      last_push: "2026-10-24"
+      group-kit: 0.1.0
+
+  bizkit:
+    area: research
+    status: support
+    notes: "Business-trend crawler: SEC EDGAR M&A and funding signals, scored into an investment-by-risk idea taxonomy. The EDGAR sibling of trendkit's GitHub/crates.io/HN crawler family. Registered 2026-10-24."
+    crates:
+      - bizkit
+    _seen:
+      last_push: "2026-10-24"
+      bizkit: 0.1.0
+
   vat-rules:
     area: money
     status: core
