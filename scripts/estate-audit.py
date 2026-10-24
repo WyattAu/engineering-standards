@@ -130,6 +130,8 @@ COVERAGE_EXEMPT = {
     # the facades themselves are exercised by their own repos' CI. Recorded
     # 2026-10-21 when the coverage ledger was driven to zero otherwise.
     "skillkit": "CLI facade, no lib target; its library members are pinned directly (skillkit-core, skillkit-store)",
+    "bizkit": "CLI facade, no lib target; bizkit-core is composed by the sqlite-side graph's EDGAR suite (estate-integration)",
+    "bizkit-core": "composed by the sqlite-side graph (tests/bizkit_edgar.rs), which the CONSUMERS audit reads as estate-integration@HEAD:sqlite-side",
     "trendkit": "CLI facade, no lib target; its library members are pinned directly (trendkit-core, trendkit-profile)",
 }
 
