@@ -379,6 +379,7 @@ repos:
     notes: "Business-trend crawler: SEC EDGAR M&A and funding signals, scored into an investment-by-risk idea taxonomy. The EDGAR sibling of trendkit's GitHub/crates.io/HN crawler family. Registered 2026-10-24."
     crates:
       - bizkit
+      - bizkit-core
     _seen:
       last_push: "2026-10-24"
       bizkit: 0.1.0
