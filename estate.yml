@@ -333,6 +333,16 @@ repos:
     _seen:
       last_push: "2026-10-23"
 
+  statement-camt:
+    area: money
+    status: core
+    notes: "ISO 20022 CAMT.053 bank statement adapter producing recon-kit Statements: both balances (opening/closing) verified against the entries, booked-only entries, sign-normalised at the boundary. The first of recon-kit's declared external-format adapters (its notes reserved OFX/CAMT to separate crates). Depends on recon-kit =0.1.0. Registered 2026-10-24, round 27."
+    crates:
+      - statement-camt
+    _seen:
+      last_push: "2026-10-24"
+      statement-camt: 0.1.0
+
   vat-rules:
     area: money
     status: core
