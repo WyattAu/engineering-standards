@@ -92,12 +92,14 @@ def publish(repo: str, name: str, token: str | None, dry_run: bool) -> bool:
         # FAILURE: the caller must commit the manifest/lock first, or the
         # publish silently does not happen (this exact bug shipped 0.1.1
         # an hour late on October 23).
+        # Already-published is terminal success; registry races retry.
+        # Everything else — including a dirty-tree refusal, whose message
+        # mentions --allow-dirty — is a FAILURE. A substring match once
+        # treated that refusal as success and reported a publish that never
+        # happened (ui-text-edit 0.1.2, October 2026).
         if "already exists" in out or "already uploaded" in out:
             print(f"  {name}: already on crates.io")
             return True
-        if "uncommitted" in out or "--allow-dirty" in out:
-            print(f"  {name}: refused — uncommitted changes; commit and re-run", file=sys.stderr)
-            return False
         print(f"  {name}: attempt {attempt} failed, retrying in 20s", file=sys.stderr)
         time.sleep(20)
     print(f"  {name}: FAILED after 3 attempts", file=sys.stderr)
