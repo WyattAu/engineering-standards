@@ -343,6 +343,16 @@ repos:
       last_push: "2026-10-24"
       statement-camt: 0.1.0
 
+  fx-kit:
+    area: money
+    status: core
+    notes: "Currency revaluation per IAS 21: exact rational rates, closing-rate restatement of monetary items, unrealized gain/loss with the posting split. The foreign-exchange leg of the double-entry stack (statement-camt imports the facts; fx-kit restates them when currencies move). Registered 2026-10-24."
+    crates:
+      - fx-kit
+    _seen:
+      last_push: "2026-10-24"
+      fx-kit: 0.1.0
+
   vat-rules:
     area: money
     status: core
