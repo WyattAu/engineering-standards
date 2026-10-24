@@ -457,6 +457,31 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 233 repos, 200 crates, 129 pins, 0 errors, 0 drift, debt 0.
   60 test groups green, clippy clean, fmt clean.
 
+
+### Round 28, done
+
+- **`fx-kit 0.1.0` — IAS 21 revaluation, exact rational rates.** An FX rate
+  is a rational number, and every float on the path from quoted rate to
+  posted difference corrupts it; a thousand-row revaluation turns "not" into
+  visible pennies of phantom gain. Rates parse from decimal strings into
+  exact reduced rationals; restatement multiplies in i128 and rounds **once**
+  at the final division, tie mode explicit. Monetary items only — the type
+  name makes passing non-monetary items a type error, not a silent
+  misstatement. Base-currency rows and missing rates are errors, not 1:1 or
+  zero.
+- The estate suite pins the idempotence property that matters: re-running the
+  revaluation against the updated booked amounts produces **zero** — the
+  classic double-revaluation bug is a second gain, and nothing downstream
+  catches it. The ledger test posts the differences and proves debits still
+  equal credits afterwards.
+- Finding recorded (not fixed — owner's call): `hw_pinned_hotpath`'s timing
+  tolerance flakes ~1-in-3 under build load (median vs fastest 2x drift).
+- Environment note: a concurrent agent's stricter audit methodology
+  (CONSUMERS list, branch-ref consumers, a sqlite-side split manifest) landed
+  mid-round; the transitional audit shape is theirs to settle.
+- Estate at 234 repos, 201 crates. 61 test groups green, clippy clean, fmt
+  clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

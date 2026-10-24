@@ -275,6 +275,16 @@ repos:
       last_push: "2026-10-07"
       vat-return: 0.1.1
 
+  fx-kit:
+    area: money
+    status: core
+    notes: "Currency revaluation per IAS 21. Rates are exact reduced rationals parsed from decimal strings \u2014 floats never touch the path from quoted rate to posted difference; restatement multiplies in i128 and rounds once at the final division, tie mode explicit. Monetary items only (non-monetary stay historical, and the type name makes the wrong class a type error); base-currency rows and missing rates are errors, not silent no-ops. Per-currency difference split for the accounts note. Published 2026-10-24."
+    crates:
+      - fx-kit
+    _seen:
+      last_push: "2026-10-24"
+      fx-kit: 0.1.0
+
   statement-camt:
     area: money
     status: core

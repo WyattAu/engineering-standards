@@ -153,3 +153,9 @@ statement-camt born: both balances verified on arrival, the truncated-import
 check OFX cannot offer. Estate reconciled the release wave (6 pins, one
 republish of vat-return against invoice-kit 1.0.0). Audit 233/200/129,
 0 errors, 0 drift, debt 0, 60 green.
+
+## Round 28 (2026-10-24)
+
+fx-kit born: IAS 21 revaluation with exact rational rates, one rounding at the
+final division, idempotence pinned. Audit 234/201, transitional shape from the
+concurrent audit-methodology rework, 61 green.
