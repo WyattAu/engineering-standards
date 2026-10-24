@@ -146,3 +146,10 @@ P&L + balance sheet in report-kit 0.2.1, one trial balance read two ways.
 0.2.0 shipped without the module — a silently failed edit and an unmoved test
 count — recorded in the changelog, fixed in 0.2.1. Audit 231/199/128, 0
 errors, 0 drift, debt 0, 59 green.
+
+## Round 27 (2026-10-24)
+
+statement-camt born: both balances verified on arrival, the truncated-import
+check OFX cannot offer. Estate reconciled the release wave (6 pins, one
+republish of vat-return against invoice-kit 1.0.0). Audit 233/200/129,
+0 errors, 0 drift, debt 0, 60 green.

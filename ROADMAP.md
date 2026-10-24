@@ -434,6 +434,29 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 231 repos, 199 crates, 128 pins, 0 errors, 0 drift, debt 0.
   59 test groups green, clippy clean, fmt clean.
 
+
+### Round 27, done
+
+- **`statement-camt 0.1.0` — the balance identity with teeth.** OFX derives
+  the opening balance, which makes the balance identity trivially true and
+  the truncated-import check inert. CAMT.053 carries both balances
+  (`OPBD`/`CLBD`), so the adapter reads them at face value and an import that
+  loses an entry fails **on arrival** with `BalanceIdentityFailed` naming all
+  three numbers. The estate suite proves the contrast: dropping an entry from
+  the CAMT file while keeping the declared balances is refused with the
+  numbers; the same loss in OFX is invisible.
+- Booked entries only: a `PDNG` entry is money the bank has seen but may
+  still reverse; a missing status block fails closed. Signs come from the
+  format's own `CdtDbtInd`. Namespace-agnostic across `camt.053.001.02–.08`.
+- The estate also reconciled the 2026-10-23 release wave: six pin bumps
+  (`invoice-kit 1.0.0` and `ledger-kit 1.0.0` are API-stability signals on
+  unchanged surfaces), and one real break that was graph-shaped —
+  `vat-return` bound `invoice-kit 0.2.1` while the estate moved to 1.0.0,
+  carrying two non-interoperable `Invoice` types. `vat-return 0.1.1`
+  republishes against 1.0.0.
+- Estate at 233 repos, 200 crates, 129 pins, 0 errors, 0 drift, debt 0.
+  60 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

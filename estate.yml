@@ -273,7 +273,17 @@ repos:
       - vat-return
     _seen:
       last_push: "2026-10-07"
-      vat-return: 0.1.0
+      vat-return: 0.1.1
+
+  statement-camt:
+    area: money
+    status: core
+    notes: "ISO 20022 CAMT.053 adapter producing recon-kit Statements. The format the model was waiting for: OPBD and CLBD balance blocks are read from the document, so an import that loses an entry fails on arrival with BalanceIdentityFailed naming all three numbers \u2014 the truncated-import check OFX structurally cannot offer. Booked entries only; pending and memo entries excluded; a missing status block fails closed. Namespace-agnostic across camt.053.001.02\u2013.08. Published 2026-10-07."
+    crates:
+      - statement-camt
+    _seen:
+      last_push: "2026-10-07"
+      statement-camt: 0.1.0
 
   statement-ofx:
     area: money
