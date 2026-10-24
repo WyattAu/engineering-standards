@@ -165,3 +165,12 @@ green). Nothing to adopt; the estate's loop is the stricter bot.
    independent 44s, then two 45s and two 46s). Distinct slugs keep the
    files findable, but the loop should either allocate numbers centrally
    or drop the numeric prefix; pick one at the next loop review.
+6. process, measured 2026-10-24: a continuously publishing round makes
+   continuous drift-draining impossible. The day's waves went 15 -> 27
+   -> swept to 4 -> back to 9 -> swept to 2 -> back to 9 within hours;
+   every sweep was overtaken before its commit landed. The audit treats
+   drift as a reported work item and exits 0, and the composition suites
+   stay green on their pinned set, so nothing is broken while the queue
+   stands. The closing step of a publishing round should be one pin-bump
+   sweep against the final state, which converges in a single pass;
+   draining mid-round is motion without progress.
