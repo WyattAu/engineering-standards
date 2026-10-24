@@ -88,10 +88,16 @@ def publish(repo: str, name: str, token: str | None, dry_run: bool) -> bool:
         out = proc.stdout + proc.stderr
         if proc.returncode == 0:
             return True
-        # Already-published and dirty-tree are terminal; registry races retry.
-        if "already exists" in out or "uncommitted" in out or "already uploaded" in out:
-            print(f"  {name}: {out.strip().splitlines()[-1][:120] if out.strip() else 'skipped'}")
+        # Already-published is terminal success. A dirty tree is terminal
+        # FAILURE: the caller must commit the manifest/lock first, or the
+        # publish silently does not happen (this exact bug shipped 0.1.1
+        # an hour late on October 23).
+        if "already exists" in out or "already uploaded" in out:
+            print(f"  {name}: already on crates.io")
             return True
+        if "uncommitted" in out or "--allow-dirty" in out:
+            print(f"  {name}: refused — uncommitted changes; commit and re-run", file=sys.stderr)
+            return False
         print(f"  {name}: attempt {attempt} failed, retrying in 20s", file=sys.stderr)
         time.sleep(20)
     print(f"  {name}: FAILED after 3 attempts", file=sys.stderr)
