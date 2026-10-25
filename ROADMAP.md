@@ -520,6 +520,34 @@ in the *product* semantics, not the primitives. So the product starts now.
   loop's crates. 64 test groups green, clippy clean, fmt clean. ~40 remaining
   drift entries are the concurrent wave's own pins, owned by their publishers.
 
+
+### Round 31, done
+
+- **`vat-mtd 0.1.0` — the HMRC MTD VAT contract, deliberately not an HTTP
+  client.** Coupling a tax contract to a framework choice makes the contract
+  harder to test and the framework harder to change; every type serialises
+  with serde, so a transport is a few lines at the call site and the
+  contract's tests are fixture-exact.
+- Money goes from integer minor units to 2dp decimal strings by **integer
+  division and a zero-padded remainder** — 0.07 through a float is
+  `6.999999999999999`, and this is a filing. Value boxes carrying pence are
+  **refused rather than truncated**: dropping 50p is a decision, not a
+  default.
+- Fraud-prevention headers typed per connection method (`DESKTOP_APP`,
+  `WEB_APP`), with value shapes (UUID device IDs, `vendor=x.y.z` versions)
+  checked where the error can name the header — HMRC rejects on shape with
+  errors that do not.
+- `digitalSubmission` is always `true` from this crate: the figures came from
+  digital records, and claiming otherwise is not a configuration.
+- The estate suite runs the **filing chain end to end** — documents → boxes →
+  MTD body, period by period — and pins the claim that no figure is retyped
+  anywhere: the pence HMRC receives are the pence the invoices charged. A nil
+  return still finalises; HMRC wants the nil, not silence.
+- Estate at 238 repos, 206 crates, 134 pins, 0 errors, 0 drift from this
+  loop's crates. 65 test groups green, clippy clean, fmt clean. The ~40
+  remaining drift entries are the concurrent 2026-10-24 wave's own pins,
+  owned by their publishers.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

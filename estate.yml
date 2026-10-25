@@ -265,6 +265,16 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  vat-mtd:
+    area: money
+    status: core
+    notes: "HMRC Making Tax Digital VAT bridge \u2014 the typed contract, deliberately not an HTTP client (coupling a tax contract to a framework choice makes both harder to change). Money goes from integer minor units to 2dp decimal strings by integer division, never a float; value boxes carrying pence are refused rather than truncated (dropping 50p is a decision, not a default). Fraud-prevention headers typed per connection method with value shapes checked where the error can name the header \u2014 HMRC rejects on shape with errors that do not. digitalSubmission is always true: claiming otherwise is not a configuration. Published 2026-10-25."
+    crates:
+      - vat-mtd
+    _seen:
+      last_push: "2026-10-25"
+      vat-mtd: 0.1.0
+
   vat-return:
     area: money
     status: core

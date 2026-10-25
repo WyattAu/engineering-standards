@@ -166,3 +166,10 @@ group-kit born (consolidation, eliminations that must cancel) and ledger-pg
 born (PostgreSQL persistence — the keystone). Estate pins persistence through
 to the reports. Release wave reconciled by patch releases converging the graph
 on double-entry 0.1.1. Audit 237/205/133, 0 errors, 64 green.
+
+## Round 31 (2026-10-25)
+
+vat-mtd born: the HMRC MTD contract as typed serde types, not an HTTP client.
+Filing chain pinned end to end in the estate suite — documents to boxes to
+submission body with no retyped figures. Audit 238/206/134, 0 errors, 0 drift
+from this loop's crates, 65 green.
