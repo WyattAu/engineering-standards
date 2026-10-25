@@ -159,3 +159,10 @@ republish of vat-return against invoice-kit 1.0.0). Audit 233/200/129,
 fx-kit born: IAS 21 revaluation with exact rational rates, one rounding at the
 final division, idempotence pinned. Audit 234/201, transitional shape from the
 concurrent audit-methodology rework, 61 green.
+
+## Rounds 29–30 (2026-10-25)
+
+group-kit born (consolidation, eliminations that must cancel) and ledger-pg
+born (PostgreSQL persistence — the keystone). Estate pins persistence through
+to the reports. Release wave reconciled by patch releases converging the graph
+on double-entry 0.1.1. Audit 237/205/133, 0 errors, 64 green.

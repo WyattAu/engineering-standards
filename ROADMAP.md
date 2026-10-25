@@ -482,6 +482,44 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 234 repos, 201 crates. 61 test groups green, clippy clean, fmt
   clean.
 
+
+### Rounds 29–30, done
+
+- **`group-kit 0.1.0` — multi-entity consolidation.** Eliminations must
+  cancel, and anything that does not cancel is surfaced, never guessed: a
+  mirror with a disagreeing amount is `IntercompanyMismatch` naming both
+  figures, a missing mirror is `OneSidedIntercompany`. The worked example in
+  the tests carries the arithmetic a reader checks: after eliminating a
+  £50,000 intercompany loan, the group's cash is genuinely £120,000 — the
+  elimination removes the IC pair, not the cash. Unbalanced entity books are
+  refused before any elimination, because two cancelling imbalances could
+  launder into a balanced group.
+- **`ledger-pg 0.1.1` — PostgreSQL persistence, the estate's keystone.**
+  Posting serialises on one CAS row per tenant — safe under READ COMMITTED
+  because the `UPDATE` takes the lock, so eight concurrent posters get eight
+  distinct versions with no lost writes. Balance is validated inside the
+  transaction; a refused entry consumes no version. **The reversal semantics
+  mirror `double-entry` exactly** — original stays posted, counter cancels it,
+  lineage in its own table — which the tests caught me getting wrong the first
+  time: marking the original reversed flips the balance instead of zeroing it.
+  `into_ledger` takes the account class chart explicitly after 0.1.0's
+  asset-default silently zeroed a P&L. Tests run against a real PostgreSQL
+  (container harness, `TEST_DATABASE_URL` override).
+- The estate pins **persistence through to the reports**: post to Postgres,
+  read back, aggregate — the stored books balance, and a reversal recorded in
+  the database moves the reports the same way it moves the books. The
+  reversal's date property is pinned too: a correction is dated when it was
+  made, so a July cut-off shows July as July reported it.
+- **The release wave (2026-10-23/24) split the graph across two exact
+  versions of `double-entry`**: `invoice-kit 1.0.0` held 0.1.0 while the
+  estate's other crates moved to 0.1.1. Converged by patch releases across
+  `ap-kit 0.1.3`, `report-kit 0.2.2`, `group-kit 0.1.2`, `ledger-pg 0.1.3`,
+  `invoice-kit 1.0.2` and `vat-return 0.1.2` — each a pin move, no behaviour
+  change, each keeping exactly one version of the money crate in the graph.
+- Estate at 237 repos, 205 crates, 133 pins, 0 errors, 0 drift from this
+  loop's crates. 64 test groups green, clippy clean, fmt clean. ~40 remaining
+  drift entries are the concurrent wave's own pins, owned by their publishers.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

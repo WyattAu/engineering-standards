@@ -242,7 +242,7 @@ repos:
       - invoice-kit
     _seen:
       last_push: "2026-10-06"
-      invoice-kit: 0.2.1
+      invoice-kit: 1.0.2
 
   audiobook-shelf:
     area: personal
@@ -273,7 +273,7 @@ repos:
       - vat-return
     _seen:
       last_push: "2026-10-07"
-      vat-return: 0.1.1
+      vat-return: 0.1.2
 
   fx-kit:
     area: money
@@ -305,6 +305,26 @@ repos:
       last_push: "2026-10-07"
       statement-ofx: 0.1.0
 
+  group-kit:
+    area: money
+    status: core
+    notes: "Multi-entity consolidation. Eliminations must cancel, and anything that does not cancel is surfaced, never guessed: a mirror with a disagreeing amount is IntercompanyMismatch naming both figures, a missing mirror is OneSidedIntercompany. Unbalanced entity books are refused before any elimination \u2014 two cancelling imbalances must not launder into a balanced group. Same-currency v1 (translation is an upstream step with its own failures); NCI documented out of scope. Published 2026-10-24."
+    crates:
+      - group-kit
+    _seen:
+      last_push: "2026-10-24"
+      group-kit: 0.1.2
+
+  ledger-pg:
+    area: money
+    status: core
+    notes: "PostgreSQL persistence for double-entry ledgers. Posting serialises on one CAS row per tenant \u2014 safe under READ COMMITTED because the UPDATE takes the lock, so eight concurrent posters get eight distinct versions with no lost writes; SERIALIZABLE's failure machinery deliberately not needed, documented. Balance validated inside the transaction; a refused entry consumes no version. Reversal mirrors double-entry exactly: original stays posted, counter cancels it, lineage in its own table. into_ledger takes the class chart explicitly after 0.1.0's asset-default silently zeroed the P&L. Tests run against a real Postgres (container harness). Published 2026-10-24."
+    crates:
+      - ledger-pg
+    _seen:
+      last_push: "2026-10-24"
+      ledger-pg: 0.1.3
+
   report-kit:
     area: money
     status: core
@@ -313,7 +333,7 @@ repos:
       - report-kit
     _seen:
       last_push: "2026-10-07"
-      report-kit: 0.2.1
+      report-kit: 0.2.2
 
   recon-kit:
     area: money
@@ -333,7 +353,7 @@ repos:
       - report-kit
     _seen:
       last_push: "2026-10-23"
-      report-kit: 0.2.1
+      report-kit: 0.2.2
 
   graphify:
     area: dx
@@ -371,7 +391,7 @@ repos:
       - group-kit
     _seen:
       last_push: "2026-10-24"
-      group-kit: 0.1.0
+      group-kit: 0.1.2
 
   bizkit:
     area: research
@@ -402,7 +422,7 @@ repos:
       - ap-kit
     _seen:
       last_push: "2026-10-06"
-      ap-kit: 0.1.1
+      ap-kit: 0.1.3
 
   kit-conformance:
     area: dx
