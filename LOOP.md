@@ -180,3 +180,10 @@ pay-kit born: webhooks verified (Stripe + GoCardless via webhookkit),
 settlements posted, allocations applied — the AR loop closes. Payment loop
 pinned end to end in the estate suite. Audit 239/207/135, 0 errors, 0 drift
 from this loop's crates, 66 green.
+
+## Round 33 (2026-10-25)
+
+group-kit 0.2.0: IAS 21 translation — three rates, the difference to a
+translation reserve rather than profit, reserve provenance pinned against the
+theoretical difference. Full multi-currency group close in the estate suite.
+Audit 242/207/135, 0 errors, 67 green.

@@ -574,6 +574,33 @@ in the *product* semantics, not the primitives. So the product starts now.
 - Estate at 239 repos, 207 crates, 135 pins, 0 errors, 0 drift from this
   loop's crates. 66 test groups green, clippy clean, fmt clean.
 
+
+### Round 33, done
+
+- **`group-kit 0.2.0` — IAS 21 translation, closing the gap v1 documented.**
+  Assets and liabilities at the **closing** rate, income and expenses at the
+  **average** rate, equity at **historical** rates, and the cumulative
+  difference to a **translation reserve within equity — not profit**. That is
+  the sharp distinction from `fx-kit`'s monetary-item revaluation: revaluing
+  cash you hold is a P&L event; re-presenting a whole subsidiary's books is
+  an ownership-of-net-assets event, and putting its effect through P&L would
+  report currency noise as trading performance.
+- The reserve is a balancing figure by construction, so the tests pin it
+  against the theoretically-expected difference — a balancing figure that
+  absorbs anything is the unexplained-difference line this estate refuses
+  elsewhere. The fixture caught the reserve being double-negated into a
+  debit, which would have made every strengthened-currency close report a
+  spurious loss.
+- The estate suite runs the **full multi-currency group close** over the
+  released artifacts: `fx-kit`'s exact rates translate the subsidiary,
+  `report-kit` reads the translated books, `group-kit` consolidates and
+  eliminates — and the second test carries the revaluation/translation
+  distinction: a moved closing rate changes the reserve and leaves every P&L
+  row at its average rate.
+- Three concurrent repos registered on sight (`ai-memory`, `detonate-mcp`,
+  `memory-handoff-skill`). Estate at 242 repos, 207 crates, 135 pins, 0
+  errors. 67 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

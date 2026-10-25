@@ -244,6 +244,27 @@ repos:
       last_push: "2026-10-06"
       invoice-kit: 1.0.2
 
+  ai-memory:
+    area: research
+    status: core
+    notes: "Long-term memory for agent coding CLIs, and handoff between agent vendors. Rust. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-25"
+
+  detonate-mcp:
+    area: research
+    status: core
+    notes: "Hardened-container detonation MCP server. Python. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-25"
+
+  memory-handoff-skill:
+    area: research
+    status: support
+    notes: "Portable session handoff across agent CLIs: one plaintext markdown file, five fixed sections, no lock-in. Linted with skillkit. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-25"
+
   audiobook-shelf:
     area: personal
     status: core
@@ -328,12 +349,12 @@ repos:
   group-kit:
     area: money
     status: core
-    notes: "Multi-entity consolidation. Eliminations must cancel, and anything that does not cancel is surfaced, never guessed: a mirror with a disagreeing amount is IntercompanyMismatch naming both figures, a missing mirror is OneSidedIntercompany. Unbalanced entity books are refused before any elimination \u2014 two cancelling imbalances must not launder into a balanced group. Same-currency v1 (translation is an upstream step with its own failures); NCI documented out of scope. Published 2026-10-24."
+    notes: "Multi-entity consolidation. Eliminations must cancel, and anything that does not cancel is surfaced, never guessed: a mirror with a disagreeing amount is IntercompanyMismatch naming both figures, a missing mirror is OneSidedIntercompany. Unbalanced entity books are refused before any elimination \u2014 two cancelling imbalances must not launder into a balanced group. 0.2.0 adds IAS 21 translation: closing rates for assets and liabilities, average for income and expenses, historical for equity, and the cumulative difference to a translation reserve within equity rather than profit — the sharp distinction from fx-kit's P&L revaluation. Same-currency consolidation remains the elimination rule; NCI documented out of scope. Published 2026-10-24."
     crates:
       - group-kit
     _seen:
       last_push: "2026-10-24"
-      group-kit: 0.1.2
+      group-kit: 0.2.0
 
   ledger-pg:
     area: money
@@ -411,7 +432,7 @@ repos:
       - group-kit
     _seen:
       last_push: "2026-10-24"
-      group-kit: 0.1.2
+      group-kit: 0.2.0
 
   bizkit:
     area: research
