@@ -173,3 +173,10 @@ vat-mtd born: the HMRC MTD contract as typed serde types, not an HTTP client.
 Filing chain pinned end to end in the estate suite — documents to boxes to
 submission body with no retyped figures. Audit 238/206/134, 0 errors, 0 drift
 from this loop's crates, 65 green.
+
+## Round 32 (2026-10-25)
+
+pay-kit born: webhooks verified (Stripe + GoCardless via webhookkit),
+settlements posted, allocations applied — the AR loop closes. Payment loop
+pinned end to end in the estate suite. Audit 239/207/135, 0 errors, 0 drift
+from this loop's crates, 66 green.

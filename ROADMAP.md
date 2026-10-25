@@ -548,6 +548,32 @@ in the *product* semantics, not the primitives. So the product starts now.
   remaining drift entries are the concurrent 2026-10-24 wave's own pins,
   owned by their publishers.
 
+
+### Round 32, done
+
+- **`pay-kit 0.1.0` — payment webhooks in, settled ledger entries out.**
+  One crate because the seam between verification and settlement is where
+  payment fraud lands: a webhook that verifies but does not reconcile is a
+  notification; one that reconciles without verifying is a remote posting
+  API. Verification composes `webhookkit`'s constant-time HMAC; Stripe's
+  scheme adds a replay-tolerance window and key rotation (any matching `v1`
+  passes, so old and new secrets both work mid-rotation), and a stale
+  timestamp is named as a **replay**, not a signature failure, so the caller
+  can alert rather than log noise.
+- The ordering rule is the security property: **verify first, parse second,
+  post last.** The signature covers the raw bytes, so parse-before-verify
+  hands an attacker a parse gadget on unauthenticated input.
+- `post_settlement` and `allocate` are deliberately separate: the posting is
+  a *cash* act, the allocation a *documents* act, and a caller doing only one
+  has either a paid invoice with no cash or cash with no paid invoice — the
+  split makes the half-done state nameable.
+- The estate suite closes the payment loop end to end: invoice priced,
+  webhook verified, settlement posted, allocation applied — and the fixture
+  caught itself, the webhook's £144 against a £1,440 invoice surfacing as a
+  failed allocation before it could surface as a customer statement.
+- Estate at 239 repos, 207 crates, 135 pins, 0 errors, 0 drift from this
+  loop's crates. 66 test groups green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

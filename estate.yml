@@ -265,6 +265,16 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+  pay-kit:
+    area: money
+    status: core
+    notes: "Payment webhooks in, settled ledger entries out. Stripe (timestamped t=/v1= header, replay tolerance, key rotation via multiple v1 entries) and GoCardless (plain body HMAC) verified through webhookkit's constant-time compare; settlements posted through double-entry; allocations via invoice-kit. The ordering rule is the security property: verify first, parse second, post last \u2014 parse-before-verify hands an attacker a parse gadget on unauthenticated input. post_settlement and allocate deliberately separate: cash act and documents act, so a half-done state is nameable. Published 2026-10-25."
+    crates:
+      - pay-kit
+    _seen:
+      last_push: "2026-10-25"
+      pay-kit: 0.1.0
+
   vat-mtd:
     area: money
     status: core
