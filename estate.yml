@@ -473,6 +473,92 @@ repos:
       last_push: "2026-10-24"
       bizkit: 0.1.0
 
+  agentic-awesome-skills:
+    area: dx
+    status: support
+    notes: "A skills registry: 2,750 reusable agent instructions with registry-sync automation (version, star count, and update timestamps tracked in-tree). Catalog, inspection, and exact-skill review for agent projects. Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
+  ai-memory:
+    area: dx
+    status: support
+    notes: "Agent memory infrastructure (Rust workspace, v3.2.4 in-tree). Workspace members are not published to crates.io as of registration. Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
+  detonate-mcp:
+    area: dx
+    status: support
+    notes: "MCP server: run unknown binaries in a maximum-hardening container; the safety profile is enforced server-side and cannot be parameterized away. Python (pyproject + uv), not a Rust crate. Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
+  impeccable:
+    area: dx
+    status: support
+    notes: "Design guidance for AI coding agents: one skill, 24 commands, live browser iteration, and 62 deterministic detectors (TypeScript, bun). Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
+  ledger-pg:
+    area: money
+    status: support
+    notes: "PostgreSQL persistence for double-entry: the accounting core's database adapter. Registered 2026-10-26; graduates to core when a consumer composes it."
+    crates:
+      - ledger-pg
+    _seen:
+      last_push: "2026-10-26"
+      ledger-pg: 0.2.1
+
+  memory-handoff-skill:
+    area: dx
+    status: support
+    notes: "Agent skill for portable session handoff across agent CLIs: one plaintext markdown file, five fields, no vendor lock. Shell, not a Rust crate. Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
+  pay-kit:
+    area: money
+    status: support
+    notes: "Payment webhooks in, settled ledger entries out: Stripe and GoCardless adapters feeding the double-entry ledger. Registered 2026-10-26; graduates to core when a consumer composes it."
+    crates:
+      - pay-kit
+    _seen:
+      last_push: "2026-10-26"
+      pay-kit: 0.1.0
+
+  trade-tester:
+    area: money
+    status: personal
+    notes: "Closed-source on-chain trade tester: atomic cyclic arbitrage, shadow-mode. Personal tooling; the repository is public but the product is not offered, and its crates are not published. Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
+  vat-mtd:
+    area: money
+    status: support
+    notes: "HMRC Making Tax Digital (VAT): the typed submission contract, mapped from the vat-rules vocabulary and vat-return's boxes. Registered 2026-10-26; graduates to core when a consumer composes it."
+    crates:
+      - vat-mtd
+    _seen:
+      last_push: "2026-10-26"
+      vat-mtd: 0.1.0
+
+  waves:
+    area: research
+    status: support
+    notes: "The public measurement record of trendkit: weekly dev-trend reports and the trust index, generated from raw snapshots. A data repository, not a crate. Registered 2026-10-26."
+    crates: []
+    _seen:
+      last_push: "2026-10-26"
+
   vat-rules:
     area: money
     status: core
