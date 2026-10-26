@@ -646,6 +646,35 @@ competitor warns a setting "might be dangerous", the estate persists the policy
 per document; every place a competitor auto-decides, the estate surfaces. Full
 chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
+
+### Round 35, done
+
+- **`ledger-pg 0.2.x` — the tamper-evident hash chain, studied from Odoo's
+  `account.move` inalterability hash.** SHA-256 over the previous entry's
+  hash plus a canonical serialization of the entry and every line; reversals
+  join the chain; `verify_chain` walks in version order and reports the
+  version, entry and reason of the first break. Odoo's design requires
+  `float_repr` stabilization because its amounts are floats — our canonical
+  form is deterministic by construction.
+- **The round's process finding, and it is serious: 0.2.0 shipped a
+  double-flipped reversal.** The chain work introduced flipped line tuples;
+  the insert loop still bound a `match side` on top, so the stored
+  counter-entry was identical to its original — the posting doubled, not
+  reversed. The chain detected its own release defect on every verify, and
+  the ledger-balance assertion caught the doubling. `cargo publish` verifies
+  the library build only, so the broken integration paths never ran before
+  the release. 0.2.0 yanked, 0.2.1/0.2.2 published with the fix, and the
+  loop rule extended: **a release does not go out until the suite covering
+  the change has run green**, even for "just plumbing".
+- The estate suite pins the chain over the released artifact: clean walk,
+  amount tamper detected at its version, memo tamper detected (the quiet
+  alteration — amounts still add up), deletion detected, and reversal
+  linkage covered.
+- Five concurrent repos registered on sight. Estate at 246 repos, 207
+  crates, 135 pins, 0 errors. 67 test groups green, clippy clean, fmt clean.
+- Index-lag note: 0.2.1's upload raced the sparse index ("already uploaded"
+  while absent), so 0.2.2 carries identical content; 0.2.0 yanked.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

@@ -196,3 +196,11 @@ self-documented minimisation of IEEE-754 errors (Odoo), silent zeroing of
 malformed money (ERPNext flt), mutable rounding policies, posted-entry
 mutability by draft-reset, and auto-deciding reconciliation. Estate edge
 restated with citations. 67 green.
+
+## Round 35 (2026-10-26)
+
+Tamper-evident hash chain in ledger-pg (studied from Odoo), and the loop's
+process rule extended: 0.2.0 shipped a double-flipped reversal because
+publish ran before the integration suite — yanked, fixed in 0.2.1/0.2.2, and
+no release goes out without its covering suite green. Audit 246/207/135,
+0 errors, 67 green.

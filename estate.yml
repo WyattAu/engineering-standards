@@ -244,6 +244,34 @@ repos:
       last_push: "2026-10-06"
       invoice-kit: 1.0.2
 
+  agentic-awesome-skills:
+    area: research
+    status: core
+    notes: "AAS Core: local, agent-first control plane for catalog discovery, agent-owned selection, stack validation and planning, backed by 2,750+ agentic skills. CLI, local MCP, plugins, Workbench. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-26"
+
+  impeccable:
+    area: ui
+    status: core
+    notes: "The design language for AI harnesses. Rust. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-26"
+
+  trade-tester:
+    area: research
+    status: core
+    notes: "Rust. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-26"
+
+  waves:
+    area: research
+    status: core
+    notes: "Weekly dev-trend reports and the trust index, generated from raw snapshots by trendkit. Generated, auditable, never edited after the fact. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-26"
+
   ai-memory:
     area: research
     status: core
