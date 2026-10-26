@@ -601,6 +601,51 @@ in the *product* semantics, not the primitives. So the product starts now.
   `memory-handoff-skill`). Estate at 242 repos, 207 crates, 135 pins, 0
   errors. 67 test groups green, clippy clean, fmt clean.
 
+
+### Round 34, done — competitive code audit (repos pulled, not brochures)
+
+Cloned and read the actual accounting implementations: `odoo` (sparse:
+addons/account, addons/base, odoo/tools), `frappe` + `erpnext`, `akaunting`.
+Findings with citations, all verified against current main:
+
+- **Odoo's money is floats**, and the code admits it: `float_utils.py`'s
+  `float_round` docstring is "minimizing IEEE-754 floating point representation
+  errors", and `float_compare` exists because floats cannot be `==` compared —
+  with a documented warning that `float_is_zero(a-b)` is not equivalent to
+  `float_compare(a,b)==0` for e.g. 0.006 vs 0.002 at 2 digits.
+- **ERPNext's `flt()` returns 0.0 for malformed input**: `flt("a")` → `0.0`,
+  by docstring and code — malformed money silently becomes zero money.
+  Precision is a global setting (`self.precision(field)`).
+- **Both keep rounding policy mutable**: Odoo's company-level
+  `tax_calculation_rounding_method` (`round_per_line` / `round_globally`,
+  default round-globally) plus a `display_rounding_warning` that literally
+  warns "a rounding factor change might be dangerous" — mutable mid-history;
+  ERPNext's precision is likewise a setting. Ours persists the policy per
+  document because EN 16931, GST s9-90 and HMRC §17.5 mandate different
+  arithmetic, and the arithmetic differs by real money (round 18's fixture).
+- **Posted-entry mutability**: Odoo's `button_draft` resets posted moves to
+  draft (guarded by lock-dates/flags); its e-invoice cancel comment says the
+  guarantee for government-sent documents is by state transition. ERPNext
+  regenerates GL entries on repost (`from_repost`). Ours: append-only,
+  reversal-by-counter-entry, lineage table.
+- **Auto-matching that decides**: Odoo's `account.reconcile.model` presets
+  carry `auto_reconcile` triggers. Ours proposes and surfaces ambiguity.
+- **Where the ERPs are genuinely ahead**: Odoo's `account.tax` trees with
+  repartition lines are far more *general* than our per-jurisdiction
+  vocabulary (arbitrary tax compositions vs deep specific regimes); Odoo's
+  `account_edi` country formats and ERPNext's India IRP are working e-invoice
+  transports; ERPNext's breadth (perpetual stock GL, assets, payroll) is
+  enormous; both run millions of real filings. Breadth and battle, not
+  correctness discipline.
+- Akaunting: PHP `(float)` casts on balances in overview paths.
+
+This audit updates the standing competitive claim: the estate's edge is not
+"no floats" as a slogan but that every place a competitor documents *minimising*
+representation error, the estate *excludes* the representation; every place a
+competitor warns a setting "might be dangerous", the estate persists the policy
+per document; every place a competitor auto-decides, the estate surfaces. Full
+chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

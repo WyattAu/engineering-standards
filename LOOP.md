@@ -187,3 +187,12 @@ group-kit 0.2.0: IAS 21 translation — three rates, the difference to a
 translation reserve rather than profit, reserve provenance pinned against the
 theoretical difference. Full multi-currency group close in the estate suite.
 Audit 242/207/135, 0 errors, 67 green.
+
+## Round 34 (2026-10-26)
+
+Competitive code audit: pulled odoo/frappe/erpnext/akaunting at current main
+and read the accounting implementations. Verified float-based money with
+self-documented minimisation of IEEE-754 errors (Odoo), silent zeroing of
+malformed money (ERPNext flt), mutable rounding policies, posted-entry
+mutability by draft-reset, and auto-deciding reconciliation. Estate edge
+restated with citations. 67 green.
