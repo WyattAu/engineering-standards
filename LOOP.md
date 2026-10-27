@@ -204,3 +204,9 @@ process rule extended: 0.2.0 shipped a double-flipped reversal because
 publish ran before the integration suite — yanked, fixed in 0.2.1/0.2.2, and
 no release goes out without its covering suite green. Audit 246/207/135,
 0 errors, 67 green.
+
+## Round 36 (2026-10-27)
+
+invoice-kit 1.1.0: VAT-inclusive pricing (the backwards division, exactly).
+The vat-rules convergence cascade — and the 0.1.6 version race between two
+agents, resolved by a converged 0.1.7. Audit 246/207/135, 0 errors, 67 green.

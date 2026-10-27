@@ -675,6 +675,29 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 - Index-lag note: 0.2.1's upload raced the sparse index ("already uploaded"
   while absent), so 0.2.2 carries identical content; 0.2.0 yanked.
 
+
+### Round 36, done
+
+- **`invoice-kit 1.1.0` — VAT-inclusive pricing**, studied from Odoo's
+  `price_include` tax handling. UK retail quotes prices with VAT in them;
+  the derivation runs the arithmetic backwards — gross × rate / (1000+rate),
+  rounded once through the exact integer path — and the net is computed as
+  gross − vat, so the pieces always sum to the gross even when the tax
+  rounds. Credit-note magnitudes split symmetrically; a rate of 100%+ is
+  refused as degenerate, matching ap-kit's gate.
+- **The vat-rules convergence cascade, and the version race it exposed.**
+  invoice-kit 1.1.0 moved to vat-rules 0.1.1, which cascaded through ap-kit,
+  fx-kit, vat-return, group-kit — and then hit a genuine hazard: **two
+  agents published `vat-return 0.1.6` with divergent pins** (same version
+  number, different contents). Resolved by a converged 0.1.7 carrying the
+  full pin set: invoice-kit 1.1.0, ap-kit 0.1.5, vat-rules 0.1.1,
+  double-entry 0.1.1. The lesson recorded: with exact pins and multiple
+  agents, convergence releases must race-safe — publish the full converged
+  set together, and the audit's drift check is the detector.
+- Estate at 246 repos, 207 crates, 135 pins, 0 errors. 67 test groups green,
+  clippy clean, fmt clean. The remaining ~58 drift entries are the
+  concurrent wave's pins, owned by their publishers.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's

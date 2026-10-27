@@ -242,7 +242,7 @@ repos:
       - invoice-kit
     _seen:
       last_push: "2026-10-06"
-      invoice-kit: 1.0.2
+      invoice-kit: 1.1.0
 
   agentic-awesome-skills:
     area: research
@@ -322,7 +322,7 @@ repos:
       - pay-kit
     _seen:
       last_push: "2026-10-25"
-      pay-kit: 0.1.0
+      pay-kit: 0.1.1
 
   vat-mtd:
     area: money
@@ -332,7 +332,7 @@ repos:
       - vat-mtd
     _seen:
       last_push: "2026-10-25"
-      vat-mtd: 0.1.0
+      vat-mtd: 0.1.3
 
   vat-return:
     area: money
@@ -342,7 +342,7 @@ repos:
       - vat-return
     _seen:
       last_push: "2026-10-07"
-      vat-return: 0.1.2
+      vat-return: 0.1.7
 
   fx-kit:
     area: money
@@ -352,7 +352,7 @@ repos:
       - fx-kit
     _seen:
       last_push: "2026-10-24"
-      fx-kit: 0.1.0
+      fx-kit: 0.1.3
 
   statement-camt:
     area: money
@@ -450,7 +450,7 @@ repos:
       - fx-kit
     _seen:
       last_push: "2026-10-24"
-      fx-kit: 0.1.0
+      fx-kit: 0.1.3
 
   group-kit:
     area: money
@@ -531,7 +531,7 @@ repos:
       - pay-kit
     _seen:
       last_push: "2026-10-26"
-      pay-kit: 0.1.0
+      pay-kit: 0.1.1
 
   trade-tester:
     area: money
@@ -549,7 +549,7 @@ repos:
       - vat-mtd
     _seen:
       last_push: "2026-10-26"
-      vat-mtd: 0.1.0
+      vat-mtd: 0.1.3
 
   waves:
     area: research
@@ -577,7 +577,7 @@ repos:
       - ap-kit
     _seen:
       last_push: "2026-10-06"
-      ap-kit: 0.1.3
+      ap-kit: 0.1.5
 
   kit-conformance:
     area: dx
