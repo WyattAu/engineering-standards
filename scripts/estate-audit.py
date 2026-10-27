@@ -66,10 +66,12 @@ CRATES_OWNER_ID = "404181"
 # caret ranges, which counts as consumption but not as a pin.
 CONSUMERS = (
     "WyattAu/estate-integration",
-    # The PDF editor. Its `rebrand` branch carries the theme-kit dogfood
-    # (commit 5c9e7fac); `main` does not, so a branch ref is required here or
-    # the audit reports theme-kit and color-kit as uncomposed.
-    "WyattAu/chisel-doc@rebrand",
+    # The PDF editor. Main carries the full platform composition: exact-pins
+    # chisel-audit 0.2.0, chisel-assets 0.1.0 and script-gate-kit 0.1.0 (the
+    # durable document trail and the fuzz-converged refuse gate), dogfoods
+    # theme-kit/color-kit (5c9e7fac), and the app's Chisel layer records every
+    # open and save into the CAS + the tamper-evident trail.
+    "WyattAu/chisel-doc",
     # The composition suite's second crate: a separate manifest with its own
     # lockfile, because its signalkit/skillkit/trendkit pins need rusqlite 0.40
     # while the root's eventbus-kit needs 0.32 and rusqlite links native
