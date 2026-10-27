@@ -41,16 +41,17 @@ import sys
 DRIFT_LINE = re.compile(
     r"^  ([a-z0-9_-]+): \S+ pins =([\d.]+) but crates\.io has ([\d.]+)"
 )
-VET_MISSING = re.compile(r"^  ([a-zA-Z0-9_-]+):([\d.]+) missing")
+VET_MISSING = re.compile(r"^  ([a-zA-Z0-9_-]+):([^\s]+) missing", re.MULTILINE)
 
 # Crates held off their latest publication, with the measured reason. A hold
 # survives sweeps; deleting the entry re-bumps the pin and re-breaks the
 # build, which is how the reason gets re-learned.
 HOLDS: dict[str, str] = {
-    # webhookkit 2.2.2 does not compile: hmac 0.13.0 final moved ct_eq to
-    # hybrid-array; the release was cut against a 0.13.0-rc. Measured
-    # 2026-10-24, estate-integration E0308 in webhookkit-2.2.2 lib.rs.
-    "webhookkit": "2.2.2 does not compile against hmac 0.13.0 final; hold at 2.2.1 until the call site is fixed",
+    # webhookkit 2.2.2 AND 2.2.3 do not compile: hmac 0.13.0 final moved
+    # ct_eq to hybrid-array; both releases were cut against a 0.13.0-rc
+    # lock. Measured 2026-10-24 (2.2.2) and 2026-10-27 (2.2.3), E0308 in
+    # the published lib.rs. The fix is one call site; it has not shipped.
+    "webhookkit": "2.2.2 and 2.2.3 do not compile against hmac 0.13.0 final; hold at 2.2.1 until the ct_eq call site is fixed",
 }
 
 
@@ -142,7 +143,7 @@ def prune_stale_entries(store: pathlib.Path, lock: pathlib.Path) -> int:
     head, kept, dropped = blocks[0], [], 0
     for block in blocks[1:]:
         m = re.match(r"\[\[exemptions\.([a-z0-9_-]+)\]\]\nversion = \"([^\"]+)\"", block)
-        if m and (m.group(1), m.group(2).split("+")[0]) not in locked:
+        if m and (m.group(1), m.group(2)) not in locked:
             dropped += 1
             continue
         kept.append(block)
@@ -191,41 +192,47 @@ def main(argv: list[str] | None = None) -> int:
     held = [(c, o, n) for c, o, n in pairs if c in HOLDS]
     print(f"drift pairs: {len(pairs)} ({len(held)} held)")
 
-    for path in manifests:
-        if path.exists():
-            n = bump_manifest(path, live)
-            print(f"  {path}: {n} pin(s) bumped")
-
-    # Resolution check before anything expensive: a manifest change forces
-    # re-resolution, and a yanked dependency anywhere in the graph blocks it
-    # no matter how clean the bumps are (measured: typed-id-new 0.1.0 yanked
-    # blocked all 58 pairs). Revert and report the external blocker rather
-    # than leaving a tree that does not build.
-    resolve = subprocess.run(
-        ["cargo", "metadata", "--format-version", "1"],
-        cwd=consumer, capture_output=True, text=True,
-    )
-    if resolve.returncode != 0:
-        for m in manifests:
-            subprocess.run(
-                ["git", "checkout", "HEAD", "--", str(m)],
-                cwd=m.parent, capture_output=True,
-            )
-            lock = m.parent / "Cargo.lock"
-            if lock.exists():
-                subprocess.run(
-                    ["git", "checkout", "HEAD", "--", str(lock)],
-                    cwd=m.parent, capture_output=True,
-                )
-        yanked = "is yanked" in resolve.stderr or "is yanked" in resolve.stdout
-        reason = (
-            "a yanked dependency blocks re-resolution; the queue waits for its "
-            "successor to publish"
-            if yanked
-            else resolve.stderr.strip().splitlines()[-1] if resolve.stderr.strip() else "unknown resolution failure"
+    # Per-pair targeted convergence: bump the manifest pin, then a targeted
+    # `cargo update --precise` that fails cleanly on a chain conflict
+    # without re-resolving the whole graph (a yanked-but-locked crate
+    # elsewhere survives, measured 2026-10-27). Resolving pairs stay;
+    # conflicting pairs are reverted and reported as the round's queue.
+    kept, conflicts = [], []
+    for crate, old, new in live:
+        n = 0
+        for path in manifests:
+            if path.exists():
+                n += bump_manifest(path, [(crate, old, new)])
+        if n == 0:
+            conflicts.append((crate, old, new, "pin not found in any manifest"))
+            continue
+        target = subprocess.run(
+            ["cargo", "update", f"-p{crate}@{old}", "--precise", new],
+            cwd=consumer, capture_output=True, text=True,
         )
-        print(f"BLOCKED (manifests reverted to HEAD): {reason}")
-        return 1
+        if target.returncode == 0:
+            kept.append((crate, old, new))
+            for path in manifests:
+                if path.exists():
+                    lock = path.parent / "Cargo.lock"
+                    if lock.exists():
+                        subprocess.run(
+                            ["cargo", "update", f"-p{crate}@{old}", "--precise", new],
+                            cwd=path.parent, capture_output=True, text=True,
+                        )
+            print(f"  kept: {crate} {old} -> {new}")
+        else:
+            for path in manifests:
+                if path.exists():
+                    bump_manifest(path, [(crate, new, old)])
+            tail = [l for l in target.stderr.strip().splitlines() if l.strip()]
+            conflicts.append((crate, old, new, tail[-1][:110] if tail else "update failed"))
+            print(f"  conflict: {crate} {old} -> {new}")
+
+    if conflicts:
+        print(f"\n{len(conflicts)} conflicting pair(s) left for the publishing round:")
+        for crate, old, new, why in conflicts:
+            print(f"  {crate} {old} -> {new}: {why}")
 
     if not args.no_test:
         test = subprocess.run(
@@ -239,18 +246,7 @@ def main(argv: list[str] | None = None) -> int:
                 failed += int(m.group(2))
         print(f"suites: {passed} passed, {failed} failed")
         if test.returncode != 0 or failed:
-            for m in manifests:
-                subprocess.run(
-                    ["git", "checkout", "HEAD", "--", str(m)],
-                    cwd=m.parent, capture_output=True,
-                )
-                lock = m.parent / "Cargo.lock"
-                if lock.exists():
-                    subprocess.run(
-                        ["git", "checkout", "HEAD", "--", str(lock)],
-                        cwd=m.parent, capture_output=True,
-                    )
-            print("BROKEN: the bump broke suites; reverted to HEAD.")
+            print("BROKEN: the kept set does not build; investigate before landing.")
             return 1
 
     if args.side:
@@ -258,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
             ["cargo", "test"], cwd=args.side, capture_output=True, text=True
         )
         if side.returncode != 0:
-            print("BROKEN: the side graph fails after the bump.")
+            print("BROKEN: the side graph fails.")
             return 1
         print("side graph: green")
 
@@ -276,8 +272,6 @@ def main(argv: list[str] | None = None) -> int:
                         ["cargo", "vet", "--locked"], capture_output=True, cwd=consumer
                     )
                     if final.returncode != 0:
-                        # A pruned version is still in the graph somewhere the
-                        # lock parse missed; restore it by re-running the pass.
                         reconcile_store(store, consumer)
                         print("vet store: prune reverted a needed entry; re-reconciled")
         else:
