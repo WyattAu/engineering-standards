@@ -218,3 +218,10 @@ taxability as input, jurisdiction-stack rates as exact percents, explicit
 rounding scope. US sale pinned end to end in the estate suite. Environment:
 tmpfs exhaustion from concurrent-run debris diagnosed and cleared. Audit
 247/208/136, 0 errors, 68 green.
+
+## Round 38 (2026-10-27)
+
+close_pack: the quarter-end close end to end — documents to boxes to MTD
+body, camt reconciliation against the same postings, nothing retyped. The
+fixtures' own arithmetic errors were refused by the crates. Audit 247/208/
+136, 0 errors, 70 green.

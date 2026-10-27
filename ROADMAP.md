@@ -729,6 +729,23 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 - Estate at 247 repos, 208 crates, 136 pins, 0 errors. 68 test groups
   green, clippy clean, fmt clean.
 
+
+### Round 38, done
+
+- **`close_pack` — the quarter-end close, end to end, as one flow.** Every
+  piece has its own focused suite; none proved the pieces form one close.
+  This one does: the quarter's invoices and bills produce the VAT boxes per
+  month, the camt bank import reconciles against the same postings to the
+  penny, September's boxes file as the MTD body (£51.00 payable, finalised,
+  digital), and the reverse-charge sale counts its net in box 6 while
+  carrying no UK VAT — all from one set of integers, nothing retyped at any
+  boundary.
+- The fixture arithmetic was wrong twice on the way in (September's
+  purchases, the camt closing balance) and **the crates refused both** —
+  which is the suites doing their job.
+- Estate at 247 repos, 208 crates, 136 pins, 0 errors. 70 test groups green,
+  clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
