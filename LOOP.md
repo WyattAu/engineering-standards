@@ -210,3 +210,11 @@ no release goes out without its covering suite green. Audit 246/207/135,
 invoice-kit 1.1.0: VAT-inclusive pricing (the backwards division, exactly).
 The vat-rules convergence cascade — and the 0.1.6 version race between two
 agents, resolved by a converged 0.1.7. Audit 246/207/135, 0 errors, 67 green.
+
+## Round 37 (2026-10-27)
+
+sales-tax born: US document arithmetic, research-first — nexus gating,
+taxability as input, jurisdiction-stack rates as exact percents, explicit
+rounding scope. US sale pinned end to end in the estate suite. Environment:
+tmpfs exhaustion from concurrent-run debris diagnosed and cleared. Audit
+247/208/136, 0 errors, 68 green.

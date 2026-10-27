@@ -274,6 +274,16 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+  sales-tax:
+    area: money
+    status: core
+    notes: "US sales tax document arithmetic \u2014 and structurally not VAT with different field names. Nexus gates collection (Wayfair economic nexus is per-state and per-year, so the registry is an input and the breakdown reports whether collection applied at all); prices are pre-tax (no backwards division); sales tax is never reclaimable (no Recoverability counterpart); taxability is an input per line (state law decides groceries and clothing); the rate is a jurisdiction stack remitted level by level. Rates exact rationals via JurisdictionRate::from_percent (fx-kit 0.1.4's parse_percent \u2014 parsing 6.25 as a multiplier makes every rate 100x too large). Per-document vs per-line rounding scope explicit: two 10-cent lines at 5% genuinely differ. The rate database is a data service, not a library. Published 2026-10-27."
+    crates:
+      - sales-tax
+    _seen:
+      last_push: "2026-10-27"
+      sales-tax: 0.1.0
+
   waves:
     area: research
     status: core

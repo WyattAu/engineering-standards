@@ -698,6 +698,37 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
   clippy clean, fmt clean. The remaining ~58 drift entries are the
   concurrent wave's pins, owned by their publishers.
 
+
+### Round 37, done
+
+- **`sales-tax 0.1.0` — US sales tax, the last open front closed as a
+  research-first crate.** The research framing is the product: US sales tax
+  is structurally not VAT with different field names, and the types encode
+  the five differences. Nexus gates collection (*South Dakota v. Wayfair*,
+  2018 — economic nexus is per-state and per-year, so the registry is an
+  input; a hardcoded threshold table would be wrong the first month it
+  shipped). Prices are pre-tax — no backwards division. Sales tax is never
+  reclaimable, which is why `ap-kit`'s `Recoverability` has no US
+  counterpart. Taxability is an input per line. And the rate is a
+  jurisdiction stack remitted level by level.
+- `JurisdictionRate::from_percent` via `fx-kit 0.1.4`'s new
+  `Rate::parse_percent`: US rate data is quoted as percents, and parsing
+  `"6.25"` as a multiplier makes every rate a hundred times too large.
+- Per-document vs per-line rounding scope is explicit and pinned: two
+  $0.10 lines at 5% are £0.02 per-line and £0.01 per-document. Nexus with an
+  empty rate stack is refused rather than returned as zero — a missing data
+  feed must not dress up as a legitimate no-tax sale, while a no-nexus
+  destination is a *legal* zero and is reported as such.
+- The estate suite posts the till through `double-entry`: collected tax
+  accrues to sales-tax-payable (a liability — the mirror of VAT's input
+  side) and clears on remittance. The fixture caught its own arithmetic:
+  the till total forgot the untaxable line's net.
+- Environment finding, recorded: the shared tmpfs filled (13GB of debris
+  from a killed concurrent run), which surfaced as `cc` and fingerprint
+  write failures masquerading as a toolchain fault. Cleared; runs stable.
+- Estate at 247 repos, 208 crates, 136 pins, 0 errors. 68 test groups
+  green, clippy clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
