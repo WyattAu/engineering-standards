@@ -68,6 +68,15 @@ repos:
     notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
     crates: []
 
+  sales-tax:
+    area: money
+    status: support
+    notes: "US sales tax document arithmetic — nexus-gated, jurisdiction-stacked, exact rational rates. Rates and taxability are inputs; the rate database is a data service, not a library. Added 2026-10-27."
+    crates:
+      - sales-tax
+    _seen:
+      last_push: "2026-10-27"
+
   chisel-doc:
     area: app
     status: fork
