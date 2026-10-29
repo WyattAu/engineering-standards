@@ -78,7 +78,7 @@ repos:
   accounting-spec:
     area: research
     status: core
-    notes: "The formal specification and Lean 4 proofs for the accounting estate's core algebra. The posting algebra, balance conservation, reversal cancellation (Theorem 4.1 — the theorem ledger-pg 0.2.0's double-flip violated), rounding sum-to-gross, and hash-chain tamper detection stated. Lean 4 core only — no mathlib — because the algebra is linear integer arithmetic that omega proves. Stated theorems with documented sorry: reversal_sum_negates, posting_sum_append, trial_balance (need mathlib ring), tamper_detection (needs symbolic SHA model). Created 2026-10-28 from the iteration loop: research papers, find the cutting edge, implement in spec, adjust the proof."
+    notes: "The formal specification and Lean 4 proofs for the accounting estate's core algebra. The posting algebra, balance conservation, reversal cancellation (Theorem 4.1 — the theorem ledger-pg 0.2.0's double-flip violated), rounding sum-to-gross, and hash-chain tamper detection stated. Lean 4 core only — no mathlib — because the algebra is linear integer arithmetic that omega proves. Stated theorems with documented sorry: reversal_sum_negates, posting_sum_append, trial_balance (need mathlib ring), tamper_detection (needs symbolic SHA model). Created 2026-10-28 from the iteration loop: research papers, find the cutting edge, implement in spec, adjust the proof. Verified 2026-10-29 (the estate review): the module compiles via lake env lean, 4 of 15 theorems sorried as documented, and lakefile.toml lacks a default build target (lake build builds nothing; add one before relying on CI)."
     _seen:
       last_push: "2026-10-28"
 
@@ -2557,11 +2557,3 @@ repos:
     crates: []
     _seen:
       last_push: "2026-10-19"
-
-  accounting-spec:
-    area: money
-    status: core
-    notes: "The formal specification and Lean 4 proofs for the accounting estate: amounts as minor-unit integers, posting conservation (debits = credits), the per-currency accounting equation, aging buckets. Created 2026-10-29; no crate published. Proof state: 15 theorems, 4 carry sorry (conservation algebra; mathlib closure deferred by the repo's own header), and lakefile.toml has no default build target (lake build builds nothing; use lake env lean on the module). Both gaps are cited in the module header. Manifest entry added by the cycle 13 estate review (cycle 12's audit flagged it ERROR: missing)."
-    crates: []
-    _seen:
-      last_push: "2026-10-29"
