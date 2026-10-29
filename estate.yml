@@ -312,6 +312,13 @@ repos:
     _seen:
       last_push: "2026-10-28"
 
+  clyde-costing-verified:
+    area: research
+    status: support
+    notes: "Python. Registered on sight during the 2026-10-29 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-29"
+
   ai-memory:
     area: research
     status: core
