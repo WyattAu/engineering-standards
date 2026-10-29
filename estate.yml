@@ -258,7 +258,7 @@ repos:
       - invoice-kit
     _seen:
       last_push: "2026-10-06"
-      invoice-kit: 1.1.0
+      invoice-kit: 1.1.1
 
   agentic-awesome-skills:
     area: research
@@ -348,7 +348,7 @@ repos:
       - pay-kit
     _seen:
       last_push: "2026-10-25"
-      pay-kit: 0.1.1
+      pay-kit: 0.1.2
 
   vat-mtd:
     area: money
@@ -557,7 +557,7 @@ repos:
       - pay-kit
     _seen:
       last_push: "2026-10-26"
-      pay-kit: 0.1.1
+      pay-kit: 0.1.2
 
   trade-tester:
     area: money
