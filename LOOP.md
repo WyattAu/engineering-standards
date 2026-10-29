@@ -225,3 +225,10 @@ close_pack: the quarter-end close end to end — documents to boxes to MTD
 body, camt reconciliation against the same postings, nothing retyped. The
 fixtures' own arithmetic errors were refused by the crates. Audit 247/208/
 136, 0 errors, 70 green.
+
+## Round 39 (2026-10-29)
+
+Property tests across fx-kit, sales-tax, invoice-kit, and both statement
+parsers: the algebra (sum invariants, sign symmetry, monotonicity, bounds)
+and the parser boundaries (arbitrary bytes never panic). Test-only; no
+republish. 74+ groups green.

@@ -746,6 +746,39 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 - Estate at 247 repos, 208 crates, 136 pins, 0 errors. 70 test groups green,
   clippy clean, fmt clean.
 
+
+### Round 39, done
+
+- **Property tests across the arithmetic core and both parser boundaries** —
+  the cheapest round on the board, and the one that protects the brand
+  systematically rather than by worked example.
+  - `fx-kit`: identity rate restates exactly; restatement is sign-symmetric
+    (guaranteed only because the arithmetic rounds the magnitude and restores
+    the sign — a signed-toward-zero rounding would break it at ties) and
+    monotone at any positive rate; `parse_percent` is `parse` over exactly
+    100; the parser boundary never panics on arbitrary strings.
+  - `sales-tax`: taxes never negative under any tie mode; the per-line vs
+    per-document scope difference is **bounded by half a unit per line per
+    jurisdiction** — a larger drift would mean the scopes disagree about
+    what is taxable, a real defect; no-nexus is always a legal zero; the
+    rate parser never panics.
+  - `invoice-kit`: `split_vat_inclusive` always accounts for the gross at
+    every amount, rate and tie mode; the tax share is bounded by the rate;
+    credit notes split symmetrically; `round_div` never panics, stays within
+    one divisor step, never inverts a sign; exact rescaling is lossless up
+    and refuses lossy down.
+  - `statement-camt` / `statement-ofx`: arbitrary bytes and hostile tag soup
+    produce `Ok` or shaped `Err`, never panics — a statement parser is fed
+    the internet by definition, and a panic there is a denial of service in
+    the reconciliation path.
+- One test bug of my own caught by the properties (a registry/destination
+  pair that trivially held nexus) — fixed, which is the harness doing its
+  job.
+- Test-only changes: committed and pushed; no republish needed, since the
+  released artifacts are byte-identical.
+- Estate at 247 repos, 207 crates. 74+ property/test groups green, clippy
+  clean, fmt clean.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
