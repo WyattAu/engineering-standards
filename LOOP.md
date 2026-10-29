@@ -244,3 +244,10 @@ lesson is now mechanical. Audit 247/208/136, 0 errors.
 
 Convergence cascade continued (statement-camt/ofx/group-kit republished).
 typed-id-new 0.1.0 yanked between lock updates — restored from git. 68+ green.
+
+## Round 42 (2026-10-29)
+
+EN 16931 category-specific rules audit: BR-AE-02 (buyer VAT ID for
+reverse charge), BR-E-02/03 (exempt reason), BR-IC-02 (delivery date),
+and BR-S-08/BR-Z-08 (breakdown cross-check) documented as gaps. The fix
+requires invoice-kit 1.2.0 and a convergence wave — fresh session.

@@ -814,6 +814,38 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
   which the smoke test caught before the gate was trusted.
 - Estate at 247 repos, 208 crates, 136 pins, 0 errors. All suites green.
 
+
+### Round 42 — the EN 16931 category-specific rules audit (documentation, no code)
+
+**Audited** the estate's invoice validation against EN 16931's
+category-specific rules (BR-S through BR-Z). The general calculation rules
+(BR-CO) are covered — documented as constants in `invoice-kit 1.1.1`'s
+`br_co` module. The category-specific rules are where the gap lives:
+
+- **Enforced**: BR-16 (at least one line), BR-27 (no negative price),
+  the category/rate consistency gate (Standard/ReverseCharge > 0,
+  ZeroRated/Exempt/NotSubject/IntraCommunity/FreeExport/CanaryIslands/
+  CeutaMelilla = 0), and the duplicate line id check.
+- **Not enforced**:
+  - **BR-AE-02**: Reverse-charge supply requires the buyer's VAT identifier.
+    The estate has `Invoice.buyer_vat_id` (added in 1.1.0 for the
+    reverse-charge test) but `validate()` does not check it.
+  - **BR-E-02 / BR-E-03**: Exempt supply requires a documented reason
+    (statutory citation). The estate has `IssueReason` (ZATCA's five
+    reasons) but does not cross-check it against the tax category.
+  - **BR-IC-02**: Intra-community supply requires an actual delivery date.
+    The estate has `supply_date` but does not enforce it for
+    `TaxCategory::IntraCommunity`.
+  - **BR-S-08/BR-Z-08**: The VAT breakdown's taxable amount must equal the
+    sum of the line amounts in that category. The `tax_groups` method
+    computes this, but does not cross-check it against the line-level sums.
+
+**Decision**: document the gap rather than implement it, because the fix
+requires a `invoice-kit 1.2.0` release that will cascade through
+`vat-return`, `vat-mtd`, `pay-kit`, and `ledger-api` — a convergence wave
+that needs a fresh session's context to manage properly. The gap is
+recorded here so it cannot be forgotten.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
