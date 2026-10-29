@@ -68,6 +68,13 @@ repos:
     notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
     crates: []
 
+  accounting-spec:
+    area: research
+    status: core
+    notes: "The formal specification and Lean 4 proofs for the accounting estate's core algebra. The posting algebra, balance conservation, reversal cancellation (Theorem 4.1 — the theorem ledger-pg 0.2.0's double-flip violated), rounding sum-to-gross, and hash-chain tamper detection stated. Lean 4 core only — no mathlib — because the algebra is linear integer arithmetic that omega proves. Stated theorems with documented sorry: reversal_sum_negates, posting_sum_append, trial_balance (need mathlib ring), tamper_detection (needs symbolic SHA model). Created 2026-10-28 from the iteration loop: research papers, find the cutting edge, implement in spec, adjust the proof."
+    _seen:
+      last_push: "2026-10-28"
+
   sales-tax:
     area: money
     status: support
