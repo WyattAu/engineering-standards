@@ -12,6 +12,7 @@ on:
     - "scripts/check-repo-crate-alignment.py"
     - "scripts/check-llms-links.py"
     - "scripts/test-estate-audit-private-scope.py"
+    - "scripts/test-estate-yml-schema.py"
     - "scripts/check-pin-consistency.py"
   schedule:
     - cron: "17 4 * * *"
@@ -38,6 +39,9 @@ jobs:
 
       - name: Install dependencies
         run: python -m pip install --quiet pyyaml
+
+      - name: Manifest schema
+        run: python scripts/test-estate-yml-schema.py
 
       - name: Audit the estate manifest
         env:
