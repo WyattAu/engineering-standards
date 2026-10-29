@@ -58,6 +58,17 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: dtolnay/rust-toolchain@stable
+      - name: Check out estate siblings (path dependencies)
+        run: |
+          # Every ../<name> path dependency in any manifest needs the
+          # sibling cloned one level above the checkout, or the vet graph
+          # cannot resolve. Detected from the manifests, not configured.
+          SIBS=$(find . -name Cargo.toml -not -path '*/target/*' \
+            -exec grep -hoE 'path = "(\.\./)+([a-z0-9_-]+)"' {} \; 2>/dev/null \
+            | sed -E 's|path = "(\.\./)+||;s|"||' | sort -u)
+          for sib in $SIBS; do
+            git clone --depth 1 "https://github.com/WyattAu/$sib" "$GITHUB_WORKSPACE/../$sib"
+          done
       - name: Install cargo-vet
         run: cargo install --locked cargo-vet --version 0.10.2
       - name: Refresh imports
