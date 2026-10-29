@@ -305,6 +305,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+  warploom-game:
+    area: personal
+    status: dormant
+    notes: "Game project. Registered on sight during the 2026-10-28 audit; owned by its creating agent."
+    _seen:
+      last_push: "2026-10-28"
+
   ai-memory:
     area: research
     status: core
