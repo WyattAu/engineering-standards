@@ -578,6 +578,24 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+  sales-tax:
+    area: money
+    status: support
+    notes: "US sales tax document arithmetic: nexus-gated, destination-sourced, exact rational rates, explicit rounding scope. Rates and taxability are inputs; the rate database is a data service, not a library -- the crate does document arithmetic, the service owns the rates. The US counterpart of the vat-rules/vat-return chain. Registered 2026-10-27; graduates to core when a consumer composes it."
+    crates:
+      - sales-tax
+    _seen:
+      last_push: "2026-10-27"
+      sales-tax: 0.1.0
+
+  argus:
+    area: obsv
+    status: support
+    notes: "All-purpose intelligence platform: world surveillance (OSINT), markets/quant, private-equity back-office, in Rust, dogfooding the estate. Workspace of five members (alertkit, argus-mcp, argus-server, argus-tui, feedkit); none published to crates.io as of registration. The crates.io crate of the same name is an unrelated 0.0.0 placeholder owned by neither the account nor this repo. Registered 2026-10-29."
+    crates: []
+    _seen:
+      last_push: "2026-10-29"
+
   vat-rules:
     area: money
     status: core
