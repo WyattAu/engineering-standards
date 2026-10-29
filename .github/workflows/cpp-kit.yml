@@ -24,6 +24,18 @@ on:
         required: false
         default: "full"
         type: string
+      enable_benchmark:
+        description: "Run the benchmark tail of the headless-debug leg"
+        required: false
+        default: true
+        type: boolean
+      benchmark_command:
+        description: "Repo-specific benchmark body for the headless-debug leg"
+        required: false
+        default: |
+          build/headless-debug/bin/warploom_deterministic_runtime_benchmark --output benchmark.json
+          cat benchmark.json
+        type: string
       format_paths:
         description: "Space-separated source dirs for the clang-format check"
         required: false
@@ -164,9 +176,8 @@ jobs:
         run: ctest --test-dir build/headless-debug --output-on-failure --timeout 120
 
       - name: Benchmark
-        run: |
-          build/headless-debug/bin/warploom_deterministic_runtime_benchmark --output benchmark.json
-          cat benchmark.json
+        if: ${{ inputs.enable_benchmark }}
+        run: ${{ inputs.benchmark_command }}
 
   # ============================================================================
   # Headless Debug (Clang) — fallback-compiler matrix leg: exercises every
