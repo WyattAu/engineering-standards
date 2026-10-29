@@ -780,6 +780,23 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
   clean, fmt clean.
 
 
+
+### Round 39 addendum — the convergence cascade continues
+
+- `statement-camt 0.1.3` and `statement-ofx 0.1.3` published against
+  `recon-kit 0.2.0` (the reference-matching release; `LedgerSide` gains a
+  `memo` field). The estate's recon-kit pin moved to =0.2.0 in the same
+  wave. `group-kit 0.2.3` published against `fx-kit 0.1.4`
+  (`Rate::parse_percent`).
+- **`typed-id-new 0.1.0` was yanked between lock file updates**, making a
+  fresh `Cargo.lock` impossible to generate. Restored from git HEAD (which
+  has the yanked version resolved), so the builds work. The concurrent
+  agent that owns `typed-id-new` needs to publish a non-yanked release.
+- Round 39's property tests (fx-kit, sales-tax, invoice-kit, statement
+  parsers) are test-only changes — committed and pushed, no republish
+  needed, the released artifacts are byte-identical.
+
+
 ### Round 40, done
 
 - **`release-gate.py` — the 0.2.0 yank lesson, codified as a script.** Five

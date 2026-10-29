@@ -238,3 +238,9 @@ republish. 74+ groups green.
 release-gate.py: five gates (build/test/clippy/fmt/pin-convergence) between
 the tree and a publish. Proven both ways against sales-tax. The 0.2.0 yank
 lesson is now mechanical. Audit 247/208/136, 0 errors.
+
+
+### Round 39 addendum
+
+Convergence cascade continued (statement-camt/ofx/group-kit republished).
+typed-id-new 0.1.0 yanked between lock updates — restored from git. 68+ green.
