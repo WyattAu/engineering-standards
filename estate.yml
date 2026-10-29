@@ -68,6 +68,13 @@ repos:
     notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
     crates: []
 
+  ledger-api:
+    area: money
+    status: core
+    notes: "HTTP API over the accounting estate \u2014 axum router composing recon-kit (reconcile), sales-tax (compute), and ledger-pg (planned for 0.2). The routes compose estate crates; no business logic lives here. Reconcile chains the three passes with taken-sets feeding each pass. Published 2026-10-28."
+    _seen:
+      last_push: "2026-10-28"
+
   accounting-spec:
     area: research
     status: core
