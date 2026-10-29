@@ -27,6 +27,14 @@ on:
 
 jobs:
   # The interface check travels with the gates.
+  # The interface check travels with the gates. It runs in the CALLER's
+  # context (checkout = caller repo), so it is self-contained: no helper
+  # script needed in the caller. It asserts the caller passes only declared
+  # inputs with legal values and hardens checkouts per estate convention.
+  # The interface check travels with the gates. The estate repo is checked
+  # out alongside the caller, so the check sees both sides: the caller's
+  # `uses:` + inputs and this file's gate list. No helper file needed in
+  # the caller.
   contract:
     name: "CI contract"
     runs-on: ubuntu-latest
@@ -35,15 +43,18 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: WyattAu/engineering-standards
+          path: estate
+          persist-credentials: false
+
       - name: Install PyYAML
         run: pip install --quiet pyyaml
 
       - name: Check caller/callee contract
-        run: python3 scripts/check_ci_contract.py
+        run: python3 estate/scripts/check_cpp_contract.py
 
-  # ============================================================================
-  # Format check — .clang-format compliance across modules/examples/tests/tools
-  # ============================================================================
   format-check:
     runs-on: ubuntu-latest
     steps:
