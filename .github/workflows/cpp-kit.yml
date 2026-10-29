@@ -11,9 +11,9 @@
 #   fast — format + docs + presets + headless legs + contract
 #   full — fast + tsan + asan-ubsan + vulkan-validation + live proofs
 #
-# Repo-specific thresholds (shader counts, benchmark budgets) stay in the
-# caller's CI. Developed and executed first in WyattAu/warploom
-# (.github/workflows/cpp-gates.yml); this file is the verbatim estate copy.
+# Repo-specific bodies stay in the caller via inputs (warploom's values are
+# the defaults, so warploom passes only `tier`). Developed and executed
+# first in WyattAu/warploom; second caller: WyattAu/warploom-game.
 name: C++ gates
 
 on:
@@ -24,13 +24,70 @@ on:
         required: false
         default: "full"
         type: string
+      format_paths:
+        description: "Space-separated source dirs for the clang-format check"
+        required: false
+        default: "modules examples tests tools"
+        type: string
+      enable_vulkan_validation:
+        description: "Run the Vulkan validation leg (needs Vulkan sources)"
+        required: false
+        default: true
+        type: boolean
+      enable_live_proof:
+        description: "Run the live-proof leg (needs live_proof_command)"
+        required: false
+        default: true
+        type: boolean
+      live_proof_command:
+        description: "Repo-specific live-proof body: start hosts, run harness"
+        required: false
+        default: |
+          build/headless-debug/bin/warploom_headless_host /tmp/proof_a.sock 2>/tmp/proof_a.log &
+          build/headless-debug/bin/warploom_headless_host /tmp/proof_b.sock 2>/tmp/proof_b.log &
+          for i in $(seq 1 50); do
+            [ -S /tmp/proof_a.sock ] && [ -S /tmp/proof_b.sock ] && break
+            sleep 0.2
+          done
+          test -S /tmp/proof_a.sock && test -S /tmp/proof_b.sock
+          python3 tools/live_proof.py all --sock /tmp/proof_a.sock --sock-a /tmp/proof_a.sock --sock-b /tmp/proof_b.sock
+        type: string
+      enable_docs:
+        description: "Run the docs leg (needs docs_command)"
+        required: false
+        default: true
+        type: boolean
+      docs_command:
+        description: "Repo-specific docs check"
+        required: false
+        default: "python3 scripts/check_docs_links.py"
+        type: string
+      enable_examples:
+        description: "Run the examples leg (builds the default preset)"
+        required: false
+        default: true
+        type: boolean
+      examples_assert_command:
+        description: "Repo-specific assertion on the default-preset build"
+        required: false
+        default: |
+          test -x build/default/bin/warploom_viewport
+          n=$(ls build/default/shaders/*.spv | wc -l)
+          echo "compiled shaders: $n"
+          test "$n" -ge 70
+        type: string
+      examples_artifact_name:
+        description: "Upload artifact name for the examples-leg binary"
+        required: false
+        default: "warploom-viewport"
+        type: string
+      examples_artifact_path:
+        description: "Binary uploaded by the examples leg"
+        required: false
+        default: "build/default/bin/warploom_viewport"
+        type: string
 
 jobs:
-  # The interface check travels with the gates.
-  # The interface check travels with the gates. It runs in the CALLER's
-  # context (checkout = caller repo), so it is self-contained: no helper
-  # script needed in the caller. It asserts the caller passes only declared
-  # inputs with legal values and hardens checkouts per estate convention.
   # The interface check travels with the gates. The estate repo is checked
   # out alongside the caller, so the check sees both sides: the caller's
   # `uses:` + inputs and this file's gate list. No helper file needed in
@@ -67,8 +124,8 @@ jobs:
 
       - name: Check formatting
         run: |
-          find modules examples tests tools \
-            \( -name '*.cpp' -o -name '*.hpp' \) -print0 |
+          find ${{ inputs.format_paths }} \
+            \( -name '*.cpp' -o -name '*.hpp' -o -name '*.c' -o -name '*.h' \) -print0 |
             xargs -0 clang-format --dry-run --Werror
 
   # ============================================================================
@@ -260,7 +317,7 @@ jobs:
   # Vulkan validation — Khronos layer on Mesa lavapipe (software GPU)
   # ============================================================================
   vulkan-validation:
-    if: ${{ inputs.tier == 'full' }}
+    if: ${{ inputs.tier == 'full' && inputs.enable_vulkan_validation }}
     name: "Vulkan Validation (lavapipe)"
     runs-on: ubuntu-latest
     steps:
@@ -305,7 +362,7 @@ jobs:
   # all over a real socket.
   # ============================================================================
   live-proof:
-    if: ${{ inputs.tier == 'full' }}
+    if: ${{ inputs.tier == 'full' && inputs.enable_live_proof }}
     name: "Live Protocol Proofs (headless)"
     runs-on: ubuntu-latest
     steps:
@@ -335,23 +392,14 @@ jobs:
         run: |
           cmake --build build/headless-debug -j$(nproc)
 
-      - name: Start headless hosts
-        run: |
-          build/headless-debug/bin/warploom_headless_host /tmp/proof_a.sock 2>/tmp/proof_a.log &
-          build/headless-debug/bin/warploom_headless_host /tmp/proof_b.sock 2>/tmp/proof_b.log &
-          for i in $(seq 1 50); do
-            [ -S /tmp/proof_a.sock ] && [ -S /tmp/proof_b.sock ] && break
-            sleep 0.2
-          done
-          test -S /tmp/proof_a.sock && test -S /tmp/proof_b.sock
-
-      - name: Run live proofs (w1 + g1 + w2 + g3)
-        run: python3 tools/live_proof.py all --sock /tmp/proof_a.sock --sock-a /tmp/proof_a.sock --sock-b /tmp/proof_b.sock
+      - name: Run repo live proofs
+        run: ${{ inputs.live_proof_command }}
 
   # ============================================================================
   # Documentation links
   # ============================================================================
   docs:
+    if: ${{ inputs.enable_docs }}
     name: "Documentation"
     runs-on: ubuntu-latest
     steps:
@@ -369,8 +417,8 @@ jobs:
           key: cpm-${{ runner.os }}-${{ hashFiles('CMakePresets.json', 'vcpkg.json', 'cmake/FindDependencies.cmake') }}
           restore-keys: cpm-${{ runner.os }}-
 
-      - name: Check docs links
-        run: python3 scripts/check_docs_links.py
+      - name: Check docs
+        run: ${{ inputs.docs_command }}
 
   # ============================================================================
   # Examples — builds the viewport, the one user-facing artifact.
@@ -385,7 +433,7 @@ jobs:
   # viewport binary is uploaded so the build is verifiable by artifact.
   # ============================================================================
   examples:
-    if: ${{ inputs.tier == 'full' }}
+    if: ${{ inputs.tier == 'full' && inputs.enable_examples }}
     name: "Viewport builds"
     runs-on: ubuntu-latest
     steps:
@@ -413,18 +461,14 @@ jobs:
       - name: Build (compiles all 73 shaders into the build root)
         run: cmake --build build/default -j$(nproc)
 
-      - name: Assert the viewport and its shaders exist
-        run: |
-          test -x build/default/bin/warploom_viewport
-          n=$(ls build/default/shaders/*.spv | wc -l)
-          echo "compiled shaders: $n"
-          test "$n" -ge 70
+      - name: Assert on the default-preset build
+        run: ${{ inputs.examples_assert_command }}
 
-      - name: Upload the viewport binary
+      - name: Upload the built binary
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
-          name: warploom-viewport
-          path: build/default/bin/warploom_viewport
+          name: ${{ inputs.examples_artifact_name }}
+          path: ${{ inputs.examples_artifact_path }}
           retention-days: 7
 
   # ============================================================================
