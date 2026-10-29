@@ -232,3 +232,9 @@ Property tests across fx-kit, sales-tax, invoice-kit, and both statement
 parsers: the algebra (sum invariants, sign symmetry, monotonicity, bounds)
 and the parser boundaries (arbitrary bytes never panic). Test-only; no
 republish. 74+ groups green.
+
+## Round 40 (2026-10-28)
+
+release-gate.py: five gates (build/test/clippy/fmt/pin-convergence) between
+the tree and a publish. Proven both ways against sales-tax. The 0.2.0 yank
+lesson is now mechanical. Audit 247/208/136, 0 errors.

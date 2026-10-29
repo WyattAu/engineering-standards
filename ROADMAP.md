@@ -779,6 +779,24 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 - Estate at 247 repos, 207 crates. 74+ property/test groups green, clippy
   clean, fmt clean.
 
+
+### Round 40, done
+
+- **`release-gate.py` — the 0.2.0 yank lesson, codified as a script.** Five
+  gates before a publish can run: the publish dry-run compiles, the crate's
+  own all-features suite is green, clippy with `-D warnings` is clean, fmt
+  is clean, and **every exact pin on an estate crate is the latest live
+  version on crates.io** — the convergence check that would have caught both
+  the vat-rules 0.1.1 cascade and the double-entry 0.1.1 cascade at publish
+  time rather than at the next estate test run.
+- Proven both ways against `sales-tax`: all gates green on the clean tree;
+  then a deliberately stale `vat-rules =0.1.0` pin fires the pin-drift gate
+  before a publish can split the graph across two versions.
+- The sparse-index URL follows crates.io's resolvable-path rules (1/2/3/4+
+  character buckets) — the first draft's `v/a` prefix 404'd on every crate,
+  which the smoke test caught before the gate was trusted.
+- Estate at 247 repos, 208 crates, 136 pins, 0 errors. All suites green.
+
 ### Standing rules for this loop
 
 - Every crypto crate pins a primary-source vector **verbatim**, in the crate's
