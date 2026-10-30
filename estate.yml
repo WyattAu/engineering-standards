@@ -71,7 +71,9 @@ repos:
   ledger-api:
     area: money
     status: core
-    notes: "HTTP API over the accounting estate \u2014 axum router composing recon-kit (reconcile), sales-tax (compute), and ledger-pg (planned for 0.2). The routes compose estate crates; no business logic lives here. Reconcile chains the three passes with taken-sets feeding each pass. Published 2026-10-28."
+    notes: "HTTP API over the accounting estate \u2014 axum router composing recon-kit (reconcile), sales-tax (compute), and ledger-pg (planned for 0.2). The routes compose estate crates; no business logic lives here. Reconcile chains the three passes with taken-sets feeding each pass. Published 2026-10-28. Renamed to accounting-api for crates.io."
+    crates:
+      - accounting-api
     _seen:
       last_push: "2026-10-28"
 
