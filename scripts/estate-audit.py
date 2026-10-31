@@ -87,7 +87,8 @@ UA = "wyatt-estate-audit (+https://github.com/WyattAu/engineering-standards)"
 NET_TIMEOUT = 30
 
 REPO_KEYS = {"area", "status", "notes", "crates", "canonical_of", "fork", "gated",
-             "_seen"}
+             "_seen",
+             "docs"}
 
 AREAS = {
     "infra",  # CI, templates, dotfiles, infra stacks, images
@@ -338,6 +339,27 @@ class Manifest:
             for key in sorted(entry):
                 if key not in REPO_KEYS:
                     out.append(f"{name}: unknown key {key!r} (typo?)")
+            docs = entry.get("docs")
+            if docs is not None:
+                DOCS_KEYS = {"tier", "specs", "truth_table", "llms_txt",
+                             "status", "last_audit", "notes"}
+                if not isinstance(docs, dict):
+                    out.append(f"{name}: docs block must be a mapping")
+                else:
+                    for dkey in sorted(docs):
+                        if dkey not in DOCS_KEYS:
+                            out.append(f"{name}: unknown docs key {dkey!r} (typo?)")
+                    if docs.get("tier") not in {"s", "k", "a", "d"}:
+                        out.append(f"{name}: docs tier {docs.get('tier')!r} not in s/k/a/d")
+                    if docs.get("status") not in {"current", "draft", "frozen", "stale", "superseded"}:
+                        out.append(f"{name}: docs status {docs.get('status')!r} invalid")
+                    la = docs.get("last_audit")
+                    if not (isinstance(la, str) and re.match(r"^\d{4}-\d{2}-\d{2}$", la)):
+                        out.append(f"{name}: docs last_audit {la!r} not an ISO date")
+                    if not isinstance(docs.get("specs", []), list):
+                        out.append(f"{name}: docs specs must be a list of paths")
+                    if not isinstance(docs.get("llms_txt", False), bool):
+                        out.append(f"{name}: docs llms_txt must be a bool")
         return out
 
     def pin_problems(self) -> list[str]:

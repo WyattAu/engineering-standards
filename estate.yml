@@ -47,7 +47,7 @@
 pins_held: []
 
 schema: 1
-updated: "2026-10-05"
+updated: "2026-10-31"
 owner: WyattAu
 crates_io_user_id: 404181
 
@@ -62,12 +62,26 @@ repos:
       last_push: "2026-10-06"
       cal-model: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   mcp-doctor:
     area: dx
     status: support
     notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
     crates: []
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ledger-api:
     area: money
     status: core
@@ -77,6 +91,13 @@ repos:
     _seen:
       last_push: "2026-10-28"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   accounting-spec:
     area: research
     status: core
@@ -84,6 +105,13 @@ repos:
     _seen:
       last_push: "2026-10-28"
 
+    docs:
+      tier: s
+      specs: ["SPEC.md"]
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   sales-tax:
     area: money
     status: support
@@ -93,6 +121,13 @@ repos:
     _seen:
       last_push: "2026-10-27"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   chisel-doc:
     area: app
     status: fork
@@ -118,6 +153,13 @@ repos:
       chisel-auth: 0.1.0
       script-gate-kit: 0.1.0
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   CivitForge:
     area: app
     status: core
@@ -125,6 +167,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   dsp-spectral:
     area: data
     status: support
@@ -135,6 +184,13 @@ repos:
       last_push: "2026-10-06"
       dsp-spectral: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   EvergreenImageRegistry:
     area: infra
     status: infra
@@ -142,6 +198,13 @@ repos:
     _seen:
       last_push: "2026-10-04"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   EvergreenShims:
     area: infra
     status: infra
@@ -149,6 +212,13 @@ repos:
     _seen:
       last_push: "2026-09-16"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   flaglab:
     area: dx
     status: infra
@@ -156,6 +226,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   FlutterSSG:
     area: docs
     status: personal
@@ -174,6 +251,13 @@ repos:
       last_push: "2026-10-06"
       font-model: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   font-shape:
     area: ui
     status: support
@@ -184,6 +268,13 @@ repos:
       last_push: "2026-10-06"
       font-shape: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   color-kit:
     area: ui
     status: support
@@ -194,6 +285,13 @@ repos:
       last_push: "2026-10-18"
       color-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   theme-kit:
     area: ui
     status: support
@@ -204,6 +302,13 @@ repos:
       last_push: "2026-10-18"
       theme-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   theme-egui:
     area: ui
     status: support
@@ -214,6 +319,13 @@ repos:
       last_push: "2026-10-18"
       theme-egui: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   a11y-kit:
     area: ui
     status: support
@@ -224,6 +336,13 @@ repos:
       last_push: "2026-10-18"
       a11y-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   tui-actions:
     area: ui
     status: support
@@ -234,6 +353,13 @@ repos:
       last_push: "2026-10-18"
       tui-actions: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   docs-core:
     area: docs
     status: support
@@ -244,6 +370,13 @@ repos:
       last_push: "2026-10-18"
       docs-core: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   font-conformance:
     area: ui
     status: personal
@@ -259,6 +392,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   invoice-kit:
     area: money
     status: core
@@ -269,6 +409,13 @@ repos:
       last_push: "2026-10-06"
       invoice-kit: 1.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   agentic-awesome-skills:
     area: research
     status: core
@@ -276,6 +423,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   impeccable:
     area: ui
     status: core
@@ -283,6 +437,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   trade-tester:
     area: research
     status: core
@@ -300,6 +461,13 @@ repos:
       last_push: "2026-10-27"
       sales-tax: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   waves:
     area: research
     status: core
@@ -307,6 +475,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   warploom-game:
     area: personal
     status: dormant
@@ -321,6 +496,13 @@ repos:
     _seen:
       last_push: "2026-10-29"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ai-memory:
     area: research
     status: core
@@ -328,6 +510,13 @@ repos:
     _seen:
       last_push: "2026-10-25"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   detonate-mcp:
     area: research
     status: core
@@ -335,6 +524,13 @@ repos:
     _seen:
       last_push: "2026-10-25"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   memory-handoff-skill:
     area: research
     status: support
@@ -342,6 +538,13 @@ repos:
     _seen:
       last_push: "2026-10-25"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   audiobook-shelf:
     area: personal
     status: core
@@ -349,6 +552,13 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   hosting-dashboard:
     area: app
     status: core
@@ -356,6 +566,13 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   crawlkit-testbed:
     area: dx
     status: infra
@@ -363,6 +580,13 @@ repos:
     _seen:
       last_push: "2026-10-07"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   pay-kit:
     area: money
     status: core
@@ -373,6 +597,13 @@ repos:
       last_push: "2026-10-25"
       pay-kit: 0.1.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   vat-mtd:
     area: money
     status: core
@@ -383,6 +614,13 @@ repos:
       last_push: "2026-10-25"
       vat-mtd: 0.1.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   vat-return:
     area: money
     status: core
@@ -393,6 +631,13 @@ repos:
       last_push: "2026-10-07"
       vat-return: 0.1.7
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   fx-kit:
     area: money
     status: core
@@ -403,6 +648,13 @@ repos:
       last_push: "2026-10-24"
       fx-kit: 0.1.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   statement-camt:
     area: money
     status: core
@@ -413,6 +665,13 @@ repos:
       last_push: "2026-10-07"
       statement-camt: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   statement-ofx:
     area: money
     status: core
@@ -423,6 +682,13 @@ repos:
       last_push: "2026-10-07"
       statement-ofx: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   group-kit:
     area: money
     status: core
@@ -433,6 +699,13 @@ repos:
       last_push: "2026-10-24"
       group-kit: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ledger-pg:
     area: money
     status: core
@@ -443,6 +716,13 @@ repos:
       last_push: "2026-10-24"
       ledger-pg: 0.2.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   report-kit:
     area: money
     status: core
@@ -453,6 +733,13 @@ repos:
       last_push: "2026-10-07"
       report-kit: 0.2.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   recon-kit:
     area: money
     status: core
@@ -463,6 +750,13 @@ repos:
       last_push: "2026-10-07"
       recon-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   report-kit:
     area: money
     status: core
@@ -473,6 +767,13 @@ repos:
       last_push: "2026-10-23"
       report-kit: 0.2.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   graphify:
     area: dx
     status: support
@@ -481,6 +782,13 @@ repos:
     _seen:
       last_push: "2026-10-23"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   statement-camt:
     area: money
     status: core
@@ -491,6 +799,13 @@ repos:
       last_push: "2026-10-24"
       statement-camt: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   fx-kit:
     area: money
     status: core
@@ -501,6 +816,13 @@ repos:
       last_push: "2026-10-24"
       fx-kit: 0.1.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   group-kit:
     area: money
     status: core
@@ -511,6 +833,13 @@ repos:
       last_push: "2026-10-24"
       group-kit: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   bizkit:
     area: research
     status: support
@@ -522,6 +851,13 @@ repos:
       last_push: "2026-10-24"
       bizkit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: ""
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   agentic-awesome-skills:
     area: dx
     status: support
@@ -530,6 +866,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ai-memory:
     area: dx
     status: support
@@ -538,6 +881,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   detonate-mcp:
     area: dx
     status: support
@@ -546,6 +896,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   impeccable:
     area: dx
     status: support
@@ -554,6 +911,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ledger-pg:
     area: money
     status: support
@@ -564,6 +928,13 @@ repos:
       last_push: "2026-10-26"
       ledger-pg: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   memory-handoff-skill:
     area: dx
     status: support
@@ -572,6 +943,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   pay-kit:
     area: money
     status: support
@@ -582,6 +960,13 @@ repos:
       last_push: "2026-10-26"
       pay-kit: 0.1.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   trade-tester:
     area: money
     status: personal
@@ -600,6 +985,13 @@ repos:
       last_push: "2026-10-26"
       vat-mtd: 0.1.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   waves:
     area: research
     status: support
@@ -608,6 +1000,13 @@ repos:
     _seen:
       last_push: "2026-10-26"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   sales-tax:
     area: money
     status: support
@@ -618,6 +1017,13 @@ repos:
       last_push: "2026-10-27"
       sales-tax: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   argus:
     area: obsv
     status: support
@@ -626,6 +1032,13 @@ repos:
     _seen:
       last_push: "2026-10-29"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   vat-rules:
     area: money
     status: core
@@ -636,6 +1049,13 @@ repos:
       last_push: "2026-10-06"
       vat-rules: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ap-kit:
     area: money
     status: core
@@ -646,6 +1066,13 @@ repos:
       last_push: "2026-10-06"
       ap-kit: 0.1.5
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   kit-conformance:
     area: dx
     status: infra
@@ -653,6 +1080,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   deploy-webhook-rs:
     area: infra
     status: support
@@ -660,6 +1094,13 @@ repos:
     _seen:
       last_push: "2026-10-12"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   aperture-vault:
     area: app
     status: support
@@ -667,6 +1108,13 @@ repos:
     _seen:
       last_push: "2026-10-12"
 
+    docs:
+      tier: a
+      specs: ["SPEC.md"]
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   eventbusd:
     area: data
     status: support
@@ -674,6 +1122,13 @@ repos:
     _seen:
       last_push: "2026-10-12"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   flagsd:
     area: infra
     status: support
@@ -681,6 +1136,13 @@ repos:
     _seen:
       last_push: "2026-10-12"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   OmniCPP-docker:
     area: dx
     status: dormant
@@ -835,6 +1297,13 @@ repos:
     _seen:
       last_push: "2026-10-09"
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   OmniRust-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -867,6 +1336,13 @@ repos:
     _seen:
       last_push: "2026-08-19"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   SimpleInfrastructureStack:
     area: infra
     status: infra
@@ -874,6 +1350,13 @@ repos:
     _seen:
       last_push: "2026-10-03"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   Tachyon:
     area: app
     status: dormant
@@ -913,6 +1396,13 @@ repos:
       last_push: "2026-10-04"
       a2l-parse: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   accessctl:
     area: auth
     status: support
@@ -923,6 +1413,13 @@ repos:
       last_push: "2026-10-02"
       accessctl: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   actor-kit:
     area: conc
     status: support
@@ -933,6 +1430,13 @@ repos:
       last_push: "2026-10-05"
       actor-kit: 0.2.5
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   aether-core:
     area: app
     status: dormant
@@ -957,6 +1461,13 @@ repos:
       last_push: "2026-10-02"
       api-types: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   app-error:
     area: data
     status: support
@@ -969,11 +1480,25 @@ repos:
       error-classify: 0.3.1
       error-classify-derive: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   audiobook-conformance:
     area: data
     status: support
     notes: "Conformance harness cross-checking mp4-core/id3-core/audiobook-core against ffmpeg and ffprobe; repo-only, not a published crate."
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   audiobook-core:
     area: data
     status: support
@@ -984,6 +1509,13 @@ repos:
       last_push: "2026-10-21"
       audiobook-core: 0.5.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   auditlog:
     area: auth
     status: support
@@ -994,6 +1526,13 @@ repos:
       last_push: "2026-10-02"
       tamper-audit: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   axum-server:
     area: net
     status: dormant
@@ -1012,6 +1551,13 @@ repos:
       last_push: "2026-10-02"
       axum-stack: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   barbican:
     area: auth
     status: core
@@ -1022,6 +1568,13 @@ repos:
       last_push: "2026-10-02"
       barbican: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   billing-kit:
     area: money
     status: support
@@ -1032,6 +1585,13 @@ repos:
       last_push: "2026-10-03"
       billing-kit: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   blobkit:
     area: data
     status: core
@@ -1042,6 +1602,13 @@ repos:
       last_push: "2026-10-02"
       blobkit: 0.4.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   book-kit:
     area: conc
     status: core
@@ -1052,6 +1619,13 @@ repos:
       last_push: "2026-10-04"
       book-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   breaker:
     area: net
     status: core
@@ -1062,6 +1636,13 @@ repos:
       last_push: "2026-10-02"
       breaker: 2.0.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   cachekit:
     area: data
     status: orphan
@@ -1089,6 +1670,13 @@ repos:
       last_push: "2026-10-03"
       can-core: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   cas-kit:
     area: data
     status: core
@@ -1099,6 +1687,13 @@ repos:
       last_push: "2026-10-02"
       cas-kit: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   cf-worker-utils:
     area: net
     status: orphan
@@ -1116,6 +1711,13 @@ repos:
       last_push: "2026-10-02"
       chaos-kit: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   clawdius:
     area: app
     status: orphan
@@ -1144,6 +1746,13 @@ repos:
       last_push: "2026-10-03"
       clock-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   coa:
     area: docs
     status: personal
@@ -1169,6 +1778,13 @@ repos:
       last_push: "2026-10-02"
       config-kit: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   contact-miner:
     area: data
     status: support
@@ -1179,6 +1795,13 @@ repos:
       last_push: "2026-10-02"
       contact-miner: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   crawlkit:
     area: data
     status: orphan
@@ -1198,6 +1821,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   crdts-kit:
     area: data
     status: support
@@ -1208,6 +1838,13 @@ repos:
       last_push: "2026-10-02"
       crdts-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   cryptkit:
     area: auth
     status: support
@@ -1218,6 +1855,13 @@ repos:
       last_push: "2026-10-02"
       cryptkit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   dbc-parse:
     area: data
     status: support
@@ -1228,6 +1872,13 @@ repos:
       last_push: "2026-10-03"
       dbc-parse: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   delta-kit:
     area: data
     status: support
@@ -1238,6 +1889,13 @@ repos:
       last_push: "2026-10-02"
       delta-kit: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   docs-pipeline:
     area: data
     status: support
@@ -1248,6 +1906,13 @@ repos:
       last_push: "2026-10-02"
       docs-pipeline: 0.1.4
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   dsp-core:
     area: data
     status: support
@@ -1258,6 +1923,13 @@ repos:
       last_push: "2026-10-04"
       dsp-core: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   engineering-standards:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1267,6 +1939,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: true
+      status: draft
+      last_audit: "2026-10-31"
   envstack:
     area: obsv
     status: orphan
@@ -1287,6 +1966,13 @@ repos:
       last_push: "2026-10-02"
       error-codes: 1.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   estate-integration:
     area: dx
     status: core
@@ -1294,6 +1980,13 @@ repos:
     _seen:
       last_push: "2026-10-03"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   eventbus:
     area: data
     status: support
@@ -1304,6 +1997,13 @@ repos:
       last_push: "2026-10-02"
       eventbus-kit: 0.3.5
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ferro:
     area: app
     status: core
@@ -1311,6 +2011,13 @@ repos:
     _seen:
       last_push: "2026-09-29"
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   fetch-kit:
     area: net
     status: core
@@ -1323,6 +2030,13 @@ repos:
       fetch-kit: 0.2.0
       resilient-fetch: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   flag-kit:
     area: obsv
     status: support
@@ -1333,6 +2047,13 @@ repos:
       last_push: "2026-10-02"
       flag-kit: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   font-parse:
     area: data
     status: support
@@ -1343,6 +2064,13 @@ repos:
       last_push: "2026-10-03"
       font-parse: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   forgejo-k8s-runner:
     area: infra
     status: dormant
@@ -1357,6 +2085,13 @@ repos:
     _seen:
       last_push: "2026-09-06"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   formula-lang:
     area: money
     status: support
@@ -1367,6 +2102,13 @@ repos:
       last_push: "2026-10-04"
       formula-lang: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   geo-kit:
     area: data
     status: support
@@ -1377,6 +2119,13 @@ repos:
       last_push: "2026-10-02"
       geo-kit: 1.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   gitea-setup:
     area: infra
     status: dormant
@@ -1394,6 +2143,13 @@ repos:
       last_push: "2026-10-02"
       shutdown-kit: 0.3.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   hdwallet:
     area: auth
     status: support
@@ -1404,6 +2160,13 @@ repos:
       last_push: "2026-10-02"
       multi-chain-wallet: 0.3.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   healthkit:
     area: obsv
     status: core
@@ -1414,6 +2177,13 @@ repos:
       last_push: "2026-10-02"
       healthkit: 1.3.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   homebite_docs:
     area: docs
     status: personal
@@ -1446,6 +2216,13 @@ repos:
       last_push: "2026-10-02"
       http-errors: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   hw-kit:
     area: conc
     status: core
@@ -1456,6 +2233,13 @@ repos:
       last_push: "2026-10-03"
       hw-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   hydrated-personal-site:
     area: docs
     status: dormant
@@ -1473,6 +2257,13 @@ repos:
       last_push: "2026-10-02"
       i18n-kit: 0.1.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   input-kit:
     area: ui
     status: core
@@ -1483,6 +2274,13 @@ repos:
       last_push: "2026-10-18"
       input-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ui-text-edit:
     area: ui
     status: core
@@ -1493,6 +2291,13 @@ repos:
       last_push: "2026-10-18"
       ui-text-edit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   id3-core:
     area: data
     status: support
@@ -1503,6 +2308,13 @@ repos:
       last_push: "2026-10-21"
       id3-core: 0.3.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   idempotency-kit:
     area: net
     status: core
@@ -1513,6 +2325,13 @@ repos:
       last_push: "2026-10-02"
       idempotency-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ironclaw:
     area: app
     status: fork
@@ -1530,6 +2349,13 @@ repos:
       last_push: "2026-10-02"
       json-envelope: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   kestrel:
     area: app
     status: orphan
@@ -1544,6 +2370,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   latent-oracle-data:
     area: research
     status: core
@@ -1551,6 +2384,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   latex2e:
     area: docs
     status: fork
@@ -1575,6 +2415,13 @@ repos:
       last_push: "2026-10-02"
       ledger-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-capital-markers:
     area: ui
     status: support
@@ -1585,6 +2432,13 @@ repos:
       last_push: "2026-10-02"
       leptos-capital-markers: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-crypto-ws:
     area: ui
     status: support
@@ -1595,6 +2449,13 @@ repos:
       last_push: "2026-10-02"
       leptos-crypto-ws: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-leaflet:
     area: ui
     status: support
@@ -1605,6 +2466,13 @@ repos:
       last_push: "2026-10-05"
       leptos-leaflet-wyatt: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-macro:
     area: ui
     status: support
@@ -1617,6 +2485,13 @@ repos:
       leptos-derive: 0.1.0
       leptos-macros: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-map-search:
     area: ui
     status: support
@@ -1627,6 +2502,13 @@ repos:
       last_push: "2026-10-02"
       leptos-map-search: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-sparkline:
     area: ui
     status: support
@@ -1637,6 +2519,13 @@ repos:
       last_push: "2026-10-02"
       leptos-sparkline: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   leptos-stale-indicator:
     area: ui
     status: support
@@ -1647,6 +2536,13 @@ repos:
       last_push: "2026-10-02"
       leptos-stale-indicator: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   luaotfload:
     area: docs
     status: fork
@@ -1664,6 +2560,13 @@ repos:
       last_push: "2026-10-02"
       mail-sync-kit: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   mailkit:
     area: net
     status: core
@@ -1674,6 +2577,13 @@ repos:
       last_push: "2026-10-04"
       mailkit: 0.3.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   media-kit:
     area: data
     status: core
@@ -1684,6 +2594,13 @@ repos:
       last_push: "2026-10-02"
       media-kit: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   metrics-kit:
     area: obsv
     status: core
@@ -1694,6 +2611,13 @@ repos:
       last_push: "2026-10-04"
       metrics-kit: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   model-router:
     area: app
     status: support
@@ -1704,6 +2628,13 @@ repos:
       last_push: "2026-10-02"
       model-router: 0.2.0
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   money:
     area: money
     status: support
@@ -1714,6 +2645,13 @@ repos:
       last_push: "2026-10-05"
       decimal-money: 1.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   double-entry:
     area: money
     status: core
@@ -1724,6 +2662,13 @@ repos:
       last_push: "2026-10-05"
       double-entry: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   morph:
     area: app
     status: dormant
@@ -1741,6 +2686,13 @@ repos:
       last_push: "2026-10-21"
       mp4-core: 0.3.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   oauth-toolkit:
     area: auth
     status: support
@@ -1751,6 +2703,13 @@ repos:
       last_push: "2026-10-02"
       oauth-toolkit: 0.3.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   observability-assets:
     area: obsv
     status: infra
@@ -1758,6 +2717,13 @@ repos:
     _seen:
       last_push: "2026-09-15"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   otel-stack:
     area: obsv
     status: dormant
@@ -1779,6 +2745,13 @@ repos:
       last_push: "2026-10-05"
       otelkit: 2.0.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   outbox-kit:
     area: net
     status: core
@@ -1789,6 +2762,13 @@ repos:
       last_push: "2026-10-03"
       outbox-kit: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   paginate:
     area: data
     status: support
@@ -1799,6 +2779,13 @@ repos:
       last_push: "2026-10-02"
       api-paginate: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   pediment:
     area: ui
     status: support
@@ -1806,6 +2793,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   pediment-pro:
     area: ui
     status: personal
@@ -1832,6 +2826,13 @@ repos:
       last_push: "2026-10-02"
       percentile-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   phys-maths-gypt-notes:
     area: docs
     status: personal
@@ -1850,6 +2851,13 @@ repos:
       last_push: "2026-10-02"
       pid-manager: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   plychart:
     area: ui
     status: support
@@ -1868,6 +2876,13 @@ repos:
       plycompute: 0.2.0
       plycore: 0.2.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   policy-kit:
     area: app
     status: core
@@ -1878,6 +2893,13 @@ repos:
       last_push: "2026-10-02"
       policy-kit: 0.1.0
 
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   polyfont:
     area: ui
     status: dormant
@@ -1914,6 +2936,13 @@ repos:
       last_push: "2026-10-02"
       poolkit: 0.1.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ratelimit:
     area: net
     status: core
@@ -1924,6 +2953,13 @@ repos:
       last_push: "2026-10-04"
       throttle-kit: 2.0.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   retry-backoff:
     area: net
     status: support
@@ -1934,6 +2970,13 @@ repos:
       last_push: "2026-10-02"
       loop-retry: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   salting:
     area: auth
     status: core
@@ -1944,6 +2987,13 @@ repos:
       last_push: "2026-10-02"
       salting: 2.0.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   scim-kit:
     area: auth
     status: support
@@ -1954,6 +3004,13 @@ repos:
       last_push: "2026-10-02"
       scim-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   sensors_rpi_pico:
     area: research
     status: dormant
@@ -1971,6 +3028,13 @@ repos:
       last_push: "2026-10-02"
       shared-state: 0.1.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   sheet-core:
     area: money
     status: support
@@ -1981,6 +3045,13 @@ repos:
       last_push: "2026-10-04"
       sheet-core: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   sheet-engine:
     area: money
     status: support
@@ -1991,6 +3062,13 @@ repos:
       last_push: "2026-10-04"
       sheet-engine: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   sheet-xlsx:
     area: money
     status: support
@@ -2001,6 +3079,13 @@ repos:
       last_push: "2026-10-04"
       sheet-xlsx: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   shm-rings:
     area: conc
     status: support
@@ -2011,6 +3096,13 @@ repos:
       last_push: "2026-10-02"
       shm-rings: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   shroom-theme:
     area: ui
     status: dormant
@@ -2028,6 +3120,13 @@ repos:
       last_push: "2026-10-02"
       sieve-kit: 0.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   simd-tokenizer:
     area: data
     status: support
@@ -2038,6 +3137,13 @@ repos:
       last_push: "2026-10-05"
       simd-tokenizer: 0.1.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   slab-pool:
     area: conc
     status: support
@@ -2048,6 +3154,13 @@ repos:
       last_push: "2026-10-02"
       slab-pool: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-content-guard:
     area: ui
     status: support
@@ -2055,6 +3168,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-cross-domain-sync:
     area: ui
     status: support
@@ -2062,6 +3182,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-dse-test:
     area: ui
     status: dormant
@@ -2076,6 +3203,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-katex:
     area: ui
     status: support
@@ -2083,6 +3217,13 @@ repos:
     _seen:
       last_push: "2026-09-11"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-kit:
     area: ui
     status: support
@@ -2090,6 +3231,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-multi-site:
     area: ui
     status: support
@@ -2097,6 +3245,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-progress:
     area: ui
     status: support
@@ -2104,6 +3259,13 @@ repos:
     _seen:
       last_push: "2026-09-13"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   starlight-sites:
     area: docs
     status: core
@@ -2111,6 +3273,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   suture:
     area: app
     status: orphan
@@ -2205,6 +3374,13 @@ repos:
       last_push: "2026-10-02"
       tantivy-helper: 0.3.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   tao:
     area: app
     status: dormant
@@ -2236,6 +3412,13 @@ repos:
       last_push: "2026-10-03"
       telemetry-init: 0.1.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   testkit:
     area: dx
     status: support
@@ -2243,6 +3426,13 @@ repos:
     _seen:
       last_push: "2026-09-21"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   tokenkit:
     area: auth
     status: core
@@ -2253,6 +3443,13 @@ repos:
       last_push: "2026-10-02"
       tokenkit: 0.4.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   traefik-setup:
     area: infra
     status: dormant
@@ -2279,6 +3476,13 @@ repos:
       typed-id-derive: 0.1.0
       typed-id-new: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   uds-kit:
     area: net
     status: support
@@ -2289,6 +3493,13 @@ repos:
       last_push: "2026-10-02"
       uds-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   uofg_r_mono:
     area: research
     status: support
@@ -2296,6 +3507,13 @@ repos:
     _seen:
       last_push: "2026-10-04"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   uring-kit:
     area: conc
     status: core
@@ -2306,6 +3524,13 @@ repos:
       last_push: "2026-10-02"
       uring-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   validkit:
     area: data
     status: support
@@ -2318,6 +3543,13 @@ repos:
       validkit: 1.3.1
       validkit-derive: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   vane:
     area: net
     status: core
@@ -2348,6 +3580,13 @@ repos:
       vane-shm: 0.5.3
       vane-tls: 0.5.3
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   warploom:
     area: research
     status: core
@@ -2355,6 +3594,13 @@ repos:
     _seen:
       last_push: "2026-10-05"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "AGENTS.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   webauthn-kit:
     area: auth
     status: support
@@ -2365,6 +3611,13 @@ repos:
       last_push: "2026-10-05"
       webauthn-kit: 0.3.6
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   webhookkit:
     area: net
     status: core
@@ -2375,6 +3628,13 @@ repos:
       last_push: "2026-10-02"
       webhookkit: 2.2.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   windows-dotfiles:
     area: infra
     status: personal
@@ -2393,6 +3653,13 @@ repos:
       last_push: "2026-10-03"
       wire-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   worker-kit:
     area: obsv
     status: core
@@ -2403,6 +3670,13 @@ repos:
       last_push: "2026-10-04"
       worker-kit: 0.3.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   wry:
     area: app
     status: dormant
@@ -2420,6 +3694,13 @@ repos:
       last_push: "2026-10-02"
       ws-barbican: 0.1.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   ws-kit:
     area: net
     status: support
@@ -2430,6 +3711,13 @@ repos:
       last_push: "2026-10-02"
       ws-kit: 0.4.2
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   wyatt-cv:
     area: docs
     status: personal
@@ -2448,6 +3736,13 @@ repos:
       last_push: "2026-10-04"
       xcp-core: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   # --- registered 2026-10-19: repos that existed on GitHub and on crates.io
   # without an estate.yml entry, which estate-audit reported as errors. Crates
   # and versions taken from each repo's manifest, not guessed.
@@ -2460,6 +3755,13 @@ repos:
     _seen:
       last_push: "2026-10-19"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   comfyui-kit:
     area: net
     status: support
@@ -2470,6 +3772,13 @@ repos:
       last_push: "2026-10-21"
       comfyui-kit: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   pdfcraft:
     area: app
     status: fork
@@ -2486,6 +3795,13 @@ repos:
     _seen:
       last_push: "2026-10-21"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   cargo-semver-checks:
     area: dx
     status: fork
@@ -2510,6 +3826,13 @@ repos:
     _seen:
       last_push: "2026-10-19"
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   signalkit:
     area: data
     status: support
@@ -2524,6 +3847,13 @@ repos:
       signalkit-core: 0.1.0
       signalkit-integrity: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   skillkit:
     area: dx
     status: support
@@ -2538,6 +3868,13 @@ repos:
       skillkit-core: 0.1.0
       skillkit-store: 0.1.0
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   trendkit:
     area: research
     status: support
@@ -2552,6 +3889,13 @@ repos:
       trendkit-core: 0.3.1
       trendkit-profile: 0.3.1
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-10-31"
   OmniSkill-template:
     area: dx
     status: template
@@ -2559,3 +3903,18 @@ repos:
     crates: []
     _seen:
       last_push: "2026-10-19"
+
+  spec-standards:
+    area: infra
+    status: support
+    notes: "Specification and documentation standard for the estate: SPEC-CORE invariants SC-1..SC-10, DOC-STYLE prose rules, tiered S/K/A/D docs gates, and the docs-block schema validated in this file. support, deliberately not core: core means consumer suites pin the shared docs workflow, and only pilots are wired so far. Created 2026-10-31; DOC-STYLE canon moved here from this repo (ADR 0009)."
+    crates: []
+    docs:
+      tier: s
+      specs: ["SPEC-CORE.md"]
+      truth_table: "AGENTS.md"
+      llms_txt: true
+      status: current
+      last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
