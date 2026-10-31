@@ -69,7 +69,7 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
-  mcp-doctor:
+  mcp-fleet-doctor:
     area: dx
     status: support
     notes: "Audits an OpenCode MCP fleet: config parse, backend resolution, gh credential entitlement, real MCP handshakes. Added 2026-10-17."
