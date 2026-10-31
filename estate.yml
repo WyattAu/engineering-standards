@@ -1519,7 +1519,7 @@ repos:
   auditlog:
     area: auth
     status: support
-    notes: "Publishes tamper-audit."
+    notes: "Publishes tamper-audit; composed by dissect-evidence (2026-10-31, first consumer)."
     crates:
       - tamper-audit
     _seen:
