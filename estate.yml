@@ -1921,7 +1921,7 @@ repos:
   dsp-core:
     area: data
     status: support
-    notes: "Audio DSP primitives."
+    notes: "Audio DSP primitives; consumed by nightjar visualizer (2026-10-31, first consumer)."
     crates:
       - dsp-core
     _seen:
@@ -2030,6 +2030,8 @@ repos:
     crates:
       - fetch-kit
       - resilient-fetch
+    docs:
+      consumers: outrider-fetch (2026-10-31)
     _seen:
       last_push: "2026-10-03"
       fetch-kit: 0.2.0
@@ -3150,7 +3152,7 @@ repos:
   simd-tokenizer:
     area: data
     status: support
-    notes: "Token estimation; not yet composed."
+    notes: "Token estimation; composed by offcut-tokencount (2026-10-31, first consumer)."
     crates:
       - simd-tokenizer
     _seen:
