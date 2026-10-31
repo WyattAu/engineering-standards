@@ -1,32 +1,253 @@
 # LOOP.md: the Omni improvement loop
+
+The estate is never "done". This is the repeating loop that keeps the
+templates market-leading. One loop = one focused pass; run it roughly
+monthly or after any major ecosystem shift.
+
+## The loop
+
+1. **Survey the market** (~1h): search for new/updated templates per
+   language (cookiecutter, cargo-generate topic, very_good_templates,
+   golang-standards, Starlight showcase, terraform-best-practices). Note
+   any feature that appears in 2+ leaders.
+2. **Diff against OMNI-CORE + COMPETITIVE-ANALYSIS.md** (~1h): mark new
+   ✅/🔶/❌ in the matrix. Anything two leaders ship that we lack goes on
+   the backlog with the loop number.
+3. **Pick the top 3–6 backlog items** by (leverage × frequency ÷ risk).
+   Maximalist ≠ everything: a feature must not violate the contract
+   (scripts canonical, one source of truth, no CI-only steps).
+4. **Implement estate-wide** via a sweep (same file lands in every
+   template, language-tailored), never per-repo one-offs.
+5. **Test the estate**: every template's main CI green; devcontainer both
+   flavors green; new jobs advisory until stable, then promoted to gates
+   (MUTATION.md promote pattern).
+6. **Update the matrix + this file** with the loop's date and outcome, and record any
+   new failure mode in [PITFALLS.md](PITFALLS.md).
+7. **Publish**: engineering-standards PR (docs + shared gates), then the
+   sweep PRs per template.
+
+## Graduation policy (advisory → gate)
+
+A new job (zizmor, osv, scorecard, cross-platform) lands **advisory**
+(`continue-on-error: true`) for exactly one loop. It graduates to a
 blocking gate when it has been green; or triaged with a written waiver -
+for the whole loop. Nothing jumps straight to blocking.
+
+## Loop log
+
+| Loop | Date | Outcome |
+|---|---|---|
 | 2 | 2026-10-05 | Research step first: pulled OAuth 2.1 `-16`, WebAuthn L3, BIP-32/39/44/84, ISO 4217/20022 and the rounding authorities (ISO 80000-1, ASTM E29, GB/T 8170-2008, ZATCA E-Invoicing vF), then acted on what they said. Five defects found and fixed at source rather than documented: `multi-chain-wallet` refused every BIP-39 phrase under 24 words; `webauthn-kit` accepted an equal signature counter and shipped with six red tests built from the wrong COSE label; `actor-kit` deadlocked a paused actor and then stranded work queued during suspension; `shared-state` never re-exported `TtlCache`; `oauth-toolkit` took the PKCE method as a `&str`. One fix was then **corrected by the research**; L3 §7.2 calls a counter regression a signal, not proof, so the estate's own 0.3.6 hard-fail became a policy choice. New repo `double-entry` (the accounting core) published with a consumer suite in the same loop; `estate-audit.py` caught the resulting pin drift on its own. |
 | 1 | 2026-10-05 | COMPETITIVE-ANALYSIS.md + PITFALLS.md; AGENTS.md + llms.txt estate-wide; OpenSSF Scorecard + zizmor + osv-scanner workflows (advisory); macOS+Windows CI legs (Rust/Go/TS/Python); Rust green on both first try; nix devcontainer flavor repaired (official installer, no GHCR feature) and promoted advisory → gate; TypeScript pinned to 6.x estate-wide (TS 7 breaks `astro check` + knip) with dependabot guards; msrv gate made un-bumpable (`master` + `toolchain` input); OmniPython docs moved to the Pages artifact flow. Graduated to blocking gates: the nix devcontainer flavor (all 10 templates) and the macOS/Windows CI legs (Rust/Go/TS/Python); both were advisory all loop and came back clean, which is the bar the policy sets. Backlog: git-cliff/release-please, REUSE.toml, perf budgets, Copier updates, legacy-template migration. |
+| 2 | 2026-10-06 | Performance budgets estate-wide: one shared comparator (`scripts/compare-bench.py`, identical in all ten templates) that gates on **statistics + exactness** instead of a naive percentage. Microbenchmarks gate via a z-test noise band (criterion std-dev, pytest-benchmark std-dev, spread of five Go runs); byte budgets (site, flash/RAM, `.olean`) gate at 5%; bare wall-clock on shared runners is reported, not gated. `perf` job landed advisory. Also fixed a loop-1 regression: OmniPython was missing AGENTS.md/llms.txt on main. Backlog: Haskell criterion bench component (loop 3), changelog automation, Copier updates, REUSE.toml, legacy templates. |
+| 3 | 2026-10-06 | Determinism made real: `scripts/repro-check.sh` in all ten templates - build twice from a clean state with a pinned `SOURCE_DATE_EPOCH`, compare artifact hashes. Gated where the toolchain is deterministic (Rust, Go, Python, TS, Docs, Lean, Dotfiles), reported with the reason where it embeds timestamps/build ids (Haskell, Embedded, Infra). Loop-3 finds: OmniRust's `reproducible-build.sh` existed and was named in ADR-0004 but had **no make verb and no CI job**; `uv build` fails at a `package = false` workspace root (needs `--all-packages`); chezmoi's `run_once_` chatter pollutes a captured manifest and fakes a mismatch. Locally verified reproducible: Python (wheels + sdists), TS/Docs sites, Lean `.olean`, Dotfiles renders, Rust release rlibs. |
+| 4 | 2026-10-06 | Graduations and a falsified assumption: `perf` and `repro` graduated from advisory to **blocking** in all ten templates after a full green loop. The assumption written into loop 3 - "GHC, `ld` and `tofu` embed timestamps, so report instead of gate" - was **false**: all three hashed identically over two from-scratch builds, so every template now gates its determinism check. Lesson recorded: an escape hatch needs evidence, not a plausible story. Also closed loop 2's documented gap: OmniHaskell gained real criterion microbenchmarks (a bench component kept out of the solver plan with `--disable-benchmarks`, criterion's `nf` so the work is not hoisted into a CAF, and a report emitter that understands 1.6.x's `reportAnalysis/anMean/estPoint`). Infra's plan-binary repro went back to report mode after it *measured* a mismatch. Lesson: a shared lint config is not uniform - OmniDotfiles formats `scripts/` at 4-space indent while the estate uses 2. |
 | 5 | 2026-10-07 | Estate audit (orphan scripts, undocumented verbs, ungated claims) plus supply-chain hardening: **265 GitHub Action references SHA-pinned** across all ten templates and the shared gates (zizmor's 9 high `unpinned-uses` findings gone; dependabot still updates pinned refs, now as explicit commits). Renovate added to the bun repos (OmniTS, OmniDocs); Dependabot's bun updater cannot parse lockfileVersion 2, so package updates there now have an automated path (activates when the Renovate app is installed). OmniDocs got a real post-build smoke gate (pages exist, every internal link resolves) wired into the shared node-ci; which immediately caught a user-visible bug: every page referenced a favicon the template never shipped. Rust's vet-refresh workflow was running its own inline copy of the vet commands (including the removed `fix-imports` subcommand) instead of the canonical script. Post-fix measurement: OmniRust's zizmor went from **30 findings (9 high)** to **0 high / 0 errors**; `pages`/`id-token` permissions scoped to the Pages deploy job in the four docs templates. Remaining zizmor output is low/medium (artipacked persist-credentials, version-comment mismatches) - triaged, stays advisory. |
+| 6 | 2026-10-07 | `persist-credentials: false` on **99 checkout steps** estate-wide (every workflow except vet-refresh, whose create-pull-request step needs the token) - zizmor's artipacked warnings gone (OmniRust 9 low → 1; TS/Go/Python/Docs → 0). Release notes closed as a gap: Go's goreleaser now groups conventional commits explicitly, and OmniPython's release flow gained a GitHub Release with generated notes (its PyPI publish had no changelog surface at all). Rust (release-plz) and TS (changesets) were already covered. Remaining zizmor output is medium/low only, triaged advisory. |
 | 8 | 2026-10-08 | `ty` 0.0.85 evaluated against OmniPython: **13x faster than pyright (0.22s vs 2.9s) but 14/14 diagnostics are false positives**; it cannot resolve uv-workspace src/ layouts yet. Verdict recorded as OmniPython ADR-0007: pyright strict stays; adopt the first ty that checks this workspace clean. Loop-8 lesson: an ADR-numbering helper that takes the last ADR's number instead of the next free one recreates exactly the duplicate-numbering debt the loop had deferred; fixed in the same loop. |
 | 9 | 2026-10-08 | Copier adoption decided (ADR-0001 in engineering-standards): two phases; a `.copier-answers.yml` contract with a **byte-identical scaffold acceptance test** (loop 10), then a drift service that opens update PRs per template (loop 11). Recorded the hard parts up front: `{{ }}` vs `${{ }}` delimiter collisions and the two-sources-of-truth window. Implementation next loop. |
 | 11 | 2026-10-08 | Copier **phase 2 shipped**: every template now carries `.github/workflows/update.yml`; in derived repos it runs `copier update` weekly and opens a PR with the replayed changes (verified: dispatched in the template repo, the no-op path exits clean because template repos carry no `.copier-answers.yml`). The estate now has the one structural feature GitHub template repos lack: in-place updates for derived repos, with the same gates dogfooded on the resulting PR. The persist-credentials exception is documented in-file (copier update commits locally). |
 | 12 | 2026-10-08 | Update channel verified end-to-end down to the wire: real derived repo (omni-copier-e2e, scaffolded from OmniRust), template change pushed, `copier update` dispatched; and it fails with copier 9.18.2's `Cannot update because cannot obtain old template references` even with `_commit` recorded and a tag on the template. Reproduction and evidence logged; this is the top loop-13 item (suspects: copier's shallow template fetch, or `_commit` needing a tagged ref at scaffold time; the scaffold-time answers file must carry the tag, not a later commit). Also fixed this loop: shipped `.copier-answers.yml` in the template (phase-1 gap; `copier copy` did not write it), and the no-op path of the update channel is dispatch-verified. Estate green; the blocking e2e gate caught and fixed its own flake mid-loop. |
 | 13 (open) | 2026-10-08 | Copier update defect reduced to a **local reproduction**: `copier update --defaults` in a derived repo with `_commit` recorded and the old ref tagged prints `Updating to template version 0.1.0` and exits 2 (first run) / 0 (subsequent) while applying nothing. Repro: clone OmniRust-template, add `.copier-answers.yml` with `_src_path`+`_commit: ccad64b...`, run update. Next: read copier 9.18's update source (suspect the subproject must contain the `.copier-answers.yml` state from a *previous copier run*, not a hand-written file; i.e. the scaffold must be produced by `copier copy` with the answers file emitted, and our `exclude: [copier.yml]` may interact). Channel, invariant, and gates all remain shipped and green; this is purely the replay step. |
 | 14 (closed) | 2026-10-08 | **Copier update defect root-caused and cleared**: the CI failures ran against an answers file predating `_commit` (the answers file now ships in the template, so every fresh scaffold has it); locally, `copier update` with `overwrite=True` replayed a real template change into the derived repo cleanly (diff applied, exit 0, committed+pushed as proof). The CLI's `update` subcommand implies overwrite; no flag needed. Loop-13's mystery line (`cannot obtain old template references`) was the missing `_commit`; loop-13's tag hypothesis was wrong. Phase 2 of ADR-0001 is now functionally complete. |
+| 15 | 2026-10-08 | Graduations: `reuse` (licensing) and `scaffold` (byte-identical copier invariant) promoted from advisory to **blocking** in all ten templates. The estate's blocking gate matrix is now: quality + msrv + contract + perf + repro + scaffold + reuse (+ cross-platform/e2e/docs/policy where applicable); advisory remainder is zizmor/scorecard/osv (triaged) and the experimental legs. |
 | 16 | 2026-10-08 | Steady-state pass: the graduated blocking matrix held green across all ten templates on the first post-graduation pushes (no flaps from reuse or scaffold). No new work needed this iteration; the loop's own graduation policy was the change under test, and it passed. Loop 17 contract: copier answer-drift notices, zizmor low/medium leftovers, `ty` upstream re-check, legacy templates owner-gated. |
+| 17 | 2026-10-08 | zizmor ref-version-mismatch leftovers cleared on the three shared-workflow pins (comment said `# main`, which is not a version). Loop-17 contract carried to 18: answer-drift notices, remaining artipacked variants, `ty` upstream re-check. |
 | 18 | 2026-10-08 | Audit pass: every checkout step estate-wide already carries `persist-credentials: false` (loop-6 sweep was complete); remaining artipacked signals originate inside devcontainer feature installs and copier's own clone; outside workflow control, documented. No drift found; steady-state pass. Loop-19 contract unchanged: answer-drift notices in template-update, `ty` upstream re-check. |
 | 19 | 2026-10-08 | Verification pass: estate green (10/10) with the full blocking matrix. Unblocked backlog exhausted; remaining items are upstream-gated (`ty` workspace support, copier replay follow-ups) or owner-gated (legacy templates, Renovate app, release secrets). The loop resumes when one of those gates opens. |
 | 20 | 2026-10-09 | **A blocked problem unblocked: `ty` adopted, not rejected.** Loop 8 recorded ty 0.0.85 as "14 false positives, does not resolve uv workspaces" and rejected it. Re-tested at the same version: the diagnostics are gone once `[tool.ty.environment]` names the workspace member sources (`extra-paths` + `root`). The rejection measured a misconfiguration, not a tool limit. OmniPython now gates with **both** checkers (`scripts/typecheck-ty.sh`, pinned `>=0.0.85,<0.1`, `make typecheck` runs pyright then ty); verified green across the Linux 3.12/3.13/3.14 matrix plus the macOS and Windows legs. ADR-0007 superseded with the original verdict kept verbatim. |
 | 21 | 2026-10-09 | **Copier phase 2 completed -- the real root cause found and fixed estate-wide.** CI dispatch on the e2e derived repo reproduced the silent no-op. Source reading (copier 9.18.2 `_main.py`) settled it: `_render_file` renders ONLY files ending in `templates_suffix` (default `.jinja`); everything else is a raw byte copy, and the update diff explicitly `--exclude`s the answers path. So the static `.copier-answers.yml` shipped in loop 12 was copied verbatim forever (baked `_commit` never advanced), untracking it makes update DELETE the file, and 9 of 10 templates turned out to never have shipped it at all (loop 12 was OmniRust-only) -- their scaffolds could never update. Fix shipped to all 10: `.copier-answers.yml.jinja` with `{{ _copier_answers|to_nice_yaml -}}`; scaffold invariant excludes the `.jinja` source. Verified end-to-end: copy renders real `_commit`/`_src_path`; update replays drift AND advances the merge base (v1->v2 mini-repo, then a static->jinja transition against the real template: `ccad64b -> v0.1.9`). Estate green 10/10 after publish (Haskell's style/weeder/perf initially failed on the known intermittent Hackage-mirror 403s; unrelated to the change, scaffold green throughout; and passed on rerun). |
 | 22 | 2026-10-09 | **Update channel proven in production CI; platform rule discovered.** Cut real tags v0.1.1-v0.1.4 on OmniRust (release-plz is inert without its user-only secret, so no collision) and dispatched update.yml on the e2e derived repo. First run failed with `refusing to allow a GitHub App to create or update workflow` -- root cause: GITHUB_TOKEN is denied the workflows scope BY DESIGN and `permissions: workflows:` is not even a valid GITHUB_TOKEN key (both job-level and workflow-level attempts are rejected by the dispatch parser -- verified empirically, twice). Redesign shipped estate-wide: checkout and create-pull-request use UPDATE_TOKEN (PAT, workflow scope) when the derived repo sets it, github.token otherwise; workflow-file replays without the token fail loudly with instructions -- all-or-nothing by design, since pushing answers-only would advance the merge base while leaving workflow drift unapplied. Production run then behaved exactly as specified: v0.1.4 resolved, replay applied, guard fired with the ::error instructions. Sole remaining gate: the user provisions UPDATE_TOKEN (joins the user-only-secrets family). Post-publish flaps, both transient and handled: (1) ten template-update 'failures' were GitHub's invalid-workflow-file artifacts from the intermediate broken commits; already replaced, the identical final file parses and runs; (2) OmniInfra CI hit a 500 from the GitHub release CDN downloading conftest; conftest install now retries 3x with 15s backoff and verifies the tarball before extracting. |
 | 23 | 2026-10-09 | **Update channel generalized: second language proven in production.** Full cycle on OmniPython: tagged v0.1.0, seeded a content drift commit + v0.1.1, scaffolded the derived repo omni-python-e2e via `copier copy -r v0.1.0` (answers rendered correctly, `_commit: v0.1.0`), pushed, dispatched template-update. First run failed on a NEW wall: new personal-account repos default to **"GitHub Actions cannot create pull requests"** (repo setting, API: `PUT /repos/{}/actions/permissions/workflow` with `can_approve_pull_request_reviews: true`; enabled on both e2e repos). Second run: **success**; PR #7 opened with exactly the right replay (`_commit: v0.1.0 -> v0.1.1` + README drift marker), merged to close the cycle. The channel is now proven on Rust AND Python: tag -> dispatch -> resolve -> replay -> answers advance -> PR -> merge. Derived-repo ops runbook gained two lines: (1) enable the actions-PR setting (UPDATE_TOKEN path bypasses it -- a PAT is not GITHUB_TOKEN); (2) enable Pages (`build_type: workflow`) -- the inherited docs gate 404s on deploy otherwise. Post-fix state: omni-python-e2e fully green through the whole inherited matrix; omni-copier-e2e green except the template-update loud-guard failure, which is correct-by-design until UPDATE_TOKEN exists. |
+| 24 | 2026-10-09 | **Pin audit + derived-repo Dependabot doctrine.** Audited all 32 unique action pins estate-wide against upstream tags: 27 exact (comment tag resolves to the pinned SHA), 1 comment imprecise (changesets `v2` -> `v2.1.2`, same SHA), 1 apparent drift that dissolved on inspection (gh-release's `v3` is a MOVING tag -- Dependabot and our audit read different targets minutes apart; our SHA pin is the stable thing; deliberate non-release refs -- dtolnay master/stable, pypa release/v1 -- excluded per ADR). Doctrine settled: action pins are template-managed -- derived repos close Dependabot's actions PRs (11 closed across both e2e repos with explanatory comments); ecosystem deps (cargo/uv) stay per-repo (hypothesis PR kept). dependabot.yml now carries the note in all 10 templates; runbook item 4 in ADR-0001. |
+| 25 | 2026-10-10 | **The audit that audits the audit.** Started by dogfooding: the standards repo carries no LICENSE/REUSE, AGENTS.md, llms.txt, dependabot, scorecard, security or devcontainer -- while mandating all of them. Then two live defects. (1) **llms.txt had shipped broken for thirteen loops**: all ten templates carried literal `$1` where the repo name belonged (3 broken URLs each), and nothing looked at the file. Fixed estate-wide; new `scripts/check-llms-links.py` (estate-wide job, blocking) plus a negative test that immediately caught the regex missing bare `$1`. The gate then caught the same bug in BOTH derived repos -- and the update channel delivered the fix automatically: OmniPython v0.1.2 -> PR #8 on omni-python-e2e carrying the llms repair + the dependabot doctrine note + `_commit: v0.1.1 -> v0.1.2`, merged with zero manual work. First proof of the channel fixing a real bug in a consumer. (2) **estate-audit had been red for six consecutive runs**: 14 "repo does not return" errors were private repos that CI's installation-token GITHUB_TOKEN cannot see (a PAT audit of the same manifest: 0 errors) -- plus 3 real errors I had introduced in loops 12/23 (two e2e repos never registered). Fixed both: absence now requires positive proof of token reach (`GET /user`), with a unit test pinning both halves, and the three repos registered (audit: 200 repos, 0 errors). Estate audit GREEN for the first time in a week. |
+| 26 | 2026-10-12 | **One version of the estate's own automation.** Audited every action pin in the family: seven actions were pinned to two different SHAs in different repos -- checkout v4/v7.0.1, setup-go v5/v7.0.0, upload-artifact v7.0.1/v7.0.2, cache v4.3.0/v6.1.0, setup-uv v6.8.0/v7.6.0, attest-build-provenance v1.4.4/v4.2.2, scorecard-action v2.4.1/v2.4.4, golangci-lint v7.0.1/v9.3.0, gh-release two v3 commits. Every pin was reproducible and CI-verified, so nothing looked wrong -- the estate simply had no single version of its own CI. **97 pins converged** across 13 loop-owned repos; every winner was resolved via the compare/tags APIs, not guessed (the discovery: the 'older' upload-artifact pin was actually v7.0.2, newer than the one it replaced). dtolnay/rust-toolchain stays split deliberately -- two branches (master/stable) for the un-bumpable MSRV gate, not two versions. New `scripts/check-pin-consistency.py` gates the invariant and earned its place twice: it found four splits an ad-hoc scan had missed, and its first CI run exposed two of my own bugs (unauthenticated 400-call scan; crash on directory entries with null download_url). Scope is explicit via `gated: true` in estate.yml (13 loop-owned repos) so the gate never asserts over the owner's other ~190. Also registered 4 repos the estate gained mid-loop. All three standards gates green. |
+| 27 | 2026-10-12 | **Dogfooding closed.** The standards repo now carries everything it mandates: security.yml (zizmor advisory + REUSE 3.3 **blocking** -- REUSE.toml aggregates the repo so a finding is a real schema break), scorecard.yml (advisory), dependabot.yml (github-actions weekly, grouped -- the pin gate keeps any merged bump coherent estate-wide), AGENTS.md (contract for agents working *on* the standard: measure-never-assume, advisory-for-one-loop-then-graduate, one-source-of-truth, scripts-are-canonical, decisions-get-ADRs, and the loop-25 lesson "gates must be able to lie"), llms.txt (the repo's own LLM contract -- verified placeholder-free by the loop-25 gate, 13 contracts estate-wide), and dual devcontainers (image + nix, matching the family). All three standards gates green on the new HEAD. |
+| 28 | 2026-10-13 | **Estate-scale bump as one decision + a live security error fixed.** A full Dependabot wave (21 PRs) proposed the same two majors on all ten templates. Applied as **one estate-wide decision**: setup-python v7 (5fda3b95) + create-pull-request v8 (5f6978fa), **54 pins across 13 loop-owned repos**, chosen on evidence -- the v5 setup-python pin emitted `Node.js 20 is deprecated ... forced to run on Node.js 24` on every single run, so the estate was running CI on a deprecated runtime. Dependabot's own PRs auto-closed as superseded, and check-pin-consistency never saw a split window. estd's setup-node v4 -> v7.1.0 on the same evidence. Then the real find: **zizmor's `error[cache-poisoning]` had been live on main** (OmniPython release.yml -- setup-uv caches by default inside a tag-triggered publish, and caches outlive the run) sitting unreported on an advisory job; fixed with `enable-cache: false` and verified -- zizmor now reports 4 warnings, **0 errors**. Three PRs disposed with reasons rather than merges: gh-release (our pin IS the current v3 tag -- the proposal targets an untagged commit), setup-uv v10 (three majors of the tool owning sync/lock/build: that is an ADR plus a measurement, not a bot merge), estd group (split: setup-node applied, setup-uv deferred). hypothesis patch merged -- dev test dep, CI verifies. |
+| 29 | 2026-10-13 | **Loop 28's deferral, resolved by measurement.** `setup-uv` 7.6.0 -> 10.3.0 had been closed as "three majors of the resolver". Measuring the two layers showed the numbers belong to the action wrapper: both versions default to `version: latest`, and the newest uv release is 0.13.0 -- the exact version this repo's lock (revision 5) is already validated against in green CI. Inputs we pass (`python-version`, `enable-cache`) both still exist, and v10 runs on node24 (v7 on the deprecated node20). Adopted: 17 pins across OmniPython, the shared `python-kit.yml`, and both derived e2e repos; CI verifies the whole matrix. ADR-0002 records the layer analysis as the ADR's real content. New pitfall: *read the layer before you fear the number* -- a deferral justified by a version number is not a measurement. |
+| 30 | 2026-10-14 | **The advisory job nobody read.** A full zizmor survey across all eleven repos contradicted the estate's own record (loop 5: "0 high/0 errors"): live errors existed in three repos. (1) **11 error[template-injection]** in the shared kit -- `inputs.*` interpolated straight into `run:` bodies in rust-kit.yml's coverage step and attest.yml's provenance writer, i.e. caller input executed as shell. Fixed with env vars plus argument arrays so no interpolated text is ever re-split. (2) **error[cache-poisoning]** in OmniGo's tag-triggered release (setup-go caches by default) -- same class as loop 28's OmniPython fix. (3) 18 error[impostor-commit] on dtolnay/rust-toolchain: verified via the GitHub API that every pinned SHA is a real upstream commit, so the audit's verdict is a false positive for that repo's branch-head refs; suppression moved to one `.zizmor.yml` with the evidence beside it. **zizmor graduated advisory -> blocking** with `min-severity: high`, the mapping measured with the tool itself (template-injection=High; artipacked/excessive-permissions=Medium, still printed). Loop's own lessons: three rounds on the ignore-comment syntax (zizmor does not honour `ignore[]` for this audit), a config file the action never read (identical finding counts across three pushes proved it), and a regex of mine that deleted pinned actions before CI could. All caught by verification, none shipped. |
+| 31 | 2026-10-15 | **Kit hardening, and the oldest pitfall re-learned by hand.** 20 artipacked findings sat in the shared kit workflows (checkouts persisting credentials by default) -- and because kits are consumed by pinned SHA, that risk propagated into every template. Fixed: 17 read-only checkouts across the five kits hardened; attest.yml's `eng` checkout keeps credentials deliberately (it is where the provenance note is committed and pushed) and its `kit` checkout is read-only. Local zizmor: 104 findings (20 medium) -> 33 (2 medium, both documented). Found along the way: **only 3 of 10 templates consume the shared kits at all** (Rust/TS/Docs) -- the other seven inline their own jobs, so the 'one gate matrix' premise is realized in 30% of the estate (backlog: kit adoption for the seven). The pin gate was blind to reusable-workflow references entirely; widened it (25 -> 27 pins visible). Three rounds of my own YAML surgery on the shared kit broke it (a duplicate `with:` key -- PyYAML accepts what GitHub's parser rejects), which is the estate's oldest pitfall, hit with a hand-rolled sweep. Restored, hardened with an indent-aware transform, validated with a duplicate-rejecting loader plus a structural assertion, and re-pinned all three consumers to the verified commit. Stale failed quality runs deleted with the reason recorded here: they tested a broken intermediate commit; the fix is proven green by consumers' CI. |
+| 32 | 2026-10-15 | **First kit adoption: OmniGo now consumes the shared Go kit.** The migration was gated on an equivalence check, and it held: OmniGo's scripts/test.sh, lint.sh and vuln.sh are thin `exec` wrappers around byte-identical commands to the kit's steps (`go test -race ./...`, `golangci-lint run`, `govulncheck ./...`), and the kit is marginally **stronger** -- it adds a `go build ./...` gate the inline jobs lacked. The three inline jobs were replaced by one `quality:` call pinned to the kit SHA; repo-specific gates (fuzz, contract, cross-platform, perf, repro, scaffold) stay inline. The 'scripts are canonical' rule survives intact: scripts remain what developers run locally (`make test`), and CI now runs the same commands from one shared place. Verified green across all OmniGo workflows. Remaining adoptions: OmniHaskell + OmniPython (their kits exist; Python's needs the kit to include the dual type-checkers from loop 20 first -- a kit-strength question, checked before migrating), then the four templates with no matching kit (new kits, bigger scope). |
+| 33 | 2026-10-15 | **The equivalence check flipped: haskell-kit was the weaker one.** Preparing OmniHaskell's adoption found three gaps in the kit itself: no multi-GHC story (OmniHaskell blocks on 9.6.7/9.8.4 and runs 9.10.1 experimental; the kit takes one version), a bare `cabal update` that flaps on the known Hackage-mirror 403s (the template guards with 3 retries -- a lesson the kit never inherited), and hlint fetched from `latest` (a new hlint release could break every consumer's gate with no code change; the template pins v3.10). Migrating would have weakened the gates, so the kit was strengthened instead: retry, pinned hlint, and the caller-side matrix pattern documented in the header. Strict-parse and zizmor clean. Loop-33 doctrine: **equivalence is checked in the direction of the consumer** -- adopt only when the kit is at least as strong as what it replaces; when it is not, the kit is the fix, not the migration. OmniHaskell adoption lands next loop on the strengthened kit. |
+| 34 | 2026-10-16 | **Research iteration 1/10: reproducible builds** (plan: docs/research/PLAN.md). Sources: Lamb & Zacchiroli IEEE Software 2022 + RB report 2026-03 + SLSA/OSS Rebuild. Delta found three gate gaps against the state of the art, all fixed in OmniPython as the pilot: `.buildinfo` input recording per run (the paper's definition: control ALL legitimate inputs, not just the command); a bytecode-cache guard -- the 2026 PyPI-scale attack ships a deterministic poisoned `.pyc` that structurally passes hash comparison, so presence itself is now a hard error; diverging-artifact output on mismatch. OMNI-CORE 11b codifies it. Follow-ups filed: buildinfo estate sweep, diffoscope advisory, cross-infrastructure rebuild (owner). CI verified: repro green with gate v2. Research note: docs/research/34-reproducible-builds.md. |
+| 35 | 2026-10-16 | **Research iteration 2/10: provenance & attestations** (docs/research/35-provenance-attestations.md). Survey: 4 of 10 templates attested; the delta fixed on evidence -- OmniRust now attests the published `.crate` artifacts (id-token: write + attest-build-provenance, SLSA non-falsifiable provenance bound to the workflow OIDC); OmniTS's 'npm provenance' claim became real (`bun publish --provenance` -- the workflow relied on an npm env variable bun's publish may not honour; a comment is not a control). Infra/Docs/Dotfiles/Lean documented N/A (no distributable artifacts) instead of claiming coverage. OMNI-CORE 11c codifies the mandate: every distributable artifact gets OIDC-bound provenance; publishers stay unarmed by default. SLSA framing: per-artifact non-falsifiable provenance on hosted runners; OSS Rebuild's fleet-scale rebuild filed as owner follow-up. CI verified green on both changed repos. |
+| 36 | 2026-10-16 | **Research iteration 3/10: dependency update policy** (docs/research/36-dependency-update-policy.md). Sources: Dependabot cooldown GA 2025 + July 2026 3-day default; zizmor cooldown audit; the 2026 TeamPCP/axios campaigns (malicious versions live 2-3h); Socket's 7-day recommendation; strapi#26438 (github-actions cooldown supports default-days ONLY). Adopted estate-wide in all 13 loop-owned repos: 30d majors / 7d minors / 3d patches / 7d github-actions; security PRs bypass cooldown by design; build-time resolution stays cold (committed lockfiles). OMNI-CORE 11d codifies it. The zizmor dependabot-cooldown warnings that motivated the loop are resolved by configuration. Fielded follow-up: uv exclude-newer as install-depth-2. |
+| 37 | 2026-10-16 | **Research iteration 4/10: flaky tests & test selection** (docs/research/37-flaky-tests.md). Policy adopted (OMNI-CORE 11e): retries are data not a pass (one retry, reported); isolation beats retrying; quarantine = non-blocking + owner + ticket + 14-day expiry + written exit criteria; randomize order where the runner supports it. Implemented: rust-kit tests via **cargo-nextest** (per-test process isolation + `--retries 1`, doctests run explicitly so the gate does not shrink, loom keeps the standard harness) -- verified live in OmniRust CI (`Nextest run ID ...`); OmniPython gains **pytest-randomly** (order randomization, seed printed; suite green). Go's gotestsum filed, not forced. Research note records what the estate does that the literature treats as out of scope: Hypothesis counterexample reproducers and loom model-checking are flake *prevention* at the mechanism level. |
+| 38 | 2026-10-16 | **Research iteration 5/10: formal verification in CI** (docs/research/38-formal-verification.md; OMNI-CORE 11f). The Lean proof adjustment: REQ-002's documented behavior was a comment -- now it is two theorems the kernel checks on every build (`clamp_eq_in_bounds` via omega; `clamp_eq_lo` via the hypothesis), the axiom basis of every theorem is printed in CI logs (propext/Quot.sound only -- no incomplete-proof axiom), and a CI gate fails on any hole marker in the source tree (mathlib-grade proof hygiene). The gate immediately caught its own documentation using the forbidden word -- fixed and verified green. Filed, not forced: Kani/hacspec as an opt-in advisory rust-kit job (IO-heavy crates would make harnesses substantial work for partial coverage). OMNI-CORE 11f states the distinction: formal properties where the language supports them; everything else strong-but-empirical. |
+| 39 (closed) | 2026-10-16 | **Iteration 6/10 verified: merge-queue readiness shipped estate-wide.** All 12 consumer repos trigger CI + security on `merge_group` (the queue validates grouped future-state branches; without the trigger an enabled queue waits forever), standards gate green, enablement runbook recorded in research note 39. Enablement itself is owner-action (branch protection: require merge queue, enforce-admins optional -- closing the loop's own documented admin-bypass deviation). |
+
+## Backlog
+
+See [COMPETITIVE-ANALYSIS.md](COMPETITIVE-ANALYSIS.md) § "Backlog".
+
+## Round 18 (2026-10-07)
+
+vat-rules extracted, invoice-kit rounding fixed, ap-kit born. The estate suite
+found the missing re-export on its first run, which is the loop working: the
+extraction was half done and only a consumer depending on both crates could see
+it. Audit 196/169/83, 0 errors, 0 drift, 40 green.
+
+## Round 19 (2026-10-07)
+
+IPC stack composed: axum-stack + poolkit + uds-kit over a real Unix socket,
+clearing three debt crates in one suite. Debt 14 → 11. Audit 197/169/86,
+0 errors, 0 drift, 41 green.
+
+## Round 20 (2026-10-07)
+
+spreadsheet-diff pair composed: sheet-xlsx + delta-kit, semantic and byte diffs
+required to agree. Debt 11 → 9. Audit 197/169/88, 0 errors, 0 drift, 42 green.
+
 | 40 | 2026-10-17 | **Research iteration 7/10: SBOM, VEX & dependency review** (docs/research/40-sbom-vex-dependency-review.md; OMNI-CORE 11h). Estate-wide: a blocking **dependency-review** PR gate (fail on newly added HIGH-severity known-vulnerable deps; deny strong-copyleft licenses conflicting with Apache-2.0; a HIGH known vuln is a finding by definition, so the advisory-one-loop graduation does not apply) and a **CycloneDX SBOM** artifact job in the 6 release-producing templates (Syft: one uniform mechanism across cargo, uv, go.mod, npm, cabal). VEX filed, not faked; honest statements need a triage process. CycloneDX chosen over SPDX for the security artifact (VEX embedding, scoring). Follow-on fix verified: the new read-only sbom job made zizmor re-classify the release workflows' write scopes as High excessive-permissions; scopes were already least-privilege at job level and all in use, so evidence-led suppression moved to `.zizmor.yml` in the three attesting repos; all green. |
+
+| 41 | 2026-10-18 | **Research iteration 8/10: agent-facing repo interfaces** (docs/research/41-agent-interfaces.md; OMNI-CORE 11i). Research settled the convention landscape: AGENTS.md is the open standard (Codex et al.), Claude Code now reads it natively, older Claude Code needs CLAUDE.md, Cursor wants .cursor/rules. Estate standard: **one contract, many projections** -- AGENTS.md single-source; CLAUDE.md pointer added to all 11 loop-owned repos (a fork would drift and two agents would get different contracts); llms.txt projection already gated (loop 25). Cursor rules filed. |
+
+| 42 | 2026-10-18 | **Research iteration 9/10: runner hardening & cache poisoning** (docs/research/42-runner-hardening.md; OMNI-CORE 11j). Survey verified per repo: all six 
+
+| 43 | 2026-10-18 | **Research iteration 10/10: synthesis.** The ten-iteration research program (docs/research/PLAN.md) landed: reproducible-build gate v2 (.buildinfo + bytecode guard), OIDC-bound provenance on every distributable artifact, cooldown-based update policy (30/7/3/7), flaky-test policy (nextest isolation + reported retries, pytest-randomly), formal-verification hygiene (axiom audit + no-sorry gate; REQ-002 now proven), merge-queue readiness (merge_group triggers), SBOM + dependency-review PR gate, the agent-interface standard (one contract, many projections), and harden-runner audit mode on the four tag-triggered publishers (SHA resolved via the tags API: ccd8616d). Open triage: dependency-review on Dependabot PRs flags the group bumps (needs log triage -- probable license-resolution edge on action refs); estate-audit manifest re-sync after new estate repos; harden-runner audit->block flip after egress review. The research notes are the competitive delta: each records what the estate does that the references do not. |
+
+## Round 21 (2026-10-07)
+
+lead pipeline composed (contact-miner + geo-kit, storage gate), merged a
+concurrent suite for the same pair, resolved a rustc 1.95 toolchain requirement
+locally. Concurrent rounds cleared all remaining debt. Audit 227/195/124,
+0 errors, 0 drift, debt 0, 55 green.
+
+## Round 22 (2026-10-07)
+
+recon-kit born: statement types + a proposing matching engine, published with a
+double-entry month-close estate suite. The Suture evaluation is also closed:
 bank statements are append-only external facts, not mergeable documents -
+reconciliation is matching, not merging, so Suture has no role here. Audit
+228/196/125, 0 errors, 0 drift, debt 0, 56 green.
+
+## Round 23 (2026-10-07)
+
+report-kit born: trial balance + aging, per-currency by construction, with the
+accounting equation as a runtime check. Reporting suite over the month-close
+ledger. Audit 229/197/126, 0 errors, 0 drift, debt 0, 57 green.
+
+## Round 24 (2026-10-07)
+
+statement-ofx born: the OFX adapter feeding recon-kit, float-free amounts,
+sign-normalising at the boundary. OFX close suite in estate-integration,
+including the one-penny-drift regression. Audit 230/198/127, 0 errors, 0
+drift, debt 0, 58 green.
+
+## Round 25 (2026-10-07)
+
+vat-return born: the VAT return from the documents, deductible-only input tax,
+per-currency, tax-point filtered. The AR/AP/vat-rules triangle closes. Audit
+231/199/128, 0 errors, 0 drift, debt 0, 59 green.
+
+## Round 26 (2026-10-07)
+
+P&L + balance sheet in report-kit 0.2.1, one trial balance read two ways.
 0.2.0 shipped without the module; a silently failed edit and an unmoved test
 count; recorded in the changelog, fixed in 0.2.1. Audit 231/199/128, 0
+errors, 0 drift, debt 0, 59 green.
+
+## Round 27 (2026-10-24)
+
+statement-camt born: both balances verified on arrival, the truncated-import
+check OFX cannot offer. Estate reconciled the release wave (6 pins, one
+republish of vat-return against invoice-kit 1.0.0). Audit 233/200/129,
+0 errors, 0 drift, debt 0, 60 green.
+
+## Round 28 (2026-10-24)
+
+fx-kit born: IAS 21 revaluation with exact rational rates, one rounding at the
+final division, idempotence pinned. Audit 234/201, transitional shape from the
+concurrent audit-methodology rework, 61 green.
+
+## Rounds 29–30 (2026-10-25)
+
+group-kit born (consolidation, eliminations that must cancel) and ledger-pg
 born (PostgreSQL persistence; the keystone). Estate pins persistence through
+to the reports. Release wave reconciled by patch releases converging the graph
+on double-entry 0.1.1. Audit 237/205/133, 0 errors, 64 green.
+
+## Round 31 (2026-10-25)
+
+vat-mtd born: the HMRC MTD contract as typed serde types, not an HTTP client.
 Filing chain pinned end to end in the estate suite; documents to boxes to
+submission body with no retyped figures. Audit 238/206/134, 0 errors, 0 drift
+from this loop's crates, 65 green.
+
+## Round 32 (2026-10-25)
+
+pay-kit born: webhooks verified (Stripe + GoCardless via webhookkit),
 settlements posted, allocations applied; the AR loop closes. Payment loop
+pinned end to end in the estate suite. Audit 239/207/135, 0 errors, 0 drift
+from this loop's crates, 66 green.
+
+## Round 33 (2026-10-25)
+
 group-kit 0.2.0: IAS 21 translation; three rates, the difference to a
+translation reserve rather than profit, reserve provenance pinned against the
+theoretical difference. Full multi-currency group close in the estate suite.
+Audit 242/207/135, 0 errors, 67 green.
+
+## Round 34 (2026-10-26)
+
+Competitive code audit: pulled odoo/frappe/erpnext/akaunting at current main
+and read the accounting implementations. Verified float-based money with
+self-documented minimisation of IEEE-754 errors (Odoo), silent zeroing of
+malformed money (ERPNext flt), mutable rounding policies, posted-entry
+mutability by draft-reset, and auto-deciding reconciliation. Estate edge
+restated with citations. 67 green.
+
+## Round 35 (2026-10-26)
+
+Tamper-evident hash chain in ledger-pg (studied from Odoo), and the loop's
+process rule extended: 0.2.0 shipped a double-flipped reversal because
 publish ran before the integration suite; yanked, fixed in 0.2.1/0.2.2, and
+no release goes out without its covering suite green. Audit 246/207/135,
+0 errors, 67 green.
+
+## Round 36 (2026-10-27)
+
+invoice-kit 1.1.0: VAT-inclusive pricing (the backwards division, exactly).
 The vat-rules convergence cascade; and the 0.1.6 version race between two
+agents, resolved by a converged 0.1.7. Audit 246/207/135, 0 errors, 67 green.
+
+## Round 37 (2026-10-27)
+
 sales-tax born: US document arithmetic, research-first; nexus gating,
+taxability as input, jurisdiction-stack rates as exact percents, explicit
+rounding scope. US sale pinned end to end in the estate suite. Environment:
+tmpfs exhaustion from concurrent-run debris diagnosed and cleared. Audit
+247/208/136, 0 errors, 68 green.
+
+## Round 38 (2026-10-27)
+
 close_pack: the quarter-end close end to end; documents to boxes to MTD
+body, camt reconciliation against the same postings, nothing retyped. The
+fixtures' own arithmetic errors were refused by the crates. Audit 247/208/
+136, 0 errors, 70 green.
+
+## Round 39 (2026-10-29)
+
+Property tests across fx-kit, sales-tax, invoice-kit, and both statement
+parsers: the algebra (sum invariants, sign symmetry, monotonicity, bounds)
+and the parser boundaries (arbitrary bytes never panic). Test-only; no
+republish. 74+ groups green.
+
+## Round 40 (2026-10-28)
+
+release-gate.py: five gates (build/test/clippy/fmt/pin-convergence) between
+the tree and a publish. Proven both ways against sales-tax. The 0.2.0 yank
+lesson is now mechanical. Audit 247/208/136, 0 errors.
+
+
+### Round 39 addendum
+
+Convergence cascade continued (statement-camt/ofx/group-kit republished).
 typed-id-new 0.1.0 yanked between lock updates; restored from git. 68+ green.
+
+## Round 42 (2026-10-29)
+
+EN 16931 category-specific rules audit: BR-AE-02 (buyer VAT ID for
+reverse charge), BR-E-02/03 (exempt reason), BR-IC-02 (delivery date),
+and BR-S-08/BR-Z-08 (breakdown cross-check) documented as gaps. The fix
 requires invoice-kit 1.2.0 and a convergence wave; fresh session.
