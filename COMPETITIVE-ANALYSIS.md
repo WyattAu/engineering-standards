@@ -102,3 +102,55 @@ dependabot guard, detailed in [PITFALLS.md](PITFALLS.md).
 ## Research-program delta (Oct 2026, iterations 34-43)
 
 Ten research iterations (docs/research/) moved the estate past the market matrix on: input-recorded reproducibility (`.buildinfo` + bytecode-cache guard; the 2026 PyPI-scale attack), OIDC-bound provenance on every distributable artifact, age-gated dependency adoption (30/7/3/7 cooldowns; security PRs exempt), flaky-test policy with per-test isolation (cargo-nextest) and order randomization (pytest-randomly), machine-checked properties with axiom audits (Lean; `#print axioms` + no-sorry CI gate), merge-queue readiness, CycloneDX SBOM on releases, a blocking dependency-review PR gate, the agent-interface standard (AGENTS.md single-source; CLAUDE.md pointer; llms.txt gated), and harden-runner audit mode on tag-triggered publishers. Open items are tracked in LOOP.md (iterations 40/43 triage list); not silently dropped.
+
+## Loop 2: the agent-ecosystem market (skills + MCP), 2026-10-31
+
+Sources: marketplace docs and directories (skills.sh, SkillsMP, LobeHub,
+localskills.sh, Agensi, claude-plugins-official, anthropics/skills), the
+AAIF donation announcement, and four MCP security studies (arXiv
+2608.00150; arXiv 2609.14119; Canopii State of MCP Security 2026; DSN 2026
+registry study). Star and install counts are direction, not merit.
+
+### Market map
+
+| Class | Leaders | What they verify |
+|---|---|---|
+| Skills aggregators | SkillsMP, LobeHub (100k+ listed) | nothing (crawled) |
+| Skills leaderboards | skills.sh (Vercel, 1.3M+ installs) | install counts; Socket/Snyk on some listings |
+| Skills registries | localskills.sh | accounts, versions, rollback, orgs/SSO |
+| Skills curated paid | Agensi | 8-point security scan |
+| Skills governance | AAIF (Agent Skills format standard, donated 2026-10-22) | format only; no quality canon |
+| MCP security tooling | xlyoung/mcp-doctor (scan/score/install), mcp-audit.dev, mcp.market research, MCP Observatory | scoring and verdicts post-hoc |
+
+### The gap the research names
+
+1. Silent drift: 51.1% of multi-version MCP servers changed advertised
+   behavior; 40.6% silently; 4.2% redirected endpoints (rug-pull shape).
+2. Unvetted execution: 687 unauthenticated shell-exec tools; 232 servers
+   with confirmed dangerous sinks; 91.8% of internet-facing servers lack
+   OAuth.
+3. No freshness: registries do not version tool definitions; "the
+   behavioral change is undetectable by construction".
+4. Token cost: exactly one competitor (skill-creator) reports skill token
+   overhead, via A/B; nobody gates it.
+
+### Estate position and verdicts
+
+| Capability | Estate | Best market | Verdict |
+|---|---|---|---|
+| Skill validation | skillkit lint/pack/verify/audit + SKILL-STD + standards-audit | Agensi 8-point (paid); Socket/Snyk partial | 🎯 |
+| Projection freshness (drift) | SC-11/11p: PROVENANCE rev pins + build.sh --check/--diff | none surface it; papers recommend exactly this | 🎯 |
+| MCP server posture | MC-1..MC-12 (read-only default, pinned deps, sink bans, auth-tested, sandbox-or-declare, versioned tool defs) | rare per paper data | 🎯 |
+| Fleet audit | mcp-fleet-doctor (renamed from mcp-doctor, ADR-0001 there; name collision resolved) | xlyoung/mcp-doctor (broader scanner, different scope) | ✅ differentiated |
+| Token measurement | token_benchmark.py regression gate (14,190 est tokens across 4 skills, baseline 2026-10-31) | skill-creator A/B report only | 🎯 gated vs reported |
+| Prose register | DOC-STYLE + voice-lint (strict in standards repos) | none | 🎯 |
+| Catalog size | 4 skills | SkillsMP 100k+ | ❌ by design: curation is the product |
+| Distribution | standards-dist marketplace.json + plugin.json | /plugin marketplaces, skills.sh | ✅ shipped; skills.sh listing is a manual follow-up |
+
+### Loop-2 actions landed
+
+standards-dist marketplace manifests; token benchmark with regression
+gate; drift-diff emission (build.sh --diff); MCP-STD v0.2 (MC-7..MC-12
+grounded in the four studies); mcp-fleet-doctor rename. Backlog:
+skills.sh + AAIF conformance listing (manual submission); eng-side
+projection-freshness mirror; token benchmark for MCP tool schemas.
