@@ -1888,7 +1888,6 @@ repos:
     _seen:
       last_push: "2026-10-02"
       delta-kit: 0.2.1
-
     docs:
       tier: k
       specs: []
@@ -1896,6 +1895,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+
+  dissect:
+    area: app
+    status: support
+    notes: "Fork of morluto/rea (MIT), seeded 60149282fcfc 2026-10-31; agent RE bridge, sandboxed providers + tamper-evident evidence."
+
   docs-pipeline:
     area: data
     status: support
@@ -2685,7 +2690,6 @@ repos:
     _seen:
       last_push: "2026-10-21"
       mp4-core: 0.3.1
-
     docs:
       tier: k
       specs: []
@@ -2693,6 +2697,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+
+  nightjar:
+    area: app
+    status: support
+    notes: "Fork of cjpais/Handy (MIT), seeded 7bfb2e2c934b 2026-10-31; offline dictation, Wayland-first, voice suite planned. Rebrand required before distribution (upstream trademark clause)."
+
   oauth-toolkit:
     area: auth
     status: support
@@ -2717,6 +2727,7 @@ repos:
     _seen:
       last_push: "2026-09-15"
 
+<<<<<<< HEAD
     docs:
       tier: k
       specs: []
@@ -2724,6 +2735,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+=======
+  offcut:
+    area: app
+    status: support
+    notes: "Fork of FujiwaraChoki/supoclip (AGPL-3.0), seeded 4bc76f83b342 2026-10-31; local-first clip pipeline, Rust render planned. Fork keeps AGPL-3.0."
+
+>>>>>>> 144b761 (estate.yml: register nightjar, outrider, offcut, dissect (competitor forks seeded 2026-10-31, schema 256 repos))
   otel-stack:
     area: obsv
     status: dormant
@@ -2762,6 +2780,7 @@ repos:
       last_push: "2026-10-03"
       outbox-kit: 0.2.0
 
+<<<<<<< HEAD
     docs:
       tier: k
       specs: []
@@ -2769,6 +2788,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+=======
+  outrider:
+    area: app
+    status: support
+    notes: "Fork of Panniantong/Agent-Reach (MIT), seeded 14c213405669 2026-10-31; agent web-access channels, Rust hot path planned. Converts crawlkit + aileron orphans."
+
+>>>>>>> 144b761 (estate.yml: register nightjar, outrider, offcut, dissect (competitor forks seeded 2026-10-31, schema 256 repos))
   paginate:
     area: data
     status: support
