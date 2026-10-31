@@ -110,7 +110,7 @@ repos:
       specs: ["SPEC.md"]
       truth_table: "README.md"
       llms_txt: false
-      status: draft
+      status: current
       last_audit: "2026-10-31"
   sales-tax:
     area: money
