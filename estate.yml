@@ -2726,8 +2726,6 @@ repos:
     notes: "VictoriaMetrics + Grafana assets for shipping builds."
     _seen:
       last_push: "2026-09-15"
-
-<<<<<<< HEAD
     docs:
       tier: k
       specs: []
@@ -2735,13 +2733,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
-=======
+
   offcut:
     area: app
     status: support
     notes: "Fork of FujiwaraChoki/supoclip (AGPL-3.0), seeded 4bc76f83b342 2026-10-31; local-first clip pipeline, Rust render planned. Fork keeps AGPL-3.0."
 
->>>>>>> 144b761 (estate.yml: register nightjar, outrider, offcut, dissect (competitor forks seeded 2026-10-31, schema 256 repos))
   otel-stack:
     area: obsv
     status: dormant
@@ -2779,8 +2776,6 @@ repos:
     _seen:
       last_push: "2026-10-03"
       outbox-kit: 0.2.0
-
-<<<<<<< HEAD
     docs:
       tier: k
       specs: []
@@ -2788,13 +2783,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
-=======
+
   outrider:
     area: app
     status: support
     notes: "Fork of Panniantong/Agent-Reach (MIT), seeded 14c213405669 2026-10-31; agent web-access channels, Rust hot path planned. Converts crawlkit + aileron orphans."
 
->>>>>>> 144b761 (estate.yml: register nightjar, outrider, offcut, dissect (competitor forks seeded 2026-10-31, schema 256 repos))
   paginate:
     area: data
     status: support
