@@ -1,4 +1,4 @@
-# Competitive analysis — Omni templates vs. the market
+# Competitive analysis: Omni templates vs. the market
 
 Date: 2026-10-05 · Loop 1 · Sources: GitHub search + project docs (see
 [LOOP.md](LOOP.md) for methodology). Star counts are direction, not merit.
@@ -13,9 +13,9 @@ Date: 2026-10-05 · Loop 1 · Sources: GitHub search + project docs (see
 | Flutter | VeryGoodOpenSource/very_good_core (moved to very_good_templates), news_toolkit (1.4k★) | **100% coverage enforced**, Very Good Analysis strict lints, build flavors (dev/staging/prod), i18n, bloc architecture, mason bricks |
 | Docs | Starlight official showcase, Docusaurus, VitePress | versioned docs, i18n, search, MDX |
 | Terraform/IaC | antonbabenko/terraform-best-practices, pre-commit-terraform suite | pre-commit composition, module docs, policy gates |
-| Lean | lean4/example, mathlib templates | minimal — thin competition |
+| Lean | lean4/example, mathlib templates | minimal; thin competition |
 
-## Feature matrix — Omni vs. best-in-class
+## Feature matrix: Omni vs. best-in-class
 
 Legend: ✅ ships today · 🔶 partial/advisory · ❌ absent · 🎯 exceeds market
 
@@ -47,7 +47,7 @@ Legend: ✅ ships today · 🔶 partial/advisory · ❌ absent · 🎯 exceeds m
 | 100% coverage mandate | ❌ (tiered 90/80/70) | VGV (Flutter) | ✅ tiered, deliberate |
 | git-cliff / release-please changelogs | ❌ roadmap | common | backlog |
 | cargo-dist style polyglot releases | ❌ roadmap (goreleaser ships for Go) | common | backlog |
-| `just` task runner | ❌ (Makefile, deliberate) | common | — (contract choice) |
+| `just` task runner | ❌ (Makefile, deliberate) | common |; (contract choice) |
 | REUSE.toml licensing | ❌ roadmap | RAprogramm | backlog |
 | Multi-version test matrix | ✅ Python 3.12–3.14, GHC 9.6–9.10, Go old/stable/next | common | ✅ |
 | Docs deploy zero-touch | ✅ OmniDocs | common | ✅ |
@@ -58,8 +58,8 @@ Everything below shipped and is green on `main`. Two rows moved beyond the
 plan: the nix devcontainer flavor was found to be **broken** (the GHCR feature
 401s for anonymous pulls) rather than merely advisory, so it was repaired and
 promoted from advisory to a blocking gate; and the TypeScript floor became a
-hard constraint — TS 7 (native port) ships no programmatic compiler API, so
-`astro check` and knip crash on it — recorded as a documented pin plus
+hard constraint; TS 7 (native port) ships no programmatic compiler API, so
+`astro check` and knip crash on it; recorded as a documented pin plus
 dependabot guard, detailed in [PITFALLS.md](PITFALLS.md).
 
 | Capability | Omni | Best market | Verdict |
@@ -74,21 +74,21 @@ dependabot guard, detailed in [PITFALLS.md](PITFALLS.md).
 
 ## Gap-closing work in loop 1
 
-1. **AGENTS.md** per template — agent contract: scripts canonical, `make ci`,
+1. **AGENTS.md** per template; agent contract: scripts canonical, `make ci`,
    guardrails (never weaken gates, never commit secrets).
-2. **llms.txt** per template — machine-readable project summary.
-3. **OpenSSF Scorecard** workflow (advisory, results as artifact) — all.
-4. **zizmor** workflow — GH Actions security lint (advisory until estate
-   tunes thresholds) — all.
-5. **osv-scanner** workflow — TS/Python/Go/Docs (Rust already covered by
-   cargo-deny + cargo-audit) — advisory until baseline noise is triaged.
-6. **macOS + Windows CI legs** — Rust/Go/TS/Python (Embedded/Infra/Dotfiles/
+2. **llms.txt** per template; machine-readable project summary.
+3. **OpenSSF Scorecard** workflow (advisory, results as artifact); all.
+4. **zizmor** workflow; GH Actions security lint (advisory until estate
+   tunes thresholds); all.
+5. **osv-scanner** workflow; TS/Python/Go/Docs (Rust already covered by
+   cargo-deny + cargo-audit); advisory until baseline noise is triaged.
+6. **macOS + Windows CI legs**; Rust/Go/TS/Python (Embedded/Infra/Dotfiles/
    Haskell are platform-scoped by nature; Lean/Haskell docs targets stay
    Linux).
 
 ## Backlog for loop 2+ (ordered by leverage)
 
-1. git-cliff (Rust/Go) + release-please (TS/Python) — changelog automation.
+1. git-cliff (Rust/Go) + release-please (TS/Python); changelog automation.
 2. REUSE.toml licensing compliance job.
 3. cargo-dist (Rust) + per-language performance-budget jobs
    (benchstat for Go, Codspeed for Python, tinybench for TS).
@@ -96,4 +96,61 @@ dependabot guard, detailed in [PITFALLS.md](PITFALLS.md).
 5. Copier-based in-place updates for derived repos (`copier update`), the
    one feature uv-forge has that GitHub template repos lack.
 6. Migrate legacy Omni templates (LaTeX/CPP/Flutter/R) to the Omni Core
-   Contract — owner-gated, per "don't touch OmniCPP" exception.
+   Contract; owner-gated, per "don't touch OmniCPP" exception.
+
+
+## Research-program delta (Oct 2026, iterations 34-43)
+
+Ten research iterations (docs/research/) moved the estate past the market matrix on: input-recorded reproducibility (`.buildinfo` + bytecode-cache guard; the 2026 PyPI-scale attack), OIDC-bound provenance on every distributable artifact, age-gated dependency adoption (30/7/3/7 cooldowns; security PRs exempt), flaky-test policy with per-test isolation (cargo-nextest) and order randomization (pytest-randomly), machine-checked properties with axiom audits (Lean; `#print axioms` + no-sorry CI gate), merge-queue readiness, CycloneDX SBOM on releases, a blocking dependency-review PR gate, the agent-interface standard (AGENTS.md single-source; CLAUDE.md pointer; llms.txt gated), and harden-runner audit mode on tag-triggered publishers. Open items are tracked in LOOP.md (iterations 40/43 triage list); not silently dropped.
+
+## Loop 2: the agent-ecosystem market (skills + MCP), 2026-10-31
+
+Sources: marketplace docs and directories (skills.sh, SkillsMP, LobeHub,
+localskills.sh, Agensi, claude-plugins-official, anthropics/skills), the
+AAIF donation announcement, and four MCP security studies (arXiv
+2608.00150; arXiv 2609.14119; Canopii State of MCP Security 2026; DSN 2026
+registry study). Star and install counts are direction, not merit.
+
+### Market map
+
+| Class | Leaders | What they verify |
+|---|---|---|
+| Skills aggregators | SkillsMP, LobeHub (100k+ listed) | nothing (crawled) |
+| Skills leaderboards | skills.sh (Vercel, 1.3M+ installs) | install counts; Socket/Snyk on some listings |
+| Skills registries | localskills.sh | accounts, versions, rollback, orgs/SSO |
+| Skills curated paid | Agensi | 8-point security scan |
+| Skills governance | AAIF (Agent Skills format standard, donated 2026-10-22) | format only; no quality canon |
+| MCP security tooling | xlyoung/mcp-doctor (scan/score/install), mcp-audit.dev, mcp.market research, MCP Observatory | scoring and verdicts post-hoc |
+
+### The gap the research names
+
+1. Silent drift: 51.1% of multi-version MCP servers changed advertised
+   behavior; 40.6% silently; 4.2% redirected endpoints (rug-pull shape).
+2. Unvetted execution: 687 unauthenticated shell-exec tools; 232 servers
+   with confirmed dangerous sinks; 91.8% of internet-facing servers lack
+   OAuth.
+3. No freshness: registries do not version tool definitions; "the
+   behavioral change is undetectable by construction".
+4. Token cost: exactly one competitor (skill-creator) reports skill token
+   overhead, via A/B; nobody gates it.
+
+### Estate position and verdicts
+
+| Capability | Estate | Best market | Verdict |
+|---|---|---|---|
+| Skill validation | skillkit lint/pack/verify/audit + SKILL-STD + standards-audit | Agensi 8-point (paid); Socket/Snyk partial | 🎯 |
+| Projection freshness (drift) | SC-11/11p: PROVENANCE rev pins + build.sh --check/--diff | none surface it; papers recommend exactly this | 🎯 |
+| MCP server posture | MC-1..MC-12 (read-only default, pinned deps, sink bans, auth-tested, sandbox-or-declare, versioned tool defs) | rare per paper data | 🎯 |
+| Fleet audit | mcp-fleet-doctor (renamed from mcp-doctor, ADR-0001 there; name collision resolved) | xlyoung/mcp-doctor (broader scanner, different scope) | ✅ differentiated |
+| Token measurement | token_benchmark.py regression gate (14,190 est tokens across 4 skills, baseline 2026-10-31) | skill-creator A/B report only | 🎯 gated vs reported |
+| Prose register | DOC-STYLE + voice-lint (strict in standards repos) | none | 🎯 |
+| Catalog size | 4 skills | SkillsMP 100k+ | ❌ by design: curation is the product |
+| Distribution | standards-dist marketplace.json + plugin.json | /plugin marketplaces, skills.sh | ✅ shipped; skills.sh listing is a manual follow-up |
+
+### Loop-2 actions landed
+
+standards-dist marketplace manifests; token benchmark with regression
+gate; drift-diff emission (build.sh --diff); MCP-STD v0.2 (MC-7..MC-12
+grounded in the four studies); mcp-fleet-doctor rename. Backlog:
+skills.sh + AAIF conformance listing (manual submission); eng-side
+projection-freshness mirror; token benchmark for MCP tool schemas.

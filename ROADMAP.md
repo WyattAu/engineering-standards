@@ -275,13 +275,13 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 21, done
 
-- **`tests/lead_pipeline.rs` — `contact-miner 0.1.0` + `geo-kit 1.1.1`.**
+- **`tests/lead_pipeline.rs`; `contact-miner 0.1.0` + `geo-kit 1.1.1`.**
   A lead-gen pipeline mines contacts out of profile pages, validates them, and
   files them with a postal address. The composition gate is the point: a lead
   is stored only if its email validates **and** its postcode parses, and
   neither crate can enforce that alone.
 - The fixture carries what real scraped pages carry, including an anti-bot
-  artifact planted in the bio — the validator's vendor-domain filter is what
+  artifact planted in the bio; the validator's vendor-domain filter is what
   keeps it out of the store, which is the crate's own knowledge proving itself
   against a live fixture. `display_name` comes from `og:title` metadata, not
   headings, which the first fixture got wrong and the parser correctly refused
@@ -289,42 +289,42 @@ in the *product* semantics, not the primitives. So the product starts now.
 - UK postcodes normalise on the way in (`S118PM` and `S11 8PM` land
   identically); an impossible postcode closes the gate; coordinates are
   validated before reaching a lead, and latitude beyond ±90 is refused while
-  (0, 0) — the scraper's "unknown" — is valid but documented as useless.
+  (0, 0); the scraper's "unknown"; is valid but documented as useless.
 - A concurrent agent shipped `tests/geo_contacts.rs` for the same pair; the
   merge kept one pin set and both suites, which now cover the pair from
   extraction and storage angles respectively.
 - Toolchain note: the merge brought `egui`/`comfyui-kit` pins requiring
   rustc ≥ 1.95; the box's default was 1.94.1, so estate-integration now runs
   under a directory-local override to 1.97.1. Global default untouched.
-- Debt reached **0** — the concurrent rounds cleared the rest. Estate at
+- Debt reached **0**; the concurrent rounds cleared the rest. Estate at
   227 repos, 195 crates, 124 exact pins across 3 consumer repos, 0 errors,
   0 drift. 55 test groups green, clippy clean, fmt clean.
 
 
 ### Round 22, done
 
-- **`recon-kit 0.1.0` — bank statements and a matching engine that proposes
+- **`recon-kit 0.1.0`; bank statements and a matching engine that proposes
   instead of guessing.** Three deliberate absences: no format parsing (OFX,
   CAMT.053 and the forty CSV dialects are adapters; the model beneath them is
-  format-independent), no tolerance (exact integer comparison only — a
+  format-independent), no tolerance (exact integer comparison only; a
   one-cent allowance hides drift that compounds while the recon report looks
   clean), and no silent auto-matching (`Proposal::Ambiguous` surfaces both
   candidates instead of picking one; a wrong auto-match misattributes money in
   the books while the reconciliation still balances, so nothing downstream
   ever catches it).
-- Direction is a value, not a sign — the invoice-side lesson applied to
+- Direction is a value, not a sign; the invoice-side lesson applied to
   statements. OFX signs amounts, CAMT carries an indicator;
   `Direction::from_signed` normalises at the boundary and the sign convention
   never reaches the engine.
 - The balance identity (`opening + Σ(±lines) == closing`) is the import check,
-  because a bank guarantees it — so a violation means the import lost lines,
+  because a bank guarantees it; so a violation means the import lost lines,
   which is exactly the failure that looks like fine individual rows. Day
   arithmetic is Hinnant's `days_from_civil`, pinned against leap years and
   century boundaries.
 - The estate suite runs a real month-end close: invoice-kit prices the
   invoices, double-entry posts the settlements, the statement matches against
   the postings, and the leftovers split into in-transit lines versus
-  unrecorded entries — opposite kinds of follow-up. The follow-through test
+  unrecorded entries; opposite kinds of follow-up. The follow-through test
   enters the missing card charge and re-closes: the ledger's movement then
   equals the statement's movement to the penny. And matching never mutates the
   ledger, because the close is a report.
@@ -334,7 +334,7 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 23, done
 
-- **`report-kit 0.1.0` — the trial balance and aging, per currency by
+- **`report-kit 0.1.0`; the trial balance and aging, per currency by
   construction.** Summing a GBP bank account with a JPY fee account is a
   number in no currency; the double-entry invariant is stated per posting, so
   debits-equal-credits is checked per currency, and a ledger balanced in GBP
@@ -342,41 +342,41 @@ in the *product* semantics, not the primitives. So the product starts now.
 - The accounting equation (`assets + expenses == liabilities + equity +
   revenue`) is a runtime check at any cut-off. It holds without closing
   entries because the period's result is still sitting in the revenue and
-  expense accounts — a violation means the report was built over something
+  expense accounts; a violation means the report was built over something
   that is not a balanced ledger, and the correct response is to stop, never
   to fudge a row.
 - Aging runs from the **due date**, not the issue date: net-60 terms are
   current for two months, and aging from issue would show a healthy customer
-  as sixty days late. Abnormal balances are a predicate, not a normalization —
+  as sixty days late. Abnormal balances are a predicate, not a normalization -
   a credit balance on a bank account is an overdraft, a real state a reader
   can find.
 - The estate suite pins the composition's quiet invariant: the aging
   population derived from the invoices equals the debtor balance derived from
   the postings. If they ever disagree, an invoice was never posted or a
-  payment was never applied — visible, never averaged away.
+  payment was never applied; visible, never averaged away.
 - Estate at 229 repos, 197 crates, 126 pins, 0 errors, 0 drift, debt 0.
   57 test groups green, clippy clean, fmt clean.
 
 
 ### Round 24, done
 
-- **`statement-ofx 0.1.0` — the OFX adapter feeding `recon-kit`.** Two
+- **`statement-ofx 0.1.0`; the OFX adapter feeding `recon-kit`.** Two
   normalisations, performed exactly: signs become `Direction` at the boundary
   (the invoice-side lesson applied to bank files), and decimal strings become
-  integer minor units **without a float anywhere on the path** — `0.07`
+  integer minor units **without a float anywhere on the path**; `0.07`
   through a float is `6.999999999999999`, and which way that rounds decides
   whether a statement line matches. More fraction digits than the declared
   scale is an error, not a truncation: a truncated penny is a line that no
   longer matches.
 - Recorded rather than papered over: OFX publishes the closing balance but not
   the opening one, so the adapter derives it and the balance identity is
-  therefore trivial for this format — the truncated-import check that format
+  therefore trivial for this format; the truncated-import check that format
   can offer is CAMT.053's, which carries both balances.
 - Scale is explicit because OFX does not declare it; JPY statements parse at
   scale 0, and the default-2 assumption would have moved every decimal point
   in the file.
-- The estate suite runs the whole close off a real-shaped OFX file — SGML's
-  unclosed tags, a MEMO-only transaction — and pins the zero-tolerance story:
+- The estate suite runs the whole close off a real-shaped OFX file; SGML's
+  unclosed tags, a MEMO-only transaction; and pins the zero-tolerance story:
   one penny of drift in the bank's file stops the line matching at any window,
   with both sides naming the discrepancy.
 - Estate at 230 repos, 198 crates, 127 pins, 0 errors, 0 drift, debt 0.
@@ -385,24 +385,24 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 25, done
 
-- **`vat-return 0.1.0` — the AR/AP/vat-rules triangle closes.** The VAT return
+- **`vat-return 0.1.0`; the AR/AP/vat-rules triangle closes.** The VAT return
   computed from the documents themselves, and the rule the crate exists to
   enforce: **only deductible input tax reaches Box 4.** A bill's gross
   includes tax the business may never reclaim (Article 168), and returns that
-  net it into the box are overclaims — small per line, systematic, expensive
+  net it into the box are overclaims; small per line, systematic, expensive
   when an authority finds them. The crate takes bills, not numbers, so it
   cannot be handed a raw tax total by mistake; the non-deductible part's net
   still counts in Box 7, because the cost is a purchase even when the tax is
   not reclaimable.
-- Currencies are refused rather than converted — a wrong FX rate in a tax
+- Currencies are refused rather than converted; a wrong FX rate in a tax
   filing is worse than a missing filing. A document outside the period is a
   loud error, because a wrongly pre-filtered return shifts tax between periods
   silently.
-- Reverse charge contributes net to Box 6 and no tax to Box 1 — what EN 16931
+- Reverse charge contributes net to Box 6 and no tax to Box 1; what EN 16931
   puts on the document. UK domestic reverse-charge filing rules are out of
   scope and documented, rather than half-guessed.
 - The estate suite runs a whole quarter period-by-period: July's £24,000
-  output tax, August's half-deductible bill, September's reverse-charge sale —
+  output tax, August's half-deductible bill, September's reverse-charge sale -
   and Box 1 is asserted to be the same tax the invoices charged, to the penny.
 - Estate at 231 repos, 199 crates, 128 pins, 0 errors, 0 drift, debt 0.
   59 test groups green, clippy clean, fmt clean.
@@ -410,18 +410,18 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 26, done
 
-- **`report-kit 0.2.1` — the P&L and the balance sheet, one trial balance read
+- **`report-kit 0.2.1`; the P&L and the balance sheet, one trial balance read
   two ways.** A balance sheet drawn mid-period does not satisfy
   `assets == liabilities + equity`, because the period's profit is still
   sitting in the revenue and expense accounts. The honest statement adds the
   **retained result** where it actually is:
   `assets == liabilities + equity + retained result`. The retained result is
-  the P&L's result by construction — both statements derive from one trial
+  the P&L's result by construction; both statements derive from one trial
   balance, so a profit on the P&L that is missing from the balance sheet is a
   bug the structure cannot express. `is_balanced` refuses to plug an
   "unexplained difference" line.
 - **The process finding of the round: 0.2.0 shipped without the module.** The
-  statements file existed but was never declared in `lib.rs` — an edit whose
+  statements file existed but was never declared in `lib.rs`; an edit whose
   target string rustfmt had reordered failed silently, the file compiled into
   nothing, and the release went out as 0.1.0 under a new number. The tell was
   the test count: 8, not 13. Recorded in the changelog so nobody trusts the
@@ -437,7 +437,7 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 27, done
 
-- **`statement-camt 0.1.0` — the balance identity with teeth.** OFX derives
+- **`statement-camt 0.1.0`; the balance identity with teeth.** OFX derives
   the opening balance, which makes the balance identity trivially true and
   the truncated-import check inert. CAMT.053 carries both balances
   (`OPBD`/`CLBD`), so the adapter reads them at face value and an import that
@@ -450,7 +450,7 @@ in the *product* semantics, not the primitives. So the product starts now.
   format's own `CdtDbtInd`. Namespace-agnostic across `camt.053.001.02–.08`.
 - The estate also reconciled the 2026-10-23 release wave: six pin bumps
   (`invoice-kit 1.0.0` and `ledger-kit 1.0.0` are API-stability signals on
-  unchanged surfaces), and one real break that was graph-shaped —
+  unchanged surfaces), and one real break that was graph-shaped -
   `vat-return` bound `invoice-kit 0.2.1` while the estate moved to 1.0.0,
   carrying two non-interoperable `Invoice` types. `vat-return 0.1.1`
   republishes against 1.0.0.
@@ -460,21 +460,21 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 28, done
 
-- **`fx-kit 0.1.0` — IAS 21 revaluation, exact rational rates.** An FX rate
+- **`fx-kit 0.1.0`; IAS 21 revaluation, exact rational rates.** An FX rate
   is a rational number, and every float on the path from quoted rate to
   posted difference corrupts it; a thousand-row revaluation turns "not" into
   visible pennies of phantom gain. Rates parse from decimal strings into
   exact reduced rationals; restatement multiplies in i128 and rounds **once**
-  at the final division, tie mode explicit. Monetary items only — the type
+  at the final division, tie mode explicit. Monetary items only; the type
   name makes passing non-monetary items a type error, not a silent
   misstatement. Base-currency rows and missing rates are errors, not 1:1 or
   zero.
 - The estate suite pins the idempotence property that matters: re-running the
-  revaluation against the updated booked amounts produces **zero** — the
+  revaluation against the updated booked amounts produces **zero**; the
   classic double-revaluation bug is a second gain, and nothing downstream
   catches it. The ledger test posts the differences and proves debits still
   equal credits afterwards.
-- Finding recorded (not fixed — owner's call): `hw_pinned_hotpath`'s timing
+- Finding recorded (not fixed; owner's call): `hw_pinned_hotpath`'s timing
   tolerance flakes ~1-in-3 under build load (median vs fastest 2x drift).
 - Environment note: a concurrent agent's stricter audit methodology
   (CONSUMERS list, branch-ref consumers, a sqlite-side split manifest) landed
@@ -485,28 +485,28 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Rounds 29–30, done
 
-- **`group-kit 0.1.0` — multi-entity consolidation.** Eliminations must
+- **`group-kit 0.1.0`; multi-entity consolidation.** Eliminations must
   cancel, and anything that does not cancel is surfaced, never guessed: a
   mirror with a disagreeing amount is `IntercompanyMismatch` naming both
   figures, a missing mirror is `OneSidedIntercompany`. The worked example in
   the tests carries the arithmetic a reader checks: after eliminating a
-  £50,000 intercompany loan, the group's cash is genuinely £120,000 — the
+  £50,000 intercompany loan, the group's cash is genuinely £120,000; the
   elimination removes the IC pair, not the cash. Unbalanced entity books are
   refused before any elimination, because two cancelling imbalances could
   launder into a balanced group.
-- **`ledger-pg 0.1.1` — PostgreSQL persistence, the estate's keystone.**
-  Posting serialises on one CAS row per tenant — safe under READ COMMITTED
+- **`ledger-pg 0.1.1`; PostgreSQL persistence, the estate's keystone.**
+  Posting serialises on one CAS row per tenant; safe under READ COMMITTED
   because the `UPDATE` takes the lock, so eight concurrent posters get eight
   distinct versions with no lost writes. Balance is validated inside the
   transaction; a refused entry consumes no version. **The reversal semantics
-  mirror `double-entry` exactly** — original stays posted, counter cancels it,
-  lineage in its own table — which the tests caught me getting wrong the first
+  mirror `double-entry` exactly**; original stays posted, counter cancels it,
+  lineage in its own table; which the tests caught me getting wrong the first
   time: marking the original reversed flips the balance instead of zeroing it.
   `into_ledger` takes the account class chart explicitly after 0.1.0's
   asset-default silently zeroed a P&L. Tests run against a real PostgreSQL
   (container harness, `TEST_DATABASE_URL` override).
 - The estate pins **persistence through to the reports**: post to Postgres,
-  read back, aggregate — the stored books balance, and a reversal recorded in
+  read back, aggregate; the stored books balance, and a reversal recorded in
   the database moves the reports the same way it moves the books. The
   reversal's date property is pinned too: a correction is dated when it was
   made, so a July cut-off shows July as July reported it.
@@ -514,7 +514,7 @@ in the *product* semantics, not the primitives. So the product starts now.
   versions of `double-entry`**: `invoice-kit 1.0.0` held 0.1.0 while the
   estate's other crates moved to 0.1.1. Converged by patch releases across
   `ap-kit 0.1.3`, `report-kit 0.2.2`, `group-kit 0.1.2`, `ledger-pg 0.1.3`,
-  `invoice-kit 1.0.2` and `vat-return 0.1.2` — each a pin move, no behaviour
+  `invoice-kit 1.0.2` and `vat-return 0.1.2`; each a pin move, no behaviour
   change, each keeping exactly one version of the money crate in the graph.
 - Estate at 237 repos, 205 crates, 133 pins, 0 errors, 0 drift from this
   loop's crates. 64 test groups green, clippy clean, fmt clean. ~40 remaining
@@ -523,24 +523,24 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 31, done
 
-- **`vat-mtd 0.1.0` — the HMRC MTD VAT contract, deliberately not an HTTP
+- **`vat-mtd 0.1.0`; the HMRC MTD VAT contract, deliberately not an HTTP
   client.** Coupling a tax contract to a framework choice makes the contract
   harder to test and the framework harder to change; every type serialises
   with serde, so a transport is a few lines at the call site and the
   contract's tests are fixture-exact.
 - Money goes from integer minor units to 2dp decimal strings by **integer
-  division and a zero-padded remainder** — 0.07 through a float is
+  division and a zero-padded remainder**; 0.07 through a float is
   `6.999999999999999`, and this is a filing. Value boxes carrying pence are
   **refused rather than truncated**: dropping 50p is a decision, not a
   default.
 - Fraud-prevention headers typed per connection method (`DESKTOP_APP`,
   `WEB_APP`), with value shapes (UUID device IDs, `vendor=x.y.z` versions)
-  checked where the error can name the header — HMRC rejects on shape with
+  checked where the error can name the header; HMRC rejects on shape with
   errors that do not.
 - `digitalSubmission` is always `true` from this crate: the figures came from
   digital records, and claiming otherwise is not a configuration.
-- The estate suite runs the **filing chain end to end** — documents → boxes →
-  MTD body, period by period — and pins the claim that no figure is retyped
+- The estate suite runs the **filing chain end to end**; documents → boxes →
+  MTD body, period by period; and pins the claim that no figure is retyped
   anywhere: the pence HMRC receives are the pence the invoices charged. A nil
   return still finalises; HMRC wants the nil, not silence.
 - Estate at 238 repos, 206 crates, 134 pins, 0 errors, 0 drift from this
@@ -551,7 +551,7 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 32, done
 
-- **`pay-kit 0.1.0` — payment webhooks in, settled ledger entries out.**
+- **`pay-kit 0.1.0`; payment webhooks in, settled ledger entries out.**
   One crate because the seam between verification and settlement is where
   payment fraud lands: a webhook that verifies but does not reconcile is a
   notification; one that reconciles without verifying is a remote posting
@@ -565,10 +565,10 @@ in the *product* semantics, not the primitives. So the product starts now.
   hands an attacker a parse gadget on unauthenticated input.
 - `post_settlement` and `allocate` are deliberately separate: the posting is
   a *cash* act, the allocation a *documents* act, and a caller doing only one
-  has either a paid invoice with no cash or cash with no paid invoice — the
+  has either a paid invoice with no cash or cash with no paid invoice; the
   split makes the half-done state nameable.
 - The estate suite closes the payment loop end to end: invoice priced,
-  webhook verified, settlement posted, allocation applied — and the fixture
+  webhook verified, settlement posted, allocation applied; and the fixture
   caught itself, the webhook's £144 against a £1,440 invoice surfacing as a
   failed allocation before it could surface as a customer statement.
 - Estate at 239 repos, 207 crates, 135 pins, 0 errors, 0 drift from this
@@ -577,16 +577,16 @@ in the *product* semantics, not the primitives. So the product starts now.
 
 ### Round 33, done
 
-- **`group-kit 0.2.0` — IAS 21 translation, closing the gap v1 documented.**
+- **`group-kit 0.2.0`; IAS 21 translation, closing the gap v1 documented.**
   Assets and liabilities at the **closing** rate, income and expenses at the
   **average** rate, equity at **historical** rates, and the cumulative
-  difference to a **translation reserve within equity — not profit**. That is
+  difference to a **translation reserve within equity; not profit**. That is
   the sharp distinction from `fx-kit`'s monetary-item revaluation: revaluing
   cash you hold is a P&L event; re-presenting a whole subsidiary's books is
   an ownership-of-net-assets event, and putting its effect through P&L would
   report currency noise as trading performance.
 - The reserve is a balancing figure by construction, so the tests pin it
-  against the theoretically-expected difference — a balancing figure that
+  against the theoretically-expected difference; a balancing figure that
   absorbs anything is the unexplained-difference line this estate refuses
   elsewhere. The fixture caught the reserve being double-negated into a
   debit, which would have made every strengthened-currency close report a
@@ -594,7 +594,7 @@ in the *product* semantics, not the primitives. So the product starts now.
 - The estate suite runs the **full multi-currency group close** over the
   released artifacts: `fx-kit`'s exact rates translate the subsidiary,
   `report-kit` reads the translated books, `group-kit` consolidates and
-  eliminates — and the second test carries the revaluation/translation
+  eliminates; and the second test carries the revaluation/translation
   distinction: a moved closing rate changes the reserve and leaves every P&L
   row at its average rate.
 - Three concurrent repos registered on sight (`ai-memory`, `detonate-mcp`,
@@ -602,7 +602,7 @@ in the *product* semantics, not the primitives. So the product starts now.
   errors. 67 test groups green, clippy clean, fmt clean.
 
 
-### Round 34, done — competitive code audit (repos pulled, not brochures)
+### Round 34, done: competitive code audit (repos pulled, not brochures)
 
 Cloned and read the actual accounting implementations: `odoo` (sparse:
 addons/account, addons/base, odoo/tools), `frappe` + `erpnext`, `akaunting`.
@@ -610,16 +610,16 @@ Findings with citations, all verified against current main:
 
 - **Odoo's money is floats**, and the code admits it: `float_utils.py`'s
   `float_round` docstring is "minimizing IEEE-754 floating point representation
-  errors", and `float_compare` exists because floats cannot be `==` compared —
+  errors", and `float_compare` exists because floats cannot be `==` compared -
   with a documented warning that `float_is_zero(a-b)` is not equivalent to
   `float_compare(a,b)==0` for e.g. 0.006 vs 0.002 at 2 digits.
 - **ERPNext's `flt()` returns 0.0 for malformed input**: `flt("a")` → `0.0`,
-  by docstring and code — malformed money silently becomes zero money.
+  by docstring and code; malformed money silently becomes zero money.
   Precision is a global setting (`self.precision(field)`).
 - **Both keep rounding policy mutable**: Odoo's company-level
   `tax_calculation_rounding_method` (`round_per_line` / `round_globally`,
   default round-globally) plus a `display_rounding_warning` that literally
-  warns "a rounding factor change might be dangerous" — mutable mid-history;
+  warns "a rounding factor change might be dangerous"; mutable mid-history;
   ERPNext's precision is likewise a setting. Ours persists the policy per
   document because EN 16931, GST s9-90 and HMRC §17.5 mandate different
   arithmetic, and the arithmetic differs by real money (round 18's fixture).
@@ -649,17 +649,17 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
 ### Round 35, done
 
-- **`ledger-pg 0.2.x` — the tamper-evident hash chain, studied from Odoo's
+- **`ledger-pg 0.2.x`; the tamper-evident hash chain, studied from Odoo's
   `account.move` inalterability hash.** SHA-256 over the previous entry's
   hash plus a canonical serialization of the entry and every line; reversals
   join the chain; `verify_chain` walks in version order and reports the
   version, entry and reason of the first break. Odoo's design requires
-  `float_repr` stabilization because its amounts are floats — our canonical
+  `float_repr` stabilization because its amounts are floats; our canonical
   form is deterministic by construction.
 - **The round's process finding, and it is serious: 0.2.0 shipped a
   double-flipped reversal.** The chain work introduced flipped line tuples;
   the insert loop still bound a `match side` on top, so the stored
-  counter-entry was identical to its original — the posting doubled, not
+  counter-entry was identical to its original; the posting doubled, not
   reversed. The chain detected its own release defect on every verify, and
   the ledger-balance assertion caught the doubling. `cargo publish` verifies
   the library build only, so the broken integration paths never ran before
@@ -668,7 +668,7 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
   the change has run green**, even for "just plumbing".
 - The estate suite pins the chain over the released artifact: clean walk,
   amount tamper detected at its version, memo tamper detected (the quiet
-  alteration — amounts still add up), deletion detected, and reversal
+  alteration; amounts still add up), deletion detected, and reversal
   linkage covered.
 - Five concurrent repos registered on sight. Estate at 246 repos, 207
   crates, 135 pins, 0 errors. 67 test groups green, clippy clean, fmt clean.
@@ -678,21 +678,21 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
 ### Round 36, done
 
-- **`invoice-kit 1.1.0` — VAT-inclusive pricing**, studied from Odoo's
+- **`invoice-kit 1.1.0`; VAT-inclusive pricing**, studied from Odoo's
   `price_include` tax handling. UK retail quotes prices with VAT in them;
-  the derivation runs the arithmetic backwards — gross × rate / (1000+rate),
-  rounded once through the exact integer path — and the net is computed as
+  the derivation runs the arithmetic backwards; gross × rate / (1000+rate),
+  rounded once through the exact integer path; and the net is computed as
   gross − vat, so the pieces always sum to the gross even when the tax
   rounds. Credit-note magnitudes split symmetrically; a rate of 100%+ is
   refused as degenerate, matching ap-kit's gate.
 - **The vat-rules convergence cascade, and the version race it exposed.**
   invoice-kit 1.1.0 moved to vat-rules 0.1.1, which cascaded through ap-kit,
-  fx-kit, vat-return, group-kit — and then hit a genuine hazard: **two
+  fx-kit, vat-return, group-kit; and then hit a genuine hazard: **two
   agents published `vat-return 0.1.6` with divergent pins** (same version
   number, different contents). Resolved by a converged 0.1.7 carrying the
   full pin set: invoice-kit 1.1.0, ap-kit 0.1.5, vat-rules 0.1.1,
   double-entry 0.1.1. The lesson recorded: with exact pins and multiple
-  agents, convergence releases must race-safe — publish the full converged
+  agents, convergence releases must race-safe; publish the full converged
   set together, and the audit's drift check is the detector.
 - Estate at 246 repos, 207 crates, 135 pins, 0 errors. 67 test groups green,
   clippy clean, fmt clean. The remaining ~58 drift entries are the
@@ -701,13 +701,13 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
 ### Round 37, done
 
-- **`sales-tax 0.1.0` — US sales tax, the last open front closed as a
+- **`sales-tax 0.1.0`; US sales tax, the last open front closed as a
   research-first crate.** The research framing is the product: US sales tax
   is structurally not VAT with different field names, and the types encode
   the five differences. Nexus gates collection (*South Dakota v. Wayfair*,
-  2018 — economic nexus is per-state and per-year, so the registry is an
+  2018; economic nexus is per-state and per-year, so the registry is an
   input; a hardcoded threshold table would be wrong the first month it
-  shipped). Prices are pre-tax — no backwards division. Sales tax is never
+  shipped). Prices are pre-tax; no backwards division. Sales tax is never
   reclaimable, which is why `ap-kit`'s `Recoverability` has no US
   counterpart. Taxability is an input per line. And the rate is a
   jurisdiction stack remitted level by level.
@@ -716,11 +716,11 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
   `"6.25"` as a multiplier makes every rate a hundred times too large.
 - Per-document vs per-line rounding scope is explicit and pinned: two
   $0.10 lines at 5% are £0.02 per-line and £0.01 per-document. Nexus with an
-  empty rate stack is refused rather than returned as zero — a missing data
+  empty rate stack is refused rather than returned as zero; a missing data
   feed must not dress up as a legitimate no-tax sale, while a no-nexus
   destination is a *legal* zero and is reported as such.
 - The estate suite posts the till through `double-entry`: collected tax
-  accrues to sales-tax-payable (a liability — the mirror of VAT's input
+  accrues to sales-tax-payable (a liability; the mirror of VAT's input
   side) and clears on remittance. The fixture caught its own arithmetic:
   the till total forgot the untaxable line's net.
 - Environment finding, recorded: the shared tmpfs filled (13GB of debris
@@ -732,16 +732,16 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
 ### Round 38, done
 
-- **`close_pack` — the quarter-end close, end to end, as one flow.** Every
+- **`close_pack`; the quarter-end close, end to end, as one flow.** Every
   piece has its own focused suite; none proved the pieces form one close.
   This one does: the quarter's invoices and bills produce the VAT boxes per
   month, the camt bank import reconciles against the same postings to the
   penny, September's boxes file as the MTD body (£51.00 payable, finalised,
   digital), and the reverse-charge sale counts its net in box 6 while
-  carrying no UK VAT — all from one set of integers, nothing retyped at any
+  carrying no UK VAT; all from one set of integers, nothing retyped at any
   boundary.
 - The fixture arithmetic was wrong twice on the way in (September's
-  purchases, the camt closing balance) and **the crates refused both** —
+  purchases, the camt closing balance) and **the crates refused both** -
   which is the suites doing their job.
 - Estate at 247 repos, 208 crates, 136 pins, 0 errors. 70 test groups green,
   clippy clean, fmt clean.
@@ -749,17 +749,17 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
 ### Round 39, done
 
-- **Property tests across the arithmetic core and both parser boundaries** —
+- **Property tests across the arithmetic core and both parser boundaries** -
   the cheapest round on the board, and the one that protects the brand
   systematically rather than by worked example.
   - `fx-kit`: identity rate restates exactly; restatement is sign-symmetric
     (guaranteed only because the arithmetic rounds the magnitude and restores
-    the sign — a signed-toward-zero rounding would break it at ties) and
+    the sign; a signed-toward-zero rounding would break it at ties) and
     monotone at any positive rate; `parse_percent` is `parse` over exactly
     100; the parser boundary never panics on arbitrary strings.
   - `sales-tax`: taxes never negative under any tie mode; the per-line vs
     per-document scope difference is **bounded by half a unit per line per
-    jurisdiction** — a larger drift would mean the scopes disagree about
+    jurisdiction**; a larger drift would mean the scopes disagree about
     what is taxable, a real defect; no-nexus is always a legal zero; the
     rate parser never panics.
   - `invoice-kit`: `split_vat_inclusive` always accounts for the gross at
@@ -768,11 +768,11 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
     one divisor step, never inverts a sign; exact rescaling is lossless up
     and refuses lossy down.
   - `statement-camt` / `statement-ofx`: arbitrary bytes and hostile tag soup
-    produce `Ok` or shaped `Err`, never panics — a statement parser is fed
+    produce `Ok` or shaped `Err`, never panics; a statement parser is fed
     the internet by definition, and a panic there is a denial of service in
     the reconciliation path.
 - One test bug of my own caught by the properties (a registry/destination
-  pair that trivially held nexus) — fixed, which is the harness doing its
+  pair that trivially held nexus); fixed, which is the harness doing its
   job.
 - Test-only changes: committed and pushed; no republish needed, since the
   released artifacts are byte-identical.
@@ -781,7 +781,7 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
 
 
 
-### Round 39 addendum — the convergence cascade continues
+### Round 39 addendum: the convergence cascade continues
 
 - `statement-camt 0.1.3` and `statement-ofx 0.1.3` published against
   `recon-kit 0.2.0` (the reference-matching release; `LedgerSide` gains a
@@ -793,33 +793,33 @@ chat-delivered comparison of 2026-10-25/26; pull commits current as of today.
   has the yanked version resolved), so the builds work. The concurrent
   agent that owns `typed-id-new` needs to publish a non-yanked release.
 - Round 39's property tests (fx-kit, sales-tax, invoice-kit, statement
-  parsers) are test-only changes — committed and pushed, no republish
+  parsers) are test-only changes; committed and pushed, no republish
   needed, the released artifacts are byte-identical.
 
 
 ### Round 40, done
 
-- **`release-gate.py` — the 0.2.0 yank lesson, codified as a script.** Five
+- **`release-gate.py`; the 0.2.0 yank lesson, codified as a script.** Five
   gates before a publish can run: the publish dry-run compiles, the crate's
   own all-features suite is green, clippy with `-D warnings` is clean, fmt
   is clean, and **every exact pin on an estate crate is the latest live
-  version on crates.io** — the convergence check that would have caught both
+  version on crates.io**; the convergence check that would have caught both
   the vat-rules 0.1.1 cascade and the double-entry 0.1.1 cascade at publish
   time rather than at the next estate test run.
 - Proven both ways against `sales-tax`: all gates green on the clean tree;
   then a deliberately stale `vat-rules =0.1.0` pin fires the pin-drift gate
   before a publish can split the graph across two versions.
 - The sparse-index URL follows crates.io's resolvable-path rules (1/2/3/4+
-  character buckets) — the first draft's `v/a` prefix 404'd on every crate,
+  character buckets); the first draft's `v/a` prefix 404'd on every crate,
   which the smoke test caught before the gate was trusted.
 - Estate at 247 repos, 208 crates, 136 pins, 0 errors. All suites green.
 
 
-### Round 42 — the EN 16931 category-specific rules audit (documentation, no code)
+### Round 42: the EN 16931 category-specific rules audit (documentation, no code)
 
 **Audited** the estate's invoice validation against EN 16931's
 category-specific rules (BR-S through BR-Z). The general calculation rules
-(BR-CO) are covered — documented as constants in `invoice-kit 1.1.1`'s
+(BR-CO) are covered; documented as constants in `invoice-kit 1.1.1`'s
 `br_co` module. The category-specific rules are where the gap lives:
 
 - **Enforced**: BR-16 (at least one line), BR-27 (no negative price),
@@ -842,7 +842,7 @@ category-specific rules (BR-S through BR-Z). The general calculation rules
 
 **Decision**: document the gap rather than implement it, because the fix
 requires a `invoice-kit 1.2.0` release that will cascade through
-`vat-return`, `vat-mtd`, `pay-kit`, and `ledger-api` — a convergence wave
+`vat-return`, `vat-mtd`, `pay-kit`, and `ledger-api`; a convergence wave
 that needs a fresh session's context to manage properly. The gap is
 recorded here so it cannot be forgotten.
 
