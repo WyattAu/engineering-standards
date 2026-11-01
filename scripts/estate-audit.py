@@ -746,7 +746,7 @@ def main() -> int:
                     "fetched_at": dt.datetime.now(dt.UTC).isoformat()})
 
     if args.sync:
-        n = sync_rewrite(MANIFEST, man, {r["name"]: r for r in repos}, crates)
+        n = sync_rewrite(MANIFEST, man, {r["name"]: r for r in repos}, crates, 0)
         print(f"synced {n} repo block(s) in {MANIFEST.relative_to(ROOT)}")
         return 0
 
