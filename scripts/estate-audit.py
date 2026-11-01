@@ -673,7 +673,19 @@ def sync_rewrite(path: pathlib.Path, man: Manifest, gh: dict, crates: dict,
                 break
             block.append(lines[i])
             i += 1
-        body = [b for b in block if not re.match(r"^    _seen", b)]
+        body = []
+        skip_seen = False
+        for b in block:
+            if re.match(r"^    _seen:", b):
+                skip_seen = True
+                continue
+            if skip_seen:
+                # _seen children are indented 6+ spaces; a less-indented or
+                # blank-then-dedented line ends the old block.
+                if b.startswith("      "):
+                    continue
+                skip_seen = False
+            body.append(b)
         meta = gh.get(name, {})
         seen_lines: list[str] = []
         if meta:
