@@ -52,6 +52,13 @@ owner: WyattAu
 crates_io_user_id: 404181
 
 repos:
+  bot-kit:
+    area: research
+    status: support
+    notes: "Competition bot scaffolds — one buildable kit per game over the competitions registry."
+    _seen:
+      last_push: "2026-10-31"
+
   cal-model:
     area: data
     status: support
@@ -69,6 +76,34 @@ repos:
     _seen:
       last_push: "2026-10-31"
       cal-model: 0.1.2
+  competitions:
+    area: research
+    status: support
+    notes: "Entry registry for the competition estate: every ladder, judge, engine rating list and tournament — one CSV source of truth."
+    _seen:
+      last_push: "2026-10-30"
+
+  fresco:
+    area: ui
+    status: support
+    notes: "Modular retained-mode UI engine for Rust — owned scene graph, damage-tracked compositing, split CPU/GPU paint. The estate's modular Qt."
+    _seen:
+      last_push: "2026-11-01"
+
+  game-spec:
+    area: research
+    status: support
+    notes: "Formal specifications and Lean 4 proofs for the competition bots; runs the estate's research loop."
+    _seen:
+      last_push: "2026-10-31"
+
+  homebite-scraper:
+    area: app
+    status: support
+    notes: "Food-locker site prospecting for Homebite (Late Night Grubs Ltd) — Glasgow student-accommodation / BTR pilot."
+    _seen:
+      last_push: "2026-10-30"
+
   mcp-fleet-doctor:
     area: dx
     status: support
@@ -115,6 +150,13 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
+  outreachkit:
+    area: money
+    status: support
+    notes: "Company-agnostic cold-outreach engine, extracted from the Kingston Peptides creator scraper after 52 spec-driven iterations."
+    _seen:
+      last_push: "2026-10-30"
+
   sales-tax:
     area: money
     status: support
@@ -296,6 +338,20 @@ repos:
     _seen:
       last_push: "2026-10-31"
       color-kit: 0.1.1
+  standards:
+    area: docs
+    status: infra
+    notes: "L0 meta-standard (STANDARDS-CORE) and the L2 domain standards, with the mechanical conformance gate — the canon the other standards repos derive from."
+    _seen:
+      last_push: "2026-10-31"
+
+  standards-dist:
+    area: docs
+    status: infra
+    notes: "Distributable projections of the standards canons (SPEC-CORE SC-11, OMNI-CORE 11p) — packaging only; the canons own truth."
+    _seen:
+      last_push: "2026-10-31"
+
   theme-kit:
     area: ui
     status: support
@@ -475,6 +531,13 @@ repos:
     _seen:
       last_push: "2026-10-31"
       sales-tax: 0.2.0
+  tumbleweed:
+    area: research
+    status: support
+    notes: "CodeCup 2027 entry — Tumbleweed: hex board, 91 cells, stack placement via sightline majority."
+    _seen:
+      last_push: "2026-10-31"
+
   waves:
     area: research
     status: core
@@ -3731,6 +3794,13 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
+  web-estate:
+    area: ui
+    status: infra
+    notes: "Web frontend estate: TS + SolidJS + Astro + Starlight under Bun, applying the Rust estate standards."
+    _seen:
+      last_push: "2026-11-01"
+
   webauthn-kit:
     area: auth
     status: support
@@ -3857,6 +3927,13 @@ repos:
     _seen:
       last_push: "2025-11-02"
       private: true
+  wyatt-viper:
+    area: research
+    status: support
+    notes: "Battlesnake entry — axum webhook server over a pure, unit-tested engine."
+    _seen:
+      last_push: "2026-10-31"
+
   xcp-core:
     area: data
     status: support
