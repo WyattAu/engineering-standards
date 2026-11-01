@@ -3301,6 +3301,20 @@ repos:
 
     _seen:
       last_push: "2026-10-09"
+  solid-bits:
+    area: ui
+    status: core
+    notes: "SolidJS port of react-bits (DavidHDev): 218 animated TS+Tailwind components under src/content, self-contained per component; Astro+Starlight docs site with live Solid islands; bun+biome toolchain. MIT+Commons Clause inherited from upstream. Registered on completion of the port; owned by its creating agent."
+
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-01"
+    _seen:
+      last_push: "2026-11-01"
   sieve-kit:
     area: net
     status: core
