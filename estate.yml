@@ -1518,8 +1518,8 @@ repos:
       last_audit: "2026-10-31"
   auditlog:
     area: auth
-    status: support
-    notes: "Publishes tamper-audit; composed by dissect-evidence (2026-10-31, first consumer)."
+    status: core
+    notes: "Publishes tamper-audit; composed and exact-pinned (=0.2.3) by dissect-evidence (2026-10-31, first consumer)."
     crates:
       - tamper-audit
     _seen:
@@ -1920,8 +1920,8 @@ repos:
       last_audit: "2026-10-31"
   dsp-core:
     area: data
-    status: support
-    notes: "Audio DSP primitives; consumed by nightjar visualizer (2026-10-31, first consumer)."
+    status: core
+    notes: "Audio DSP primitives; consumed and exact-pinned (=0.1.1) by nightjar visualizer (2026-10-31, first consumer)."
     crates:
       - dsp-core
     _seen:
@@ -3151,8 +3151,8 @@ repos:
       last_audit: "2026-10-31"
   simd-tokenizer:
     area: data
-    status: support
-    notes: "Token estimation; composed by offcut-tokencount (2026-10-31, first consumer)."
+    status: core
+    notes: "Token estimation; composed and exact-pinned (=1.0.0) by offcut-tokencount (2026-10-31, first consumer)."
     crates:
       - simd-tokenizer
     _seen:
