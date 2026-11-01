@@ -86,7 +86,7 @@ repos:
       last_push: "2026-10-31"
   ledger-api:
     area: money
-    status: core
+    status: support
     notes: "HTTP API over the accounting estate \u2014 axum router composing recon-kit (reconcile), sales-tax (compute), and ledger-pg (planned for 0.2). The routes compose estate crates; no business logic lives here. Reconcile chains the three passes with taken-sets feeding each pass. Published 2026-10-28. Renamed to accounting-api for crates.io."
     crates:
       - accounting-api
@@ -1082,11 +1082,10 @@ repos:
     area: app
     status: support
     notes: "Homebite food-locker site prospecting: finds student-accommodation / BTR hosts and runs compliance-fencing checks. Rust, 0.1.0 in-tree. Registered 2026-10-29; re-registered 2026-10-31."
-    crates:
-      - homebite-scraper
+    crates: []
     _seen:
       last_push: "2026-10-31"
-      homebite-scraper: 0.1.0
+      homebite-scraper: 0.1.0 (in-tree, unpublished)
 
   outreachkit:
     area: app
@@ -1124,10 +1123,10 @@ repos:
     area: app
     status: support
     notes: "WyattAu's Battlesnake entry (play.battlesnake.com): the viper crate. Registered 2026-10-29; re-registered 2026-10-31."
-    crates:
-      - viper
+    crates: []
     _seen:
       last_push: "2026-10-31"
+      viper: in-tree, unpublished
 
   vat-rules:
     area: money
