@@ -1054,6 +1054,81 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
+  bot-kit:
+    area: app
+    status: support
+    notes: "Competition bot scaffolds for the WyattAu estate -- one repo per discipline, shared infra here (the snake reference bot). Registered 2026-10-29; re-registered 2026-10-31 after the shared-tree convergence dropped the batch."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  competitions:
+    area: app
+    status: support
+    notes: "The entry registry for the WyattAu competition estate: every ladder, judge, and entry, as data. Registered 2026-10-29; re-registered 2026-10-31."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  game-spec:
+    area: app
+    status: support
+    notes: "Formal specifications and Lean 4 proofs for the WyattAu competition bots. Registered 2026-10-29; re-registered 2026-10-31."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  homebite-scraper:
+    area: app
+    status: support
+    notes: "Homebite food-locker site prospecting: finds student-accommodation / BTR hosts and runs compliance-fencing checks. Rust, 0.1.0 in-tree. Registered 2026-10-29; re-registered 2026-10-31."
+    crates:
+      - homebite-scraper
+    _seen:
+      last_push: "2026-10-31"
+      homebite-scraper: 0.1.0
+
+  outreachkit:
+    area: app
+    status: support
+    notes: "Company-agnostic cold-outreach engine: contact gates, alias-aware lead identity, MX/SMTP verification. Rust, 0.1.0 in-tree, not yet on crates.io. Registered 2026-10-29; re-registered 2026-10-31."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  standards:
+    area: docs
+    status: support
+    notes: "The L0 meta-standard (STANDARDS-CORE) and the L2 domain standards for the WyattAu estate: how truth is written, structured, and versioned. Registered 2026-10-29; re-registered 2026-10-31."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  standards-dist:
+    area: docs
+    status: support
+    notes: "Distributable projections of the WyattAu standards canons, per SPEC-CORE packaging. Shell, not a Rust crate. Registered 2026-10-29; re-registered 2026-10-31."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  tumbleweed:
+    area: app
+    status: support
+    notes: "WyattAu's entry for CodeCup 2027 -- Tumbleweed (codecup.nl): hex board, 91 cells, competitive bot play. Registered 2026-10-29; re-registered 2026-10-31."
+    crates: []
+    _seen:
+      last_push: "2026-10-31"
+
+  wyatt-viper:
+    area: app
+    status: support
+    notes: "WyattAu's Battlesnake entry (play.battlesnake.com): the viper crate. Registered 2026-10-29; re-registered 2026-10-31."
+    crates:
+      - viper
+    _seen:
+      last_push: "2026-10-31"
+
   vat-rules:
     area: money
     status: core
