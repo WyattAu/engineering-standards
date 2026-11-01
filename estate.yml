@@ -835,6 +835,11 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
+  beat-list:
+    area: research
+    status: support
+    notes: "Standing registry of competitive targets: trending repos + critical infrastructure gaps, scored for estate leverage (mcp-integrity-sentinel flagged infra-critical). Weekly sweep. Added 2026-11-01."
+
   bot-kit:
     area: app
     status: support
