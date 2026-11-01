@@ -58,7 +58,6 @@ repos:
     notes: "A2L calibration data model and session layer; publishes cal-model. Added 2026-10-06."
     crates:
       - cal-model
-    _seen:
       last_push: "2026-10-06"
       cal-model: 0.1.1
 
@@ -69,6 +68,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      cal-model: 0.1.2
   mcp-fleet-doctor:
     area: dx
     status: support
@@ -82,13 +84,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   ledger-api:
     area: money
     status: core
     notes: "HTTP API over the accounting estate \u2014 axum router composing recon-kit (reconcile), sales-tax (compute), and ledger-pg (planned for 0.2). The routes compose estate crates; no business logic lives here. Reconcile chains the three passes with taken-sets feeding each pass. Published 2026-10-28. Renamed to accounting-api for crates.io."
     crates:
       - accounting-api
-    _seen:
       last_push: "2026-10-28"
 
     docs:
@@ -98,11 +101,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      accounting-api: 0.1.0
   accounting-spec:
     area: research
     status: core
     notes: "The formal specification and Lean 4 proofs for the accounting estate's core algebra. The posting algebra, balance conservation, reversal cancellation (Theorem 4.1 — the theorem ledger-pg 0.2.0's double-flip violated), rounding sum-to-gross, and hash-chain tamper detection stated. Lean 4 core only — no mathlib — because the algebra is linear integer arithmetic that omega proves. Stated theorems with documented sorry: reversal_sum_negates, posting_sum_append, trial_balance (need mathlib ring), tamper_detection (needs symbolic SHA model). Created 2026-10-28 from the iteration loop: research papers, find the cutting edge, implement in spec, adjust the proof. Verified 2026-10-29 (the estate review): the module compiles via lake env lean, 4 of 15 theorems sorried as documented, and lakefile.toml lacks a default build target (lake build builds nothing; add one before relying on CI)."
-    _seen:
       last_push: "2026-10-28"
 
     docs:
@@ -112,13 +117,14 @@ repos:
       llms_txt: false
       status: current
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   sales-tax:
     area: money
     status: support
     notes: "US sales tax document arithmetic — nexus-gated, jurisdiction-stacked, exact rational rates. Rates and taxability are inputs; the rate database is a data service, not a library. Added 2026-10-27."
     crates:
       - sales-tax
-    _seen:
       last_push: "2026-10-27"
 
     docs:
@@ -128,13 +134,17 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sales-tax: 0.2.0
   chisel-doc:
     area: app
     status: fork
     notes: "Chisel Docs — industrial fork of storytold/pdfcraft (Apache-2.0/MIT): PDF reader+editor in pure Rust, rebrand-complete, estate gate matrix (fuzz harnesses for cos+js, vendor-ledger checker, blocking rebrand gate). Dogfoods the kit estate at app scale. Consumes `theme-kit` and `color-kit` since 2026-10-18 (branch `rebrand`, commit 5c9e7fac): the chrome palette moved out of 764 lines of hand-picked hex into gated DTCG, which surfaced three real contrast findings (border 1.23–1.39:1; success 4.45:1 and error 4.29:1 under protanopia) that no prior tooling could see. Listed in estate-audit CONSUMERS so that product consumption is visible to the coverage claim. Added 2026-10-17."
-    _seen:
       last_push: "2026-10-18"
 
+    _seen:
+      last_push: "2026-10-29"
   chisel-platform:
     area: app
     status: support
@@ -145,7 +155,6 @@ repos:
       - chisel-assets
       - chisel-auth
       - script-gate-kit
-    _seen:
       last_push: "2026-10-18"
       chisel-audit: 0.2.0
       chisel-kernel: 0.1.0
@@ -160,11 +169,17 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      chisel-audit: 0.2.0
+      chisel-kernel: 0.1.2
+      chisel-assets: 0.1.3
+      chisel-auth: 0.2.4
+      script-gate-kit: 0.1.2
   CivitForge:
     area: app
     status: core
     notes: "Federated forge."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -174,13 +189,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   dsp-spectral:
     area: data
     status: support
     notes: "Spectral audio analysis and restoration; publishes dsp-spectral. Added 2026-10-06."
     crates:
       - dsp-spectral
-    _seen:
       last_push: "2026-10-06"
       dsp-spectral: 0.1.0
 
@@ -191,11 +207,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      dsp-spectral: 0.1.1
   EvergreenImageRegistry:
     area: infra
     status: infra
     notes: "Community LTS images."
-    _seen:
       last_push: "2026-10-04"
 
     docs:
@@ -205,11 +223,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   EvergreenShims:
     area: infra
     status: infra
     notes: "Healthcheck shims for images that lack one."
-    _seen:
       last_push: "2026-09-16"
 
     docs:
@@ -219,11 +238,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   flaglab:
     area: dx
     status: infra
     notes: "Audits feature flags across repos and emits removal candidates. Added 2026-10-05."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -233,21 +253,24 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   FlutterSSG:
     area: docs
     status: personal
     notes: "Dart SSG; private."
-    _seen:
       last_push: "2026-01-06"
       private: true
 
+    _seen:
+      last_push: "2026-01-06"
+      private: true
   font-model:
     area: ui
     status: support
     notes: "Typed owned editable font model: glyph outlines, cmap formats 4 and 12, metrics. Added 2026-10-06."
     crates:
       - font-model
-    _seen:
       last_push: "2026-10-06"
       font-model: 0.1.0
 
@@ -258,13 +281,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      font-model: 0.1.1
   font-shape:
     area: ui
     status: support
     notes: "Glyph rasterization and text measurement: exact-coverage scanline fill. Added 2026-10-06."
     crates:
       - font-shape
-    _seen:
       last_push: "2026-10-06"
       font-shape: 0.1.0
 
@@ -275,13 +300,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      font-shape: 0.1.1
   color-kit:
     area: ui
     status: support
     notes: "Colour science leaf (L0): linear sRGB core, Oklab/OkLCH gamut mapping, WCAG 2.1 AA contrast, neutral-named perceptual lightness contrast, Brettel-Vienot CVD simulation, deterministic quantisation. The numeric base under theme-kit (ADR-0004 §2). Added 2026-10-18."
     crates:
       - color-kit
-    _seen:
       last_push: "2026-10-18"
       color-kit: 0.1.0
 
@@ -292,13 +319,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      color-kit: 0.1.1
   theme-kit:
     area: ui
     status: support
     notes: "Typed design-token contract (L1): DTCG 2025.10 round-trip, closed role vocabulary, build-failing WCAG gate, derived light/high-contrast/monochrome/CVD variants, CSS/VS Code/ANSI emitters. The only cross-L2 coupling in the UI family. Added 2026-10-18."
     crates:
       - theme-kit
-    _seen:
       last_push: "2026-10-18"
       theme-kit: 0.1.0
 
@@ -309,13 +338,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      theme-kit: 0.1.1
   theme-egui:
     area: ui
     status: support
     notes: "egui/epaint lowering for theme-kit (L2): places approved roles into Visuals with no colour maths. First cross-stack dogfood of the token contract; the first of the one-crate-per-toolkit adapters. Added 2026-10-18."
     crates:
       - theme-egui
-    _seen:
       last_push: "2026-10-18"
       theme-egui: 0.1.0
 
@@ -326,13 +357,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      theme-egui: 0.1.1
   a11y-kit:
     area: ui
     status: support
     notes: "Accessibility semantics layer (L1): platform-free node model plus the headless tree audit that is the estate's a11y CI gate — the layer nobody else funds (AccessKit runs on one maintainer's spare time). Added 2026-10-18."
     crates:
       - a11y-kit
-    _seen:
       last_push: "2026-10-18"
       a11y-kit: 0.1.0
 
@@ -343,13 +376,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      a11y-kit: 0.2.1
   tui-actions:
     area: ui
     status: support
     notes: "Terminal input layer (L2): chord parsing, modal mode stacks, conflict and unbound-key detection, help rows derived from the live keymap. Consolidates the keymaps hand-rolled in kestrel-tui, suture-tui and aileron. Added 2026-10-18."
     crates:
       - tui-actions
-    _seen:
       last_push: "2026-10-18"
       tui-actions: 0.1.0
 
@@ -360,13 +395,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      tui-actions: 0.1.1
   docs-core:
     area: docs
     status: support
     notes: "Rust docs pipeline core (L2): CommonMark+GFM to HTML with astro-island-compatible island emission and the JS shim — the seam that lets a Rust shell hydrate the estate's existing SolidJS islands (Leptos/Dioxus islands are Rust/WASM-only). Consolidates Tachyon, docs-pipeline and the starlight-* stack (ADR-0004 §2.5). Added 2026-10-18."
     crates:
       - docs-core
-    _seen:
       last_push: "2026-10-18"
       docs-core: 0.1.0
 
@@ -377,19 +414,22 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      docs-core: 0.1.1
   font-conformance:
     area: ui
     status: personal
     notes: "Differential oracle for the text stack (L3, dev-only, UNPUBLISHED — publish=false; a differential harness is not a library anyone depends on): hostile corpus, font-parse vs read-fonts, font-shape vs tiny-skia, Err-not-panic watchdog with HANG findings. Found and fixed the font-shape hostile-extent hang. Added 2026-10-18."
     crates: []
-    _seen:
       last_push: "2026-10-18"
 
+    _seen:
+      last_push: "2026-10-21"
   hosting-api:
     area: infra
     status: infra
     notes: "Control-plane API for the hosting platform: tenant state, backup triggers, metrics. Added 2026-10-05."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -399,13 +439,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   invoice-kit:
     area: money
     status: core
     notes: "Accounts-receivable invoicing for an SME ledger: three orthogonal document states, Peppol/EN 16931 arithmetic, per-jurisdiction rounding policy, integer-minor-unit allocation, gapless hash-chained numbering. Published 2026-10-06 with an estate-integration suite in the same loop. Uses the CreditNote convention so direction is the document type and no amount is negative; see ROADMAP.md round 17. Round 18: the tax vocabulary moved to vat-rules and 0.2.1 fixed the three rounding regimes being one algorithm."
     crates:
       - invoice-kit
-    _seen:
       last_push: "2026-10-06"
       invoice-kit: 1.1.1
 
@@ -416,11 +457,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      invoice-kit: 1.2.0
   agentic-awesome-skills:
     area: research
     status: core
     notes: "AAS Core: local, agent-first control plane for catalog discovery, agent-owned selection, stack validation and planning, backed by 2,750+ agentic skills. CLI, local MCP, plugins, Workbench. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -430,11 +473,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   impeccable:
     area: ui
     status: core
     notes: "The design language for AI harnesses. Rust. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -444,20 +489,24 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   trade-tester:
     area: research
     status: core
     notes: "Rust. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-26"
 
+    _seen:
+      last_push: "2026-10-29"
+      private: true
   sales-tax:
     area: money
     status: core
     notes: "US sales tax document arithmetic \u2014 and structurally not VAT with different field names. Nexus gates collection (Wayfair economic nexus is per-state and per-year, so the registry is an input and the breakdown reports whether collection applied at all); prices are pre-tax (no backwards division); sales tax is never reclaimable (no Recoverability counterpart); taxability is an input per line (state law decides groceries and clothing); the rate is a jurisdiction stack remitted level by level. Rates exact rationals via JurisdictionRate::from_percent (fx-kit 0.1.4's parse_percent \u2014 parsing 6.25 as a multiplier makes every rate 100x too large). Per-document vs per-line rounding scope explicit: two 10-cent lines at 5% genuinely differ. The rate database is a data service, not a library. Published 2026-10-27."
     crates:
       - sales-tax
-    _seen:
       last_push: "2026-10-27"
       sales-tax: 0.2.0
 
@@ -468,11 +517,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sales-tax: 0.2.0
   waves:
     area: research
     status: core
     notes: "Weekly dev-trend reports and the trust index, generated from raw snapshots by trendkit. Generated, auditable, never edited after the fact. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -482,18 +533,20 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   warploom-game:
     area: personal
     status: dormant
     notes: "Game project. Registered on sight during the 2026-10-28 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-28"
 
+    _seen:
+      last_push: "2026-10-29"
   clyde-costing-verified:
     area: research
     status: support
     notes: "Python. Registered on sight during the 2026-10-29 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-29"
 
     docs:
@@ -503,11 +556,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      private: true
   ai-memory:
     area: research
     status: core
     notes: "Long-term memory for agent coding CLIs, and handoff between agent vendors. Rust. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-25"
 
     docs:
@@ -517,11 +572,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   detonate-mcp:
     area: research
     status: core
     notes: "Hardened-container detonation MCP server. Python. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-25"
 
     docs:
@@ -531,11 +588,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   memory-handoff-skill:
     area: research
     status: support
     notes: "Portable session handoff across agent CLIs: one plaintext markdown file, five fixed sections, no lock-in. Linted with skillkit. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-25"
 
     docs:
@@ -545,11 +603,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   audiobook-shelf:
     area: personal
     status: core
     notes: "Audiobook-first library manager: decides which files form one book, orders them by disc then track, parses folder-name conventions, reports inconsistencies. Registered on sight during the round-18 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-07"
 
     docs:
@@ -559,11 +618,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   hosting-dashboard:
     area: app
     status: core
     notes: "Customer dashboard for the hosting platform: tenants, backup jobs, health. Astro + SolidJS, dogfoods pediment. Registered on sight during the round-19 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-07"
 
     docs:
@@ -573,11 +633,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   crawlkit-testbed:
     area: dx
     status: infra
     notes: "Ground-truth conformance testbed for crawlkit: a site with planted, documented defects, and a scorer measuring precision and recall. Registered on sight during the round-18 audit; owned by its creating agent."
-    _seen:
       last_push: "2026-10-07"
 
     docs:
@@ -587,13 +648,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   pay-kit:
     area: money
     status: core
     notes: "Payment webhooks in, settled ledger entries out. Stripe (timestamped t=/v1= header, replay tolerance, key rotation via multiple v1 entries) and GoCardless (plain body HMAC) verified through webhookkit's constant-time compare; settlements posted through double-entry; allocations via invoice-kit. The ordering rule is the security property: verify first, parse second, post last \u2014 parse-before-verify hands an attacker a parse gadget on unauthenticated input. post_settlement and allocate deliberately separate: cash act and documents act, so a half-done state is nameable. Published 2026-10-25."
     crates:
       - pay-kit
-    _seen:
       last_push: "2026-10-25"
       pay-kit: 0.1.2
 
@@ -604,13 +666,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      pay-kit: 0.1.3
   vat-mtd:
     area: money
     status: core
     notes: "HMRC Making Tax Digital VAT bridge \u2014 the typed contract, deliberately not an HTTP client (coupling a tax contract to a framework choice makes both harder to change). Money goes from integer minor units to 2dp decimal strings by integer division, never a float; value boxes carrying pence are refused rather than truncated (dropping 50p is a decision, not a default). Fraud-prevention headers typed per connection method with value shapes checked where the error can name the header \u2014 HMRC rejects on shape with errors that do not. digitalSubmission is always true: claiming otherwise is not a configuration. Published 2026-10-25."
     crates:
       - vat-mtd
-    _seen:
       last_push: "2026-10-25"
       vat-mtd: 0.1.3
 
@@ -621,13 +685,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      vat-mtd: 0.1.6
   vat-return:
     area: money
     status: core
     notes: "VAT return boxes computed from the documents: AR invoices via invoice-kit, AP bills via ap-kit, vocabulary from vat-rules. Only deductible input tax reaches Box 4 \u2014 the crate takes bills, not numbers, so it cannot be handed a raw tax total by mistake; the non-deductible part's net still counts in Box 7. Currencies are refused rather than converted; a document outside the period is a loud error. Domestic reverse-charge filing rules out of scope and documented. Published 2026-10-07."
     crates:
       - vat-return
-    _seen:
       last_push: "2026-10-07"
       vat-return: 0.1.7
 
@@ -638,13 +704,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      vat-return: 0.1.10
   fx-kit:
     area: money
     status: core
     notes: "Currency revaluation per IAS 21. Rates are exact reduced rationals parsed from decimal strings \u2014 floats never touch the path from quoted rate to posted difference; restatement multiplies in i128 and rounds once at the final division, tie mode explicit. Monetary items only (non-monetary stay historical, and the type name makes the wrong class a type error); base-currency rows and missing rates are errors, not silent no-ops. Per-currency difference split for the accounts note. Published 2026-10-24."
     crates:
       - fx-kit
-    _seen:
       last_push: "2026-10-24"
       fx-kit: 0.1.3
 
@@ -655,13 +723,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fx-kit: 0.1.5
   statement-camt:
     area: money
     status: core
     notes: "ISO 20022 CAMT.053 adapter producing recon-kit Statements. The format the model was waiting for: OPBD and CLBD balance blocks are read from the document, so an import that loses an entry fails on arrival with BalanceIdentityFailed naming all three numbers \u2014 the truncated-import check OFX structurally cannot offer. Booked entries only; pending and memo entries excluded; a missing status block fails closed. Namespace-agnostic across camt.053.001.02\u2013.08. Published 2026-10-07."
     crates:
       - statement-camt
-    _seen:
       last_push: "2026-10-07"
       statement-camt: 0.1.0
 
@@ -672,13 +742,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      statement-camt: 0.1.3
   statement-ofx:
     area: money
     status: core
     notes: "OFX 1.x bank-statement adapter producing recon-kit Statements. Signs become direction at the boundary; amounts go from decimal string to integer minor units without a float on the path (0.07 through a float is 6.999999999999999, and which way that rounds decides whether a line matches). OFX publishes the closing balance but not the opening, so the adapter derives it and records that the balance identity is trivial for this format. Scale is explicit because OFX does not declare it. Published 2026-10-07."
     crates:
       - statement-ofx
-    _seen:
       last_push: "2026-10-07"
       statement-ofx: 0.1.0
 
@@ -689,13 +761,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      statement-ofx: 0.1.3
   group-kit:
     area: money
     status: core
     notes: "Multi-entity consolidation. Eliminations must cancel, and anything that does not cancel is surfaced, never guessed: a mirror with a disagreeing amount is IntercompanyMismatch naming both figures, a missing mirror is OneSidedIntercompany. Unbalanced entity books are refused before any elimination \u2014 two cancelling imbalances must not launder into a balanced group. 0.2.0 adds IAS 21 translation: closing rates for assets and liabilities, average for income and expenses, historical for equity, and the cumulative difference to a translation reserve within equity rather than profit — the sharp distinction from fx-kit's P&L revaluation. Same-currency consolidation remains the elimination rule; NCI documented out of scope. Published 2026-10-24."
     crates:
       - group-kit
-    _seen:
       last_push: "2026-10-24"
       group-kit: 0.2.0
 
@@ -706,13 +780,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      group-kit: 0.2.3
   ledger-pg:
     area: money
     status: core
     notes: "PostgreSQL persistence for double-entry ledgers. Posting serialises on one CAS row per tenant \u2014 safe under READ COMMITTED because the UPDATE takes the lock, so eight concurrent posters get eight distinct versions with no lost writes; SERIALIZABLE's failure machinery deliberately not needed, documented. Balance validated inside the transaction; a refused entry consumes no version. Reversal mirrors double-entry exactly: original stays posted, counter cancels it, lineage in its own table. into_ledger takes the class chart explicitly after 0.1.0's asset-default silently zeroed the P&L. Tests run against a real Postgres (container harness). Published 2026-10-24."
     crates:
       - ledger-pg
-    _seen:
       last_push: "2026-10-24"
       ledger-pg: 0.2.2
 
@@ -723,13 +799,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ledger-pg: 0.2.2
   report-kit:
     area: money
     status: core
     notes: "Trial balance and aging over a double-entry ledger. Per currency by construction \u2014 summing a GBP bank account with a JPY fee account is a number in no currency \u2014 with the accounting equation (assets + expenses = liabilities + equity + revenue) as a per-currency runtime check. Aging runs from the due date, not the issue date; abnormal balances are a predicate, not a normalization. Published 2026-10-07 with a reporting suite over the month-close ledger. 0.2.1 adds the P&L and balance sheet \u2014 one trial balance read two ways, the retained result carried where it actually is; 0.2.0 shipped without the module and is recorded as an error in its changelog."
     crates:
       - report-kit
-    _seen:
       last_push: "2026-10-07"
       report-kit: 0.2.3
 
@@ -740,13 +818,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      report-kit: 0.2.3
   recon-kit:
     area: money
     status: core
     notes: "Bank statement types and a matching engine for reconciling statements against a ledger. No format parsing (OFX/CAMT adapters are separate), no tolerance (exact integer comparison only), no silent auto-matching (ambiguity is surfaced, never resolved). Direction is a value, not a sign \u2014 OFX's signed amounts normalise at the boundary. The balance identity is the import check that catches a truncated import. Published 2026-10-07 with a double-entry month-close suite."
     crates:
       - recon-kit
-    _seen:
       last_push: "2026-10-07"
       recon-kit: 0.1.0
 
@@ -757,13 +837,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      recon-kit: 0.2.0
   report-kit:
     area: money
     status: core
     notes: "Trial balance and aging reports over double-entry (the estate's ledger crate). Per-currency by construction: the balance identity is checked per currency, and a ledger balanced in GBP and unbalanced in JPY is reported as exactly that. The accounting equation is a runtime check with the period's result still sitting in revenue and expense -- no closing entries are required for a truthful report. Aging buckets escalate on the promised date, never the issue date, per the item's own currency. The cut-off is a YYYY-MM-DD string comparison. Registered 2026-10-23 the day it appeared; composed the same day in estate-integration's reporting suite."
     crates:
       - report-kit
-    _seen:
       last_push: "2026-10-23"
       report-kit: 0.2.3
 
@@ -774,12 +856,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      report-kit: 0.2.3
   graphify:
     area: dx
     status: support
     notes: "Turns a codebase (docs, SQL schemas, configs, PDFs) into a queryable knowledge base. A Python project (pyproject.toml, uv.lock), not a Rust crate. The crates.io crate of the same name is an unrelated 2016 graph library that has sat in this account's namespace since before the estate existed; the audit pairs them because both match the name, but the 2016 crate is not the account's and not a publication of this repo (the owner-id check rejects it). Repo registered 2026-10-23 the day it appeared."
     crates: []
-    _seen:
       last_push: "2026-10-23"
 
     docs:
@@ -789,13 +873,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   statement-camt:
     area: money
     status: core
     notes: "ISO 20022 CAMT.053 bank statement adapter producing recon-kit Statements: both balances (opening/closing) verified against the entries, booked-only entries, sign-normalised at the boundary. The first of recon-kit's declared external-format adapters (its notes reserved OFX/CAMT to separate crates). Depends on recon-kit =0.1.0. Registered 2026-10-24, round 27."
     crates:
       - statement-camt
-    _seen:
       last_push: "2026-10-24"
       statement-camt: 0.1.0
 
@@ -806,13 +892,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      statement-camt: 0.1.3
   fx-kit:
     area: money
     status: core
     notes: "Currency revaluation per IAS 21: exact rational rates, closing-rate restatement of monetary items, unrealized gain/loss with the posting split. The foreign-exchange leg of the double-entry stack (statement-camt imports the facts; fx-kit restates them when currencies move). Registered 2026-10-24."
     crates:
       - fx-kit
-    _seen:
       last_push: "2026-10-24"
       fx-kit: 0.1.3
 
@@ -823,13 +911,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fx-kit: 0.1.5
   group-kit:
     area: money
     status: core
     notes: "Multi-entity consolidation over the double-entry stack: intercompany matching that surfaces mismatches instead of guessing, eliminations that must cancel (a non-cancelling elimination is surfaced, never absorbed), same-currency matching first. The group close sits above the entity close (recon-kit -> report-kit -> group-kit). Registered 2026-10-24."
     crates:
       - group-kit
-    _seen:
       last_push: "2026-10-24"
       group-kit: 0.2.0
 
@@ -840,6 +930,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      group-kit: 0.2.3
   bizkit:
     area: research
     status: support
@@ -847,7 +940,6 @@ repos:
     crates:
       - bizkit
       - bizkit-core
-    _seen:
       last_push: "2026-10-24"
       bizkit: 0.1.0
 
@@ -858,12 +950,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      bizkit: 0.1.3
+      bizkit-core: 0.1.3
   agentic-awesome-skills:
     area: dx
     status: support
     notes: "A skills registry: 2,750 reusable agent instructions with registry-sync automation (version, star count, and update timestamps tracked in-tree). Catalog, inspection, and exact-skill review for agent projects. Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -873,12 +968,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   ai-memory:
     area: dx
     status: support
     notes: "Agent memory infrastructure (Rust workspace, v3.2.4 in-tree). Workspace members are not published to crates.io as of registration. Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -888,12 +985,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   detonate-mcp:
     area: dx
     status: support
     notes: "MCP server: run unknown binaries in a maximum-hardening container; the safety profile is enforced server-side and cannot be parameterized away. Python (pyproject + uv), not a Rust crate. Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -903,12 +1002,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   impeccable:
     area: dx
     status: support
     notes: "Design guidance for AI coding agents: one skill, 24 commands, live browser iteration, and 62 deterministic detectors (TypeScript, bun). Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -918,13 +1018,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   ledger-pg:
     area: money
     status: support
     notes: "PostgreSQL persistence for double-entry: the accounting core's database adapter. Registered 2026-10-26; graduates to core when a consumer composes it."
     crates:
       - ledger-pg
-    _seen:
       last_push: "2026-10-26"
       ledger-pg: 0.2.1
 
@@ -935,12 +1037,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ledger-pg: 0.2.2
   memory-handoff-skill:
     area: dx
     status: support
     notes: "Agent skill for portable session handoff across agent CLIs: one plaintext markdown file, five fields, no vendor lock. Shell, not a Rust crate. Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -950,13 +1054,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   pay-kit:
     area: money
     status: support
     notes: "Payment webhooks in, settled ledger entries out: Stripe and GoCardless adapters feeding the double-entry ledger. Registered 2026-10-26; graduates to core when a consumer composes it."
     crates:
       - pay-kit
-    _seen:
       last_push: "2026-10-26"
       pay-kit: 0.1.2
 
@@ -967,21 +1072,25 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      pay-kit: 0.1.3
   trade-tester:
     area: money
     status: personal
     notes: "Closed-source on-chain trade tester: atomic cyclic arbitrage, shadow-mode. Personal tooling; the repository is public but the product is not offered, and its crates are not published. Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
+    _seen:
+      last_push: "2026-10-29"
+      private: true
   vat-mtd:
     area: money
     status: support
     notes: "HMRC Making Tax Digital (VAT): the typed submission contract, mapped from the vat-rules vocabulary and vat-return's boxes. Registered 2026-10-26; graduates to core when a consumer composes it."
     crates:
       - vat-mtd
-    _seen:
       last_push: "2026-10-26"
       vat-mtd: 0.1.3
 
@@ -992,12 +1101,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      vat-mtd: 0.1.6
   waves:
     area: research
     status: support
     notes: "The public measurement record of trendkit: weekly dev-trend reports and the trust index, generated from raw snapshots. A data repository, not a crate. Registered 2026-10-26."
     crates: []
-    _seen:
       last_push: "2026-10-26"
 
     docs:
@@ -1007,13 +1118,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   sales-tax:
     area: money
     status: support
     notes: "US sales tax document arithmetic: nexus-gated, destination-sourced, exact rational rates, explicit rounding scope. Rates and taxability are inputs; the rate database is a data service, not a library -- the crate does document arithmetic, the service owns the rates. The US counterpart of the vat-rules/vat-return chain. Registered 2026-10-27; graduates to core when a consumer composes it."
     crates:
       - sales-tax
-    _seen:
       last_push: "2026-10-27"
       sales-tax: 0.2.0
 
@@ -1024,12 +1136,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sales-tax: 0.2.0
   argus:
     area: obsv
     status: support
     notes: "All-purpose intelligence platform: world surveillance (OSINT), markets/quant, private-equity back-office, in Rust, dogfooding the estate. Workspace of five members (alertkit, argus-mcp, argus-server, argus-tui, feedkit); none published to crates.io as of registration. The crates.io crate of the same name is an unrelated 0.0.0 placeholder owned by neither the account nor this repo. Registered 2026-10-29."
     crates: []
-    _seen:
       last_push: "2026-10-29"
 
     docs:
@@ -1039,13 +1153,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   vat-rules:
     area: money
     status: core
     notes: "The tax vocabulary both sides of a ledger share: UNCL5305 categories with their CEF VATEX-* reasons, UNTDID 1001 document types, ZATCA's five issue reasons, the four rounding regimes, and TieMode. Zero dependencies by design \u2014 TieMode is policy vocabulary, not arithmetic machinery, so a table of tax codes does not depend on a double-entry engine to say round-ties-away-from-zero. Extracted 2026-10-06 so AP imports the same table AR does."
     crates:
       - vat-rules
-    _seen:
       last_push: "2026-10-06"
       vat-rules: 0.1.0
 
@@ -1056,13 +1171,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      vat-rules: 0.1.1
   ap-kit:
     area: money
     status: core
     notes: "Accounts payable: supplier bills, input-VAT recoverability (Article 168), and the three-way split between gross payable, deductible tax and expense. The line net is authoritative data, not a derivation \u2014 AP receives documents, it does not issue them. Recoverability never changes what is owed to the supplier. Published 2026-10-06 with a double-entry ledger suite posting the original-then-reversal pair for a supplier credit note."
     crates:
       - ap-kit
-    _seen:
       last_push: "2026-10-06"
       ap-kit: 0.1.5
 
@@ -1073,11 +1190,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ap-kit: 0.1.5
   kit-conformance:
     area: dx
     status: infra
     notes: "Shared conformance harness for the Rust kit ecosystem. Added 2026-10-05."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -1087,11 +1206,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   deploy-webhook-rs:
     area: infra
     status: support
     notes: "Rust twin of the infra deploy webhook: webhookkit-verified HMAC, shadow-first rollout."
-    _seen:
       last_push: "2026-10-12"
 
     docs:
@@ -1101,11 +1221,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      private: true
   aperture-vault:
     area: app
     status: support
     notes: "Photo/video vault: single binary, content-addressed, Immich-compatible API."
-    _seen:
       last_push: "2026-10-12"
 
     docs:
@@ -1115,11 +1237,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   eventbusd:
     area: data
     status: support
     notes: "Durable event-bus daemon on eventbus: HTTP publish + replay, SQLite persistence."
-    _seen:
       last_push: "2026-10-12"
 
     docs:
@@ -1129,11 +1252,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      private: true
   flagsd:
     area: infra
     status: support
     notes: "Feature-flag sidecar on flag-kit: HTTP evaluation + rollout control with audit history."
-    _seen:
       last_push: "2026-10-12"
 
     docs:
@@ -1143,158 +1268,179 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      private: true
   OmniCPP-docker:
     area: dx
     status: dormant
     notes: "CMake/CPP toolchain image; dormant."
-    _seen:
       last_push: "2025-07-09"
 
+    _seen:
+      last_push: "2025-07-09"
   OmniCPP-template:
     area: dx
     status: template
     notes: "CMake starter."
-    _seen:
       last_push: "2026-09-04"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniDocs-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "Starlight docs site."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniDotfiles-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "chezmoi-first dotfiles."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniEmbedded-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "RP2040/RP2350 embedded."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniFlutter-template:
     area: dx
     status: dormant
     notes: "Dart/Flutter starter."
-    _seen:
       last_push: "2025-08-01"
       private: true
 
+    _seen:
+      last_push: "2025-08-01"
+      private: true
   OmniGo-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "go.work anchor + golangci-lint v2."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniHaskell-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "cabal multi-package + nix GHC."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-25"
   OmniInfra-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "OpenTofu + conftest/OPA."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniLaTeX-CV:
     area: docs
     status: dormant
     notes: "Derived from OmniLaTeX-template."
-    _seen:
       last_push: "2025-11-02"
 
+    _seen:
+      last_push: "2025-11-02"
   OmniLaTeX-coverletter:
     area: docs
     status: dormant
     notes: "Derived from OmniLaTeX-template."
-    _seen:
       last_push: "2025-11-24"
 
+    _seen:
+      last_push: "2025-11-24"
   OmniLaTeX-docker:
     area: docs
     status: dormant
     notes: "Image for OmniLaTeX-template."
-    _seen:
       last_push: "2025-11-01"
 
+    _seen:
+      last_push: "2025-11-01"
   OmniLaTeX-template:
     area: docs
     status: template
     notes: "OmniLaTeX document class; 30 doctypes incl. invoice."
-    _seen:
       last_push: "2026-09-07"
 
+    _seen:
+      last_push: "2026-09-07"
   OmniLean-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "Lean 4 + mathlib."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   OmniPython-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "Python starter; description still the placeholder."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-26"
   OmniR-template:
     area: dx
     status: template
     notes: "R monorepo starter."
-    _seen:
       last_push: "2026-10-04"
 
+    _seen:
+      last_push: "2026-10-04"
   omni-python-e2e:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "Derived repo verifying the OmniPython update channel (ADR-0001); template-managed."
-    _seen:
       last_push: "2026-10-10"
 
+    _seen:
+      last_push: "2026-10-30"
   omni-copier-e2e:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "Derived repo verifying the OmniRust update channel (ADR-0001); template-managed."
-    _seen:
       last_push: "2026-10-09"
 
+    _seen:
+      last_push: "2026-10-28"
   cuesheet-core:
     area: app
     status: support
     notes: "CDRWIN cue sheet reader/writer at 75 fps: tracks, indices, MM:SS:FF, CD-TEXT, no_std."
-    _seen:
       last_push: "2026-10-09"
 
     docs:
@@ -1304,36 +1450,40 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   OmniRust-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "Pinned-toolchain Rust monorepo with estate tier-a gates."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-25"
   OmniTS-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: dx
     status: template
     notes: "bun workspaces + Astro/SolidJS."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-11-01"
   PatentSafePermissiveLicense:
     area: infra
     status: dormant
     notes: "License text + tooling; dormant."
-    _seen:
       last_push: "2025-07-08"
 
+    _seen:
+      last_push: "2025-07-08"
   RunnerImages:
     area: infra
     status: infra
     notes: "Base images for CI."
-    _seen:
       last_push: "2026-08-19"
 
     docs:
@@ -1343,11 +1493,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   SimpleInfrastructureStack:
     area: infra
     status: infra
     notes: "truenas + terraform stack."
-    _seen:
       last_push: "2026-10-03"
 
     docs:
@@ -1357,42 +1508,48 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   Tachyon:
     area: app
     status: dormant
     notes: "JIT documentation server."
-    _seen:
       last_push: "2026-09-13"
 
+    _seen:
+      last_push: "2026-09-13"
   uofg_sml_soc_docs:
     area: personal
     status: personal
     notes: "Private TeX repo for University of Glasgow small-open-source-contributions paperwork. Not part of the published library estate; recorded so the audit stops reporting it as missing."
-    _seen:
       last_push: "2026-10-06"
       private: true
 
+    _seen:
+      last_push: "2026-10-25"
+      private: true
   WyattAu:
     area: docs
     status: infra
     notes: "Profile repo."
-    _seen:
       last_push: "2026-09-26"
 
+    _seen:
+      last_push: "2026-10-23"
   WyattsNotes:
     area: docs
     status: dormant
     notes: "Deprecated; superseded by starlight-sites."
-    _seen:
       last_push: "2026-09-15"
 
+    _seen:
+      last_push: "2026-09-15"
   a2l-parse:
     area: data
     status: support
     notes: "ASAP2/A2L parser."
     crates:
       - a2l-parse
-    _seen:
       last_push: "2026-10-04"
       a2l-parse: 0.1.0
 
@@ -1403,13 +1560,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      a2l-parse: 0.1.2
   accessctl:
     area: auth
     status: support
     notes: "Authorization policy checks."
     crates:
       - accessctl
-    _seen:
       last_push: "2026-10-02"
       accessctl: 0.1.0
 
@@ -1420,13 +1579,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      accessctl: 0.1.3
   actor-kit:
     area: conc
     status: support
     notes: "Work-stealing OTP runtime."
     crates:
       - actor-kit
-    _seen:
       last_push: "2026-10-05"
       actor-kit: 0.2.5
 
@@ -1437,27 +1598,31 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      actor-kit: 0.2.7
   aether-core:
     area: app
     status: dormant
     notes: "Open core logic for aether."
-    _seen:
       last_push: "2026-09-07"
 
+    _seen:
+      last_push: "2026-10-31"
   aileron:
     area: app
     status: orphan
     notes: "Keyboard-driven web environment (Servo)."
-    _seen:
       last_push: "2026-09-13"
 
+    _seen:
+      last_push: "2026-10-31"
   api-types:
     area: data
     status: support
     notes: "Shared API types."
     crates:
       - api-types
-    _seen:
       last_push: "2026-10-02"
       api-types: 0.1.1
 
@@ -1468,6 +1633,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      api-types: 0.1.2
   app-error:
     area: data
     status: support
@@ -1475,7 +1643,6 @@ repos:
     crates:
       - error-classify
       - error-classify-derive
-    _seen:
       last_push: "2026-10-02"
       error-classify: 0.3.1
       error-classify-derive: 0.1.0
@@ -1487,6 +1654,10 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      error-classify: 0.3.1
+      error-classify-derive: 0.1.1
   audiobook-conformance:
     area: data
     status: support
@@ -1499,13 +1670,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   audiobook-core:
     area: data
     status: support
     notes: "Audiobook domain model over id3-core + mp4-core. Published 2026-10-21 (by concurrent work); the crates list below was added the same day so the audit stops reading it as unclaimed."
     crates:
       - audiobook-core
-    _seen:
       last_push: "2026-10-21"
       audiobook-core: 0.5.0
 
@@ -1516,13 +1688,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      audiobook-core: 0.5.1
   auditlog:
     area: auth
     status: core
     notes: "Publishes tamper-audit; composed and exact-pinned (=0.2.3) by dissect-evidence (2026-10-31, first consumer)."
     crates:
       - tamper-audit
-    _seen:
       last_push: "2026-10-02"
       tamper-audit: 0.2.0
 
@@ -1533,13 +1707,17 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      tamper-audit: 0.2.3
   axum-server:
     area: net
     status: dormant
     notes: "Duplicate of axum-stack."
-    _seen:
       last_push: "2026-09-19"
 
+    _seen:
+      last_push: "2026-09-19"
   axum-stack:
     area: net
     status: support
@@ -1547,7 +1725,6 @@ repos:
     notes: "Axum server utilities (shutdown, CORS, health routes)."
     crates:
       - axum-stack
-    _seen:
       last_push: "2026-10-02"
       axum-stack: 0.2.0
 
@@ -1558,13 +1735,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      axum-stack: 1.0.0
   barbican:
     area: auth
     status: core
     notes: "Auth middleware (bearer/session)."
     crates:
       - barbican
-    _seen:
       last_push: "2026-10-02"
       barbican: 0.2.1
 
@@ -1575,13 +1754,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      barbican: 0.2.4
   billing-kit:
     area: money
     status: support
     notes: "Pricing with tax/discount. Accounting core."
     crates:
       - billing-kit
-    _seen:
       last_push: "2026-10-03"
       billing-kit: 0.1.1
 
@@ -1592,13 +1773,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      billing-kit: 0.2.1
   blobkit:
     area: data
     status: core
     notes: "Typed object storage."
     crates:
       - blobkit
-    _seen:
       last_push: "2026-10-02"
       blobkit: 0.4.2
 
@@ -1609,13 +1792,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      blobkit: 0.4.3
   book-kit:
     area: conc
     status: core
     notes: "Lock-free limit order book."
     crates:
       - book-kit
-    _seen:
       last_push: "2026-10-04"
       book-kit: 0.1.0
 
@@ -1626,13 +1811,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      book-kit: 0.1.1
   breaker:
     area: net
     status: core
     notes: "Circuit breaker."
     crates:
       - breaker
-    _seen:
       last_push: "2026-10-02"
       breaker: 2.0.1
 
@@ -1643,30 +1830,35 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      breaker: 2.0.2
   cachekit:
     area: data
     status: orphan
     notes: "Publishes cache-pal; not yet composed."
     crates:
       - cache-pal
-    _seen:
       last_push: "2026-10-05"
       cache-pal: 0.4.0
 
+    _seen:
+      last_push: "2026-10-26"
+      cache-pal: 0.4.1
   cachyos_sys_dotfiles:
     area: infra
     status: dormant
     notes: "Personal CachyOS dotfiles."
-    _seen:
       last_push: "2026-09-19"
 
+    _seen:
+      last_push: "2026-10-31"
   can-core:
     area: data
     status: support
     notes: "CAN/FD frame codec."
     crates:
       - can-core
-    _seen:
       last_push: "2026-10-03"
       can-core: 0.1.0
 
@@ -1677,13 +1869,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      can-core: 0.1.1
   cas-kit:
     area: data
     status: core
     notes: "Content-addressed store."
     crates:
       - cas-kit
-    _seen:
       last_push: "2026-10-02"
       cas-kit: 0.2.1
 
@@ -1694,20 +1888,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      cas-kit: 1.0.0
   cf-worker-utils:
     area: net
     status: orphan
     notes: "Cloudflare Worker helpers."
-    _seen:
       last_push: "2026-08-30"
 
+    _seen:
+      last_push: "2026-08-30"
   chaos-kit:
     area: obsv
     status: core
     notes: "Deterministic fault injection."
     crates:
       - chaos-kit
-    _seen:
       last_push: "2026-10-02"
       chaos-kit: 0.1.1
 
@@ -1718,23 +1915,29 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      chaos-kit: 0.1.2
   clawdius:
     area: app
     status: orphan
     notes: "Remote agentic coding sandbox."
-    _seen:
       last_push: "2026-10-05"
 
+    _seen:
+      last_push: "2026-10-31"
   clock:
     area: conc
     status: dormant
     notes: "Publishes chronoshift; clock-kit supersedes it."
     crates:
       - chronoshift
-    _seen:
       last_push: "2026-10-02"
       chronoshift: 1.0.1
 
+    _seen:
+      last_push: "2026-10-19"
+      chronoshift: 1.0.1
   clock-kit:
     area: conc
     status: core
@@ -1742,7 +1945,6 @@ repos:
     notes: "Time-source abstraction; overlaps chronoshift."
     crates:
       - clock-kit
-    _seen:
       last_push: "2026-10-03"
       clock-kit: 0.1.0
 
@@ -1753,28 +1955,34 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      clock-kit: 0.1.1
   coa:
     area: docs
     status: personal
     notes: "OmniLaTeX monorepo (name is misleading)."
-    _seen:
       last_push: "2026-09-13"
       private: true
 
+    _seen:
+      last_push: "2026-09-13"
+      private: true
   conan-center-index:
     area: infra
     status: dormant
     notes: "Conan recipes fork; dormant, kept for the Conan toolchain."
-    _seen:
       last_push: "2025-11-17"
 
+    _seen:
+      last_push: "2025-11-17"
+      fork: true
   config-kit:
     area: obsv
     status: core
     notes: "Layered typed config."
     crates:
       - config-kit
-    _seen:
       last_push: "2026-10-02"
       config-kit: 0.1.1
 
@@ -1785,13 +1993,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      config-kit: 1.0.0
   contact-miner:
     area: data
     status: support
     notes: "Web contact discovery."
     crates:
       - contact-miner
-    _seen:
       last_push: "2026-10-02"
       contact-miner: 0.1.0
 
@@ -1802,6 +2012,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      contact-miner: 0.1.0
   crawlkit:
     area: data
     status: orphan
@@ -1809,16 +2022,18 @@ repos:
     crates:
       - crawlkit-engine
       - crawlkit-plugin-sdk
-    _seen:
       last_push: "2026-10-05"
       crawlkit-engine: 2.0.0
       crawlkit-plugin-sdk: 1.0.0
 
+    _seen:
+      last_push: "2026-10-31"
+      crawlkit-engine: 2.0.0
+      crawlkit-plugin-sdk: 1.0.0
   crdt-demo:
     area: ui
     status: support
     notes: "Live CRDT demo (crdts-kit + ws-kit)."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -1828,13 +2043,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   crdts-kit:
     area: data
     status: support
     notes: "RGA CRDT; crdt-demo exercises it, no estate suite."
     crates:
       - crdts-kit
-    _seen:
       last_push: "2026-10-02"
       crdts-kit: 0.1.0
 
@@ -1845,13 +2061,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      crdts-kit: 1.0.0
   cryptkit:
     area: auth
     status: support
     notes: "Crypto primitives; Tier A."
     crates:
       - cryptkit
-    _seen:
       last_push: "2026-10-02"
       cryptkit: 0.1.0
 
@@ -1862,13 +2080,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      cryptkit: 0.1.1
   dbc-parse:
     area: data
     status: support
     notes: "DBC signal layout parser."
     crates:
       - dbc-parse
-    _seen:
       last_push: "2026-10-03"
       dbc-parse: 0.1.0
 
@@ -1879,13 +2099,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      dbc-parse: 0.1.2
   delta-kit:
     area: data
     status: support
     notes: "Binary delta codec."
     crates:
       - delta-kit
-    _seen:
       last_push: "2026-10-02"
       delta-kit: 0.2.1
     docs:
@@ -1896,18 +2118,22 @@ repos:
       status: draft
       last_audit: "2026-10-31"
 
+    _seen:
+      last_push: "2026-10-31"
+      delta-kit: 0.2.2
   dissect:
     area: app
     status: support
     notes: "Fork of morluto/rea (MIT), seeded 60149282fcfc 2026-10-31; agent RE bridge, sandboxed providers + tamper-evident evidence."
 
+    _seen:
+      last_push: "2026-11-01"
   docs-pipeline:
     area: data
     status: support
     notes: "Markdown + tree-sitter rendering."
     crates:
       - docs-pipeline
-    _seen:
       last_push: "2026-10-02"
       docs-pipeline: 0.1.4
 
@@ -1918,13 +2144,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      docs-pipeline: 0.1.4
   dsp-core:
     area: data
     status: core
     notes: "Audio DSP primitives; consumed and exact-pinned (=0.1.1) by nightjar visualizer (2026-10-31, first consumer)."
     crates:
       - dsp-core
-    _seen:
       last_push: "2026-10-04"
       dsp-core: 0.1.0
 
@@ -1935,13 +2163,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      dsp-core: 0.1.1
   engineering-standards:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
     area: infra
     status: core
     notes: "Shared CI matrix, policies, templates, estate manifest + audit."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -1951,23 +2181,26 @@ repos:
       llms_txt: true
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-11-01"
   envstack:
     area: obsv
     status: orphan
     notes: "Env layering; overlaps config-kit."
     crates:
       - envstack
-    _seen:
       last_push: "2026-10-02"
       envstack: 0.2.1
 
+    _seen:
+      last_push: "2026-10-29"
+      envstack: 1.0.1
   errcode:
     area: data
     status: support
     notes: "Publishes error-codes; no_std."
     crates:
       - error-codes
-    _seen:
       last_push: "2026-10-02"
       error-codes: 1.1.0
 
@@ -1978,11 +2211,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      error-codes: 1.1.1
   estate-integration:
     area: dx
     status: core
     notes: "Cross-crate dogfooding suites; the only proof the estate composes."
-    _seen:
       last_push: "2026-10-03"
 
     docs:
@@ -1992,13 +2227,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   eventbus:
     area: data
     status: support
     notes: "Publishes eventbus-kit."
     crates:
       - eventbus-kit
-    _seen:
       last_push: "2026-10-02"
       eventbus-kit: 0.3.5
 
@@ -2009,11 +2245,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      eventbus-kit: 1.0.0
   ferro:
     area: app
     status: core
     notes: "Self-hosted file storage platform."
-    _seen:
       last_push: "2026-09-29"
 
     docs:
@@ -2023,6 +2261,8 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   fetch-kit:
     area: net
     status: core
@@ -2032,7 +2272,6 @@ repos:
       - resilient-fetch
     docs:
       consumers: outrider-fetch (2026-10-31)
-    _seen:
       last_push: "2026-10-03"
       fetch-kit: 0.2.0
       resilient-fetch: 0.1.0
@@ -2044,13 +2283,16 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      fetch-kit: 0.2.2
+      resilient-fetch: 0.1.1
   flag-kit:
     area: obsv
     status: support
     notes: "Feature flags; not yet composed."
     crates:
       - flag-kit
-    _seen:
       last_push: "2026-10-02"
       flag-kit: 0.2.0
 
@@ -2061,13 +2303,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      flag-kit: 1.0.0
   font-parse:
     area: data
     status: support
     notes: "SFNT/OTF/WOFF2 parser."
     crates:
       - font-parse
-    _seen:
       last_push: "2026-10-03"
       font-parse: 0.1.0
 
@@ -2078,18 +2322,21 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      font-parse: 0.1.1
   forgejo-k8s-runner:
     area: infra
     status: dormant
     notes: "Forgejo runner on k8s; dormant pending CivitForge integration."
-    _seen:
       last_push: "2026-06-06"
 
+    _seen:
+      last_push: "2026-06-06"
   forgeyard:
     area: dx
     status: infra
     notes: "Repo scaffolder; produces repos green against the shared matrix."
-    _seen:
       last_push: "2026-09-06"
 
     docs:
@@ -2099,13 +2346,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   formula-lang:
     area: money
     status: support
     notes: "Formula tokenizer/parser/evaluator."
     crates:
       - formula-lang
-    _seen:
       last_push: "2026-10-04"
       formula-lang: 0.1.1
 
@@ -2116,13 +2364,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      formula-lang: 0.1.3
   geo-kit:
     area: data
     status: support
     notes: "Geo primitives; Tier B."
     crates:
       - geo-kit
-    _seen:
       last_push: "2026-10-02"
       geo-kit: 1.1.1
 
@@ -2133,20 +2383,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      geo-kit: 1.1.2
   gitea-setup:
     area: infra
     status: dormant
     notes: "Superseded by forgejo-k8s-runner."
-    _seen:
       last_push: "2025-08-10"
 
+    _seen:
+      last_push: "2025-08-10"
   graceful:
     area: obsv
     status: core
     notes: "Graceful shutdown guards (ShutdownGuard); publishes shutdown-kit."
     crates:
       - shutdown-kit
-    _seen:
       last_push: "2026-10-02"
       shutdown-kit: 0.3.2
 
@@ -2157,13 +2410,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      shutdown-kit: 0.3.3
   hdwallet:
     area: auth
     status: support
     notes: "Publishes multi-chain-wallet; Tier A."
     crates:
       - multi-chain-wallet
-    _seen:
       last_push: "2026-10-02"
       multi-chain-wallet: 0.3.0
 
@@ -2174,13 +2429,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      multi-chain-wallet: 0.3.1
   healthkit:
     area: obsv
     status: core
     notes: "Liveness/readiness/startup probes."
     crates:
       - healthkit
-    _seen:
       last_push: "2026-10-02"
       healthkit: 1.3.1
 
@@ -2191,35 +2448,41 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      healthkit: 1.3.2
   homebite_docs:
     area: docs
     status: personal
     notes: "Private docs."
-    _seen:
       last_push: "2026-09-29"
       private: true
 
+    _seen:
+      last_push: "2026-10-31"
+      private: true
   homebrew-clawdius:
     area: infra
     status: dormant
     notes: "Homebrew tap for clawdius; dormant while clawdius is dormant."
-    _seen:
       last_push: "2026-05-27"
 
+    _seen:
+      last_push: "2026-05-27"
   homebrew-suture-merge-driver:
     area: infra
     status: orphan
     notes: "Homebrew tap for the suture git merge driver."
-    _seen:
       last_push: "2026-09-02"
 
+    _seen:
+      last_push: "2026-09-02"
   http-error:
     area: data
     status: support
     notes: "Publishes http-errors + derive."
     crates:
       - http-errors
-    _seen:
       last_push: "2026-10-02"
       http-errors: 0.1.0
 
@@ -2230,13 +2493,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      http-errors: 0.1.1
   hw-kit:
     area: conc
     status: core
     notes: "CPU/NUMA pinning, hugepages."
     crates:
       - hw-kit
-    _seen:
       last_push: "2026-10-03"
       hw-kit: 0.1.0
 
@@ -2247,20 +2512,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      hw-kit: 0.1.1
   hydrated-personal-site:
     area: docs
     status: dormant
     notes: "Personal site."
-    _seen:
       last_push: "2026-07-26"
 
+    _seen:
+      last_push: "2026-07-26"
   i18n-kit:
     area: data
     status: support
     notes: "Runtime i18n catalogs; not yet composed."
     crates:
       - i18n-kit
-    _seen:
       last_push: "2026-10-02"
       i18n-kit: 0.1.3
 
@@ -2271,13 +2539,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      i18n-kit: 0.1.4
   input-kit:
     area: ui
     status: core
     notes: "Toolkit-neutral text-composition semantics (L1): IME preedit state machine, grapheme-cluster caret mapping for all four platform cursor units (Win32/macOS/web UTF-16, Wayland/X11 bytes), dead-key composition. no_std + alloc, zero estate deps. The gap was measured, not assumed: no crate in the ledger provided composition semantics. Published 2026-10-18 with a consumer already in place per ADR-0005; the composing suite recorded the a11y-kit `busy`-state gap."
     crates:
       - input-kit
-    _seen:
       last_push: "2026-10-18"
       input-kit: 0.1.0
 
@@ -2288,13 +2558,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      input-kit: 0.1.0
   ui-text-edit:
     area: ui
     status: core
     notes: "Text-field semantics (L2): a buffer-agnostic TextBuffer trait (insurance against ropey 2.0 flipping char indexing to byte), a grapheme-correct caret/selection/edit model, an IME bridge over input-kit, and an a11y bridge over a11y-kit behind the `a11y` feature. Deliberately NOT an editing engine: the estate's four UI surfaces include no code editor, so a Helix-class engine would have zero consumers. ADR-0006 records the survey of five existing crates and why none was adopted. Published 2026-10-18; its composing suite found a real bug in the crate (unbounded accessible announcement) before publication."
     crates:
       - ui-text-edit
-    _seen:
       last_push: "2026-10-18"
       ui-text-edit: 0.1.0
 
@@ -2305,13 +2577,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ui-text-edit: 0.1.2
   id3-core:
     area: data
     status: support
     notes: "ID3v1/v2 tag codec (CHAP/CTOC chapters, APIC art), no_std. Published 2026-10-21 (by concurrent work)."
     crates:
       - id3-core
-    _seen:
       last_push: "2026-10-21"
       id3-core: 0.3.0
 
@@ -2322,13 +2596,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      id3-core: 0.3.1
   idempotency-kit:
     area: net
     status: core
     notes: "Idempotency keys; composed by ledger-kit + webhook suite."
     crates:
       - idempotency-kit
-    _seen:
       last_push: "2026-10-02"
       idempotency-kit: 0.1.0
 
@@ -2339,20 +2615,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      idempotency-kit: 1.0.1
   ironclaw:
     area: app
     status: fork
     notes: "Fork of nearai/ironclaw."
-    _seen:
       last_push: "2026-09-11"
 
+    _seen:
+      last_push: "2026-09-11"
   json-envelope:
     area: data
     status: support
     notes: "Standard API envelope."
     crates:
       - json-envelope
-    _seen:
       last_push: "2026-10-02"
       json-envelope: 0.1.0
 
@@ -2363,18 +2642,21 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      json-envelope: 0.1.2
   kestrel:
     area: app
     status: orphan
     notes: "tui+gui email client; needs mail-sync-kit + mailkit to ship."
-    _seen:
       last_push: "2026-09-16"
 
+    _seen:
+      last_push: "2026-10-22"
   latent-oracle:
     area: research
     status: core
     notes: "Neural chess research engine."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -2384,11 +2666,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   latent-oracle-data:
     area: research
     status: core
     notes: "PGN -> Stockfish label pipeline."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -2398,27 +2681,31 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   latex2e:
     area: docs
     status: fork
     notes: "LaTeX2e kernel fork."
-    _seen:
       last_push: "2026-09-04"
 
+    _seen:
+      last_push: "2026-09-04"
+      fork: true
   ldir:
     area: app
     status: dormant
     notes: "Low-level document IR."
-    _seen:
       last_push: "2026-09-13"
 
+    _seen:
+      last_push: "2026-09-13"
   ledger-kit:
     area: money
     status: core
     notes: "Double-entry ledger, outbox journal, tamper chain."
     crates:
       - ledger-kit
-    _seen:
       last_push: "2026-10-02"
       ledger-kit: 0.1.0
 
@@ -2429,13 +2716,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ledger-kit: 1.0.2
   leptos-capital-markers:
     area: ui
     status: support
     notes: "Capital city markers."
     crates:
       - leptos-capital-markers
-    _seen:
       last_push: "2026-10-02"
       leptos-capital-markers: 0.1.0
 
@@ -2446,13 +2735,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-capital-markers: 0.1.1
   leptos-crypto-ws:
     area: ui
     status: support
     notes: "Crypto-over-WS component."
     crates:
       - leptos-crypto-ws
-    _seen:
       last_push: "2026-10-02"
       leptos-crypto-ws: 0.1.0
 
@@ -2463,13 +2754,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-crypto-ws: 0.1.1
   leptos-leaflet:
     area: ui
     status: support
     notes: "Publishes leptos-leaflet-wyatt."
     crates:
       - leptos-leaflet-wyatt
-    _seen:
       last_push: "2026-10-05"
       leptos-leaflet-wyatt: 0.1.1
 
@@ -2480,6 +2773,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-leaflet-wyatt: 0.1.2
   leptos-macro:
     area: ui
     status: support
@@ -2487,7 +2783,6 @@ repos:
     crates:
       - leptos-derive
       - leptos-macros
-    _seen:
       last_push: "2026-10-02"
       leptos-derive: 0.1.0
       leptos-macros: 0.1.0
@@ -2499,13 +2794,16 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-derive: None
+      leptos-macros: 0.1.1
   leptos-map-search:
     area: ui
     status: support
     notes: "Map search component."
     crates:
       - leptos-map-search
-    _seen:
       last_push: "2026-10-02"
       leptos-map-search: 0.1.0
 
@@ -2516,13 +2814,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-map-search: 0.1.1
   leptos-sparkline:
     area: ui
     status: support
     notes: "Sparkline component."
     crates:
       - leptos-sparkline
-    _seen:
       last_push: "2026-10-02"
       leptos-sparkline: 0.1.0
 
@@ -2533,13 +2833,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-sparkline: 0.1.1
   leptos-stale-indicator:
     area: ui
     status: support
     notes: "Data freshness indicator."
     crates:
       - leptos-stale-indicator
-    _seen:
       last_push: "2026-10-02"
       leptos-stale-indicator: 0.1.0
 
@@ -2550,20 +2852,24 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      leptos-stale-indicator: 0.1.1
   luaotfload:
     area: docs
     status: fork
     notes: "OpenType loader for LuaTeX."
-    _seen:
       last_push: "2026-08-31"
 
+    _seen:
+      last_push: "2026-08-31"
+      fork: true
   mail-sync-kit:
     area: net
     status: core
     notes: "IMAP/JMAP/SMTP sync."
     crates:
       - mail-sync-kit
-    _seen:
       last_push: "2026-10-02"
       mail-sync-kit: 0.1.1
 
@@ -2574,13 +2880,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      mail-sync-kit: 0.1.2
   mailkit:
     area: net
     status: core
     notes: "MIME composition/sending."
     crates:
       - mailkit
-    _seen:
       last_push: "2026-10-04"
       mailkit: 0.3.1
 
@@ -2591,13 +2899,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      mailkit: 1.0.0
   media-kit:
     area: data
     status: core
     notes: "Image pipeline."
     crates:
       - media-kit
-    _seen:
       last_push: "2026-10-02"
       media-kit: 0.2.1
 
@@ -2608,13 +2918,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      media-kit: 1.0.0
   metrics-kit:
     area: obsv
     status: core
     notes: "Prometheus exposition."
     crates:
       - metrics-kit
-    _seen:
       last_push: "2026-10-04"
       metrics-kit: 0.2.0
 
@@ -2625,13 +2937,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      metrics-kit: 1.0.0
   model-router:
     area: app
     status: support
     notes: "Cost-aware LLM routing."
     crates:
       - model-router
-    _seen:
       last_push: "2026-10-02"
       model-router: 0.2.0
 
@@ -2642,13 +2956,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      model-router: 1.0.0
   money:
     area: money
     status: support
     notes: "Publishes decimal-money. Accounting core."
     crates:
       - decimal-money
-    _seen:
       last_push: "2026-10-05"
       decimal-money: 1.1.1
 
@@ -2659,13 +2975,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      decimal-money: 1.1.2
   double-entry:
     area: money
     status: core
     notes: "Immutable double-entry accounting core: append-only journals, balanced posting, period close, reversal by counter-entry. Published 2026-10-05 with an estate-integration suite in the same loop. Models a posting as an integer count of minor units with an explicit rounding mode, which ledger-kit does not; see ROADMAP.md round 14."
     crates:
       - double-entry
-    _seen:
       last_push: "2026-10-05"
       double-entry: 0.1.0
 
@@ -2676,20 +2994,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      double-entry: 0.1.1
   morph:
     area: app
     status: dormant
     notes: "Agentic programming language spec."
-    _seen:
       last_push: "2026-09-02"
 
+    _seen:
+      last_push: "2026-09-02"
   mp4-core:
     area: data
     status: support
     notes: "ISO-BMFF box codec (ilst metadata, chpl chapters), no_std. Published 2026-10-21 (by concurrent work)."
     crates:
       - mp4-core
-    _seen:
       last_push: "2026-10-21"
       mp4-core: 0.3.1
     docs:
@@ -2700,18 +3021,22 @@ repos:
       status: draft
       last_audit: "2026-10-31"
 
+    _seen:
+      last_push: "2026-10-31"
+      mp4-core: 0.3.2
   nightjar:
     area: app
     status: support
     notes: "Fork of cjpais/Handy (MIT), seeded 7bfb2e2c934b 2026-10-31; offline dictation, Wayland-first, voice suite planned. Rebrand required before distribution (upstream trademark clause)."
 
+    _seen:
+      last_push: "2026-11-01"
   oauth-toolkit:
     area: auth
     status: support
     notes: "OAuth2/OIDC primitives; not yet composed."
     crates:
       - oauth-toolkit
-    _seen:
       last_push: "2026-10-02"
       oauth-toolkit: 0.3.0
 
@@ -2722,11 +3047,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      oauth-toolkit: 0.4.2
   observability-assets:
     area: obsv
     status: infra
     notes: "VictoriaMetrics + Grafana assets for shipping builds."
-    _seen:
       last_push: "2026-09-15"
     docs:
       tier: k
@@ -2736,21 +3063,27 @@ repos:
       status: draft
       last_audit: "2026-10-31"
 
+    _seen:
+      last_push: "2026-10-31"
   offcut:
     area: app
     status: support
     notes: "Fork of FujiwaraChoki/supoclip (AGPL-3.0), seeded 4bc76f83b342 2026-10-31; local-first clip pipeline, Rust render planned. Fork keeps AGPL-3.0."
 
+    _seen:
+      last_push: "2026-11-01"
   otel-stack:
     area: obsv
     status: dormant
     notes: "Superseded by otelkit + telemetry-init."
     crates:
       - otel-stack
-    _seen:
       last_push: "2026-10-02"
       otel-stack: 0.2.0
 
+    _seen:
+      last_push: "2026-10-24"
+      otel-stack: 0.2.1
   otelkit:
     area: obsv
     status: core
@@ -2758,7 +3091,6 @@ repos:
     notes: "Tracing/metrics/OTLP."
     crates:
       - otelkit
-    _seen:
       last_push: "2026-10-05"
       otelkit: 2.0.3
 
@@ -2769,13 +3101,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      otelkit: 2.2.3
   outbox-kit:
     area: net
     status: core
     notes: "Transactional outbox; composed by ledger-kit."
     crates:
       - outbox-kit
-    _seen:
       last_push: "2026-10-03"
       outbox-kit: 0.2.0
     docs:
@@ -2786,18 +3120,22 @@ repos:
       status: draft
       last_audit: "2026-10-31"
 
+    _seen:
+      last_push: "2026-10-31"
+      outbox-kit: 0.2.2
   outrider:
     area: app
     status: support
     notes: "Fork of Panniantong/Agent-Reach (MIT), seeded 14c213405669 2026-10-31; agent web-access channels, Rust hot path planned. Converts crawlkit + aileron orphans."
 
+    _seen:
+      last_push: "2026-11-01"
   paginate:
     area: data
     status: support
     notes: "Publishes api-paginate."
     crates:
       - api-paginate
-    _seen:
       last_push: "2026-10-02"
       api-paginate: 0.1.1
 
@@ -2808,11 +3146,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      api-paginate: 0.1.2
   pediment:
     area: ui
     status: support
     notes: "Design tokens/components for Astro+SolidJS+Starlight."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -2822,29 +3162,34 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   pediment-pro:
     area: ui
     status: personal
     notes: "Private design work."
-    _seen:
       last_push: "2026-09-13"
       private: true
 
+    _seen:
+      last_push: "2026-09-13"
+      private: true
   peptide-web:
     area: app
     status: personal
     notes: "Private experiment."
-    _seen:
       last_push: "2026-03-20"
       private: true
 
+    _seen:
+      last_push: "2026-03-20"
+      private: true
   percentile-kit:
     area: obsv
     status: core
     notes: "Latency budget gates."
     crates:
       - percentile-kit
-    _seen:
       last_push: "2026-10-02"
       percentile-kit: 0.1.0
 
@@ -2855,21 +3200,25 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      percentile-kit: 1.0.0
   phys-maths-gypt-notes:
     area: docs
     status: personal
     notes: "Private notes."
-    _seen:
       last_push: "2026-03-27"
       private: true
 
+    _seen:
+      last_push: "2026-03-27"
+      private: true
   pid-manager:
     area: obsv
     status: support
     notes: "PID file lifecycle."
     crates:
       - pid-manager
-    _seen:
       last_push: "2026-10-02"
       pid-manager: 0.1.0
 
@@ -2880,6 +3229,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      pid-manager: 0.1.0
   plychart:
     area: ui
     status: support
@@ -2890,7 +3242,6 @@ repos:
       - plycharts
       - plycompute
       - plycore
-    _seen:
       last_push: "2026-10-02"
       ply-viz: 0.1.0
       plychart: 0.2.0
@@ -2905,13 +3256,19 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ply-viz: None
+      plychart: 0.2.1
+      plycharts: None
+      plycompute: 0.2.1
+      plycore: 0.2.1
   policy-kit:
     area: app
     status: core
     notes: "Fail-closed Rego policy; used by the accounting product."
     crates:
       - policy-kit
-    _seen:
       last_push: "2026-10-02"
       policy-kit: 0.1.0
 
@@ -2922,6 +3279,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      policy-kit: 0.1.1
   polyfont:
     area: ui
     status: dormant
@@ -2936,7 +3296,6 @@ repos:
       - polyfont-render
       - polyfont-scope
       - polyfont-themes
-    _seen:
       last_push: "2026-10-02"
       polyfont-cli: 0.10.0
       polyfont-config: 0.10.0
@@ -2948,13 +3307,23 @@ repos:
       polyfont-scope: 0.10.0
       polyfont-themes: 0.10.0
 
+    _seen:
+      last_push: "2026-10-24"
+      polyfont-cli: 0.10.0
+      polyfont-config: 0.10.0
+      polyfont-core: 0.10.0
+      polyfont-fonts: 0.10.0
+      polyfont-lsp: 0.10.0
+      polyfont-parse: 0.10.0
+      polyfont-render: 0.10.0
+      polyfont-scope: 0.10.0
+      polyfont-themes: 0.10.0
   poolkit:
     area: conc
     status: support
     notes: "Object pools."
     crates:
       - poolkit
-    _seen:
       last_push: "2026-10-02"
       poolkit: 0.1.2
 
@@ -2965,13 +3334,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      poolkit: 0.1.3
   ratelimit:
     area: net
     status: core
     notes: "Publishes throttle-kit."
     crates:
       - throttle-kit
-    _seen:
       last_push: "2026-10-04"
       throttle-kit: 2.0.0
 
@@ -2982,13 +3353,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      throttle-kit: 2.1.2
   retry-backoff:
     area: net
     status: support
     notes: "Async retry with jitter; publishes loop-retry."
     crates:
       - loop-retry
-    _seen:
       last_push: "2026-10-02"
       loop-retry: 0.1.1
 
@@ -2999,13 +3372,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      loop-retry: 0.1.1
   salting:
     area: auth
     status: core
     notes: "Argon2id+pepper derivation."
     crates:
       - salting
-    _seen:
       last_push: "2026-10-02"
       salting: 2.0.0
 
@@ -3016,13 +3391,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      salting: 2.0.1
   scim-kit:
     area: auth
     status: support
     notes: "SCIM 2.0 provisioning; target of the accounting product."
     crates:
       - scim-kit
-    _seen:
       last_push: "2026-10-02"
       scim-kit: 0.1.0
 
@@ -3033,20 +3410,24 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      scim-kit: 1.0.0
   sensors_rpi_pico:
     area: research
     status: dormant
     notes: "Pico sensor firmware fork; dormant."
-    _seen:
       last_push: "2025-11-15"
 
+    _seen:
+      last_push: "2025-11-15"
+      fork: true
   shared-state:
     area: conc
     status: support
     notes: "Readiness gates, TTL caches, counters."
     crates:
       - shared-state
-    _seen:
       last_push: "2026-10-02"
       shared-state: 0.1.2
 
@@ -3057,13 +3438,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      shared-state: 0.1.3
   sheet-core:
     area: money
     status: support
     notes: "Spreadsheet model + DAG."
     crates:
       - sheet-core
-    _seen:
       last_push: "2026-10-04"
       sheet-core: 0.1.0
 
@@ -3074,13 +3457,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sheet-core: 0.1.1
   sheet-engine:
     area: money
     status: support
     notes: "Incremental recalc engine."
     crates:
       - sheet-engine
-    _seen:
       last_push: "2026-10-04"
       sheet-engine: 0.1.0
 
@@ -3091,13 +3476,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sheet-engine: 0.1.1
   sheet-xlsx:
     area: money
     status: support
     notes: "XLSX codec."
     crates:
       - sheet-xlsx
-    _seen:
       last_push: "2026-10-04"
       sheet-xlsx: 0.1.1
 
@@ -3108,13 +3495,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sheet-xlsx: 0.1.4
   shm-rings:
     area: conc
     status: support
     notes: "Shared-memory SPMC ring."
     crates:
       - shm-rings
-    _seen:
       last_push: "2026-10-02"
       shm-rings: 0.2.1
 
@@ -3125,20 +3514,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      shm-rings: 1.0.0
   shroom-theme:
     area: ui
     status: dormant
     notes: "VS Code theme; no activity since 2026-05."
-    _seen:
       last_push: "2026-05-29"
 
+    _seen:
+      last_push: "2026-10-09"
   sieve-kit:
     area: net
     status: core
     notes: "Mail filtering rules."
     crates:
       - sieve-kit
-    _seen:
       last_push: "2026-10-02"
       sieve-kit: 0.2.1
 
@@ -3149,13 +3541,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      sieve-kit: 0.2.2
   simd-tokenizer:
     area: data
     status: core
     notes: "Token estimation; composed and exact-pinned (=1.0.0) by offcut-tokencount (2026-10-31, first consumer)."
     crates:
       - simd-tokenizer
-    _seen:
       last_push: "2026-10-05"
       simd-tokenizer: 0.1.2
 
@@ -3166,13 +3560,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      simd-tokenizer: 1.0.0
   slab-pool:
     area: conc
     status: support
     notes: "Lock-free slab pool."
     crates:
       - slab-pool
-    _seen:
       last_push: "2026-10-02"
       slab-pool: 0.1.0
 
@@ -3183,11 +3579,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      slab-pool: 0.1.1
   starlight-content-guard:
     area: ui
     status: support
     notes: "Starlight content guard."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -3197,11 +3595,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-cross-domain-sync:
     area: ui
     status: support
     notes: "Starlight cross-domain sync."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -3211,18 +3610,20 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-dse-test:
     area: ui
     status: dormant
     notes: "DSE exam platform."
-    _seen:
       last_push: "2026-09-13"
 
+    _seen:
+      last_push: "2026-09-13"
   starlight-interactive-islands:
     area: ui
     status: support
     notes: "Starlight islands plugin."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -3232,11 +3633,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-katex:
     area: ui
     status: support
     notes: "Starlight KaTeX plugin."
-    _seen:
       last_push: "2026-09-11"
 
     docs:
@@ -3246,11 +3648,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-kit:
     area: ui
     status: support
     notes: "Starlight plugin kit."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -3260,11 +3663,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-multi-site:
     area: ui
     status: support
     notes: "Starlight multi-site build."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -3274,11 +3678,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-progress:
     area: ui
     status: support
     notes: "Starlight progress plugin."
-    _seen:
       last_push: "2026-09-13"
 
     docs:
@@ -3288,11 +3693,12 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   starlight-sites:
     area: docs
     status: core
     notes: "Wyatt's notes site (Astro + Starlight)."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -3302,6 +3708,8 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   suture:
     area: app
     status: orphan
@@ -3345,7 +3753,6 @@ repos:
       - suture-tui
       - suture-vfs
       - suture-wasm-plugin
-    _seen:
       last_push: "2026-10-02"
       suture-cli: 5.3.1
       suture-common: 5.1.0
@@ -3386,13 +3793,52 @@ repos:
       suture-vfs: 5.1.0
       suture-wasm-plugin: 0.1.0
 
+    _seen:
+      last_push: "2026-10-28"
+      suture-cli: 5.3.1
+      suture-common: 5.1.0
+      suture-connector-airtable: 0.1.1
+      suture-connector-notion: 0.1.1
+      suture-core: 5.1.0
+      suture-daemon: 5.1.4
+      suture-driver: 5.1.1
+      suture-driver-csv: 5.1.0
+      suture-driver-docx: 5.1.0
+      suture-driver-example: 5.1.1
+      suture-driver-feed: 5.1.0
+      suture-driver-html: 5.1.0
+      suture-driver-ical: 5.1.0
+      suture-driver-image: 5.1.0
+      suture-driver-json: 5.1.0
+      suture-driver-markdown: 5.1.0
+      suture-driver-otio: 5.1.0
+      suture-driver-pdf: 5.1.0
+      suture-driver-pptx: 5.1.0
+      suture-driver-sql: 5.1.0
+      suture-driver-svg: 5.1.0
+      suture-driver-toml: 5.1.0
+      suture-driver-xlsx: 5.1.0
+      suture-driver-xml: 5.1.0
+      suture-driver-yaml: 5.1.1
+      suture-git-bridge: None
+      suture-hub: 5.3.0
+      suture-lsp: 5.1.0
+      suture-merge: 5.1.3
+      suture-ooxml: 5.1.0
+      suture-platform: 0.2.2
+      suture-plugin-sdk: 0.1.2
+      suture-protocol: 5.1.0
+      suture-raft: 5.1.1
+      suture-s3: 5.1.1
+      suture-tui: 5.1.1
+      suture-vfs: 5.1.1
+      suture-wasm-plugin: 0.1.1
   tantivy-ext:
     area: data
     status: support
     notes: "Publishes tantivy-helper."
     crates:
       - tantivy-helper
-    _seen:
       last_push: "2026-10-02"
       tantivy-helper: 0.3.0
 
@@ -3403,34 +3849,41 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      tantivy-helper: 0.3.1
   tao:
     area: app
     status: dormant
     notes: "Windowing library fork, held at its pin for chisel-doc's wry stack. No development since 2026-06; a fork held at a version is dormant by the estate's definition even though it is still consumed."
-    _seen:
       last_push: "2026-06-12"
 
+    _seen:
+      last_push: "2026-06-12"
+      fork: true
   tauri:
     area: app
     status: dormant
     notes: "Tauri upstream fork, held at its pin. No development since 2026-06; consumed but not worked on."
-    _seen:
       last_push: "2026-06-15"
 
+    _seen:
+      last_push: "2026-06-15"
+      fork: true
   tauri-preset:
     area: infra
     status: orphan
     notes: "Undocumented placeholder."
-    _seen:
       last_push: "2026-09-13"
 
+    _seen:
+      last_push: "2026-09-13"
   telemetry-init:
     area: obsv
     status: core
     notes: "One-call observability bootstrap."
     crates:
       - telemetry-init
-    _seen:
       last_push: "2026-10-03"
       telemetry-init: 0.1.1
 
@@ -3441,11 +3894,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      telemetry-init: 1.0.1
   testkit:
     area: dx
     status: support
     notes: "Shared test utilities; repo-only, not yet published."
-    _seen:
       last_push: "2026-09-21"
 
     docs:
@@ -3455,13 +3910,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   tokenkit:
     area: auth
     status: core
     notes: "JWT mint/decode/revocation."
     crates:
       - tokenkit
-    _seen:
       last_push: "2026-10-02"
       tokenkit: 0.4.1
 
@@ -3472,20 +3928,25 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      tokenkit: 1.0.1
   traefik-setup:
     area: infra
     status: dormant
     notes: "Superseded by traefik-stack."
-    _seen:
       last_push: "2025-11-24"
 
+    _seen:
+      last_push: "2025-11-24"
   traefik-stack:
     area: infra
     status: dormant
     notes: "No activity since 2025-08."
-    _seen:
       last_push: "2025-08-17"
 
+    _seen:
+      last_push: "2025-08-17"
   typed-id:
     area: data
     status: support
@@ -3493,7 +3954,6 @@ repos:
     crates:
       - typed-id-derive
       - typed-id-new
-    _seen:
       last_push: "2026-10-02"
       typed-id-derive: 0.1.0
       typed-id-new: 0.1.0
@@ -3505,13 +3965,16 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      typed-id-derive: 0.1.1
+      typed-id-new: None
   uds-kit:
     area: net
     status: support
     notes: "UDS transport helpers."
     crates:
       - uds-kit
-    _seen:
       last_push: "2026-10-02"
       uds-kit: 0.1.0
 
@@ -3522,11 +3985,13 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      uds-kit: 1.0.0
   uofg_r_mono:
     area: research
     status: support
     notes: "University of Guelph R monorepo."
-    _seen:
       last_push: "2026-10-04"
 
     docs:
@@ -3536,13 +4001,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   uring-kit:
     area: conc
     status: core
     notes: "io_uring substrate."
     crates:
       - uring-kit
-    _seen:
       last_push: "2026-10-02"
       uring-kit: 0.1.0
 
@@ -3553,6 +4019,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      uring-kit: 0.1.1
   validkit:
     area: data
     status: support
@@ -3560,7 +4029,6 @@ repos:
     crates:
       - validkit
       - validkit-derive
-    _seen:
       last_push: "2026-10-02"
       validkit: 1.3.1
       validkit-derive: 0.1.0
@@ -3572,6 +4040,10 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      validkit: 1.3.3
+      validkit-derive: 0.1.1
   vane:
     area: net
     status: core
@@ -3588,7 +4060,6 @@ repos:
       - vane-router
       - vane-shm
       - vane-tls
-    _seen:
       last_push: "2026-10-05"
       vane-client-sdk: 0.5.3
       vane-control: 0.6.0
@@ -3609,11 +4080,23 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      vane-client-sdk: 0.5.4
+      vane-control: 0.13.1
+      vane-filters: 0.6.2
+      vane-kernel: 0.9.3
+      vane-observe: 0.5.4
+      vane-plugins: 0.5.4
+      vane-proto: 0.7.2
+      vane-proxy: 0.16.1
+      vane-router: 0.8.0
+      vane-shm: 0.5.6
+      vane-tls: 0.6.3
   warploom:
     area: research
     status: core
     notes: "Data-oriented C++ engine."
-    _seen:
       last_push: "2026-10-05"
 
     docs:
@@ -3623,13 +4106,14 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   webauthn-kit:
     area: auth
     status: support
     notes: "WebAuthn/FIDO2 verification; composed by estate-integration."
     crates:
       - webauthn-kit
-    _seen:
       last_push: "2026-10-05"
       webauthn-kit: 0.3.6
 
@@ -3640,13 +4124,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      webauthn-kit: 1.0.0
   webhookkit:
     area: net
     status: core
     notes: "Webhook parsing/verification."
     crates:
       - webhookkit
-    _seen:
       last_push: "2026-10-02"
       webhookkit: 2.2.1
 
@@ -3657,21 +4143,25 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      webhookkit: 2.2.3
   windows-dotfiles:
     area: infra
     status: personal
     notes: "Private Windows config."
-    _seen:
       last_push: "2026-04-02"
       private: true
 
+    _seen:
+      last_push: "2026-04-02"
+      private: true
   wire-kit:
     area: net
     status: core
     notes: "SBE + FIX codecs."
     crates:
       - wire-kit
-    _seen:
       last_push: "2026-10-03"
       wire-kit: 0.1.0
 
@@ -3682,13 +4172,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      wire-kit: 0.1.1
   worker-kit:
     area: obsv
     status: core
     notes: "Job scheduling + drain."
     crates:
       - worker-kit
-    _seen:
       last_push: "2026-10-04"
       worker-kit: 0.3.0
 
@@ -3699,20 +4191,24 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      worker-kit: 0.3.2
   wry:
     area: app
     status: dormant
     notes: "WebView library fork, held at its pin for chisel-doc's Leptos-WASM shell. No development since 2026-06; consumed but not worked on."
-    _seen:
       last_push: "2026-06-15"
 
+    _seen:
+      last_push: "2026-06-15"
+      fork: true
   ws-barbican:
     area: net
     status: support
     notes: "ws-kit + JWT auth wrapper."
     crates:
       - ws-barbican
-    _seen:
       last_push: "2026-10-02"
       ws-barbican: 0.1.2
 
@@ -3723,13 +4219,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ws-barbican: 0.1.6
   ws-kit:
     area: net
     status: support
     notes: "Typed authenticated WebSocket hub."
     crates:
       - ws-kit
-    _seen:
       last_push: "2026-10-02"
       ws-kit: 0.4.2
 
@@ -3740,21 +4238,25 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      ws-kit: 1.0.1
   wyatt-cv:
     area: docs
     status: personal
     notes: "Private CV."
-    _seen:
       last_push: "2025-11-02"
       private: true
 
+    _seen:
+      last_push: "2025-11-02"
+      private: true
   xcp-core:
     area: data
     status: support
     notes: "XCP on CAN."
     crates:
       - xcp-core
-    _seen:
       last_push: "2026-10-04"
       xcp-core: 0.1.0
 
@@ -3765,6 +4267,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      xcp-core: 0.1.1
   # --- registered 2026-10-19: repos that existed on GitHub and on crates.io
   # without an estate.yml entry, which estate-audit reported as errors. Crates
   # and versions taken from each repo's manifest, not guessed.
@@ -3774,7 +4279,6 @@ repos:
     status: support
     notes: "OIDC decision-shadow sidecar over oauth-toolkit + accessctl + auditlog. UNPUBLISHED, and the crates.io name is taken by an unrelated project (authbox 1.1.6, a general auth framework), so publishing needs a rename first. Registered so the repo stops reading as missing."
     crates: []
-    _seen:
       last_push: "2026-10-19"
 
     docs:
@@ -3784,13 +4288,15 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      private: true
   comfyui-kit:
     area: net
     status: support
     notes: "Typed Rust client for the ComfyUI HTTP API: queue workflows, track history, fetch generations. Published 2026-10-21 (by concurrent work); registered the same day the audit flagged it."
     crates:
       - comfyui-kit
-    _seen:
       last_push: "2026-10-21"
       comfyui-kit: 0.1.0
 
@@ -3801,20 +4307,24 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      comfyui-kit: 0.2.3
   pdfcraft:
     area: app
     status: fork
     notes: "Upstream PdfCraft (storytold/pdfcraft, Apache-2.0/MIT) mirrored into the org: the fork source chisel-doc was cut from, kept as provenance and an upstream diff base. 34 workspace crates named pdfcraft-* are upstream's unpublished identifiers (chisel-doc AGENTS.md: rename deferred by decision), so crates is empty here despite the workspace. Upstream branding, contributor rules and CLAUDE.md are preserved unmodified; do not estate-adapt this mirror. Registered 2026-10-21 when the audit flagged it missing, with workspace layout and publication status verified rather than assumed."
     crates: []
-    _seen:
       last_push: "2026-10-20"
 
+    _seen:
+      last_push: "2026-10-21"
+      fork: true
   estate-site:
     area: docs
     status: support
     notes: "The WyattAu estate index page, rendered by docs-core — the estate's own docs engine rendering the estate's own page. publish = false by declaration: it is a site, not a crate, so crates is empty. A second real consumer of docs-core alongside the ui_semantics suite."
     crates: []
-    _seen:
       last_push: "2026-10-21"
 
     docs:
@@ -3824,28 +4334,33 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   cargo-semver-checks:
     area: dx
     status: fork
     notes: "GitHub fork of obi1kenobi/cargo-semver-checks (semver-violation linter). The crates.io crate of this name is upstream's own publication (repository field names obi1kenobi/cargo-semver-checks), NOT the estate's -- first registration claimed 0.51.0 under the account and the audit caught it. crates is empty; the fork exists as a provenance mirror, and estate-local changes upstream per the vendored-patch policy."
     crates: []
-    _seen:
       last_push: "2026-10-22"
 
+    _seen:
+      last_push: "2026-10-31"
+      fork: true
   continuwuity:
     area: infra
     status: fork
     notes: "Community-driven Matrix homeserver (upstream fork). No crates published under this account."
     crates: []
-    _seen:
       last_push: "2026-10-19"
 
+    _seen:
+      last_push: "2026-10-29"
+      fork: true
   pele-rehype:
     area: docs
     status: support
     notes: "Rehype plugin rendering mermaid fences with Pele in Astro/Starlight. npm package, not a crates.io crate."
     crates: []
-    _seen:
       last_push: "2026-10-19"
 
     docs:
@@ -3855,6 +4370,8 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
   signalkit:
     area: data
     status: support
@@ -3863,7 +4380,6 @@ repos:
       - signalkit
       - signalkit-core
       - signalkit-integrity
-    _seen:
       last_push: "2026-10-19"
       signalkit: 0.1.0
       signalkit-core: 0.1.0
@@ -3876,6 +4392,11 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      signalkit: 0.3.0
+      signalkit-core: 0.3.0
+      signalkit-integrity: 0.3.1
   skillkit:
     area: dx
     status: support
@@ -3884,7 +4405,6 @@ repos:
       - skillkit
       - skillkit-core
       - skillkit-store
-    _seen:
       last_push: "2026-10-19"
       skillkit: 0.1.0
       skillkit-core: 0.1.0
@@ -3897,6 +4417,11 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      skillkit: 0.1.5
+      skillkit-core: 0.1.0
+      skillkit-store: 0.1.2
   trendkit:
     area: research
     status: support
@@ -3905,7 +4430,6 @@ repos:
       - trendkit
       - trendkit-core
       - trendkit-profile
-    _seen:
       last_push: "2026-10-19"
       trendkit: 0.3.1
       trendkit-core: 0.3.1
@@ -3918,14 +4442,20 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-10-31"
+    _seen:
+      last_push: "2026-10-31"
+      trendkit: 0.6.2
+      trendkit-core: 0.6.2
+      trendkit-profile: 0.6.2
   OmniSkill-template:
     area: dx
     status: template
     notes: "Canonical agent-skill skeleton, validated by skillkit in CI. No crate."
     crates: []
-    _seen:
       last_push: "2026-10-19"
 
+    _seen:
+      last_push: "2026-10-31"
   spec-standards:
     area: infra
     status: support
@@ -3938,5 +4468,6 @@ repos:
       llms_txt: true
       status: current
       last_audit: "2026-10-31"
+      last_push: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
