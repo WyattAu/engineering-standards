@@ -39,6 +39,7 @@ import os
 import pathlib
 import re
 import subprocess
+import time
 import sys
 import urllib.error
 import urllib.request
@@ -150,10 +151,24 @@ DORMANT_DAYS = 120  # no push for this long = dormant, unless pinned as core
 # network
 # --------------------------------------------------------------------------
 
-def _get_json(url: str) -> dict | list:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=NET_TIMEOUT) as fh:
-        return json.loads(fh.read())
+def _get_json(url: str, retries: int = 3) -> dict | list:
+    """GET with 429/5xx retry — crates.io rate-limits bursts, and an
+    unhandled 429 read as 'crate not found' produces false
+    'manifest claims a crate that is not published' errors."""
+    last: Exception | None = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=NET_TIMEOUT) as fh:
+                return json.loads(fh.read())
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                raise  # a genuine miss is data, not a transport failure
+            last = exc
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            last = exc
+        time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError(f"GET {url} failed after {retries} attempts: {last}")
 
 
 def fetch_repos() -> list[dict]:
