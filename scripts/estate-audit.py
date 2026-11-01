@@ -128,6 +128,9 @@ COVERAGE_EXEMPT = {
     "ply*": "charting library, wasm-first",
     "resilient-fetch": "superseded by fetch-kit; kept pinned for the migration round",
     "loop-retry": "repo retry-backoff; renamed package, same crate",
+    "typed-id-new": "placeholder crate name (0.0.0, README: 'typed-id-new was a placeholder name'); the derive crate typed-id-derive is composed directly by estate-integration",
+    "fresco-*": "separate product monorepo with its own test suite",
+    "accounting-api": "standalone product app (repo ledger-api) with its own HTTP suite; estate-integration composition is a later-round candidate",
     # The skillkit and trendkit facade crates are CLIs with no lib target, so
     # no consumer can pin them: a dependency on a lib-less crate does not
     # resolve. Their library surface (skillkit-core/-store, trendkit-core/
