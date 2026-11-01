@@ -86,9 +86,33 @@ repos:
   fresco:
     area: ui
     status: support
-    notes: "Modular retained-mode UI engine for Rust — owned scene graph, damage-tracked compositing, split CPU/GPU paint. The estate's modular Qt."
+    notes: "Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph, damage-tracked compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit closed-form springs, scene-kit retained scene + damage, layout-kit incremental layout, paint-kit exact-coverage raster + gradients/clip/images, window-kit winit facade, text-kit TextEngine trait (Parley backend), render-conformance golden-image gate (publish=false). Phase 2 landed 2026-11-01; consumer target kestrel-gui."
+    crates:
+      - path-kit
+      - anim-kit
+      - scene-kit
+      - layout-kit
+      - paint-kit
+      - window-kit
+      - text-kit
+      - render-conformance
     _seen:
       last_push: "2026-11-01"
+      path-kit: 0.2.0
+      anim-kit: 0.2.0
+      scene-kit: 0.2.0
+      layout-kit: 0.2.0
+      paint-kit: 0.2.0
+      window-kit: 0.2.0
+      text-kit: 0.2.0
+
+    docs:
+      tier: k
+      specs: ["SPEC.md"]
+      truth_table: "SPEC.md"
+      llms_txt: true
+      status: draft
+      last_audit: "2026-11-01"
 
   game-spec:
     area: research
