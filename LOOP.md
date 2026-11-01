@@ -97,24 +97,12 @@ clearing three debt crates in one suite. Debt 14 → 11. Audit 197/169/86,
 
 spreadsheet-diff pair composed: sheet-xlsx + delta-kit, semantic and byte diffs
 required to agree. Debt 11 → 9. Audit 197/169/88, 0 errors, 0 drift, 42 green.
-
-| 40 | 2026-10-17 | **Research iteration 7/10: SBOM, VEX & dependency review** (docs/research/40-sbom-vex-dependency-review.md; OMNI-CORE 11h). Estate-wide: a blocking **dependency-review** PR gate (fail on newly added HIGH-severity known-vulnerable deps; deny strong-copyleft licenses conflicting with Apache-2.0 — a HIGH known vuln is a finding by definition, so the advisory-one-loop graduation does not apply) and a **CycloneDX SBOM** artifact job in the 6 release-producing templates (Syft: one uniform mechanism across cargo, uv, go.mod, npm, cabal). VEX filed, not faked — honest statements need a triage process. CycloneDX chosen over SPDX for the security artifact (VEX embedding, scoring). Follow-on fix verified: the new read-only sbom job made zizmor re-classify the release workflows' write scopes as High excessive-permissions; scopes were already least-privilege at job level and all in use, so evidence-led suppression moved to `.zizmor.yml` in the three attesting repos — all green. |
-
-| 41 | 2026-10-18 | **Research iteration 8/10: agent-facing repo interfaces** (docs/research/41-agent-interfaces.md; OMNI-CORE 11i). Research settled the convention landscape: AGENTS.md is the open standard (Codex et al.), Claude Code now reads it natively, older Claude Code needs CLAUDE.md, Cursor wants .cursor/rules. Estate standard: **one contract, many projections** -- AGENTS.md single-source; CLAUDE.md pointer added to all 11 loop-owned repos (a fork would drift and two agents would get different contracts); llms.txt projection already gated (loop 25). Cursor rules filed. |
-
-| 42 | 2026-10-18 | **Research iteration 9/10: runner hardening & cache poisoning** (docs/research/42-runner-hardening.md; OMNI-CORE 11j). Survey verified per repo: all six 
-
-| 43 | 2026-10-18 | **Research iteration 10/10: synthesis.** The ten-iteration research program (docs/research/PLAN.md) landed: reproducible-build gate v2 (.buildinfo + bytecode guard), OIDC-bound provenance on every distributable artifact, cooldown-based update policy (30/7/3/7), flaky-test policy (nextest isolation + reported retries, pytest-randomly), formal-verification hygiene (axiom audit + no-sorry gate; REQ-002 now proven), merge-queue readiness (merge_group triggers), SBOM + dependency-review PR gate, the agent-interface standard (one contract, many projections), and harden-runner audit mode on the four tag-triggered publishers (SHA resolved via the tags API: ccd8616d). Open triage: dependency-review on Dependabot PRs flags the group bumps (needs log triage -- probable license-resolution edge on action refs); estate-audit manifest re-sync after new estate repos; harden-runner audit->block flip after egress review. The research notes are the competitive delta: each records what the estate does that the references do not. |
-
 ## Round 21 (2026-10-07)
-
 lead pipeline composed (contact-miner + geo-kit, storage gate), merged a
 concurrent suite for the same pair, resolved a rustc 1.95 toolchain requirement
 locally. Concurrent rounds cleared all remaining debt. Audit 227/195/124,
 0 errors, 0 drift, debt 0, 55 green.
-
 ## Round 22 (2026-10-07)
-
 recon-kit born: statement types + a proposing matching engine, published with a
 double-entry month-close estate suite. The Suture evaluation is also closed:
 bank statements are append-only external facts, not mergeable documents —

@@ -75,14 +75,35 @@ def collect(files: list[pathlib.Path]) -> dict[str, dict[str, list[str]]]:
     return pins
 
 
+def _fetch_with_retry(url: str, attempts: int = 3) -> "http.client.HTTPResponse":
+    """Fetch `url`, retrying connection-level failures.
+
+    The GitHub API and raw CDN alternate between clean answers and connection
+    resets under load (measured 2026-10-22 while chasing an llms-links gate
+    failure: the same raw URL returned HTTPError 404 and then URLError
+    "connection reset" on consecutive probes). HTTPError is a decisive server
+    answer and is never retried; only URLError gets the bounded retries.
+    """
+    last: Exception | None = None
+    for _ in range(attempts):
+        try:
+            return urllib.request.urlopen(
+                urllib.request.Request(url, headers=_headers()), timeout=30
+            )
+        except urllib.error.HTTPError:
+            raise
+        except urllib.error.URLError as error:
+            last = error
+    raise last if last is not None else urllib.error.URLError("fetch failed")
+
+
 def fetch_remote(owner: str, repo: str, ref: str = "main") -> list[tuple[str, str]] | None:
     """(filename, source) pairs for one repo's workflows, or None if it has none."""
     url = (
         f"https://api.github.com/repos/{owner}/{repo}/contents/.github/workflows?ref={ref}"
     )
     try:
-        with urllib.request.urlopen(urllib.request.Request(url, headers=_headers()),
-                                    timeout=30) as fh:
+        with _fetch_with_retry(url) as fh:
             listing = json.loads(fh.read())
     except urllib.error.HTTPError as error:
         if error.code == 404:
@@ -95,9 +116,7 @@ def fetch_remote(owner: str, repo: str, ref: str = "main") -> list[tuple[str, st
         download = item.get("download_url")
         if not download or item.get("type") != "file":
             continue
-        with urllib.request.urlopen(
-            urllib.request.Request(download, headers=_headers()), timeout=30
-        ) as fh:
+        with _fetch_with_retry(download) as fh:
             bodies.append((item.get("name") or download.rsplit("/", 1)[-1],
                            fh.read().decode("utf-8")))
     return bodies
