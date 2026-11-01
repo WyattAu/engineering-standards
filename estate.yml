@@ -52,13 +52,6 @@ owner: WyattAu
 crates_io_user_id: 404181
 
 repos:
-  bot-kit:
-    area: research
-    status: support
-    notes: "Competition bot scaffolds — one buildable kit per game over the competitions registry."
-
-    _seen:
-      last_push: "2026-10-31"
   cal-model:
     area: data
     status: support
@@ -76,13 +69,6 @@ repos:
     _seen:
       last_push: "2026-11-01"
       cal-model: 0.1.2
-  competitions:
-    area: research
-    status: support
-    notes: "Entry registry for the competition estate: every ladder, judge, engine rating list and tournament — one CSV source of truth."
-
-    _seen:
-      last_push: "2026-10-30"
   fresco:
     area: ui
     status: support
@@ -90,11 +76,12 @@ repos:
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
-      scene-kit: 0.2.0
-      layout-kit: 0.2.0
-      paint-kit: 0.2.0
-      window-kit: 0.2.0
-      text-kit: 0.2.0
+    crates:
+      - scene-kit
+      - layout-kit
+      - paint-kit
+      - window-kit
+      - text-kit
 
     docs:
       tier: k
@@ -106,21 +93,11 @@ repos:
 
     _seen:
       last_push: "2026-11-01"
-  game-spec:
-    area: research
-    status: support
-    notes: "Formal specifications and Lean 4 proofs for the competition bots; runs the estate's research loop."
-
-    _seen:
-      last_push: "2026-10-31"
-  homebite-scraper:
-    area: app
-    status: support
-    notes: "Food-locker site prospecting for Homebite (Late Night Grubs Ltd) — Glasgow student-accommodation / BTR pilot."
-
-    _seen:
-      last_push: "2026-10-31"
-      private: true
+      scene-kit: 0.2.0
+      layout-kit: 0.2.0
+      paint-kit: 0.2.0
+      window-kit: 0.2.0
+      text-kit: 0.2.0
   mcp-fleet-doctor:
     area: dx
     status: support
@@ -167,31 +144,6 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
-  outreachkit:
-    area: money
-    status: support
-    notes: "Company-agnostic cold-outreach engine, extracted from the Kingston Peptides creator scraper after 52 spec-driven iterations."
-
-    _seen:
-      last_push: "2026-10-30"
-      private: true
-  sales-tax:
-    area: money
-    status: support
-    notes: "US sales tax document arithmetic — nexus-gated, jurisdiction-stacked, exact rational rates. Rates and taxability are inputs; the rate database is a data service, not a library. Added 2026-10-27."
-    crates:
-      - sales-tax
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      sales-tax: 0.2.0
   chisel-doc:
     area: app
     status: fork
@@ -356,20 +308,6 @@ repos:
     _seen:
       last_push: "2026-10-31"
       color-kit: 0.1.1
-  standards:
-    area: docs
-    status: infra
-    notes: "L0 meta-standard (STANDARDS-CORE) and the L2 domain standards, with the mechanical conformance gate — the canon the other standards repos derive from."
-
-    _seen:
-      last_push: "2026-10-31"
-  standards-dist:
-    area: docs
-    status: infra
-    notes: "Distributable projections of the standards canons (SPEC-CORE SC-11, OMNI-CORE 11p) — packaging only; the canons own truth."
-
-    _seen:
-      last_push: "2026-10-31"
   theme-kit:
     area: ui
     status: support
@@ -494,82 +432,6 @@ repos:
     _seen:
       last_push: "2026-11-01"
       invoice-kit: 1.2.0
-  agentic-awesome-skills:
-    area: research
-    status: core
-    notes: "AAS Core: local, agent-first control plane for catalog discovery, agent-owned selection, stack validation and planning, backed by 2,750+ agentic skills. CLI, local MCP, plugins, Workbench. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "AGENTS.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
-      fork: true
-  impeccable:
-    area: ui
-    status: core
-    notes: "The design language for AI harnesses. Rust. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "AGENTS.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
-      fork: true
-  trade-tester:
-    area: research
-    status: core
-    notes: "Rust. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-
-    _seen:
-      last_push: "2026-11-01"
-      private: true
-  sales-tax:
-    area: money
-    status: core
-    notes: "US sales tax document arithmetic \u2014 and structurally not VAT with different field names. Nexus gates collection (Wayfair economic nexus is per-state and per-year, so the registry is an input and the breakdown reports whether collection applied at all); prices are pre-tax (no backwards division); sales tax is never reclaimable (no Recoverability counterpart); taxability is an input per line (state law decides groceries and clothing); the rate is a jurisdiction stack remitted level by level. Rates exact rationals via JurisdictionRate::from_percent (fx-kit 0.1.4's parse_percent \u2014 parsing 6.25 as a multiplier makes every rate 100x too large). Per-document vs per-line rounding scope explicit: two 10-cent lines at 5% genuinely differ. The rate database is a data service, not a library. Published 2026-10-27."
-    crates:
-      - sales-tax
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      sales-tax: 0.2.0
-  tumbleweed:
-    area: research
-    status: support
-    notes: "CodeCup 2027 entry — Tumbleweed: hex board, 91 cells, stack placement via sightline majority."
-
-    _seen:
-      last_push: "2026-10-31"
-  waves:
-    area: research
-    status: core
-    notes: "Weekly dev-trend reports and the trust index, generated from raw snapshots by trendkit. Generated, auditable, never edited after the fact. Registered on sight during the 2026-10-26 audit; owned by its creating agent."
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
   warploom-game:
     area: personal
     status: dormant
@@ -592,49 +454,6 @@ repos:
     _seen:
       last_push: "2026-10-31"
       private: true
-  ai-memory:
-    area: research
-    status: core
-    notes: "Long-term memory for agent coding CLIs, and handoff between agent vendors. Rust. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "AGENTS.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      fork: true
-  detonate-mcp:
-    area: research
-    status: core
-    notes: "Hardened-container detonation MCP server. Python. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
-  memory-handoff-skill:
-    area: research
-    status: support
-    notes: "Portable session handoff across agent CLIs: one plaintext markdown file, five fixed sections, no lock-in. Linted with skillkit. Registered on sight during the 2026-10-25 audit; owned by its creating agent."
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
   audiobook-shelf:
     area: personal
     status: core
@@ -677,40 +496,6 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-10-31"
-  pay-kit:
-    area: money
-    status: core
-    notes: "Payment webhooks in, settled ledger entries out. Stripe (timestamped t=/v1= header, replay tolerance, key rotation via multiple v1 entries) and GoCardless (plain body HMAC) verified through webhookkit's constant-time compare; settlements posted through double-entry; allocations via invoice-kit. The ordering rule is the security property: verify first, parse second, post last \u2014 parse-before-verify hands an attacker a parse gadget on unauthenticated input. post_settlement and allocate deliberately separate: cash act and documents act, so a half-done state is nameable. Published 2026-10-25."
-    crates:
-      - pay-kit
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      pay-kit: 0.1.3
-  vat-mtd:
-    area: money
-    status: core
-    notes: "HMRC Making Tax Digital VAT bridge \u2014 the typed contract, deliberately not an HTTP client (coupling a tax contract to a framework choice makes both harder to change). Money goes from integer minor units to 2dp decimal strings by integer division, never a float; value boxes carrying pence are refused rather than truncated (dropping 50p is a decision, not a default). Fraud-prevention headers typed per connection method with value shapes checked where the error can name the header \u2014 HMRC rejects on shape with errors that do not. digitalSubmission is always true: claiming otherwise is not a configuration. Published 2026-10-25."
-    crates:
-      - vat-mtd
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      vat-mtd: 0.1.6
   vat-return:
     area: money
     status: core
@@ -728,40 +513,6 @@ repos:
     _seen:
       last_push: "2026-11-01"
       vat-return: 0.1.10
-  fx-kit:
-    area: money
-    status: core
-    notes: "Currency revaluation per IAS 21. Rates are exact reduced rationals parsed from decimal strings \u2014 floats never touch the path from quoted rate to posted difference; restatement multiplies in i128 and rounds once at the final division, tie mode explicit. Monetary items only (non-monetary stay historical, and the type name makes the wrong class a type error); base-currency rows and missing rates are errors, not silent no-ops. Per-currency difference split for the accounts note. Published 2026-10-24."
-    crates:
-      - fx-kit
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
-      fx-kit: 0.1.5
-  statement-camt:
-    area: money
-    status: core
-    notes: "ISO 20022 CAMT.053 adapter producing recon-kit Statements. The format the model was waiting for: OPBD and CLBD balance blocks are read from the document, so an import that loses an entry fails on arrival with BalanceIdentityFailed naming all three numbers \u2014 the truncated-import check OFX structurally cannot offer. Booked entries only; pending and memo entries excluded; a missing status block fails closed. Namespace-agnostic across camt.053.001.02\u2013.08. Published 2026-10-07."
-    crates:
-      - statement-camt
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
-      statement-camt: 0.1.3
   statement-ofx:
     area: money
     status: core
@@ -779,57 +530,6 @@ repos:
     _seen:
       last_push: "2026-10-31"
       statement-ofx: 0.1.3
-  group-kit:
-    area: money
-    status: core
-    notes: "Multi-entity consolidation. Eliminations must cancel, and anything that does not cancel is surfaced, never guessed: a mirror with a disagreeing amount is IntercompanyMismatch naming both figures, a missing mirror is OneSidedIntercompany. Unbalanced entity books are refused before any elimination \u2014 two cancelling imbalances must not launder into a balanced group. 0.2.0 adds IAS 21 translation: closing rates for assets and liabilities, average for income and expenses, historical for equity, and the cumulative difference to a translation reserve within equity rather than profit — the sharp distinction from fx-kit's P&L revaluation. Same-currency consolidation remains the elimination rule; NCI documented out of scope. Published 2026-10-24."
-    crates:
-      - group-kit
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      group-kit: 0.2.3
-  ledger-pg:
-    area: money
-    status: core
-    notes: "PostgreSQL persistence for double-entry ledgers. Posting serialises on one CAS row per tenant \u2014 safe under READ COMMITTED because the UPDATE takes the lock, so eight concurrent posters get eight distinct versions with no lost writes; SERIALIZABLE's failure machinery deliberately not needed, documented. Balance validated inside the transaction; a refused entry consumes no version. Reversal mirrors double-entry exactly: original stays posted, counter cancels it, lineage in its own table. into_ledger takes the class chart explicitly after 0.1.0's asset-default silently zeroed the P&L. Tests run against a real Postgres (container harness). Published 2026-10-24."
-    crates:
-      - ledger-pg
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-11-01"
-      ledger-pg: 0.2.2
-  report-kit:
-    area: money
-    status: core
-    notes: "Trial balance and aging over a double-entry ledger. Per currency by construction \u2014 summing a GBP bank account with a JPY fee account is a number in no currency \u2014 with the accounting equation (assets + expenses = liabilities + equity + revenue) as a per-currency runtime check. Aging runs from the due date, not the issue date; abnormal balances are a predicate, not a normalization. Published 2026-10-07 with a reporting suite over the month-close ledger. 0.2.1 adds the P&L and balance sheet \u2014 one trial balance read two ways, the retained result carried where it actually is; 0.2.0 shipped without the module and is recorded as an error in its changelog."
-    crates:
-      - report-kit
-
-    docs:
-      tier: k
-      specs: []
-      truth_table: "README.md"
-      llms_txt: false
-      status: draft
-      last_audit: "2026-10-31"
-    _seen:
-      last_push: "2026-10-31"
-      report-kit: 0.2.3
   recon-kit:
     area: money
     status: core
@@ -1197,14 +897,6 @@ repos:
     area: app
     status: support
     notes: "WyattAu's entry for CodeCup 2027 -- Tumbleweed (codecup.nl): hex board, 91 cells, competitive bot play. Registered 2026-10-29; re-registered 2026-10-31."
-    crates: []
-
-    _seen:
-      last_push: "2026-10-31"
-  wyatt-viper:
-    area: app
-    status: support
-    notes: "WyattAu's Battlesnake entry (play.battlesnake.com): the viper crate. Registered 2026-10-29; re-registered 2026-10-31."
     crates: []
 
     _seen:
