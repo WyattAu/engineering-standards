@@ -108,7 +108,7 @@ jobs:
           persist-credentials: false
 
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: check (all-features, locked)
         if: ${{ inputs.all-features }}
         run: cargo check --locked --all-features ${{ env.PKG_FLAG }}
@@ -135,9 +135,9 @@ jobs:
           persist-credentials: false
 
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: install cargo-nextest
-        uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad  # v2
+        uses: taiki-e/install-action@5488ac5a951645ce95062214902ac4b6bc1a1037  # v2
         with:
           tool: cargo-nextest
       # nextest: per-test process isolation (kills shared-state order flakiness
@@ -176,7 +176,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: clippy
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: clippy (deny warnings)
         run: cargo clippy --all-features --all-targets -- -D warnings ${{ env.PKG_FLAG }}
       - name: clippy (pedantic — tier a)
@@ -366,7 +366,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           components: llvm-tools-preview
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: install cargo-llvm-cov
         run: cargo install --locked cargo-llvm-cov
       - name: coverage (tier threshold)
@@ -477,7 +477,7 @@ jobs:
           persist-credentials: false
 
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: loom models
         run: RUSTFLAGS="--cfg loom" cargo test --release --lib -- --test-threads=1 loom
 
@@ -493,7 +493,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@0e28dd9a7764e5f83064112bb1f24025a14c313c # nightly
         with:
           components: miri
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: miri (lib tests)
         env:
           MIRIFLAGS: ${{ inputs.miri-flags }}
@@ -511,7 +511,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           targets: wasm32-unknown-unknown
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: wasm32 check
         run: cargo check --locked --target wasm32-unknown-unknown --no-default-features ${{ env.PKG_FLAG }}
 
@@ -538,7 +538,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
         with:
           targets: thumbv7em-none-eabihf
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: embedded check (thumbv7em-none-eabihf, no-default-features)
         # no_std tier: the crate must build core-only (extern crate alloc
         # allowed) for the Cortex-M4F target. Crates that pass this carry
@@ -555,6 +555,6 @@ jobs:
           persist-credentials: false
 
       - uses: dtolnay/rust-toolchain@89b12181fb390509a0842a86cc55eeb8eb928c1d # stable
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: benches (regression visibility)
         run: cargo bench ${{ env.PKG_FLAG }} -- --save-baseline ci || true
