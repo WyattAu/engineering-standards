@@ -82,6 +82,7 @@ repos:
       - paint-kit
       - window-kit
       - text-kit
+      - widget-kit
 
     docs:
       tier: k
@@ -92,12 +93,13 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-01"
-      scene-kit: 0.2.0
-      layout-kit: 0.2.0
-      paint-kit: 0.2.0
-      window-kit: 0.2.0
-      text-kit: 0.2.0
+      last_push: "2026-11-02"
+      scene-kit: 0.3.0
+      layout-kit: 0.3.0
+      paint-kit: 0.3.0
+      window-kit: 0.3.0
+      text-kit: 0.3.0
+      widget-kit: 0.3.0
   mcp-fleet-doctor:
     area: dx
     status: support
