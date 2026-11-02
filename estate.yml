@@ -76,13 +76,10 @@ repos:
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
-    crates:
-      - scene-kit
-      - layout-kit
-      - paint-kit
-      - window-kit
-      - text-kit
-      - widget-kit
+    # NOTE for the fresco agent: `crates:` means PUBLISHED on crates.io
+    # (schema line: "crates.io package names published from this repo") — the
+    # audit errors while they 404. Re-add each name in the same commit that
+    # publishes it.
 
     docs:
       tier: k
@@ -117,7 +114,7 @@ repos:
       last_push: "2026-10-31"
   ledger-api:
     area: money
-    status: support
+    status: core
     notes: "HTTP API over the accounting estate \u2014 axum router composing recon-kit (reconcile), sales-tax (compute), and ledger-pg (planned for 0.2). The routes compose estate crates; no business logic lives here. Reconcile chains the three passes with taken-sets feeding each pass. Published 2026-10-28. Renamed to accounting-api for crates.io."
     crates:
       - accounting-api
@@ -3019,10 +3016,10 @@ repos:
 
     _seen:
       last_push: "2026-11-01"
-  solid-bits:
+  solid-fx:
     area: ui
-    status: core
-    notes: "SolidJS port of react-bits (DavidHDev): 218 animated TS+Tailwind components under src/content, self-contained per component; Astro+Starlight docs site with live Solid islands; bun+biome toolchain. MIT+Commons Clause inherited from upstream. Registered on completion of the port; owned by its creating agent."
+    status: support
+    notes: "SolidJS port of react-bits (DavidHDev): 218 animated TS+Tailwind components, Astro+Starlight docs with live Solid islands. Renamed from solid-bits on GitHub 2026-11-01; MIT+Commons Clause inherited from upstream. Owned by its creating agent."
 
     docs:
       tier: k
