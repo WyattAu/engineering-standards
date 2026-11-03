@@ -2247,7 +2247,7 @@ repos:
       specs: [docs/SPEC.md]
       truth_table: "README.md"
       llms_txt: true
-      status: draft
+      status: current
       last_audit: "2026-11-03"
     _seen:
       last_push: "2026-11-03"
