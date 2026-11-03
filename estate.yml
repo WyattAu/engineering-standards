@@ -91,12 +91,6 @@ repos:
 
     _seen:
       last_push: "2026-11-03"
-      scene-kit: 0.3.1
-      layout-kit: 0.3.1
-      paint-kit: 0.3.1
-      window-kit: 0.3.1
-      text-kit: 0.3.1
-      widget-kit: 0.3.1
   mcp-fleet-doctor:
     area: dx
     status: support
@@ -127,8 +121,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
-      accounting-api: 0.1.0
+      last_push: "2026-11-02"
+      accounting-api: 0.1.2
   accounting-spec:
     area: research
     status: core
@@ -204,7 +198,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
       dsp-spectral: 0.1.1
   EvergreenImageRegistry:
     area: infra
@@ -219,7 +213,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
   EvergreenShims:
     area: infra
     status: infra
@@ -413,7 +407,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   invoice-kit:
     area: money
     status: core
@@ -429,8 +423,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
-      invoice-kit: 1.2.0
+      last_push: "2026-11-02"
+      invoice-kit: 2.0.0
   warploom-game:
     area: personal
     status: dormant
@@ -494,7 +488,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
   vat-return:
     area: money
     status: core
@@ -510,8 +504,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
-      vat-return: 0.1.10
+      last_push: "2026-11-02"
+      vat-return: 0.1.11
   statement-ofx:
     area: money
     status: core
@@ -629,7 +623,7 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-11-01"
-      group-kit: 0.2.3
+      group-kit: 0.2.4
   bizkit:
     area: research
     status: support
@@ -759,8 +753,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
-      pay-kit: 0.1.3
+      last_push: "2026-11-02"
+      pay-kit: 0.1.4
   trade-tester:
     area: money
     status: personal
@@ -785,8 +779,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
-      vat-mtd: 0.1.6
+      last_push: "2026-11-02"
+      vat-mtd: 0.1.7
   waves:
     area: research
     status: support
@@ -817,8 +811,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
-      sales-tax: 0.2.0
+      last_push: "2026-11-02"
+      sales-tax: 0.2.1
   argus:
     area: obsv
     status: support
@@ -839,6 +833,8 @@ repos:
     status: support
     notes: "Standing registry of competitive targets: trending repos + critical infrastructure gaps, scored for estate leverage (mcp-integrity-sentinel flagged infra-critical). Weekly sweep. Added 2026-11-01."
 
+    _seen:
+      last_push: "2026-11-01"
   bot-kit:
     area: app
     status: support
@@ -862,7 +858,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-03"
   homebite-scraper:
     area: app
     status: support
@@ -1034,7 +1030,7 @@ repos:
     notes: "Starlight docs site."
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
   OmniDotfiles-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1124,7 +1120,7 @@ repos:
     notes: "Lean 4 + mathlib."
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
   OmniPython-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1133,14 +1129,14 @@ repos:
     notes: "Python starter; description still the placeholder."
 
     _seen:
-      last_push: "2026-10-26"
+      last_push: "2026-11-02"
   OmniR-template:
     area: dx
     status: template
     notes: "R monorepo starter."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
   omni-python-e2e:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1149,7 +1145,7 @@ repos:
     notes: "Derived repo verifying the OmniPython update channel (ADR-0001); template-managed."
 
     _seen:
-      last_push: "2026-10-30"
+      last_push: "2026-11-02"
   omni-copier-e2e:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1225,7 +1221,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   Tachyon:
     area: app
     status: dormant
@@ -1287,7 +1283,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       accessctl: 0.1.3
   actor-kit:
     area: conc
@@ -1304,7 +1300,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       actor-kit: 0.2.7
   aether-core:
     area: app
@@ -1312,14 +1308,14 @@ repos:
     notes: "Open core logic for aether."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
   aileron:
     area: app
     status: orphan
     notes: "Keyboard-driven web environment (Servo)."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
   api-types:
     area: data
     status: support
@@ -1335,7 +1331,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       api-types: 0.1.2
   app-error:
     area: data
@@ -1353,7 +1349,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       error-classify: 0.3.1
       error-classify-derive: 0.1.1
   audiobook-conformance:
@@ -1402,7 +1398,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       tamper-audit: 0.2.3
   axum-server:
     area: net
@@ -1427,7 +1423,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       axum-stack: 1.0.0
   barbican:
     area: auth
@@ -1444,7 +1440,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       barbican: 0.2.4
   billing-kit:
     area: money
@@ -1461,7 +1457,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       billing-kit: 0.2.1
   blobkit:
     area: data
@@ -1512,7 +1508,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       breaker: 2.0.2
   cachekit:
     area: data
@@ -1530,7 +1526,7 @@ repos:
     notes: "Personal CachyOS dotfiles."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
   can-core:
     area: data
     status: support
@@ -1563,7 +1559,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       cas-kit: 1.0.0
   cf-worker-utils:
     area: net
@@ -1595,7 +1591,7 @@ repos:
     notes: "Remote agentic coding sandbox."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   clock:
     area: conc
     status: dormant
@@ -1715,7 +1711,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       crdts-kit: 1.0.0
   cryptkit:
     area: auth
@@ -1766,7 +1762,7 @@ repos:
       last_audit: "2026-10-31"
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       delta-kit: 0.2.2
   dissect:
     area: app
@@ -1790,7 +1786,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       docs-pipeline: 0.1.4
   dsp-core:
     area: data
@@ -1824,7 +1820,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   envstack:
     area: obsv
     status: orphan
@@ -1850,7 +1846,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       error-codes: 1.1.1
   estate-integration:
     area: dx
@@ -1865,7 +1861,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
   eventbus:
     area: data
     status: support
@@ -1881,7 +1877,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       eventbus-kit: 1.0.0
   ferro:
     area: app
@@ -1915,7 +1911,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
       fetch-kit: 0.2.3
       resilient-fetch: 0.1.1
   flag-kit:
@@ -1933,7 +1929,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       flag-kit: 1.0.0
   font-parse:
     area: data
@@ -1950,7 +1946,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       font-parse: 0.1.1
   forgejo-k8s-runner:
     area: infra
@@ -2005,7 +2001,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       geo-kit: 1.1.2
   gitea-setup:
     area: infra
@@ -2063,7 +2059,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       healthkit: 1.3.2
   homebite_docs:
     area: docs
@@ -2211,7 +2207,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       idempotency-kit: 1.0.1
   ironclaw:
     area: app
@@ -2235,8 +2231,22 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
       json-envelope: 0.1.2
+  janus_docs:
+    area: docs
+    status: personal
+    notes: "Project Janus plan of record (Forgejo janus org primary; this private GitHub mirror is the registry probe). Docs: SPEC-CORE tier a, generated risk register with oracle."
+    docs:
+      tier: a
+      specs: [docs/SPEC.md]
+      truth_table: "README.md"
+      llms_txt: true
+      status: draft
+      last_audit: "2026-11-03"
+    _seen:
+      last_push: "2026-11-03"
+      private: true
   kestrel:
     area: app
     status: orphan
@@ -2302,7 +2312,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       ledger-kit: 1.0.2
   leptos-capital-markers:
     area: ui
@@ -2319,7 +2329,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       leptos-capital-markers: 0.1.1
   leptos-crypto-ws:
     area: ui
@@ -2336,7 +2346,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       leptos-crypto-ws: 0.1.1
   leptos-leaflet:
     area: ui
@@ -2353,7 +2363,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       leptos-leaflet-wyatt: 0.1.2
   leptos-macro:
     area: ui
@@ -2389,7 +2399,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       leptos-map-search: 0.1.1
   leptos-sparkline:
     area: ui
@@ -2423,7 +2433,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       leptos-stale-indicator: 0.1.1
   luaotfload:
     area: docs
@@ -2465,7 +2475,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       mailkit: 1.0.0
   media-kit:
     area: data
@@ -2482,7 +2492,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       media-kit: 1.0.0
   metrics-kit:
     area: obsv
@@ -2516,7 +2526,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       model-router: 1.0.0
   money:
     area: money
@@ -2533,7 +2543,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       decimal-money: 1.1.2
   double-entry:
     area: money
@@ -2582,7 +2592,7 @@ repos:
     notes: "Fork of cjpais/Handy (MIT), seeded 7bfb2e2c934b 2026-10-31; offline dictation, Wayland-first, voice suite planned. Rebrand required before distribution (upstream trademark clause)."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   oauth-toolkit:
     area: auth
     status: support
@@ -2647,7 +2657,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       otelkit: 2.2.3
   outbox-kit:
     area: net
@@ -2664,7 +2674,7 @@ repos:
       last_audit: "2026-10-31"
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       outbox-kit: 0.2.2
   outrider:
     area: app
@@ -2688,7 +2698,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       api-paginate: 0.1.2
   pediment:
     area: ui
@@ -2760,7 +2770,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       pid-manager: 0.1.0
   plychart:
     area: ui
@@ -2845,7 +2855,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       poolkit: 0.1.3
   ratelimit:
     area: net
@@ -2879,7 +2889,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       loop-retry: 0.1.1
   salting:
     area: auth
@@ -2896,7 +2906,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       salting: 2.0.1
   scim-kit:
     area: auth
@@ -2913,7 +2923,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
       scim-kit: 1.0.0
   sensors_rpi_pico:
     area: research
@@ -2938,7 +2948,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       shared-state: 0.1.3
   sheet-core:
     area: money
@@ -2972,7 +2982,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-02"
       sheet-engine: 0.1.1
   sheet-xlsx:
     area: money
@@ -3029,6 +3039,8 @@ repos:
       status: draft
       last_audit: "2026-11-01"
 
+    _seen:
+      last_push: "2026-11-03"
   sieve-kit:
     area: net
     status: core
@@ -3061,7 +3073,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       simd-tokenizer: 1.0.0
   slab-pool:
     area: conc
@@ -3078,7 +3090,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       slab-pool: 0.1.1
   starlight-content-guard:
     area: ui
@@ -3198,7 +3210,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   suture:
     area: app
     status: orphan
@@ -3298,7 +3310,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       tantivy-helper: 0.3.1
   tao:
     area: app
@@ -3353,7 +3365,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
   tokenkit:
     area: auth
     status: core
@@ -3369,7 +3381,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       tokenkit: 1.0.1
   traefik-setup:
     area: infra
@@ -3401,7 +3413,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       typed-id-derive: 0.1.1
       typed-id-new: None
   uofg_physics:
@@ -3409,7 +3421,7 @@ repos:
     status: support
     notes: "Physics monorepo: Python packages, Jupyter notebooks and LaTeX papers under one lockfile — the Python counterpart of uofg_r_mono."
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-03"
   uds-kit:
     area: net
     status: support
@@ -3474,7 +3486,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       validkit: 1.3.3
       validkit-derive: 0.1.1
   vane:
@@ -3527,14 +3539,14 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   web-estate:
     area: ui
     status: infra
     notes: "Web frontend estate: TS + SolidJS + Astro + Starlight under Bun, applying the Rust estate standards."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   webauthn-kit:
     area: auth
     status: support
@@ -3550,7 +3562,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       webauthn-kit: 1.0.0
   webhookkit:
     area: net
@@ -3609,7 +3621,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       worker-kit: 0.3.2
   wry:
     area: app
@@ -3651,7 +3663,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-02"
       ws-kit: 1.0.1
   wyatt-cv:
     area: docs
