@@ -91,6 +91,11 @@ repos:
 
     _seen:
       last_push: "2026-11-03"
+  mcp-sentinel:
+    area: auth
+    status: support
+    notes: "MCP supply-chain integrity gate: config IoC scanning (Deadbugz rules), tool-definition hash pinning + drift verify on tamper-audit chains. Infra-critical per beat-list. Added 2026-11-02."
+
   mcp-fleet-doctor:
     area: dx
     status: support
