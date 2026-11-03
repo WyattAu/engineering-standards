@@ -3404,6 +3404,12 @@ repos:
       last_push: "2026-10-31"
       typed-id-derive: 0.1.1
       typed-id-new: None
+  uofg_physics:
+    area: research
+    status: support
+    notes: "Physics monorepo: Python packages, Jupyter notebooks and LaTeX papers under one lockfile — the Python counterpart of uofg_r_mono."
+    _seen:
+      last_push: "2026-11-02"
   uds-kit:
     area: net
     status: support
