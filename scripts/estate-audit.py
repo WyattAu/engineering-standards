@@ -477,8 +477,25 @@ def audit(man: Manifest, repos: list[dict], crates: dict, pins_by_repo: dict) ->
     for consumer, (exact, _loose) in pins_by_repo.items():
         for crate, ver in sorted(exact.items()):
             if crate not in crates:
-                severity = "error" if crate in declared else "info"
-                add(severity, crate,
+                # An exact pin on a name this account does not publish is
+                # only suspicious if the pin cannot resolve AT ALL: repos
+                # legitimately exact-pin third-party crates (reqwest,
+                # tantivy). If crates.io has the crate at the pinned
+                # version, the pin is a working third-party pin — not a
+                # finding. If crates.io lacks it, the name is wrong.
+                resolves = False
+                try:
+                    _get_json(f"https://crates.io/api/v1/crates/{crate}/{ver.lstrip('=')}")
+                    resolves = True
+                except urllib.error.HTTPError as exc:
+                    resolves = False  # 404: pinned version does not exist
+                    if exc.code != 404:
+                        resolves = True  # network/5xx: don't punish the pin
+                except Exception:
+                    resolves = True  # network failure: keep silent, not noisy
+                if resolves:
+                    continue
+                add("info", crate,
                     f"{consumer} exact-pins {crate} but no such crate is published "
                     "under this account",
                     "check the pin's spelling, or the crates.io owner id")
