@@ -842,7 +842,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
   beat-list:
     area: research
     status: support
@@ -1413,7 +1413,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       tamper-audit: 0.2.3
   axum-server:
     area: net
@@ -1898,6 +1898,13 @@ repos:
     area: app
     status: core
     notes: "Self-hosted file storage platform."
+
+    _seen:
+      last_push: "2026-11-04"
+  ferro-fresco-spike:
+    area: ui
+    status: support
+    notes: "R9 spike: Ferro screens on fresco + native client probe (created 2026-11-04)."
 
     docs:
       tier: a
@@ -2558,7 +2565,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       decimal-money: 1.1.2
   double-entry:
     area: money
@@ -2654,8 +2661,8 @@ repos:
       - otel-stack
 
     _seen:
-      last_push: "2026-10-24"
-      otel-stack: 0.2.1
+      last_push: "2026-11-04"
+      otel-stack: 0.3.0
   otelkit:
     area: obsv
     status: core
@@ -3419,6 +3426,7 @@ repos:
     crates:
       - typed-id-derive
       - typedids
+      - typed-id-new
 
     docs:
       tier: k
@@ -3431,6 +3439,7 @@ repos:
       last_push: "2026-11-03"
       typed-id-derive: 0.1.1
       typedids: 0.1.0
+      typed-id-new: None
   uofg_physics:
     area: research
     status: support

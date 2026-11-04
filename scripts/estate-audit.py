@@ -131,6 +131,14 @@ COVERAGE_EXEMPT = {
     "loop-retry": "repo retry-backoff; renamed package, same crate",
     "typed-id-new": "placeholder crate name (0.0.0, README: 'typed-id-new was a placeholder name'); the derive crate typed-id-derive is composed directly by estate-integration",
     "fresco-*": "separate product monorepo with its own test suite",
+    # api_errors chain: the composing suite was removed 2026-10-29
+    # (typed-id-new 0.1.0 yank, c8f8741) and the dead pins were dropped
+    # 2026-11-04. These four await a new composition suite.
+    "api-paginate": "composing suite removed 2026-10-29; pins dropped 2026-11-04 until a suite wires it again",
+    "api-types": "composing suite removed 2026-10-29; pins dropped 2026-11-04 until a suite wires it again",
+    "error-codes": "composing suite removed 2026-10-29; pins dropped 2026-11-04 until a suite wires it again",
+    "http-errors": "composing suite removed 2026-10-29; pins dropped 2026-11-04 until a suite wires it again",
+    "json-envelope": "composing suite removed 2026-10-29; pins dropped 2026-11-04 until a suite wires it again",
     "accounting-api": "standalone product app (repo ledger-api) with its own HTTP suite; estate-integration composition is a later-round candidate",
     # The skillkit and trendkit facade crates are CLIs with no lib target, so
     # no consumer can pin them: a dependency on a lib-less crate does not
