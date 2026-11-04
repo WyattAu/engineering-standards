@@ -42,9 +42,17 @@
 # why" apart from "nobody noticed", and CI will fail if a hold loses its
 # reason or names an unknown consumer.
 #
-# Currently empty: the last hold (outbox-kit, waiting on a ledger-kit
-# consumer) was released when ledger-kit 0.1.1 shipped.
-pins_held: []
+# Currently one hold: webhookkit, held by estate-integration until the
+# 2.2.4 publish lands (2.2.3 does not compile under its own hmac stack).
+pins_held:
+  - consumer: WyattAu/estate-integration
+    crate: webhookkit
+    reason: >-
+      2.2.3's published lib does not compile under its declared hmac 0.13
+      stack (the ct_eq call predates the hybrid-array migration; the fix is
+      on webhookkit main, commit 480015f, awaiting the 2.2.4 publish).
+      1.1.2's verify_hmac_sha256 has an identical signature, so the
+      migration is a one-line pin flip then.
 
 schema: 1
 updated: "2026-10-31"
@@ -67,12 +75,12 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       cal-model: 0.1.2
   fresco:
     area: ui
     status: support
-    notes: "Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph, damage-tracked compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit closed-form springs, scene-kit retained scene + damage, layout-kit incremental layout, paint-kit exact-coverage raster + gradients/clip/images, window-kit winit facade, text-kit TextEngine trait (Parley backend) + 3x5 micro-font, render-conformance golden-image gate (publish=false). Phase 2 landed 2026-11-01; Phase 3 scaffolding (layout-engine contract, widget-kit retained-props spike, a11y emission) landed 2026-11-02; Phase 3 continued (ScrollPane, TabList, theme-kit styling resolver, label_text micro-font glyph rendering) landed 2026-11-03; consumer target kestrel-gui."
+    notes: "Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph, damage-tracked compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit closed-form springs, scene-kit retained scene + damage, layout-kit incremental layout, paint-kit exact-coverage raster + gradients/clip/images, window-kit winit facade, text-kit TextEngine trait (Parley backend) + 3x5 micro-font, render-conformance golden-image gate (publish=false). Phase 2 landed 2026-11-01; Phase 3 scaffolding (layout-engine contract, widget-kit retained-props spike, a11y emission) landed 2026-11-02; Phase 3 continued (ScrollPane, TabList, theme-kit styling resolver, label_text micro-font glyph rendering) landed 2026-11-03; tree-lite TreeList + per-widget CVD verification (Phase 3.4 closed) landed 2026-11-04 at 0.3.6; consumer target kestrel-gui (Phase 2.4 alpha remains, needs a display session)."
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
@@ -96,6 +104,8 @@ repos:
     status: support
     notes: "MCP supply-chain integrity gate: config IoC scanning (Deadbugz rules), tool-definition hash pinning + drift verify on tamper-audit chains. Infra-critical per beat-list. Added 2026-11-02."
 
+    _seen:
+      last_push: "2026-11-03"
   mcp-fleet-doctor:
     area: dx
     status: support
@@ -168,7 +178,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       chisel-audit: 0.2.0
       chisel-kernel: 0.1.2
       chisel-assets: 0.1.3
@@ -203,7 +213,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       dsp-spectral: 0.1.1
   EvergreenImageRegistry:
     area: infra
@@ -218,7 +228,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
   EvergreenShims:
     area: infra
     status: infra
@@ -287,7 +297,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       font-shape: 0.1.1
   color-kit:
     area: ui
@@ -304,7 +314,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       color-kit: 0.1.1
   theme-kit:
     area: ui
@@ -389,7 +399,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       docs-core: 0.1.1
   font-conformance:
     area: ui
@@ -767,7 +777,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       private: true
   vat-mtd:
     area: money
@@ -839,7 +849,7 @@ repos:
     notes: "Standing registry of competitive targets: trending repos + critical infrastructure gaps, scored for estate leverage (mcp-integrity-sentinel flagged infra-critical). Weekly sweep. Added 2026-11-01."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   bot-kit:
     area: app
     status: support
@@ -863,7 +873,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   homebite-scraper:
     area: app
     status: support
@@ -871,7 +881,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       private: true
   outreachkit:
     area: app
@@ -1173,7 +1183,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
   OmniRust-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1271,7 +1281,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       a2l-parse: 0.1.2
   accessctl:
     area: auth
@@ -1313,14 +1323,14 @@ repos:
     notes: "Open core logic for aether."
 
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
   aileron:
     area: app
     status: orphan
     notes: "Keyboard-driven web environment (Servo)."
 
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
   api-types:
     area: data
     status: support
@@ -1496,7 +1506,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       book-kit: 0.1.1
   breaker:
     area: net
@@ -1523,15 +1533,15 @@ repos:
       - cache-pal
 
     _seen:
-      last_push: "2026-10-26"
-      cache-pal: 0.4.1
+      last_push: "2026-11-04"
+      cache-pal: 0.5.0
   cachyos_sys_dotfiles:
     area: infra
     status: dormant
     notes: "Personal CachyOS dotfiles."
 
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
   can-core:
     area: data
     status: support
@@ -1547,7 +1557,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       can-core: 0.1.1
   cas-kit:
     area: data
@@ -1588,7 +1598,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
       chaos-kit: 0.1.2
   clawdius:
     area: app
@@ -1596,7 +1606,7 @@ repos:
     notes: "Remote agentic coding sandbox."
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   clock:
     area: conc
     status: dormant
@@ -1623,7 +1633,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       clock-kit: 0.1.1
   coa:
     area: docs
@@ -1656,7 +1666,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
       config-kit: 1.0.0
   contact-miner:
     area: data
@@ -1750,7 +1760,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       dbc-parse: 0.1.2
   delta-kit:
     area: data
@@ -1825,7 +1835,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   envstack:
     area: obsv
     status: orphan
@@ -1866,7 +1876,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
   eventbus:
     area: data
     status: support
@@ -1897,7 +1907,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
   fetch-kit:
     area: net
     status: core
@@ -1916,7 +1926,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       fetch-kit: 0.2.3
       resilient-fetch: 0.1.1
   flag-kit:
@@ -1989,7 +1999,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       formula-lang: 0.1.3
   geo-kit:
     area: data
@@ -2006,7 +2016,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       geo-kit: 1.1.2
   gitea-setup:
     area: infra
@@ -2030,7 +2040,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       shutdown-kit: 0.3.3
   hdwallet:
     area: auth
@@ -2064,7 +2074,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       healthkit: 1.3.2
   homebite_docs:
     area: docs
@@ -2120,7 +2130,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       hw-kit: 0.1.1
   hydrated-personal-site:
     area: docs
@@ -2178,7 +2188,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       ui-text-edit: 0.1.2
   id3-core:
     area: data
@@ -2250,7 +2260,7 @@ repos:
       status: current
       last_audit: "2026-11-03"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
       private: true
   kestrel:
     area: app
@@ -2317,7 +2327,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       ledger-kit: 1.0.2
   leptos-capital-markers:
     area: ui
@@ -2334,7 +2344,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       leptos-capital-markers: 0.1.1
   leptos-crypto-ws:
     area: ui
@@ -2368,7 +2378,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       leptos-leaflet-wyatt: 0.1.2
   leptos-macro:
     area: ui
@@ -2421,7 +2431,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       leptos-sparkline: 0.1.1
   leptos-stale-indicator:
     area: ui
@@ -2514,7 +2524,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       metrics-kit: 1.0.0
   model-router:
     area: app
@@ -2531,7 +2541,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       model-router: 1.0.0
   money:
     area: money
@@ -2635,7 +2645,7 @@ repos:
     notes: "Fork of FujiwaraChoki/supoclip (AGPL-3.0), seeded 4bc76f83b342 2026-10-31; local-first clip pipeline, Rust render planned. Fork keeps AGPL-3.0."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
   otel-stack:
     area: obsv
     status: dormant
@@ -2662,8 +2672,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
-      otelkit: 2.2.3
+      last_push: "2026-11-04"
+      otelkit: 3.0.1
   outbox-kit:
     area: net
     status: core
@@ -2679,7 +2689,7 @@ repos:
       last_audit: "2026-10-31"
 
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       outbox-kit: 0.2.2
   outrider:
     area: app
@@ -2687,7 +2697,7 @@ repos:
     notes: "Fork of Panniantong/Agent-Reach (MIT), seeded 14c213405669 2026-10-31; agent web-access channels, Rust hot path planned. Converts crawlkit + aileron orphans."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-03"
   paginate:
     area: data
     status: support
@@ -2703,8 +2713,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
-      api-paginate: 0.1.2
+      last_push: "2026-11-04"
+      api-paginate: 0.2.0
   pediment:
     area: ui
     status: support
@@ -2796,7 +2806,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       ply-viz: None
       plychart: 0.2.1
       plycharts: None
@@ -2928,7 +2938,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-03"
       scim-kit: 1.0.0
   sensors_rpi_pico:
     area: research
@@ -2970,7 +2980,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       sheet-core: 0.1.1
   sheet-engine:
     area: money
@@ -2987,7 +2997,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       sheet-engine: 0.1.1
   sheet-xlsx:
     area: money
@@ -3004,7 +3014,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       sheet-xlsx: 0.1.4
   shm-rings:
     area: conc
@@ -3045,7 +3055,7 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   sieve-kit:
     area: net
     status: core
@@ -3078,7 +3088,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       simd-tokenizer: 1.0.0
   slab-pool:
     area: conc
@@ -3095,7 +3105,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-03"
       slab-pool: 0.1.1
   starlight-content-guard:
     area: ui
@@ -3215,7 +3225,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   suture:
     area: app
     status: orphan
@@ -3315,7 +3325,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       tantivy-helper: 0.3.1
   tao:
     area: app
@@ -3355,7 +3365,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       telemetry-init: 1.0.1
   testkit:
     area: dx
@@ -3408,7 +3418,7 @@ repos:
     notes: "Typed ID newtypes + derive."
     crates:
       - typed-id-derive
-      - typed-id-new
+      - typedids
 
     docs:
       tier: k
@@ -3418,15 +3428,16 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-03"
       typed-id-derive: 0.1.1
-      typed-id-new: None
+      typedids: 0.1.0
   uofg_physics:
     area: research
     status: support
     notes: "Physics monorepo: Python packages, Jupyter notebooks and LaTeX papers under one lockfile — the Python counterpart of uofg_r_mono."
     _seen:
       last_push: "2026-11-03"
+      private: true
   uds-kit:
     area: net
     status: support
@@ -3491,7 +3502,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       validkit: 1.3.3
       validkit-derive: 0.1.1
   vane:
@@ -3519,7 +3530,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       vane-client-sdk: 0.5.4
       vane-control: 0.13.1
       vane-filters: 0.6.2
@@ -3551,7 +3562,7 @@ repos:
     notes: "Web frontend estate: TS + SolidJS + Astro + Starlight under Bun, applying the Rust estate standards."
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   webauthn-kit:
     area: auth
     status: support
@@ -3584,7 +3595,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-04"
       webhookkit: 2.2.3
   windows-dotfiles:
     area: infra
@@ -3609,7 +3620,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       wire-kit: 0.1.1
   worker-kit:
     area: obsv
@@ -3626,7 +3637,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-04"
       worker-kit: 0.3.2
   wry:
     area: app
@@ -3700,7 +3711,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       xcp-core: 0.1.1
   # --- registered 2026-10-19: repos that existed on GitHub and on crates.io
   # without an estate.yml entry, which estate-audit reported as errors. Crates
