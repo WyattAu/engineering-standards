@@ -72,7 +72,7 @@ repos:
   fresco:
     area: ui
     status: support
-    notes: "Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph, damage-tracked compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit closed-form springs, scene-kit retained scene + damage, layout-kit incremental layout, paint-kit exact-coverage raster + gradients/clip/images, window-kit winit facade, text-kit TextEngine trait (Parley backend), render-conformance golden-image gate (publish=false). Phase 2 landed 2026-11-01; Phase 3 scaffolding (layout-engine contract, widget-kit retained-props spike, a11y emission) landed 2026-11-02; consumer target kestrel-gui."
+    notes: "Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph, damage-tracked compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit closed-form springs, scene-kit retained scene + damage, layout-kit incremental layout, paint-kit exact-coverage raster + gradients/clip/images, window-kit winit facade, text-kit TextEngine trait (Parley backend) + 3x5 micro-font, render-conformance golden-image gate (publish=false). Phase 2 landed 2026-11-01; Phase 3 scaffolding (layout-engine contract, widget-kit retained-props spike, a11y emission) landed 2026-11-02; Phase 3 continued (ScrollPane, TabList, theme-kit styling resolver, label_text micro-font glyph rendering) landed 2026-11-03; consumer target kestrel-gui."
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
@@ -90,7 +90,7 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-04"
   mcp-sentinel:
     area: auth
     status: support
