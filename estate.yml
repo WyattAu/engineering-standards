@@ -1323,7 +1323,7 @@ repos:
     notes: "Open core logic for aether."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-05"
   aileron:
     area: app
     status: orphan
@@ -1694,7 +1694,7 @@ repos:
       - crawlkit-plugin-sdk
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-04"
       crawlkit-engine: 2.0.0
       crawlkit-plugin-sdk: 1.0.0
   crdt-demo:
@@ -1876,7 +1876,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-05"
   eventbus:
     area: data
     status: support
@@ -3062,7 +3062,7 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-05"
   sieve-kit:
     area: net
     status: core
@@ -3232,7 +3232,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-05"
   suture:
     area: app
     status: orphan
@@ -3571,7 +3571,7 @@ repos:
     notes: "Web frontend estate: TS + SolidJS + Astro + Starlight under Bun, applying the Rust estate standards."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-05"
   webauthn-kit:
     area: auth
     status: support
