@@ -3447,6 +3447,12 @@ repos:
     _seen:
       last_push: "2026-11-03"
       private: true
+  tmp-push-probe:
+    area: infra
+    status: orphan
+    notes: "Private automation probe for push-pipeline verification; no source content, safe to delete after the pipeline stabilises."
+    _seen:
+      last_push: "2026-11-05"
   uds-kit:
     area: net
     status: support
