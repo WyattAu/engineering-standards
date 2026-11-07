@@ -77,6 +77,19 @@ repos:
     _seen:
       last_push: "2026-11-04"
       cal-model: 0.1.2
+  mcp-kit-core:
+    area: dx
+    status: infra
+    notes: "The estate kit-server pattern as a library: MCP stdio serve loop, JSON-RPC framing, tool-catalog trait. Used by memory-kit, github-kit, filesystem-kit, time-kit."
+    _seen:
+      last_push: "2026-11-07"
+  time-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP time server (mcp-kit-core native): timezone-correct current time and timezone conversion via the IANA database."
+    _seen:
+      last_push: "2026-11-07"
+
   filesystem-kit:
     area: dx
     status: infra
