@@ -90,6 +90,25 @@ repos:
     _seen:
       last_push: "2026-11-07"
 
+  git-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP git server (mcp-kit-core native): the mcp-server-git tool surface (14 tools, repo_path on every call) wrapping the git CLI."
+    _seen:
+      last_push: "2026-11-07"
+  mcp-fetch-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP fetch server (mcp-kit-core native): GET a URL, return readable text - HTML converted (scripts/styles/nav stripped, entities decoded)."
+    _seen:
+      last_push: "2026-11-07"
+  sequential-thinking-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP scratchpad server (mcp-kit-core native): drop-in shape of mcp-server-sequential-thinking. Sessions are per-server-lifetime."
+    _seen:
+      last_push: "2026-11-07"
+
   filesystem-kit:
     area: dx
     status: infra
