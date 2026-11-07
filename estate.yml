@@ -77,6 +77,25 @@ repos:
     _seen:
       last_push: "2026-11-04"
       cal-model: 0.1.2
+  filesystem-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP filesystem server: the third-party filesystem server's API drop-in with an allowed-roots guard (canonicalize, ':'-separated roots, default $HOME:/tmp/opencode). One Rust binary, no npx."
+    _seen:
+      last_push: "2026-11-07"
+  github-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP GitHub server: repos, issues, PRs, actions, code search over the GitHub REST API - one Rust binary, no npx/docker, no mid-session restarts (replaces github-mcp-server, whose restarts churned the tool catalog)."
+    _seen:
+      last_push: "2026-11-06"
+  memory-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP memory server: SQLite knowledge graph, drop-in API-compatible with mcp-server-memory (Node), which timed out under parallel-agent load - one static binary, starts in <10ms."
+    _seen:
+      last_push: "2026-11-07"
+
   fresco:
     area: ui
     status: support
