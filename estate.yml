@@ -45,14 +45,6 @@
 # Currently one hold: webhookkit, held by estate-integration until the
 # 2.2.4 publish lands (2.2.3 does not compile under its own hmac stack).
 pins_held:
-  - consumer: WyattAu/estate-integration
-    crate: webhookkit
-    reason: >-
-      2.2.3's published lib does not compile under its declared hmac 0.13
-      stack (the ct_eq call predates the hybrid-array migration; the fix is
-      on webhookkit main, commit 480015f, awaiting the 2.2.4 publish).
-      1.1.2's verify_hmac_sha256 has an identical signature, so the
-      migration is a one-line pin flip then.
 
 schema: 1
 updated: "2026-10-31"
