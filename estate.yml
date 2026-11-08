@@ -2709,6 +2709,19 @@ repos:
 
     _seen:
       last_push: "2026-11-04"
+  os-core:
+    area: research
+    status: support
+    notes: "Sovereign operating system, not derived from Unix; derived from OmniRust-template 2026-11-08."
+    docs:
+      tier: a
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-08"
+    _seen:
+      last_push: "2026-11-08"
   otel-stack:
     area: obsv
     status: dormant
