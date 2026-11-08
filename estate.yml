@@ -119,6 +119,12 @@ repos:
     notes: "Estate MCP memory server: SQLite knowledge graph, drop-in API-compatible with mcp-server-memory (Node), which timed out under parallel-agent load - one static binary, starts in <10ms."
     _seen:
       last_push: "2026-11-07"
+  osint-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP OSINT server (mcp-kit-core native): keyless network-recon subset (14 tools) of the third-party osint server's 37 - dns_lookup/reverse, whois (slim), cert_transparency, subdomains_cert, wayback, http_headers, security_headers_audit, ip_info, bgp_asn_info; keyed sources (shodan/virustotal/securitytrails/censys) land when keys are provisioned via the key-file pattern."
+    _seen:
+      last_push: "2026-11-08"
 
   fresco:
     area: ui
