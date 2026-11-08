@@ -1870,6 +1870,12 @@ repos:
     _seen:
       last_push: "2026-11-01"
       dsp-core: 0.1.1
+  duckduckgo-kit:
+    area: dx
+    status: infra
+    notes: "Estate MCP web-search server (mcp-kit-core native): DuckDuckGo HTML endpoint, no API key. Returns title/url/snippet triples. Detects and reports DDG bot-challenge pages as MCP errors instead of returning junk. Added 2026-11-07."
+
+
   engineering-standards:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -2194,6 +2200,12 @@ repos:
 
     _seen:
       last_push: "2026-07-26"
+  hydrated-site:
+    area: ui
+    status: support
+    notes: "Personal site + intelligence dashboard: Astro 5 + SolidJS 1.9 + Rust/WASM widgets (16 modules), Cloudflare Pages + Workers, guestbook KV. Dual-published: canonical wyattau.com (Cloudflare Pages) + GitHub Pages mirror with canonical redirect. Added 2026-11-07."
+
+
   i18n-kit:
     area: data
     status: support
@@ -2940,6 +2952,12 @@ repos:
     _seen:
       last_push: "2026-11-02"
       poolkit: 0.1.3
+  quinn:
+    area: net
+    status: fork
+    notes: "Async-friendly QUIC implementation in Rust (upstream quinn-rs/quinn fork kept for vendoring or patching). Added 2026-11-07."
+
+
   ratelimit:
     area: net
     status: core
@@ -3124,6 +3142,12 @@ repos:
 
     _seen:
       last_push: "2026-11-05"
+  siegekit:
+    area: auth
+    status: support
+    notes: "Authorized-testing (pentest) automation built as a crawlkit consumer: OWASP WSTG-mapped checks against targets you are authorized to test; refuses otherwise. Added 2026-11-07."
+
+
   sieve-kit:
     area: net
     status: core
