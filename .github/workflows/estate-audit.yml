@@ -30,6 +30,10 @@ on:
     - "candidates.yml"
     - "scripts/check-adoption.py"
     - "scripts/test-check-adoption.py"
+    - "scripts/check-adr.py"
+    - "scripts/test-check-adr.py"
+    - "DECISIONS.md"
+    - "docs/adr/**"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -213,6 +217,14 @@ jobs:
 
       - name: Candidate registry conforms to ADOPTION.md
         run: python scripts/check-adoption.py
+
+      # ADR records are a format contract (DC-1..DC-8): filename, status,
+      # ISO date, required sections. Advisory for one loop (ADR-0018).
+      - name: Self-test the ADR gate
+        run: python scripts/test-check-adr.py
+
+      - name: ADR records conform to DECISIONS.md
+        run: python scripts/check-adr.py
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py

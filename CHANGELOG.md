@@ -6,6 +6,19 @@ Material change means version bump + ADR + entry here
 (`STANDARDS-MODEL.md` SM-7, SPEC-CORE §5, AGENTS.md rule 6). A version bump
 lands in the header of every document that changed.
 
+## 0.3.0 (2026-11-09)
+
+### Added
+
+- `DECISIONS.md` (DC-1..DC-8), the ADR practice standard: numbered, stable
+  filenames; machine-readable status and ISO date; required context,
+  decision and consequence sections; amendment over silent rewrite (ADR-0018).
+- `scripts/check-adr.py`, which gates the mechanical subset and accepts the
+  three metadata forms already present in the corpus, plus
+  `scripts/test-check-adr.py` (9 fixtures). Measured against this repository:
+  16 records, 0 findings, 1 reported sequence gap (`0007` absent).
+- CI runs the ADR gate as an advisory `standards-index` step (one loop).
+
 ## 0.2.0 (2026-11-09)
 
 ### Changed
