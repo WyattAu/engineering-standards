@@ -3,6 +3,11 @@
 # repos need no auth; pass `token` for private ones.
 #
 # Input: `siblings` — space-separated repo names (WyattAu/<name> implied).
+#
+# Inputs arrive through env: a ${{ }} expansion inside `run:` splices a
+# caller-controlled string into shell source. That is a template-injection
+# finding (zizmor) and it is real here — the workflow calling this action
+# decides what lands between the quotes.
 name: "Check out estate siblings"
 description: "Clones each named estate repo one directory above the caller, so ../<name> path dependencies resolve."
 inputs:
@@ -17,15 +22,26 @@ runs:
   using: "composite"
   steps:
     - shell: bash
+      env:
+        SIBLINGS: ${{ inputs.siblings }}
+        SIBLING_TOKEN: ${{ inputs.token }}
       run: |
-        for sibling in ${{ inputs.siblings }}; do
-          if [ -d "$GITHUB_WORKSPACE/../$sibling" ]; then
+        set -euo pipefail
+        read -ra names <<< "$SIBLINGS"
+        for sibling in "${names[@]}"; do
+          [ -n "$sibling" ] || continue
+          dest="$GITHUB_WORKSPACE/../$sibling"
+          if [ -d "$dest" ]; then
             echo "sibling $sibling already present"
             continue
           fi
-          if [ -n "${{ inputs.token }}" ]; then
-            git clone --depth 1 "https://x-access-token:${{ inputs.token }}@github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+          if [ -n "$SIBLING_TOKEN" ]; then
+            # Authorization goes in a header, not the URL: a failed clone
+            # echoes the URL, and remotes keep it in .git/config.
+            auth=$(printf 'x-access-token:%s' "$SIBLING_TOKEN" | base64 -w0)
+            git -c "http.extraheader=Authorization: Basic $auth" \
+              clone --depth 1 "https://github.com/WyattAu/$sibling" "$dest"
           else
-            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$GITHUB_WORKSPACE/../$sibling"
+            git clone --depth 1 "https://github.com/WyattAu/$sibling" "$dest"
           fi
         done
