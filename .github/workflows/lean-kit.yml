@@ -1,0 +1,57 @@
+# WyattAu shared Lean 4 CI — implements OMNI-CORE invariant 11f (any `sorry`
+# fails the build; `#print axioms` stated per theorem). Called from each repo
+# that carries a proofs/ lake project:
+#   jobs:
+#     lean:
+#       uses: WyattAu/engineering-standards/.github/workflows/lean-kit.yml@<sha>
+#       with:
+#         elan-version: "4.0.0"
+#         script: ./scripts/check-lean.sh
+#
+# The repo owns the gate script (scripts are canonical, invariant 1); the kit
+# owns the toolchain install and the network-retry discipline. Toolchain and
+# mathlib content stay pinned by the caller's lean-toolchain / lakefile.lock.
+
+name: lean
+
+on:
+  workflow_call:
+    inputs:
+      elan-version:
+        description: "elan release to install (pinned; retries cannot drift content)"
+        required: false
+        default: "4.0.0"
+        type: string
+      script:
+        description: "Gate script path, relative to the caller repo root"
+        required: false
+        default: "./scripts/check-lean.sh"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      # curl-tar of a pinned elan release (11c posture). Retries exist because
+      # transient GitHub 504s made this leg flap (os-core run 42570806295);
+      # retries cannot drift content — the URL pins the release. Replace with
+      # a trusted setup-lean action if one ships.
+      - name: Install Lean4 (elan, pinned)
+        run: |
+          ELAN_VERSION="${{ inputs.elan-version }}"
+          curl --fail --retry 5 --retry-delay 3 --retry-all-errors \
+            -L "https://github.com/leanprover/elan/releases/download/v${ELAN_VERSION}/elan-x86_64-unknown-linux-gnu.tar.gz" -o elan.tar.gz
+          tar -xzf elan.tar.gz
+          ./elan-init -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: lean gate (repo-owned script)
+        run: ${{ inputs.script }}
