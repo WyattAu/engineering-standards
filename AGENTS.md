@@ -46,6 +46,9 @@ written for the next agent, not for the record.
 | Path | Purpose |
 |---|---|
 | `OMNI-CORE.md` | the family-wide contract every template implements |
+| `STANDARDS-MODEL.md` | how a concern becomes a standard (SM-1..SM-11) |
+| `DESIGN.md` | the visual and interaction canon (DS-1..DS-19) |
+| `STANDARDS-INDEX.md` | every concern, its standard, gate, and measured adoption |
 | `LOOP.md` | iteration log + doctrine (survey, graduation, publish) |
 | `PITFALLS.md` | lessons that must not be relearned |
 | `COMPETITIVE-ANALYSIS.md` | market matrix vs leading templates |
@@ -61,6 +64,8 @@ written for the next agent, not for the record.
 - `llms.txt links`: no unresolved placeholders in any LLM contract
 - `one pin per action`: one SHA per action across loop-owned repos
 - `REUSE 3.3`: licensing compliance
+- `design tokens`: DTCG contrast, alias, and exception gate (DESIGN.md)
+- `standards index`: no dangling standard or gate references, totals match rows
 - `zizmor`: workflow security lint (advisory)
 - `scorecard`: OpenSSF posture (advisory)
 

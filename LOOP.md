@@ -251,3 +251,31 @@ EN 16931 category-specific rules audit: BR-AE-02 (buyer VAT ID for
 reverse charge), BR-E-02/03 (exempt reason), BR-IC-02 (delivery date),
 and BR-S-08/BR-Z-08 (breakdown cross-check) documented as gaps. The fix
 requires invoice-kit 1.2.0 and a convergence wave; fresh session.
+
+## Round 43 (2026-11-09)
+
+Standards made countable, and design made checkable. Measured before
+changing anything: 0/125 checkouts react to `merge_group` although 11g
+requires a merge queue; 0/125 use harden-runner; 0/8 sampled repos have
+branch protection; 13/289 registered repos are `gated: true`. Diagnosis:
+the estate standardized code shape well and evidence badly, and the 12
+invariants had no meta-standard saying what a standard must contain.
+Landed: `STANDARDS-MODEL.md` (SM-1..SM-11: evidence classes
+GATE/TEST/MEASURE/REVIEW, thresholds as numbers with units and sources,
+declared-and-dated exceptions, countable coverage), `DESIGN.md`
+(DS-1..DS-19 with cited numbers: 4.5:1 and 3:1 WCAG 2.1, 7:1 AAA, 2 px
+focus appearance, Lc 60/75, delta-E-Ok 0.02, 45-75 characters, +30%
+localisation growth, 100-200 ms motion, 4/8 px grid), and
+`STANDARDS-INDEX.md` (56 concerns, 44 standardized, 26 gated, 3 advisory,
+15 declared, 12 none). Two gates: `check-design-tokens.py` (DTCG contrast,
+alias resolution, undeclared and expired exceptions; 7-fixture self-test)
+and `check-standards-index.py` (dangling standard or gate references, and
+totals that disagree with rows). `buildinfo.sh` records the 11b inputs
+deterministically and proves two records identical with `--compare`.
+Three defects were found by the new gates in their own first runs and
+fixed: a contrast fixture that passed at 3.6:1 because the geometry was
+wrong, an index gate that could not express tool-named gates, and
+`buildinfo.sh` dying of SIGPIPE under `pipefail` because `head -1` closed
+the pipe on `rustc -vV`. ADR-0013. Adopting the design canon is a
+migration, not a switch: 2 token crates and 1 adapter today, and the index
+says so.

@@ -5,6 +5,15 @@ Every repo in the [Omni template family](https://github.com/WyattAu?tab=reposito
 Dotfiles) ships these invariants. Derived projects inherit them; template
 changes that violate one require an ADR in the template repo.
 
+Two canons extend these invariants without adding a thirteenth:
+[`STANDARDS-MODEL.md`](STANDARDS-MODEL.md) says how a concern becomes a
+standard and what evidence class it must carry, and
+[`DESIGN.md`](DESIGN.md) is the visual and interaction canon
+(DS-1..DS-19, numbers and rationale, gated by
+`scripts/check-design-tokens.py`). [`STANDARDS-INDEX.md`](STANDARDS-INDEX.md)
+records which concerns are standardized and how widely each gate is adopted.
+Changes to either canon require an ADR, like any other change here.
+
 ## The 12 invariants
 
 | # | Invariant | Why |
