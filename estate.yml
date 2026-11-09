@@ -47,7 +47,7 @@
 pins_held:
 
 schema: 1
-updated: "2026-10-31"
+updated: "2026-11-09"
 owner: WyattAu
 crates_io_user_id: 404181
 
@@ -881,7 +881,7 @@ repos:
   argus:
     area: obsv
     status: support
-    notes: "All-purpose intelligence platform: world surveillance (OSINT), markets/quant, private-equity back-office, in Rust, dogfooding the estate. Workspace of five members (alertkit, argus-mcp, argus-server, argus-tui, feedkit); none published to crates.io as of registration. The crates.io crate of the same name is an unrelated 0.0.0 placeholder owned by neither the account nor this repo. Registered 2026-10-29."
+    notes: "All-purpose intelligence platform: world surveillance (OSINT), markets/quant, private-equity back-office, in Rust, dogfooding the estate. Workspace of five members (alertkit, argus-mcp, argus-server, argus-tui, feedkit) at registration (2026-10-29); alertkit and feedkit have since been extracted and published (v0.1.0, 2026-11-09) as separate repos/crates, alongside graphkit, marketdata-kit, and ontokit (also extracted from argus, v0.1.0). The crates.io crate named argus remains an unrelated 0.0.0 placeholder owned by neither the account nor this repo."
     crates: []
 
     docs:
@@ -893,6 +893,36 @@ repos:
       last_audit: "2026-10-31"
     _seen:
       last_push: "2026-11-04"
+  alertkit:
+    area: obsv
+    status: support
+    notes: "Rule-based alerting, extracted from the argus intelligence platform; publishes alertkit. Added 2026-11-09 (measured: gh api + crates.io)."
+    crates:
+      - alertkit
+  feedkit:
+    area: obsv
+    status: support
+    notes: "Normalized open-source feed adapters, extracted from the argus intelligence platform; publishes feedkit. Added 2026-11-09 (measured: gh api + crates.io)."
+    crates:
+      - feedkit
+  graphkit:
+    area: obsv
+    status: support
+    notes: "Typed link graph with n-hop queries, extracted from the argus intelligence platform; publishes graphkit. Added 2026-11-09 (measured: gh api + crates.io)."
+    crates:
+      - graphkit
+  marketdata-kit:
+    area: obsv
+    status: support
+    notes: "Market-data adapters (Binance, Alpaca), extracted from the argus intelligence platform; publishes marketdata-kit. Added 2026-11-09 (measured: gh api + crates.io)."
+    crates:
+      - marketdata-kit
+  ontokit:
+    area: obsv
+    status: support
+    notes: "Entity ontology with provenance, extracted from the argus intelligence platform; publishes ontokit. Added 2026-11-09 (measured: gh api + crates.io)."
+    crates:
+      - ontokit
   beat-list:
     area: research
     status: support
