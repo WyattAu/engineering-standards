@@ -8,10 +8,13 @@ Checks the machine-checkable subset of DESIGN.md:
   DS-3  text pairs meet the declared ratio (AA 4.5, AAA 7.0, large 3.0)
   DS-4  ui/large pairs meet 3:1
   DS-9  every alias resolves (no dangling `{token}` references, no cycles)
+  DS-10 the type scale is integer px, monotonic, on one ratio, with leading
+  DS-11 spacing is a 4 px scale, monotonic and bounded
+  DS-12 motion durations sit in their named bands and reduced motion is 0
   DS-19 declared exceptions are non-empty and expired ones fail
 
 Usage:
-    check-design-tokens.py <tokens.json> [--json]
+    check-design-tokens.py <tokens.json> [--json] [--require-scales]
 
 Exit codes: 0 clean, 1 findings, 2 usage or parse error.
 No third-party dependencies: stdlib only (AGENTS.md rule 5).
@@ -139,6 +142,294 @@ def ungated_expiry(node):
     estate = extensions.get("estate") or {}
     raw = estate.get("expires")
     return raw if isinstance(raw, str) else None
+
+
+# Scale rules (DS-10..DS-12). The numbers are the canon, not the document:
+# a token file may not widen them any more than a contrast pair may undercut
+# its floor. Changing one is an ADR (SM-5, SM-6).
+TYPE_MIN_STEPS, TYPE_MAX_STEPS = 4, 8
+TYPE_MIN_PX, TYPE_MAX_PX = 12.0, 72.0
+LEADING_MIN, LEADING_BODY = 1.2, 1.5
+SPACE_MIN_PX, SPACE_MAX_PX = 4.0, 96.0
+SPACE_MIN_STEPS, SPACE_MAX_STEPS = 5, 10
+SPACE_BASE = 4.0
+MOTION_BANDS = {
+    "instant": (0.0, 100.0),
+    "fast": (100.0, 200.0),
+    "base": (200.0, 300.0),
+    "slow": (300.0, 400.0),
+}
+MOTION_CEILING = 400.0
+
+
+class ScaleError(Exception):
+    def __init__(self, code, message):
+        super().__init__(message)
+        self.code = code
+        self.message = message
+
+
+def dimension_px(value, unit_code="type-unit"):
+    """Return a DTCG dimension in px, or raise the finding it deserves."""
+    if isinstance(value, dict):
+        unit = value.get("unit", "px")
+        if unit != "px":
+            raise ScaleError(
+                unit_code,
+                "unit %r is not px: a rem scale drifts with the reader's font size"
+                % (unit,),
+            )
+        value = value.get("value")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ScaleError(unit_code, "value %r is not a number" % (value,))
+    return float(value)
+
+
+def extension(node, key, default=None):
+    estate = ((node.get("$extensions") or {}).get("estate") or {})
+    return estate.get(key, default)
+
+
+def check_type(document, fail):
+    group = document.get("type") or {}
+    sizes = group.get("size")
+    if not isinstance(sizes, dict) or not sizes:
+        return False
+    settings = (group.get("$extensions") or {}).get("estate") or {}
+    base = float(settings.get("base", 16))
+    ratio = float(settings.get("ratio", 1.25))
+    tolerance = float(settings.get("ratioTolerance", 0.05))
+
+    steps = []
+    for role in sorted(sizes):
+        node = sizes[role]
+        if not isinstance(node, dict) or "$value" not in node:
+            fail("type-shape", "type.size.%s: not a token" % role)
+            continue
+        try:
+            px = dimension_px(node["$value"])
+        except ScaleError as exc:
+            fail(exc.code, "type.size.%s: %s" % (role, exc.message))
+            continue
+        steps.append((role, px, node))
+
+    if not TYPE_MIN_STEPS <= len(steps) <= TYPE_MAX_STEPS:
+        fail(
+            "type-count",
+            "%d type steps: the canon allows %d..%d"
+            % (len(steps), TYPE_MIN_STEPS, TYPE_MAX_STEPS),
+        )
+
+    steps.sort(key=lambda step: step[1])
+    previous = None
+    for role, px, node in steps:
+        if px != int(px):
+            fail("type-range", "type.size.%s: %g px is not an integer" % (role, px))
+        if not TYPE_MIN_PX <= px <= TYPE_MAX_PX:
+            fail(
+                "type-range",
+                "type.size.%s: %g px outside %g..%g"
+                % (role, px, TYPE_MIN_PX, TYPE_MAX_PX),
+            )
+        if previous is not None:
+            last_role, last_px = previous
+            if px <= last_px:
+                fail(
+                    "type-order",
+                    "type.size.%s (%g px) is not larger than %s (%g px)"
+                    % (role, px, last_role, last_px),
+                )
+            else:
+                step_ratio = px / last_px
+                if not ratio - tolerance <= step_ratio <= ratio + tolerance:
+                    fail(
+                        "type-ratio",
+                        "type.size.%s: step %.3f off ratio %.2f by more than %.2f"
+                        % (role, step_ratio, ratio, tolerance),
+                    )
+        previous = (role, px)
+
+        leading = extension(node, "lineHeight")
+        if leading is None:
+            fail("type-leading", "type.size.%s: no $extensions.estate.lineHeight" % role)
+            continue
+        if isinstance(leading, bool) or not isinstance(leading, (int, float)):
+            fail("type-leading", "type.size.%s: lineHeight is not a number" % role)
+            continue
+        need = LEADING_BODY if role == "body" else LEADING_MIN
+        if leading < need:
+            fail(
+                "type-leading",
+                "type.size.%s: line-height %.2f below %.2f (DS-10)"
+                % (role, leading, need),
+            )
+
+    if "body" not in sizes:
+        fail("type-body", "type.size.body is required: it anchors the scale")
+        return True
+    try:
+        body_px = dimension_px(sizes["body"]["$value"])
+    except (ScaleError, KeyError, TypeError):
+        return True
+    if body_px != base:
+        fail(
+            "type-body",
+            "type.size.body is %g px but the declared base is %g px"
+            % (body_px, base),
+        )
+    return True
+
+
+def check_space(document, fail):
+    group = document.get("space")
+    if not isinstance(group, dict) or not group:
+        return False
+    values = []
+    for role in sorted(group):
+        if role.startswith("$"):
+            continue
+        node = group[role]
+        if not isinstance(node, dict) or "$value" not in node:
+            fail("space-shape", "space.%s: not a token" % role)
+            continue
+        try:
+            px = dimension_px(node["$value"], "space-unit")
+        except ScaleError as exc:
+            fail(exc.code, "space.%s: %s" % (role, exc.message))
+            continue
+        values.append((role, px))
+        if px % SPACE_BASE != 0:
+            fail(
+                "space-multiple",
+                "space.%s: %g px is not a multiple of %g (DS-11)"
+                % (role, px, SPACE_BASE),
+            )
+        if not SPACE_MIN_PX <= px <= SPACE_MAX_PX:
+            fail(
+                "space-range",
+                "space.%s: %g px outside %g..%g"
+                % (role, px, SPACE_MIN_PX, SPACE_MAX_PX),
+            )
+    if not SPACE_MIN_STEPS <= len(values) <= SPACE_MAX_STEPS:
+        fail(
+            "space-count",
+            "%d spacing steps: the canon allows %d..%d"
+            % (len(values), SPACE_MIN_STEPS, SPACE_MAX_STEPS),
+        )
+    # Spacing roles are semantic names, so their values are checked as a set:
+    # a scale is unique members starting at the base, not an alphabetical order.
+    ordered = sorted(px for _, px in values)
+    if len(set(ordered)) != len(ordered):
+        fail("space-order", "duplicate spacing values: %r" % (ordered,))
+    if ordered and ordered[0] != SPACE_BASE:
+        fail(
+            "space-base",
+            "smallest step is %g px but the scale starts at %g px"
+            % (ordered[0], SPACE_BASE),
+        )
+    return True
+
+
+def check_motion(document, fail):
+    group = document.get("motion")
+    if not isinstance(group, dict) or not group:
+        return False
+
+    durations = group.get("duration") or {}
+    if not isinstance(durations, dict) or not durations:
+        fail("motion-shape", "motion.duration must be a token group")
+        return True
+    if "reduced" not in durations:
+        fail(
+            "motion-reduced",
+            "motion.duration.reduced is required: WCAG 2.3.3 needs a 0 ms path",
+        )
+    for role in sorted(durations):
+        if role.startswith("$"):
+            continue
+        node = durations[role]
+        try:
+            ms = dimension_px_ms(node.get("$value"))
+        except ScaleError as exc:
+            fail(exc.code, "motion.duration.%s: %s" % (role, exc.message))
+            continue
+        if role == "reduced":
+            if ms != 0:
+                fail(
+                    "motion-reduced",
+                    "motion.duration.reduced is %g ms; reduced motion must be 0" % ms,
+                )
+            continue
+        band = MOTION_BANDS.get(role)
+        if band is not None and not band[0] <= ms <= band[1]:
+            fail(
+                "motion-band",
+                "motion.duration.%s: %g ms outside %g..%g"
+                % (role, ms, band[0], band[1]),
+            )
+        if ms > MOTION_CEILING:
+            reason = extension(node, "justification")
+            if not isinstance(reason, str) or not reason.strip():
+                fail(
+                    "motion-justify",
+                    "motion.duration.%s: %g ms over %g needs a justification (DS-12)"
+                    % (role, ms, MOTION_CEILING),
+                )
+
+    easings = group.get("easing") or {}
+    roles = [role for role in sorted(easings) if not role.startswith("$")] if isinstance(easings, dict) else []
+    if not 2 <= len(roles) <= 5:
+        fail(
+            "motion-easing",
+            "%d easing tokens: the canon allows 2..5, all declared" % len(roles),
+        )
+    for role in roles:
+        value = (easings[role] or {}).get("$value")
+        if not (
+            isinstance(value, list)
+            and len(value) == 4
+            and all(
+                isinstance(item, (int, float))
+                and not isinstance(item, bool)
+                and 0.0 <= item <= 1.0
+                for item in value
+            )
+        ):
+            fail(
+                "motion-easing",
+                "motion.easing.%s: expected [x1, y1, x2, y2] with every value in 0..1"
+                % role,
+            )
+    return True
+
+
+def dimension_px_ms(value):
+    if isinstance(value, dict):
+        unit = value.get("unit", "ms")
+        if unit != "ms":
+            raise ScaleError("motion-duration", "unit %r is not ms" % (unit,))
+        value = value.get("value")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ScaleError("motion-duration", "duration %r is not a number" % (value,))
+    return float(value)
+
+
+def check_scales(document, require_groups):
+    findings = []
+
+    def fail(code, message):
+        findings.append({"code": code, "message": message})
+
+    present = {
+        "type scale (DS-10)": check_type(document, fail),
+        "spacing scale (DS-11)": check_space(document, fail),
+        "motion set (DS-12)": check_motion(document, fail),
+    }
+    if require_groups:
+        for name, found in present.items():
+            if not found:
+                fail("missing-scale", "document declares no %s" % name)
+    return findings
 
 
 class Auditor:
@@ -278,8 +569,11 @@ class Auditor:
 def main(argv):
     paths = [arg for arg in argv[1:] if not arg.startswith("--")]
     as_json = "--json" in argv[1:]
+    require_scales = "--require-scales" in argv[1:]
     if len(paths) != 1:
-        sys.stderr.write("usage: check-design-tokens.py <tokens.json> [--json]\n")
+        sys.stderr.write(
+            "usage: check-design-tokens.py <tokens.json> [--json] [--require-scales]\n"
+        )
         return 2
     try:
         with open(paths[0], encoding="utf-8") as handle:
@@ -290,6 +584,7 @@ def main(argv):
 
     auditor = Auditor(document)
     findings = auditor.run()
+    findings.extend(check_scales(document, require_scales))
     if as_json:
         print(json.dumps({"findings": findings, "tokens": len(auditor.tokens)}, indent=2))
     else:

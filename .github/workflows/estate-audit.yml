@@ -180,11 +180,14 @@ jobs:
       - name: Self-test the design-token gate
         run: python scripts/test-check-design-tokens.py
 
+      # --require-scales is what makes the type, spacing and motion groups
+      # mandatory: without it a document that dropped a whole scale would
+      # still pass, because the rules only validate groups that exist.
       - name: Design tokens pass the gate (dark)
-        run: python scripts/check-design-tokens.py tokens/estate-dark.dtcg.json
+        run: python scripts/check-design-tokens.py tokens/estate-dark.dtcg.json --require-scales
 
       - name: Design tokens pass the gate (light)
-        run: python scripts/check-design-tokens.py tokens/estate-light.dtcg.json
+        run: python scripts/check-design-tokens.py tokens/estate-light.dtcg.json --require-scales
 
       - name: Self-test the commit gate
         run: python scripts/test-check-commits.py

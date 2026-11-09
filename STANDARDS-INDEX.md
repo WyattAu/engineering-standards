@@ -26,10 +26,10 @@ printed, never silently passed.
 |---|---|
 | Concerns listed | 57 |
 | With a standard | 49 |
-| With a machine check | 38 |
+| With a machine check | 40 |
 | Gated | 26 |
-| Advisory | 8 |
-| Declared only | 16 |
+| Advisory | 10 |
+| Declared only | 14 |
 | No standard | 7 |
 
 The enforcement rows (gated + advisory + declared + none) sum to the
@@ -106,8 +106,8 @@ assertion this index exists to prevent.
 | Colour-vision deficiency | DESIGN.md | DS-6 | tool:theme-kit tests | gated | 1 crate |
 | Variant derivation | DESIGN.md | DS-7, DS-8 | tool:theme-kit tests | gated | 1 crate |
 | Perceptual ranking | DESIGN.md | DS-5 | tool:theme-kit tests | gated | 1 crate |
-| Typography and spacing scale | DESIGN.md | DS-10, DS-11 | none | declared | 0 |
-| Motion and reduced motion | DESIGN.md | DS-12 | none | declared | 0 |
+| Typography and spacing scale | DESIGN.md | DS-10, DS-11 (`--require-scales`) | scripts/check-design-tokens.py | advisory | 2 documents, 33 tokens each |
+| Motion and reduced motion | DESIGN.md | DS-12 (`--require-scales`) | scripts/check-design-tokens.py | advisory | 2 documents, 4 durations + 3 curves |
 | Icons and accessible names | DESIGN.md | DS-16 | tool:a11y-kit audit | declared | 1 crate |
 | Localisation layout growth | DESIGN.md | DS-18 | none | declared | 1 i18n crate |
 | Visual regression baselines | none | none | none | none | 0 |

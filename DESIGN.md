@@ -1,6 +1,7 @@
 # DESIGN: the visual and interaction canon
 
-> **Status: PROPOSED (v0.1.0, 2026-11-09).** Ratification: ADR-0013.
+> **Status: PROPOSED (v0.2.0, 2026-11-09).** Ratification: ADR-0013;
+> type, spacing and motion gates: ADR-0017.
 > Numeric core: `color-kit` (specs/color-kit.md). Token contract and gate:
 > `theme-kit` (specs/theme-kit.md). This document is the estate-level policy
 > those crates implement, so a surface can be judged without reading crate
@@ -155,43 +156,57 @@ Hue-named tokens are allowed only inside the seed palette layer.
   palette changes. Semantic names survive a rebrand; appearance names are a
   rename project.
 
-## DS-10 Type: scale, measure, leading
+## DS-10 Type: one integer scale per surface, leading attached
 
-**SHOULD.** One modular scale per surface, ratio 1.2 (minor third) for
-dense UI, 1.25 (major third) for prose. Body line-height 1.5 (1.4 minimum
-for dense UI). Prose measure 45 to 75 characters. Tabular figures for
-numeric columns. No text below 12 CSS px, ever.
+**MUST.** Type sizes are `type.size.*` tokens: integer CSS px, 12 to 72, 4
+to 8 steps, all on one ratio. The estate ratio is 1.25, and each
+consecutive step must land within 0.05 of it, because integer rounding
+moves a step by less than that only when the scale is honest. `body` MUST
+equal the declared base (16 px), and every size MUST carry a line height of
+at least 1.2, with `body` at 1.5 or more. Units other than px fail: a rem
+scale drifts with the reader's font size.
 
-- Evidence: `REVIEW` (checklist) plus `MEASURE` (rendered measure width in
-  the visual regression baseline)
-- Why: 45 to 75 characters is the range where saccade cost is lowest;
-  leading below 1.4 measurably slows reading. These are conventions, not
-  laws, so they are `SHOULD` with a number instead of `MUST`.
+- Evidence: `GATE` (`type-order`, `type-range`, `type-ratio`, `type-body`,
+  `type-leading`, `type-unit`)
+- Why: 1.25 is the smallest ratio whose steps stay distinguishable at body
+  size and the largest that still fits five steps between 13 and 31 px.
+  Attaching leading to the size token is what stops 31 px display text from
+  arriving with body leading bolted on in a component. Prose measure (45 to
+  75 characters) and tabular figures stay `REVIEW`: both need a rendered
+  line box, not a token document.
 
 ## DS-11 Spacing is a 4 px base with an 8 px rhythm
 
-**SHOULD.** Spacing and sizing tokens are multiples of 4 px; layout rhythm
-(vertical stacks, card padding, section gaps) uses multiples of 8 px.
-Optical adjustments are allowed at 2 px. Arbitrary values (13 px, 27 px)
-fail review.
+**MUST.** Spacing tokens are integer CSS px, multiples of 4, unique, 5 to
+10 steps, starting at exactly 4 and ending at or below 96. The base (4) and
+the layout rhythm (8) are declared on the `space` group.
+**REVIEW.** Stacks, card padding and section gaps use the multiples of 8
+(8, 16, 24, 32); optical adjustments below the base are not tokens.
 
-- Evidence: `REVIEW` + `TEST` (token set contains only scale members)
-- Why: a single base makes every gap alignable by construction and removes
-  the "nudge it 3 px" negotiation. 4/8 is the smallest pair that survives
-  fractional device pixel ratios.
+- Evidence: `GATE` (`space-multiple`, `space-base`, `space-order`,
+  `space-range`, `space-count`), `REVIEW` (rhythm usage in a surface)
+- Why: a single base makes every gap alignable by construction and ends the
+  "nudge it 3 px" negotiation. 4 and 8 survive fractional device pixel
+  ratios; 13 px never does. The gate sees the scale, not which member a
+  component picked, so rhythm usage is the one part a reader still checks.
 
 ## DS-12 Motion is short, purposeful, and reducible
 
-**SHOULD.** Micro-interactions 100 to 200 ms; transitions 200 to 300 ms;
-nothing over 400 ms except deliberate narrative animation. Easing is a
-declared token, not an inline curve. `prefers-reduced-motion: reduce` MUST
-remove non-essential motion (WCAG 2.3.3).
+**MUST.** Durations are `motion.duration.*` tokens in ms, inside their
+named bands: `instant` 0 to 100, `fast` 100 to 200, `base` 200 to 300,
+`slow` 300 to 400. Nothing above 400 ms without
+`$extensions.estate.justification`. `motion.duration.reduced` MUST be 0 and
+MUST be the path taken under `prefers-reduced-motion: reduce` (WCAG 2.3.3).
+Curves are `motion.easing.*` tokens, 2 to 5 of them, each a cubic-bezier
+with all four values in 0 to 1.
 
-- Evidence: `REVIEW` + `TEST` (reduced-motion path asserted in the
-  component suite)
+- Evidence: `GATE` (`motion-band`, `motion-justify`, `motion-reduced`,
+  `motion-easing`), `TEST` (the reduced-motion path is asserted wherever a
+  surface has a component suite)
 - Why: above ~200 ms an interaction stops feeling like a response; below
   ~100 ms it reads as a jump. Reducing motion is not cosmetic: for
-  vestibular disorders it is the difference between usable and nauseating.
+  vestibular disorders it is the difference between usable and nauseating,
+  which is why the 0 ms token is mandatory rather than advisory.
 
 ## DS-13 State layers are composited, never authored
 
@@ -309,9 +324,36 @@ Both documents are gated in CI. The tightest margin is the accent label at
 4.63:1, which is the one pair a future palette change is most likely to
 break, so it is the one worth watching in review.
 
+## Type, spacing and motion scales
+
+The same two documents carry the non-colour scales, because a surface that
+imports roles without sizes still invents its own type ramp. Measured by
+the gate on 2026-11-09 (33 tokens per document):
+
+| Type step | px | Step ratio | Line height |
+|---|---|---|---|
+| caption | 13 | 1.231 from body | 1.55 |
+| body | 16 | base | 1.50 |
+| title | 20 | 1.250 | 1.40 |
+| heading | 25 | 1.250 | 1.25 |
+| display | 31 | 1.240 | 1.20 |
+
+Every step is `16 * 1.25^n` rounded to an integer, which is why the ratios
+read 1.231 and 1.240 rather than a flat 1.25: the rounding is the price of
+integer px, and the 0.05 tolerance is what makes that honest instead of a
+loophole.
+
+| Scale | Members | Constraint |
+|---|---|---|
+| space | 4, 8, 12, 16, 24, 32, 48, 64 | multiples of 4, base 4, rhythm 8 |
+| duration | 100, 150, 240, 320, 0 (reduced) | bands: instant, fast, base, slow |
+| easing | 3 cubic-beziers | all coordinates in 0..1 |
+
 `scripts/check-design-tokens.py` implements the machine-checkable subset:
-DS-1 (coverage and declared exceptions), DS-3, DS-4, DS-9 (resolution), and
-DS-19. DS-2, DS-5, DS-6, DS-7, DS-8 live in the `color-kit` / `theme-kit`
-test suites; DS-10 to DS-12, DS-14 to DS-18 are `REVIEW` items until a
-visual regression harness exists, and are labelled as such in
-`STANDARDS-INDEX.md`.
+DS-1 (coverage and declared exceptions), DS-3, DS-4, DS-9 (resolution),
+DS-10 to DS-12 (scales and motion), and DS-19. DS-2, DS-5, DS-6, DS-7, DS-8
+live in the `color-kit` / `theme-kit` test suites; DS-14 to DS-18 are
+`REVIEW` items until a visual regression harness exists, and are labelled as
+such in `STANDARDS-INDEX.md`. The `--require-scales` flag is what makes the
+three groups mandatory rather than merely validated when present, and CI
+passes it for both estate documents.
