@@ -135,8 +135,10 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y clang-format
 
       - name: Check formatting
+        env:
+          FORMAT_PATHS: ${{ inputs.format_paths }}
         run: |
-          find ${{ inputs.format_paths }} \
+          find $FORMAT_PATHS \
             \( -name '*.cpp' -o -name '*.hpp' -o -name '*.c' -o -name '*.h' \) -print0 |
             xargs -0 clang-format --dry-run --Werror
 
@@ -177,7 +179,9 @@ jobs:
 
       - name: Benchmark
         if: ${{ inputs.enable_benchmark }}
-        run: ${{ inputs.benchmark_command }}
+        env:
+          BENCHMARK_COMMAND: ${{ inputs.benchmark_command }}
+        run: bash -euo pipefail -c "$BENCHMARK_COMMAND"
 
   # ============================================================================
   # Headless Debug (Clang) — fallback-compiler matrix leg: exercises every
@@ -404,7 +408,9 @@ jobs:
           cmake --build build/headless-debug -j$(nproc)
 
       - name: Run repo live proofs
-        run: ${{ inputs.live_proof_command }}
+        env:
+          LIVE_PROOF_COMMAND: ${{ inputs.live_proof_command }}
+        run: bash -euo pipefail -c "$LIVE_PROOF_COMMAND"
 
   # ============================================================================
   # Documentation links
@@ -429,7 +435,9 @@ jobs:
           restore-keys: cpm-${{ runner.os }}-
 
       - name: Check docs
-        run: ${{ inputs.docs_command }}
+        env:
+          DOCS_COMMAND: ${{ inputs.docs_command }}
+        run: bash -euo pipefail -c "$DOCS_COMMAND"
 
   # ============================================================================
   # Examples — builds the viewport, the one user-facing artifact.
@@ -473,7 +481,9 @@ jobs:
         run: cmake --build build/default -j$(nproc)
 
       - name: Assert on the default-preset build
-        run: ${{ inputs.examples_assert_command }}
+        env:
+          EXAMPLES_ASSERT_COMMAND: ${{ inputs.examples_assert_command }}
+        run: bash -euo pipefail -c "$EXAMPLES_ASSERT_COMMAND"
 
       - name: Upload the built binary
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2

@@ -13,7 +13,8 @@ on:
   schedule:
     - cron: "0 8 * * 5" # Fridays 08:00 UTC
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   zizmor:

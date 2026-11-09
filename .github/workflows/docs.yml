@@ -8,6 +8,6 @@ permissions:
   contents: read
 jobs:
   docs:
-    uses: WyattAu/spec-standards/.github/workflows/docs.yml@main
+    uses: WyattAu/spec-standards/.github/workflows/docs.yml@7b9533b7537b87e01c798723ffae491cc5a5bd25  # main @ 2026-11-09
     with:
       tier: k
