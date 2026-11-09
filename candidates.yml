@@ -1,0 +1,426 @@
+# Candidate registry for ADOPTION.md (AD-1..AD-9).
+#
+# Every value below was read from the GitHub REST API on `measured`; nothing
+# here is remembered. Unknown values are null, never a guess (AD-8).
+# `source` is the exact endpoint the numbers came from, so a reader can re-run
+# one curl and check the row instead of trusting the file.
+#
+# Decisions: adopt | fork | rebuild | follow | hold | reject.
+# Review dates are at most 180 days after `measured` (AD-9).
+
+measured: "2026-11-09"
+method: >-
+  Candidate set assembled from GitHub trending and self-hosted/fun-project
+  lists in early November 2026, then narrowed to projects that would touch an
+  estate concern (toolchain, crawling, accessibility, design, agents, metrics,
+  hosting). Star counts, licences, push dates and open issues come from
+  `GET /repos/{owner}/{repo}`; language is the API's `language` field.
+
+candidates:
+  - name: nushell/nushell
+    url: https://github.com/nushell/nushell
+    decision: follow
+    license: MIT
+    license_verified: true
+    stars: 41067
+    pushed: "2026-11-08"
+    open_issues: 1459
+    language: Rust
+    source: https://api.github.com/repos/nushell/nushell
+    rationale: >-
+      A structured shell is a better ergonomic model than POSIX text streams
+      for estate scripts, but no crate or gate consumes it today, so reading
+      the pipeline design is the whole commitment.
+    review_by: "2027-02-07"
+
+  - name: slint-ui/slint
+    url: https://github.com/slint-ui/slint
+    decision: hold
+    license: null
+    license_verified: false
+    stars: 24481
+    pushed: "2026-11-09"
+    open_issues: 751
+    language: Rust
+    source: https://api.github.com/repos/slint-ui/slint
+    rationale: >-
+      The most credible Rust UI toolkit candidate for a future L2, but the API
+      reports NOASSERTION, so the licence is unknown rather than permissive.
+    open_question: >-
+      Which terms actually apply: the dual GPL-3.0-or-commercial licence the
+      project documents, or something else in the tree? Read LICENSE files
+      before any design work, because a GPL-3.0 outcome forbids adoption.
+    review_by: "2027-02-07"
+
+  - name: astral-sh/ruff
+    url: https://github.com/astral-sh/ruff
+    decision: follow
+    license: MIT
+    license_verified: true
+    stars: 51120
+    pushed: "2026-11-09"
+    open_issues: 2293
+    language: Rust
+    source: https://api.github.com/repos/astral-sh/ruff
+    rationale: >-
+      A Rust linter and formatter would replace the Python-side tooling in
+      OmniPython, but the current checks are already gated; adopting it is a
+      speed decision, not a correctness one, and needs a measurement first.
+    review_by: "2027-02-07"
+
+  - name: zed-industries/zed
+    url: https://github.com/zed-industries/zed
+    decision: hold
+    license: null
+    license_verified: false
+    stars: 94516
+    pushed: "2026-11-09"
+    open_issues: 3076
+    language: Rust
+    source: https://api.github.com/repos/zed-industries/zed
+    rationale: >-
+      The editor is the strongest available reference for a Rust text stack and
+      GPU rendering, and it is exactly the kind of code worth reimplementing
+      rather than copying, if the licence turns out to be GPL.
+    open_question: >-
+      What do the LICENSE-* files say? The API reports NOASSERTION while the
+      project is widely described as GPL-3.0; that distinction decides whether
+      this is study material (AD-3) or nothing at all.
+    review_by: "2027-02-07"
+
+  - name: vercel-labs/agent-browser
+    url: https://github.com/vercel-labs/agent-browser
+    decision: follow
+    license: Apache-2.0
+    license_verified: true
+    stars: 47867
+    pushed: "2026-11-08"
+    open_issues: 524
+    language: Rust
+    source: https://api.github.com/repos/vercel-labs/agent-browser
+    rationale: >-
+      A Rust browser-automation layer is the natural missing half of crawlkit,
+      which fetches but cannot drive a page; follow it until a site gate
+      actually needs click-through checks.
+    review_by: "2027-02-07"
+
+  - name: vercel-labs/agent-desktop
+    url: https://github.com/vercel-labs/agent-desktop
+    decision: reject
+    license: Apache-2.0
+    license_verified: true
+    stars: 19829
+    pushed: "2026-11-08"
+    open_issues: 208
+    language: Rust
+    source: https://api.github.com/repos/vercel-labs/agent-desktop
+    rationale: >-
+      Desktop computer-use is outside the estate: every surface here is a
+      crate, a static site or a CLI, and no layer would ever call it.
+    review_by: "2027-05-08"
+
+  - name: max-sixty/worktrunk
+    url: https://github.com/max-sixty/worktrunk
+    decision: hold
+    license: null
+    license_verified: false
+    stars: 12166
+    pushed: "2026-11-09"
+    open_issues: 58
+    language: Rust
+    source: https://api.github.com/repos/max-sixty/worktrunk
+    rationale: >-
+      The worktree-per-agent workflow is the closest candidate to how this
+      estate already works, which makes it the one most worth a licence check
+      before any code is read closely.
+    open_question: >-
+      The API reports NOASSERTION; confirm the licence, then check whether the
+      existing scripts already cover the workflow so the answer is a rebuild
+      rather than a dependency.
+    review_by: "2027-02-07"
+
+  - name: morluto/rea
+    url: https://github.com/morluto/rea
+    decision: follow
+    license: MIT
+    license_verified: true
+    stars: 444504
+    pushed: "2026-11-09"
+    open_issues: 1698
+    language: TypeScript
+    source: https://api.github.com/repos/morluto/rea
+    rationale: >-
+      At 444k stars it is the most visible agent project of the season and the
+      best signal for what people expect from agent tooling, but it is a
+      TypeScript application and cannot land in a Rust layer (AD-6).
+    review_by: "2027-02-07"
+
+  - name: cloudflare/security-audit-skill
+    url: https://github.com/cloudflare/security-audit-skill
+    decision: follow
+    license: MIT
+    license_verified: true
+    stars: 67129
+    pushed: "2026-09-14"
+    open_issues: 120
+    language: JavaScript
+    source: https://api.github.com/repos/cloudflare/security-audit-skill
+    rationale: >-
+      Its checklist is a useful second opinion on our security gates even
+      though a skill is prompt text and cannot replace a gate; take the
+      checklist, not the code, and note upstream has not pushed in 56 days.
+    review_by: "2027-02-07"
+
+  - name: meta/astryx
+    url: https://github.com/meta/astryx
+    decision: follow
+    license: MIT
+    license_verified: true
+    stars: 17571
+    pushed: "2026-11-09"
+    open_issues: 634
+    language: TypeScript
+    source: https://api.github.com/repos/meta/astryx
+    rationale: >-
+      An independent design system with a documented role vocabulary is the
+      best external check on DESIGN.md's closed 12-role choice; the canon stays
+      ours, so this is study material and never a fork.
+    review_by: "2027-02-07"
+
+  - name: thedotmack/claude-mem
+    url: https://github.com/thedotmack/claude-mem
+    decision: follow
+    license: Apache-2.0
+    license_verified: true
+    stars: 115024
+    pushed: "2026-11-09"
+    open_issues: 97
+    language: TypeScript
+    source: https://api.github.com/repos/thedotmack/claude-mem
+    rationale: >-
+      Persistent agent memory is the concern AGENTS.md and LOOP.md handle by
+      hand; follow how it stores and retrieves context before inventing an
+      estate format for it.
+    review_by: "2027-02-07"
+
+  - name: D4Vinci/Scrapling
+    url: https://github.com/D4Vinci/Scrapling
+    decision: reject
+    license: BSD-3-Clause
+    license_verified: true
+    stars: 100046
+    pushed: "2026-11-08"
+    open_issues: 19
+    language: Python
+    source: https://api.github.com/repos/D4Vinci/Scrapling
+    rationale: >-
+      It occupies crawlkit-engine's concern in a language the estate does not
+      use for substrate; SPEC-CORE SC-1 forbids two homes for one concern, and
+      the Python core would need a second toolchain to gate.
+    review_by: "2027-05-08"
+
+  - name: cjpais/Handy
+    url: https://github.com/cjpais/Handy
+    decision: reject
+    license: MIT
+    license_verified: true
+    stars: 38087
+    pushed: "2026-11-07"
+    open_issues: 220
+    language: Rust
+    source: https://api.github.com/repos/cjpais/Handy
+    rationale: >-
+      Speech-to-text input is a desktop accessibility feature with no consumer
+      among the ~175 estate crates, and a model bundle would break the
+      reproducibility rules for build artifacts.
+    review_by: "2027-05-08"
+
+  - name: janhq/jan
+    url: https://github.com/janhq/jan
+    decision: reject
+    license: null
+    license_verified: false
+    stars: 45616
+    pushed: "2026-11-09"
+    open_issues: 573
+    language: Rust
+    source: https://api.github.com/repos/janhq/jan
+    rationale: >-
+      A local chat client has no estate surface, and because the API reports
+      NOASSERTION there is not even a licence to reason about; nothing here
+      would change if it were MIT.
+    review_by: "2027-05-08"
+
+  - name: deepseek-ai/deepseek-harness
+    url: https://github.com/deepseek-ai/deepseek-harness
+    decision: follow
+    license: MIT
+    license_verified: true
+    stars: 276771
+    pushed: "2026-11-04"
+    open_issues: 0
+    language: TypeScript
+    source: https://api.github.com/repos/deepseek-ai/deepseek-harness
+    rationale: >-
+      276k stars with zero open issues is a signal to watch rather than trust;
+      follow it until it has a release history old enough to judge, since the
+      current numbers mostly measure the launch.
+    review_by: "2027-02-07"
+
+  - name: louislam/uptime-kuma
+    url: https://github.com/louislam/uptime-kuma
+    decision: reject
+    license: MIT
+    license_verified: true
+    stars: 93393
+    pushed: "2026-11-09"
+    open_issues: 862
+    language: JavaScript
+    source: https://api.github.com/repos/louislam/uptime-kuma
+    rationale: >-
+      uptime-watchdog and healthkit already own availability checks, and a Node
+      service would add a runtime to the estate for a capability it has.
+    review_by: "2027-05-08"
+
+  - name: coollabsio/coolify
+    url: https://github.com/coollabsio/coolify
+    decision: reject
+    license: Apache-2.0
+    license_verified: true
+    stars: 65809
+    pushed: "2026-11-08"
+    open_issues: 241
+    language: PHP
+    source: https://api.github.com/repos/coollabsio/coolify
+    rationale: >-
+      PHP control panels solve a deployment model this estate does not use;
+      sites ship through GitHub Actions to static hosts, so there is nothing
+      for it to replace.
+    review_by: "2027-05-08"
+
+  - name: sissbruecker/linkding
+    url: https://github.com/sissbruecker/linkding
+    decision: reject
+    license: MIT
+    license_verified: true
+    stars: 11400
+    pushed: "2026-10-26"
+    open_issues: 261
+    language: Python
+    source: https://api.github.com/repos/sissbruecker/linkding
+    rationale: >-
+      Bookmarking is a personal product, not an estate concern; no layer would
+      consume it and no gate would exercise it.
+    review_by: "2027-05-08"
+
+  - name: docusealco/docuseal
+    url: https://github.com/docusealco/docuseal
+    decision: reject
+    license: AGPL-3.0
+    license_verified: true
+    stars: 19024
+    pushed: "2026-11-02"
+    open_issues: 132
+    language: Ruby
+    source: https://api.github.com/repos/docusealco/docuseal
+    rationale: >-
+      AGPL-3.0 forecloses both adoption and a fork (AD-3), and e-signature is
+      outside the estate's product scope, so there is no idea worth a rebuild
+      either.
+    review_by: "2027-05-08"
+
+  - name: m1k1o/neko
+    url: https://github.com/m1k1o/neko
+    decision: reject
+    license: Apache-2.0
+    license_verified: true
+    stars: 22622
+    pushed: "2026-11-07"
+    open_issues: 148
+    language: Go
+    source: https://api.github.com/repos/m1k1o/neko
+    rationale: >-
+      Browser-in-a-container is a hosting service, and the estate runs no media
+      infrastructure to attach it to; the Go stack is also a third runtime to
+      gate.
+    review_by: "2027-05-08"
+
+  - name: immich-app/immich
+    url: https://github.com/immich-app/immich
+    decision: reject
+    license: AGPL-3.0
+    license_verified: true
+    stars: 118582
+    pushed: "2026-11-09"
+    open_issues: 677
+    language: TypeScript
+    source: https://api.github.com/repos/immich-app/immich
+    rationale: >-
+      AGPL-3.0 rules out absorbing any of it (AD-3), and photo management is
+      not a concern the estate has; its value here is as a reference for
+      self-hosted release discipline.
+    review_by: "2027-05-08"
+
+  - name: openinterpreter/openinterpreter
+    url: https://github.com/openinterpreter/openinterpreter
+    decision: follow
+    license: Apache-2.0
+    license_verified: true
+    stars: 68840
+    pushed: "2026-11-09"
+    open_issues: 37
+    language: Rust
+    source: https://api.github.com/repos/openinterpreter/openinterpreter
+    rationale: >-
+      The only candidate here that is both Rust and an agent harness, so its
+      sandboxing and tool-call design are relevant to estate tooling even
+      though no crate would link against it.
+    review_by: "2027-02-07"
+
+  - name: AccessKit/accesskit
+    url: https://github.com/AccessKit/accesskit
+    decision: adopt
+    license: BSD-3-Clause
+    license_verified: true
+    layer: L1
+    stars: 1555
+    pushed: "2026-11-06"
+    open_issues: 76
+    language: Rust
+    source: https://api.github.com/repos/AccessKit/accesskit
+    rationale: >-
+      Already the accessibility substrate beneath a11y-kit, so the registry
+      records the decision that was made implicitly; BSD-3-Clause is verified
+      and the layer is substrate, below every UI concern.
+    review_by: "2027-05-08"
+
+  - name: prometheus/prometheus
+    url: https://github.com/prometheus/prometheus
+    decision: reject
+    license: Apache-2.0
+    license_verified: true
+    stars: 67575
+    pushed: "2026-11-09"
+    open_issues: 1099
+    language: Go
+    source: https://api.github.com/repos/prometheus/prometheus
+    rationale: >-
+      metrics-kit exports OpenTelemetry and a Go scrape server would put a
+      second metrics pipeline in the estate; the exposition format is already
+      reachable through the exporter.
+    review_by: "2027-05-08"
+
+  - name: ollama/ollama
+    url: https://github.com/ollama/ollama
+    decision: reject
+    license: MIT
+    license_verified: true
+    stars: 186402
+    pushed: "2026-11-08"
+    open_issues: 4622
+    language: Go
+    source: https://api.github.com/repos/ollama/ollama
+    rationale: >-
+      A model runtime is infrastructure the estate deliberately does not own,
+      and 4,622 open issues price the support cost of pretending otherwise.
+    review_by: "2027-05-08"

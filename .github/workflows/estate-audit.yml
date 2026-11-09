@@ -26,6 +26,10 @@ on:
     - "scripts/check-commits.py"
     - "scripts/test-check-commits.py"
     - "scripts/audit-repo-settings.py"
+    - "ADOPTION.md"
+    - "candidates.yml"
+    - "scripts/check-adoption.py"
+    - "scripts/test-check-adoption.py"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -197,6 +201,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python scripts/audit-repo-settings.py --limit 10
+
+      # A candidate registry is only worth keeping if it cannot quietly rot
+      # into guesses: the gate rejects unverified licences, expired review
+      # dates and decisions outside the closed vocabulary (AD-1..AD-9).
+      - name: Self-test the adoption gate
+        run: python scripts/test-check-adoption.py
+
+      - name: Candidate registry conforms to ADOPTION.md
+        run: python scripts/check-adoption.py
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py

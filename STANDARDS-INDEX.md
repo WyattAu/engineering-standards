@@ -24,11 +24,11 @@ printed, never silently passed.
 
 | Metric | Value |
 |---|---|
-| Concerns listed | 56 |
-| With a standard | 48 |
-| With a machine check | 37 |
+| Concerns listed | 57 |
+| With a standard | 49 |
+| With a machine check | 38 |
 | Gated | 26 |
-| Advisory | 7 |
+| Advisory | 8 |
 | Declared only | 16 |
 | No standard | 7 |
 
@@ -53,6 +53,7 @@ assertion this index exists to prevent.
 | One pin per action | AGENTS.md | one SHA per action | scripts/check-pin-consistency.py | gated | loop-owned repos |
 | Duplicate major versions | docs/ | no two majors | scripts/check-duplicate-majors.py | gated | kit repos |
 | Licensing compliance | REUSE.toml | REUSE 3.3 | tool:reuse lint | gated | 1/125 checkouts carry REUSE.toml |
+| Whether third-party code may enter the estate | ADOPTION.md | AD-1..AD-9 | scripts/check-adoption.py | advisory | 25 candidates, 1 adopted (2026-11-09) |
 
 ## Supply chain and releases
 
