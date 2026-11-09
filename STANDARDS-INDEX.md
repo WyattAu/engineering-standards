@@ -15,6 +15,11 @@ numbers instead of belief. One row per concern. `Enforcement` is one of:
 of the section. A gate adopted by zero repositories is `declared` no matter
 how good the script is.
 
+A `Standard` or `Gate` in another canon repo is written `ext:<repo>/<path>`.
+It is verified when the sibling checkout is present and listed as unverified
+when it is not, because a single-repo CI clone cannot see it. Unverified is
+printed, never silently passed.
+
 ## Totals
 
 | Metric | Value |
@@ -39,8 +44,8 @@ assertion this index exists to prevent.
 |---|---|---|---|---|---|
 | How a standard is written, versioned, evidenced | STANDARDS-MODEL.md | SM-1..SM-11 | scripts/check-standards-index.py | gated | 44 rows checked |
 | Whole-estate build invariants | OMNI-CORE.md | 1..12, 11b..11j | scripts/estate-audit.py | gated | 289 registered repos |
-| Spec and doc invariants | ../spec-standards/SPEC-CORE.md | SC-1..SC-11 | ../spec-standards/scripts/doc-lint.sh | gated | 183 repos with docs block |
-| Prose register and characters | ../spec-standards/DOC-STYLE.md | 1..5 | ../spec-standards/scripts/doc-lint.sh | gated | tier k: 171 repos |
+| Spec and doc invariants | ext:spec-standards/SPEC-CORE.md | SC-1..SC-11 | ext:spec-standards/scripts/doc-lint.sh | gated | 183 repos with docs block |
+| Prose register and characters | ext:spec-standards/DOC-STYLE.md | 1..5 | ext:spec-standards/scripts/doc-lint.sh | gated | tier k: 171 repos |
 | Repo and crate naming | docs/naming-convention.md | Rule 1..6 | scripts/check-repo-crate-alignment.py | gated | estate-wide |
 | Dependency layers | docs/layers.md | Rule 1..5 | scripts/check-layers.py | gated | 175 crates classified |
 | Feature compatibility | docs/feature-compatibility.md | matrix | scripts/check-features.py | gated | kit repos |
@@ -81,12 +86,12 @@ assertion this index exists to prevent.
 
 | Concern | Standard | Requirements | Gate | Enforcement | Adoption |
 |---|---|---|---|---|---|
-| Truth table per repo | ../spec-standards/SPEC-CORE.md | SC-1, §3 | ../spec-standards/scripts/doc-lint.sh | gated | tier k: 171 |
-| REQ traceability | ../spec-standards/SPEC-CORE.md | SC-4, §4 | ../spec-standards/scripts/doc-lint.sh | advisory | tier S |
-| Spec lifecycle stamps | ../spec-standards/SPEC-CORE.md | SC-5, §5 | ../spec-standards/scripts/doc-lint.sh | gated | all tiers |
-| Executable oracle | ../spec-standards/SPEC-CORE.md | SC-6, §6 | ../spec-standards/scripts/spec-audit.py | gated | tier S |
-| Registry of record | ../spec-standards/SPEC-CORE.md | SC-7, §7 | ../spec-standards/scripts/spec-audit.py | gated | 183 docs blocks |
-| llms.txt projection | ../spec-standards/SPEC-CORE.md | SC-10 | scripts/check-llms-links.py | gated | 8/125 checkouts |
+| Truth table per repo | ext:spec-standards/SPEC-CORE.md | SC-1, §3 | ext:spec-standards/scripts/doc-lint.sh | gated | tier k: 171 |
+| REQ traceability | ext:spec-standards/SPEC-CORE.md | SC-4, §4 | ext:spec-standards/scripts/doc-lint.sh | advisory | tier S |
+| Spec lifecycle stamps | ext:spec-standards/SPEC-CORE.md | SC-5, §5 | ext:spec-standards/scripts/doc-lint.sh | gated | all tiers |
+| Executable oracle | ext:spec-standards/SPEC-CORE.md | SC-6, §6 | ext:spec-standards/scripts/spec-audit.py | gated | tier S |
+| Registry of record | ext:spec-standards/SPEC-CORE.md | SC-7, §7 | ext:spec-standards/scripts/spec-audit.py | gated | 183 docs blocks |
+| llms.txt projection | ext:spec-standards/SPEC-CORE.md | SC-10 | scripts/check-llms-links.py | gated | 8/125 checkouts |
 | Agent contract file | OMNI-CORE.md | 11i | scripts/check-llms-links.py | gated | 20/125 AGENTS.md |
 | ADR practice | OMNI-CORE.md | 9 | none | declared | 5/125 have docs/adr |
 
