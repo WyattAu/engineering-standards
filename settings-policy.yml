@@ -1,0 +1,29 @@
+# Required GitHub repository settings (OMNI-CORE 10 security defaults, 11g
+# trunk discipline). Read by `scripts/audit-repo-settings.py`; never by
+# `estate-audit.py`, so the registry schema is untouched.
+#
+# `merge_queue` is deliberately absent: GitHub exposes no REST endpoint for
+# it, so the audit would be guessing. 11g remains declared-only for now and
+# STANDARDS-INDEX.md says so (AGENTS.md rule 7: a gate must be able to lie).
+
+schema: wyattau.settings-policy/1
+
+# Every audited repo must have these on. `false` means "not required here",
+# which is an explicit choice, not an omission.
+require:
+  branch_protection: true
+  secret_scanning: true
+  push_protection: true
+  dependabot_security_updates: true
+
+# Repos whose status makes the requirement meaningless for now. The status
+# names are estate.yml's own vocabulary, so this file cannot drift from it.
+skip_status:
+  - personal
+  - fork
+  - dormant
+
+# Per-repo waivers. Each needs an owner, a reason, and an expiry; an expired
+# waiver fails the audit (STANDARDS-MODEL SM-6: declared, owned, dated,
+# fail-closed).
+exemptions: {}

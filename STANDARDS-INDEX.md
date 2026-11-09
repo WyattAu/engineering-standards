@@ -25,12 +25,12 @@ printed, never silently passed.
 | Metric | Value |
 |---|---|
 | Concerns listed | 56 |
-| With a standard | 44 |
-| With a machine check | 33 |
+| With a standard | 48 |
+| With a machine check | 37 |
 | Gated | 26 |
-| Advisory | 3 |
-| Declared only | 15 |
-| No standard | 12 |
+| Advisory | 7 |
+| Declared only | 16 |
+| No standard | 7 |
 
 The enforcement rows (gated + advisory + declared + none) sum to the
 concern count. "With a machine check" does not: a rule can have a working
@@ -62,10 +62,10 @@ assertion this index exists to prevent.
 | Dependency adoption cooldown | OMNI-CORE.md | 11d | none | declared | 53/125 checkouts |
 | Update operations (grouping, auto-merge, stale closure) | none | none | none | none | 620 open PRs |
 | Runner hardening (egress policy) | OMNI-CORE.md | 11j | none | declared | 0/125 checkouts |
-| Merge queue discipline | OMNI-CORE.md | 11g | none | none | 0/125 workflows react to merge_group |
-| Branch protection and required checks | none | none | none | none | 0/8 sampled repos protected |
-| Secret scanning and push protection | none | none | none | none | 3/5 sampled enabled, 2/5 off |
-| Dependabot security updates | none | none | none | none | 0/5 sampled |
+| Merge queue discipline | OMNI-CORE.md | 11g | none | declared | 0/125 react to merge_group; no REST endpoint |
+| Branch protection and required checks | OMNI-CORE.md | 10 | scripts/audit-repo-settings.py | advisory | 0/5 sampled (2026-11-09) |
+| Secret scanning and push protection | OMNI-CORE.md | 10 | scripts/audit-repo-settings.py | advisory | 5/5 and 5/5 (n=5, 2026-11-09) |
+| Dependabot security updates | OMNI-CORE.md | 10 | scripts/audit-repo-settings.py | advisory | 0/5 sampled (2026-11-09) |
 | Provenance and attestation | OMNI-CORE.md | 11c | .github/workflows/attest.yml | declared | 6/125 checkouts |
 | SBOM and VEX | OMNI-CORE.md | 11h | none | declared | 1/125 checkouts |
 | Reproducibility input record | REPRODUCIBILITY.md | 11b | scripts/buildinfo.sh | advisory | 3 crates hash-verified |
@@ -122,7 +122,7 @@ assertion this index exists to prevent.
 | CODEOWNERS coverage | OMNI-CORE.md | 8 | none | declared | 16/125 |
 | SECURITY.md | OMNI-CORE.md | 8 | none | declared | 65/125 |
 | Issue and PR templates | OMNI-CORE.md | 8 | none | declared | 17/125, 16/125 |
-| Commit convention and signing | none | none | none | none | 0 gates |
+| Commit convention and signing | COMMITS.md | CS-1..CS-9 | scripts/check-commits.py | advisory | 15 findings/6 commits, 0 signed (2026-11-09) |
 
 ## How the numbers move
 

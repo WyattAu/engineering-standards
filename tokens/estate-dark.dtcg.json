@@ -1,0 +1,100 @@
+{
+  "$description": "Estate seed palette, dark variant. The 12 roles are theme-kit's closed vocabulary (REQ-THM-002); component and state tokens are derived, never authored (DESIGN.md DS-1, DS-7, DS-13).",
+  "$extensions": {
+    "estate": {
+      "contrast": [
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.on-surface}",
+          "name": "body"
+        },
+        {
+          "bg": "{color.surface-raised}",
+          "fg": "{color.on-surface}",
+          "name": "body-raised"
+        },
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.on-surface-muted}",
+          "name": "muted"
+        },
+        {
+          "bg": "{color.accent}",
+          "fg": "{color.on-accent}",
+          "name": "accent-label"
+        },
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.warn}",
+          "name": "warn"
+        },
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.error}",
+          "name": "error"
+        },
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.success}",
+          "name": "success"
+        },
+        {
+          "bg": "{color.selection}",
+          "fg": "{color.on-surface}",
+          "name": "selection-body"
+        },
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.border}",
+          "kind": "ui",
+          "name": "edge"
+        },
+        {
+          "bg": "{color.surface}",
+          "fg": "{color.focus-ring}",
+          "kind": "ui",
+          "name": "focus"
+        }
+      ]
+    }
+  },
+  "$type": "color",
+  "color": {
+    "accent": {
+      "$value": "#1f6feb"
+    },
+    "border": {
+      "$value": "#6e7681"
+    },
+    "error": {
+      "$value": "#f85149"
+    },
+    "focus-ring": {
+      "$value": "#58a6ff"
+    },
+    "on-accent": {
+      "$value": "#ffffff"
+    },
+    "on-surface": {
+      "$value": "#e6edf3"
+    },
+    "on-surface-muted": {
+      "$value": "#9aa4b2"
+    },
+    "selection": {
+      "$value": "#264f78"
+    },
+    "success": {
+      "$value": "#3fb950"
+    },
+    "surface": {
+      "$value": "#0d1117"
+    },
+    "surface-raised": {
+      "$value": "#161b22"
+    },
+    "warn": {
+      "$value": "#d29922"
+    }
+  }
+}

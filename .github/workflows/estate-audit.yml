@@ -20,6 +20,12 @@ on:
     - "STANDARDS-INDEX.md"
     - "DESIGN.md"
     - "STANDARDS-MODEL.md"
+    - "COMMITS.md"
+    - "settings-policy.yml"
+    - "tokens/**"
+    - "scripts/check-commits.py"
+    - "scripts/test-check-commits.py"
+    - "scripts/audit-repo-settings.py"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -164,8 +170,33 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install dependencies
+        run: python -m pip install --quiet pyyaml
+
       - name: Self-test the design-token gate
         run: python scripts/test-check-design-tokens.py
+
+      - name: Design tokens pass the gate (dark)
+        run: python scripts/check-design-tokens.py tokens/estate-dark.dtcg.json
+
+      - name: Design tokens pass the gate (light)
+        run: python scripts/check-design-tokens.py tokens/estate-light.dtcg.json
+
+      - name: Self-test the commit gate
+        run: python scripts/test-check-commits.py
+
+      # Advisory on purpose: history predates the contract (the measured
+      # baseline is in COMMITS.md), so only new commits are expected to
+      # satisfy it. Removing the guard before the history rolls over would
+      # make the job permanently red and train people to ignore it.
+      - name: Commit contract on recent history (advisory)
+        continue-on-error: true
+        run: python scripts/check-commits.py --range HEAD~5..HEAD
+
+      - name: Repository settings, sampled (advisory)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/audit-repo-settings.py --limit 10
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py

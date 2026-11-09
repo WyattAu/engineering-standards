@@ -285,6 +285,30 @@ and reports declared ones on every run. Expired exceptions fail.
 | Product surface | Baseline + DS-5, DS-7, DS-8, DS-10, DS-11, DS-12, DS-15, DS-16 |
 | Public or regulated surface | Product + DS-14, DS-17, DS-18 and a recorded `MEASURE` snapshot per release |
 
+## Reference palette
+
+`tokens/estate-dark.dtcg.json` and `tokens/estate-light.dtcg.json` are the
+canonical seed documents: twelve roles each, exactly theme-kit's closed
+vocabulary (REQ-THM-002), ten declared pairs each (REQ-THM-003). Measured
+by the gate on 2026-11-09, not asserted:
+
+| Pair | Dark | Light | Floor |
+|---|---|---|---|
+| body on surface | 16.02:1 | 15.80:1 | 4.5:1 |
+| body on raised surface | 14.64:1 | 14.84:1 | 4.5:1 |
+| muted on surface | 7.50:1 | 6.11:1 | 4.5:1 |
+| on-accent on accent | 4.63:1 | 5.19:1 | 4.5:1 |
+| warn on surface | 7.50:1 | 4.87:1 | 4.5:1 |
+| error on surface | 5.65:1 | 5.36:1 | 4.5:1 |
+| success on surface | 7.45:1 | 5.08:1 | 4.5:1 |
+| body on selection | 7.19:1 | 10.65:1 | 4.5:1 |
+| border on surface | 4.12:1 | 4.55:1 | 3:1 |
+| focus ring on surface | 7.49:1 | 5.19:1 | 3:1 |
+
+Both documents are gated in CI. The tightest margin is the accent label at
+4.63:1, which is the one pair a future palette change is most likely to
+break, so it is the one worth watching in review.
+
 `scripts/check-design-tokens.py` implements the machine-checkable subset:
 DS-1 (coverage and declared exceptions), DS-3, DS-4, DS-9 (resolution), and
 DS-19. DS-2, DS-5, DS-6, DS-7, DS-8 live in the `color-kit` / `theme-kit`
