@@ -27,8 +27,8 @@ printed, never silently passed.
 | Concerns listed | 57 |
 | With a standard | 49 |
 | With a machine check | 45 |
-| Gated | 30 |
-| Advisory | 11 |
+| Gated | 31 |
+| Advisory | 10 |
 | Declared only | 9 |
 | No standard | 7 |
 
@@ -60,7 +60,7 @@ assertion this index exists to prevent.
 | Concern | Standard | Requirements | Gate | Enforcement | Adoption |
 |---|---|---|---|---|---|
 | Workflow security (pins, least privilege, injection) | OMNI-CORE.md | 10 | tool:zizmor | gated | 6/6 shared workflows clean |
-| Dependency adoption cooldown | DEPENDENCY-COOLDOWN.md | CD-1..CD-3 (OMNI-CORE 11d) | scripts/check-dependabot-cooldown.py | advisory | 53/125 checkouts (estate sample) |
+| Dependency adoption cooldown | DEPENDENCY-COOLDOWN.md | CD-1..CD-3 (OMNI-CORE 11d) | scripts/check-dependabot-cooldown.py | gated | 53/125 checkouts (estate sample) |
 | Update operations (grouping, auto-merge, stale closure) | none | none | none | none | 620 open PRs |
 | Runner hardening (egress policy) | OMNI-CORE.md | 11j | none | declared | 0/125 checkouts |
 | Merge queue discipline | OMNI-CORE.md | 11g | none | declared | 0/125 react to merge_group; no REST endpoint |

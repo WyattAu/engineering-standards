@@ -244,16 +244,12 @@ jobs:
       - name: Repo hygiene files conform to REPO-HYGIENE.md
         run: python scripts/check-hygiene.py --path .
 
+      # Dependency cooldown (CD-1..CD-3) gated (ADR-0020 graduated 2026-11-10).
       - name: Self-test the dependency cooldown gate
         run: python scripts/test-check-dependabot-cooldown.py
 
       - name: Dependabot cooldowns conform to DEPENDENCY-COOLDOWN.md
-        run: |
-          # Advisory for one loop (ADR-0020, AGENTS.md rule 3); the
-          # standards index records this as advisory. The step fails on
-          # real findings so the log is explicit; the job is
-          # continue-on-error while advisory.
-          python scripts/check-dependabot-cooldown.py --path .
+        run: python scripts/check-dependabot-cooldown.py --path .
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py

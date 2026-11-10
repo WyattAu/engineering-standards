@@ -1,6 +1,7 @@
 # 0020: Dependency update cooldown is a gated contract
 
-- **Status**: Proposed
+- **Status**: Accepted (2026-11-09). Advisory for one loop completed
+  (CI 42758017750, cfa334c, standards-index green); graduated to `gated`.
 - **Date**: 2026-11-09
 - **Deciders**: Wyatt Au
 - **Relates to**: ADR-0013 (standards index is authoritative), OMNI-CORE.md invariant 11d, DEPENDENCY-COOLDOWN.md

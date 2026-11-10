@@ -451,6 +451,22 @@ repos:
     _seen:
       last_push: "2026-11-04"
       docs-core: 0.1.1
+  docs-search:
+    area: docs
+    status: support
+    notes: "Rust, Apache-2.0. Client-side search index for docs sites: FST + roaring postings, BM25-shaped ranking, wasm32-clean. docs-core extension program (REQ-Q). Measured 2026-11-10 via gh api (public, not archived/fork)."
+
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-10"
+    _seen:
+      last_push: "2026-11-10"
+      private: false
+
   font-conformance:
     area: ui
     status: personal

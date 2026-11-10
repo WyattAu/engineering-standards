@@ -6,6 +6,17 @@ Material change means version bump + ADR + entry here
 (`STANDARDS-MODEL.md` SM-7, SPEC-CORE §5, AGENTS.md rule 6). A version bump
 lands in the header of every document that changed.
 
+## 0.8.0 - 2026-11-10
+
+- ADR-0020 graduated: dependency adoption cooldown
+  (`DEPENDENCY-COOLDOWN.md` / `check-dependabot-cooldown.py`, CD-1..CD-3,
+  OMNI-CORE 11d) moved `advisory` -> `gated` after a clean loop (CI
+  42758017750, cfa334c, standards-index green). Totals 45
+  machine-checked, 31 gated, 10 advisory, 9 declared.
+- `estate.yml`: registered `docs-search` (public, Rust, Apache-2.0,
+  docs/support, measured 2026-11-10 via gh api) to clear the audit error
+  "repo is missing from estate.yml" seen on 42758017750/42758240703.
+
 ## 0.7.0 - 2026-11-09
 
 - `DEPENDENCY-COOLDOWN.md` (CD-1..CD-3, PROPOSED): Dependabot update

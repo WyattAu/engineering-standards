@@ -1,6 +1,6 @@
 # DEPENDENCY-COOLDOWN: update cooldown policy
 
-> **Status: PROPOSED (v0.1.0, 2026-11-09).** Ratification: ADR-0020.
+> **Status: ACCEPTED (v0.1.0, 2026-11-09).** Ratification: ADR-0020.
 > Implements [OMNI-CORE.md](./OMNI-CORE.md) invariant 11d.
 
 Package releases must age before automated adoption so that a compromised
