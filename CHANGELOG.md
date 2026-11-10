@@ -6,6 +6,20 @@ Material change means version bump + ADR + entry here
 (`STANDARDS-MODEL.md` SM-7, SPEC-CORE §5, AGENTS.md rule 6). A version bump
 lands in the header of every document that changed.
 
+## 0.7.0 - 2026-11-09
+
+- `DEPENDENCY-COOLDOWN.md` (CD-1..CD-3, PROPOSED): Dependabot update
+  cooldown contract per OMNI-CORE 11d (github-actions >= 7d default;
+  other ecosystems >= 30/7/3d semver or default >= 30).
+- `scripts/check-dependabot-cooldown.py` (+ self-test, 12 fixtures,
+  PASS): per-repo stdlib gate (`--path`, `--json`) for dependabot.yml.
+- ADR-0020 `docs/adr/0020-dependency-cooldown-is-gated.md` (Proposed);
+  `estate-audit.yml` runs the check as advisory for one loop
+  (AGENTS.md rule 3). This repo conforms (`.github/dependabot.yml`).
+- `STANDARDS-INDEX.md`: dependency adoption cooldown moved
+  `declared` -> `advisory`. Totals 45 machine-checked, 30 gated,
+  11 advisory, 9 declared.
+
 ## 0.6.0 - 2026-11-09
 
 - ADR-0019 graduated: repo hygiene (`REPO-HYGIENE.md` / `check-hygiene.py`,
