@@ -28,8 +28,8 @@ printed, never silently passed.
 | With a standard | 49 |
 | With a machine check | 45 |
 | Gated | 31 |
-| Advisory | 10 |
-| Declared only | 9 |
+| Advisory | 11 |
+| Declared only | 8 |
 | No standard | 7 |
 
 The enforcement rows (gated + advisory + declared + none) sum to the
@@ -67,7 +67,7 @@ assertion this index exists to prevent.
 | Branch protection and required checks | OMNI-CORE.md | 10 | scripts/audit-repo-settings.py | advisory | 0/5 sampled (2026-11-09) |
 | Secret scanning and push protection | OMNI-CORE.md | 10 | scripts/audit-repo-settings.py | advisory | 5/5 and 5/5 (n=5, 2026-11-09) |
 | Dependabot security updates | OMNI-CORE.md | 10 | scripts/audit-repo-settings.py | advisory | 0/5 sampled (2026-11-09) |
-| Provenance and attestation | OMNI-CORE.md | 11c | .github/workflows/attest.yml | declared | 6/125 checkouts |
+| Provenance and attestation | PROVENANCE.md | PV-1..PV-3 (OMNI-CORE 11c) | scripts/check-provenance.py | advisory | 6/125 checkouts (estate sample) |
 | SBOM and VEX | OMNI-CORE.md | 11h | none | declared | 1/125 checkouts |
 | Reproducibility input record | REPRODUCIBILITY.md | 11b | scripts/buildinfo.sh | advisory | 3 crates hash-verified |
 | Release policy and changelog | OMNI-CORE.md | 11 | scripts/release-gate.py | gated | 82/125 have CHANGELOG |

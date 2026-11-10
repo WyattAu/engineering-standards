@@ -6,6 +6,22 @@ Material change means version bump + ADR + entry here
 (`STANDARDS-MODEL.md` SM-7, SPEC-CORE §5, AGENTS.md rule 6). A version bump
 lands in the header of every document that changed.
 
+## 0.9.0 - 2026-11-10
+
+- `PROVENANCE.md` (PV-1..PV-3, PROPOSED): build provenance contract per
+  OMNI-CORE 11c; requires an attestation workflow (using
+  `actions/attest-build-provenance` with `id-token`/`attestations` write)
+  or an explicit `.provenance-scope` declaring `distributable: none`.
+- `scripts/check-provenance.py` (+ self-test, 9 fixtures, PASS):
+  per-repo stdlib gate (`--path`, `--json`). This repo conforms via
+  `.github/workflows/attest.yml`.
+- ADR-0021 `docs/adr/0021-provenance-is-gated.md` (Proposed);
+  `estate-audit.yml` runs the check as advisory for one loop
+  (AGENTS.md rule 3).
+- `STANDARDS-INDEX.md`: provenance and attestation moved
+  `declared` -> `advisory`. Totals 45 machine-checked, 31 gated,
+  11 advisory, 8 declared.
+
 ## 0.8.0 - 2026-11-10
 
 - ADR-0020 graduated: dependency adoption cooldown

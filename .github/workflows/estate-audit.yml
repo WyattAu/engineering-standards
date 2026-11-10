@@ -45,6 +45,11 @@ on:
     - "scripts/check-dependabot-cooldown.py"
     - "scripts/test-check-dependabot-cooldown.py"
     - ".github/dependabot.yml"
+    - "PROVENANCE.md"
+    - "scripts/check-provenance.py"
+    - "scripts/test-check-provenance.py"
+    - ".provenance-scope"
+    - ".github/workflows/attest.yml"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -250,6 +255,17 @@ jobs:
 
       - name: Dependabot cooldowns conform to DEPENDENCY-COOLDOWN.md
         run: python scripts/check-dependabot-cooldown.py --path .
+
+      - name: Self-test the provenance gate
+        run: python scripts/test-check-provenance.py
+
+      - name: Provenance conforms to PROVENANCE.md
+        run: |
+          # Advisory for one loop (ADR-0021, AGENTS.md rule 3); the
+          # standards index records this as advisory. The step fails on
+          # real findings so the log is explicit; the job is
+          # continue-on-error while advisory.
+          python scripts/check-provenance.py --path .
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py
