@@ -34,6 +34,13 @@ on:
     - "scripts/test-check-adr.py"
     - "DECISIONS.md"
     - "docs/adr/**"
+    - "scripts/check-hygiene.py"
+    - "scripts/test-check-hygiene.py"
+    - "REPO-HYGIENE.md"
+    - "SECURITY.md"
+    - ".github/CODEOWNERS"
+    - ".github/PULL_REQUEST_TEMPLATE.md"
+    - ".github/ISSUE_TEMPLATE/**"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -225,6 +232,17 @@ jobs:
 
       - name: ADR records conform to DECISIONS.md
         run: python scripts/check-adr.py
+
+      - name: Self-test the repo hygiene gate
+        run: python scripts/test-check-hygiene.py
+
+      - name: Repo hygiene files conform to REPO-HYGIENE.md
+        run: |
+          # Advisory for one loop (ADR-0019, AGENTS.md rule 3); the
+          # standards index records this as advisory. The step fails on
+          # real findings so the log is explicit; the job is
+          # continue-on-error while advisory.
+          python scripts/check-hygiene.py --path .
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py

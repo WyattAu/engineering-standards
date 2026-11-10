@@ -6,6 +6,24 @@ Material change means version bump + ADR + entry here
 (`STANDARDS-MODEL.md` SM-7, SPEC-CORE §5, AGENTS.md rule 6). A version bump
 lands in the header of every document that changed.
 
+## 0.4.0 - 2026-11-09
+
+- `REPO-HYGIENE.md` (RH-1..RH-4, PROPOSED): vulnerability reporting path
+  (SECURITY.md), CODEOWNERS ownership rules, issue templates, and pull
+  request templates; implements OMNI-CORE 8.
+- `scripts/check-hygiene.py` (+ `scripts/test-check-hygiene.py`, 10
+  fixtures, PASS): per-repo presence/shape gate, stdlib-only, `--path`.
+- ADR-0019 `docs/adr/0019-repo-hygiene-is-gated.md` (Proposed);
+  `estate-audit.yml` runs the self-test and check as advisory for one loop
+  (AGENTS.md rule 3).
+- Reference templates added (`templates/CODEOWNERS`,
+  `templates/PULL_REQUEST_TEMPLATE.md`, `templates/ISSUE_TEMPLATE/*`) and
+  this repo adopts root `SECURITY.md`, `.github/CODEOWNERS`,
+  `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/*`.
+- `STANDARDS-INDEX.md`: CODEOWNERS, SECURITY.md, and issue/PR templates
+  moved `declared` -> `advisory` (REPO-HYGIENE.md / `check-hygiene.py`).
+  Totals 44 machine-checked, 14 advisory, 10 declared.
+
 ## 0.3.0 (2026-11-09)
 
 ### Added
