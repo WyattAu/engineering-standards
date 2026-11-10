@@ -226,7 +226,7 @@ jobs:
         run: python scripts/check-adoption.py
 
       # ADR records are a format contract (DC-1..DC-8): filename, status,
-      # ISO date, required sections. Advisory for one loop (ADR-0018).
+      # ISO date, required sections. Gated (ADR-0018 graduated 2026-11-09).
       - name: Self-test the ADR gate
         run: python scripts/test-check-adr.py
 

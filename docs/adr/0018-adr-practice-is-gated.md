@@ -1,7 +1,7 @@
 # ADR-0018: ADR practice is a gated format contract
 
-- **Status**: Proposed (2026-11-09). Ratification pending; `standards-index`
-  stays advisory for one loop (AGENTS.md rule 3).
+- **Status**: Accepted (2026-11-09). Advisory for one loop completed
+  (CI 42725718935, 577a49d); graduated to `gated` in `STANDARDS-INDEX.md`.
 - **Date**: 2026-11-09
 - **Amends**: nothing (OMNI-CORE 9 names an ADR directory; this standard
   defines the record contract)

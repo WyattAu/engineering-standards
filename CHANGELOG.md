@@ -6,6 +6,13 @@ Material change means version bump + ADR + entry here
 (`STANDARDS-MODEL.md` SM-7, SPEC-CORE §5, AGENTS.md rule 6). A version bump
 lands in the header of every document that changed.
 
+## 0.5.0 - 2026-11-09
+
+- ADR-0018 graduated: ADR practice (`DECISIONS.md` / `check-adr.py`,
+  DC-1..DC-8) moved `advisory` -> `gated` in `STANDARDS-INDEX.md` after
+  one clean loop (CI 42725718935, 577a49d). Adoption measured at 18
+  records, 0 findings. Totals 44 machine-checked, 27 gated, 13 advisory.
+
 ## 0.4.0 - 2026-11-09
 
 - `REPO-HYGIENE.md` (RH-1..RH-4, PROPOSED): vulnerability reporting path

@@ -27,8 +27,8 @@ printed, never silently passed.
 | Concerns listed | 57 |
 | With a standard | 49 |
 | With a machine check | 44 |
-| Gated | 26 |
-| Advisory | 14 |
+| Gated | 27 |
+| Advisory | 13 |
 | Declared only | 10 |
 | No standard | 7 |
 
@@ -94,7 +94,7 @@ assertion this index exists to prevent.
 | Registry of record | ext:spec-standards/SPEC-CORE.md | SC-7, §7 | ext:spec-standards/scripts/spec-audit.py | gated | 183 docs blocks |
 | llms.txt projection | ext:spec-standards/SPEC-CORE.md | SC-10 | scripts/check-llms-links.py | gated | 8/125 checkouts |
 | Agent contract file | OMNI-CORE.md | 11i | scripts/check-llms-links.py | gated | 20/125 AGENTS.md |
-| ADR practice | DECISIONS.md | DC-1..DC-8 (OMNI-CORE 9) | scripts/check-adr.py | advisory | 16 records, 0 findings |
+| ADR practice | DECISIONS.md | DC-1..DC-8 (OMNI-CORE 9) | scripts/check-adr.py | gated | 18 records, 0 findings (2026-11-09) |
 
 ## Design and accessibility
 
