@@ -2895,6 +2895,12 @@ repos:
     _seen:
       last_push: "2026-11-01"
       percentile-kit: 1.0.0
+  peregrine:
+    area: app
+    status: orphan
+    notes: "Multi-platform Matrix client: correct E2EE (UTD cluster), split-engine store, latency budgets as release gates; TUI first then desktop/web/mobile. Design scaffold 2026-11-10; protocol substrate = matrix-rust-sdk, spike pending."
+    _seen:
+      last_push: "2026-11-10"
   phys-maths-gypt-notes:
     area: docs
     status: personal
