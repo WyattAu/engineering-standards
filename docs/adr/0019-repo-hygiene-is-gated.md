@@ -1,6 +1,7 @@
 # 0019: Repo hygiene files are gated by contract
 
-- **Status**: Proposed
+- **Status**: Accepted (2026-11-09). Advisory for one loop completed
+  (CI 42725718935, 577a49d; 42728537738, 654f303); graduated to `gated`.
 - **Date**: 2026-11-09
 - **Deciders**: Wyatt Au
 - **Relates to**: ADR-0013 (standards index is authoritative), ADR-0018 (ADR practice gated), OMNI-CORE.md invariant 8

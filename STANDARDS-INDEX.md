@@ -27,8 +27,8 @@ printed, never silently passed.
 | Concerns listed | 57 |
 | With a standard | 49 |
 | With a machine check | 44 |
-| Gated | 27 |
-| Advisory | 13 |
+| Gated | 30 |
+| Advisory | 10 |
 | Declared only | 10 |
 | No standard | 7 |
 
@@ -120,9 +120,9 @@ assertion this index exists to prevent.
 | Incident response and on-call | none | none | none | none | 0 |
 | Privacy and data retention | none | none | none | none | 0 |
 | Code of conduct and governance | none | none | none | none | 7/125 |
-| CODEOWNERS coverage | REPO-HYGIENE.md | RH-2 (OMNI-CORE 8) | scripts/check-hygiene.py | advisory | 16/125 (estate sample) |
-| SECURITY.md | REPO-HYGIENE.md | RH-1 (OMNI-CORE 8) | scripts/check-hygiene.py | advisory | 65/125 (estate sample) |
-| Issue and PR templates | REPO-HYGIENE.md | RH-3, RH-4 (OMNI-CORE 8) | scripts/check-hygiene.py | advisory | 17/125, 16/125 (estate sample) |
+| CODEOWNERS coverage | REPO-HYGIENE.md | RH-2 (OMNI-CORE 8) | scripts/check-hygiene.py | gated | 16/125 (estate sample) |
+| SECURITY.md | REPO-HYGIENE.md | RH-1 (OMNI-CORE 8) | scripts/check-hygiene.py | gated | 65/125 (estate sample) |
+| Issue and PR templates | REPO-HYGIENE.md | RH-3, RH-4 (OMNI-CORE 8) | scripts/check-hygiene.py | gated | 17/125, 16/125 (estate sample) |
 | Commit convention and signing | COMMITS.md | CS-1..CS-9 | scripts/check-commits.py | advisory | 15 findings/6 commits, 0 signed (2026-11-09) |
 
 ## How the numbers move

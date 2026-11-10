@@ -233,16 +233,12 @@ jobs:
       - name: ADR records conform to DECISIONS.md
         run: python scripts/check-adr.py
 
+      # Repo hygiene (RH-1..RH-4) gated (ADR-0019 graduated 2026-11-09).
       - name: Self-test the repo hygiene gate
         run: python scripts/test-check-hygiene.py
 
       - name: Repo hygiene files conform to REPO-HYGIENE.md
-        run: |
-          # Advisory for one loop (ADR-0019, AGENTS.md rule 3); the
-          # standards index records this as advisory. The step fails on
-          # real findings so the log is explicit; the job is
-          # continue-on-error while advisory.
-          python scripts/check-hygiene.py --path .
+        run: python scripts/check-hygiene.py --path .
 
       - name: Every concern's standard and gate must exist
         run: python scripts/check-standards-index.py

@@ -1,6 +1,6 @@
 # REPO-HYGIENE: repository housekeeping files
 
-> **Status: PROPOSED (v0.1.0, 2026-11-09).** Ratification: ADR-0019.
+> **Status: ACCEPTED (v0.1.0, 2026-11-09).** Ratification: ADR-0019.
 > Implements [OMNI-CORE.md](./OMNI-CORE.md) invariant 8 ("GitHub
 > housekeeping: ... CODEOWNERS, issue templates, PR template, SECURITY.md,
 > ... hygiene is not per-repo taste").
