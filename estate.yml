@@ -528,6 +528,23 @@ repos:
     _seen:
       last_push: "2026-11-11"
       docs-proof: 0.1.0
+  docs-compiler:
+    area: docs
+    status: support
+    notes: "Rust, Apache-2.0. The composition CLI (L3): include-symbol (docs-symbols), witness (docs-witness), lean-check (out-of-process lean + docs-proof, sorry-guarded), island fences to static HTML via docs-core. Dedicated elan CI job runs the REQ-P2 oracle against a pinned leanprover/lean4:v4.35.0 fixture. docs-core extension program. Published 0.1.0 2026-11-11."
+    crates:
+      - docs-compiler
+
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-11"
+    _seen:
+      last_push: "2026-11-11"
+      docs-compiler: 0.1.0
   font-conformance:
     area: ui
     status: personal
@@ -1785,7 +1802,7 @@ repos:
     notes: "Remote agentic coding sandbox."
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   clock:
     area: conc
     status: dormant
