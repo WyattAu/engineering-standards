@@ -286,7 +286,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-10"
   EvergreenShims:
     area: infra
     status: infra
@@ -457,7 +457,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
       docs-core: 0.1.1
   docs-search:
     area: docs
@@ -475,6 +475,24 @@ repos:
       last_audit: "2026-11-10"
     _seen:
       last_push: "2026-11-10"
+      docs-search: 0.1.0
+  docs-symbols:
+    area: docs
+    status: support
+    notes: "Rust, Apache-2.0. Symbol-anchored source extraction: tree-sitter resolution of a::b::c paths through modules and impls, byte-exact spans, position-independent anchor IDs (fnv1a64 over lang+path). Rust grammar only in 0.1; native-only by design (extraction is build-time). docs-core extension program (REQ-S). Published 0.1.0 2026-11-11."
+    crates:
+      - docs-symbols
+
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-11"
+    _seen:
+      last_push: "2026-11-11"
+      docs-symbols: 0.1.0
   docs-witness:
     area: docs
     status: support
@@ -492,6 +510,7 @@ repos:
 
     _seen:
       last_push: "2026-11-10"
+      docs-witness: 0.1.0
   font-conformance:
     area: ui
     status: personal
@@ -941,7 +960,7 @@ repos:
     crates:
       - alertkit
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-10"
       alertkit: 0.1.0
   feedkit:
     area: obsv
@@ -950,7 +969,7 @@ repos:
     crates:
       - feedkit
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-10"
       feedkit: 0.1.0
   graphkit:
     area: obsv
@@ -959,7 +978,7 @@ repos:
     crates:
       - graphkit
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-10"
       graphkit: 0.1.0
   marketdata-kit:
     area: obsv
@@ -968,7 +987,7 @@ repos:
     crates:
       - marketdata-kit
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-10"
       marketdata-kit: 0.1.0
   ontokit:
     area: obsv
@@ -977,7 +996,7 @@ repos:
     crates:
       - ontokit
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-10"
       ontokit: 0.1.0
   beat-list:
     area: research
@@ -1466,7 +1485,7 @@ repos:
     notes: "Keyboard-driven web environment (Servo)."
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   api-types:
     area: data
     status: support
@@ -1987,7 +2006,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   envstack:
     area: obsv
     status: orphan
