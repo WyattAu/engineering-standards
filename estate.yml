@@ -74,58 +74,67 @@ repos:
     status: infra
     notes: "The estate kit-server pattern as a library: MCP stdio serve loop, JSON-RPC framing, tool-catalog trait. Used by memory-kit, github-kit, filesystem-kit, time-kit."
     _seen:
-      last_push: "2026-11-07"
+      last_push: "2026-11-09"
+      private: true
   time-kit:
     area: dx
     status: infra
     notes: "Estate MCP time server (mcp-kit-core native): timezone-correct current time and timezone conversion via the IANA database."
-    _seen:
-      last_push: "2026-11-07"
 
+    _seen:
+      last_push: "2026-11-08"
+      private: true
   git-kit:
     area: dx
     status: infra
     notes: "Estate MCP git server (mcp-kit-core native): the mcp-server-git tool surface (14 tools, repo_path on every call) wrapping the git CLI."
     _seen:
-      last_push: "2026-11-07"
+      last_push: "2026-11-08"
+      private: true
   mcp-fetch-kit:
     area: dx
     status: infra
     notes: "Estate MCP fetch server (mcp-kit-core native): GET a URL, return readable text - HTML converted (scripts/styles/nav stripped, entities decoded)."
     _seen:
-      last_push: "2026-11-07"
+      last_push: "2026-11-08"
+      private: true
   sequential-thinking-kit:
     area: dx
     status: infra
     notes: "Estate MCP scratchpad server (mcp-kit-core native): drop-in shape of mcp-server-sequential-thinking. Sessions are per-server-lifetime."
-    _seen:
-      last_push: "2026-11-07"
 
+    _seen:
+      last_push: "2026-11-08"
+      private: true
   filesystem-kit:
     area: dx
     status: infra
     notes: "Estate MCP filesystem server: the third-party filesystem server's API drop-in with an allowed-roots guard (canonicalize, ':'-separated roots, default $HOME:/tmp/opencode). One Rust binary, no npx."
     _seen:
-      last_push: "2026-11-07"
+      last_push: "2026-11-08"
+      private: true
   github-kit:
     area: dx
     status: infra
     notes: "Estate MCP GitHub server: repos, issues, PRs, actions, code search over the GitHub REST API - one Rust binary, no npx/docker, no mid-session restarts (replaces github-mcp-server, whose restarts churned the tool catalog)."
     _seen:
-      last_push: "2026-11-06"
+      last_push: "2026-11-08"
+      private: true
   memory-kit:
     area: dx
     status: infra
     notes: "Estate MCP memory server: SQLite knowledge graph, drop-in API-compatible with mcp-server-memory (Node), which timed out under parallel-agent load - one static binary, starts in <10ms."
     _seen:
-      last_push: "2026-11-07"
+      last_push: "2026-11-08"
+      private: true
   osint-kit:
     area: dx
     status: infra
     notes: "Estate MCP OSINT server (mcp-kit-core native): keyless network-recon subset (14 tools) of the third-party osint server's 37 - dns_lookup/reverse, whois (slim), cert_transparency, subdomains_cert, wayback, http_headers, security_headers_audit, ip_info, bgp_asn_info; keyed sources (shodan/virustotal/securitytrails/censys) land when keys are provisioned via the key-file pattern."
-    _seen:
-      last_push: "2026-11-08"
 
+    _seen:
+      last_push: "2026-11-09"
+      private: true
   fresco:
     area: ui
     status: support
@@ -147,15 +156,14 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-09"
-      fresco: 0.7.14
+      last_push: "2026-11-10"
   mcp-sentinel:
     area: auth
     status: support
     notes: "MCP supply-chain integrity gate: config IoC scanning (Deadbugz rules), tool-definition hash pinning + drift verify on tamper-audit chains. Infra-critical per beat-list. Added 2026-11-02."
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-07"
   mcp-fleet-doctor:
     area: dx
     status: support
@@ -201,7 +209,7 @@ repos:
       status: current
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-09"
   chisel-doc:
     area: app
     status: fork
@@ -278,7 +286,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
   EvergreenShims:
     area: infra
     status: infra
@@ -449,12 +457,14 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
       docs-core: 0.1.1
   docs-search:
     area: docs
     status: support
-    notes: "Rust, Apache-2.0. Client-side search index for docs sites: FST + roaring postings, BM25-shaped ranking, wasm32-clean. docs-core extension program (REQ-Q). Measured 2026-11-10 via gh api (public, not archived/fork)."
+    notes: "Rust, Apache-2.0. Client-side search index for docs sites: FST + roaring postings, BM25-shaped ranking, wasm32-clean. docs-core extension program (REQ-Q). Measured 2026-11-10 via gh api (public, not archived/fork). Published 0.1.0 2026-11-10."
+    crates:
+      - docs-search
 
     docs:
       tier: k
@@ -465,8 +475,23 @@ repos:
       last_audit: "2026-11-10"
     _seen:
       last_push: "2026-11-10"
-      private: false
+  docs-witness:
+    area: docs
+    status: support
+    notes: "Rust, Apache-2.0. Deterministic WASI execution witnesses: fresh wasmtime engine per run, fuel-bounded, capacity-bounded stdout, serializable payload with engine provenance. wasmtime >=36.0.3 (RUSTSEC-2025-0118 blocking; profiling/threads features off so no shared memories exist). docs-core extension program (REQ-W). Published 0.1.0 2026-11-10."
+    crates:
+      - docs-witness
 
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-10"
+
+    _seen:
+      last_push: "2026-11-10"
   font-conformance:
     area: ui
     status: personal
@@ -488,7 +513,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-06"
   invoice-kit:
     area: money
     status: core
@@ -569,7 +594,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
   vat-return:
     area: money
     status: core
@@ -843,7 +868,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
       private: true
   vat-mtd:
     area: money
@@ -908,44 +933,59 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
   alertkit:
     area: obsv
     status: support
     notes: "Rule-based alerting, extracted from the argus intelligence platform; publishes alertkit. Added 2026-11-09 (measured: gh api + crates.io)."
     crates:
       - alertkit
+    _seen:
+      last_push: "2026-11-09"
+      alertkit: 0.1.0
   feedkit:
     area: obsv
     status: support
     notes: "Normalized open-source feed adapters, extracted from the argus intelligence platform; publishes feedkit. Added 2026-11-09 (measured: gh api + crates.io)."
     crates:
       - feedkit
+    _seen:
+      last_push: "2026-11-09"
+      feedkit: 0.1.0
   graphkit:
     area: obsv
     status: support
     notes: "Typed link graph with n-hop queries, extracted from the argus intelligence platform; publishes graphkit. Added 2026-11-09 (measured: gh api + crates.io)."
     crates:
       - graphkit
+    _seen:
+      last_push: "2026-11-09"
+      graphkit: 0.1.0
   marketdata-kit:
     area: obsv
     status: support
     notes: "Market-data adapters (Binance, Alpaca), extracted from the argus intelligence platform; publishes marketdata-kit. Added 2026-11-09 (measured: gh api + crates.io)."
     crates:
       - marketdata-kit
+    _seen:
+      last_push: "2026-11-09"
+      marketdata-kit: 0.1.0
   ontokit:
     area: obsv
     status: support
     notes: "Entity ontology with provenance, extracted from the argus intelligence platform; publishes ontokit. Added 2026-11-09 (measured: gh api + crates.io)."
     crates:
       - ontokit
+    _seen:
+      last_push: "2026-11-09"
+      ontokit: 0.1.0
   beat-list:
     area: research
     status: support
     notes: "Standing registry of competitive targets: trending repos + critical infrastructure gaps, scored for estate leverage (mcp-integrity-sentinel flagged infra-critical). Weekly sweep. Added 2026-11-01."
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-07"
   bot-kit:
     area: app
     status: support
@@ -969,7 +1009,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-06"
   homebite-scraper:
     area: app
     status: support
@@ -977,7 +1017,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       private: true
   outreachkit:
     area: app
@@ -986,7 +1026,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-10-30"
+      last_push: "2026-11-09"
       private: true
   standards:
     area: docs
@@ -1011,7 +1051,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-06"
   vat-rules:
     area: money
     status: core
@@ -1059,7 +1099,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-09"
   deploy-webhook-rs:
     area: infra
     status: support
@@ -1185,7 +1225,7 @@ repos:
     notes: "cabal multi-package + nix GHC."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-08"
   OmniInfra-template:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1194,7 +1234,7 @@ repos:
     notes: "OpenTofu + conftest/OPA."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-08"
   OmniLaTeX-CV:
     area: docs
     status: dormant
@@ -1240,7 +1280,7 @@ repos:
     notes: "Python starter; description still the placeholder."
 
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
   OmniR-template:
     area: dx
     status: template
@@ -1256,7 +1296,7 @@ repos:
     notes: "Derived repo verifying the OmniPython update channel (ADR-0001); template-managed."
 
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
   omni-copier-e2e:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1332,21 +1372,21 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-07"
   Tachyon:
     area: app
     status: dormant
     notes: "JIT documentation server."
 
     _seen:
-      last_push: "2026-09-13"
+      last_push: "2026-11-08"
   uofg_sml_soc_docs:
     area: personal
     status: personal
     notes: "Private TeX repo for University of Glasgow small-open-source-contributions paperwork. Not part of the published library estate; recorded so the audit stops reporting it as missing."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-09"
       private: true
   WyattAu:
     area: docs
@@ -1354,7 +1394,7 @@ repos:
     notes: "Profile repo."
 
     _seen:
-      last_push: "2026-10-23"
+      last_push: "2026-11-06"
   WyattsNotes:
     area: docs
     status: dormant
@@ -1411,7 +1451,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-07"
       actor-kit: 0.2.7
   aether-core:
     area: app
@@ -1419,14 +1459,14 @@ repos:
     notes: "Open core logic for aether."
 
     _seen:
-      last_push: "2026-11-05"
+      last_push: "2026-11-10"
   aileron:
     area: app
     status: orphan
     notes: "Keyboard-driven web environment (Servo)."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
   api-types:
     area: data
     status: support
@@ -1509,7 +1549,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       tamper-audit: 0.2.3
   axum-server:
     area: net
@@ -1585,7 +1625,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-08"
       blobkit: 0.4.3
   book-kit:
     area: conc
@@ -1619,7 +1659,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
       breaker: 2.0.2
   cachekit:
     area: data
@@ -1636,7 +1676,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       cache-pal: 0.5.0
   cachyos_sys_dotfiles:
     area: infra
@@ -1644,7 +1684,7 @@ repos:
     notes: "Personal CachyOS dotfiles."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
   can-core:
     area: data
     status: support
@@ -1677,7 +1717,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-07"
       cas-kit: 1.0.0
   cf-worker-utils:
     area: net
@@ -1685,7 +1725,7 @@ repos:
     notes: "Cloudflare Worker helpers."
 
     _seen:
-      last_push: "2026-08-30"
+      last_push: "2026-11-08"
   chaos-kit:
     area: obsv
     status: core
@@ -1701,7 +1741,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-10"
       chaos-kit: 0.1.2
   clawdius:
     area: app
@@ -1709,7 +1749,7 @@ repos:
     notes: "Remote agentic coding sandbox."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
   clock:
     area: conc
     status: dormant
@@ -1797,7 +1837,7 @@ repos:
       - crawlkit-plugin-sdk
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       crawlkit-engine: 2.0.0
       crawlkit-plugin-sdk: 1.0.0
   crdt-demo:
@@ -1888,7 +1928,7 @@ repos:
     notes: "Fork of morluto/rea (MIT), seeded 60149282fcfc 2026-10-31; agent RE bridge, sandboxed providers + tamper-evident evidence."
 
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-07"
   docs-pipeline:
     area: data
     status: support
@@ -1929,6 +1969,9 @@ repos:
     notes: "Estate MCP web-search server (mcp-kit-core native): DuckDuckGo HTML endpoint, no API key. Returns title/url/snippet triples. Detects and reports DDG bot-challenge pages as MCP errors instead of returning junk. Added 2026-11-07."
 
 
+    _seen:
+      last_push: "2026-11-08"
+      private: true
   engineering-standards:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1944,7 +1987,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
   envstack:
     area: obsv
     status: orphan
@@ -1985,7 +2028,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-05"
+      last_push: "2026-11-10"
   eventbus:
     area: data
     status: support
@@ -2009,7 +2052,7 @@ repos:
     notes: "Self-hosted file storage platform."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-07"
   ferro-fresco-spike:
     area: ui
     status: support
@@ -2040,7 +2083,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       fetch-kit: 0.2.3
       resilient-fetch: 0.1.1
   flag-kit:
@@ -2252,13 +2295,15 @@ repos:
     notes: "Personal site."
 
     _seen:
-      last_push: "2026-07-26"
+      last_push: "2026-11-10"
   hydrated-site:
     area: ui
     status: support
     notes: "Personal site + intelligence dashboard: Astro 5 + SolidJS 1.9 + Rust/WASM widgets (16 modules), Cloudflare Pages + Workers, guestbook KV. Dual-published: canonical wyattau.com (Cloudflare Pages) + GitHub Pages mirror with canonical redirect. Added 2026-11-07."
 
 
+    _seen:
+      last_push: "2026-11-07"
   i18n-kit:
     area: data
     status: support
@@ -2498,7 +2543,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-07"
       leptos-leaflet-wyatt: 0.1.2
   leptos-macro:
     area: ui
@@ -2551,7 +2596,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       leptos-sparkline: 0.1.1
   leptos-stale-indicator:
     area: ui
@@ -2610,7 +2655,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
       mailkit: 1.0.0
   media-kit:
     area: data
@@ -2644,7 +2689,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
       metrics-kit: 1.0.0
   model-router:
     area: app
@@ -2678,7 +2723,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       decimal-money: 1.1.2
   double-entry:
     area: money
@@ -2727,7 +2772,7 @@ repos:
     notes: "Fork of cjpais/Handy (MIT), seeded 7bfb2e2c934b 2026-10-31; offline dictation, Wayland-first, voice suite planned. Rebrand required before distribution (upstream trademark clause)."
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-06"
   oauth-toolkit:
     area: auth
     status: support
@@ -2765,7 +2810,7 @@ repos:
     notes: "Fork of FujiwaraChoki/supoclip (AGPL-3.0), seeded 4bc76f83b342 2026-10-31; local-first clip pipeline, Rust render planned. Fork keeps AGPL-3.0."
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-07"
   os-core:
     area: research
     status: support
@@ -2778,7 +2823,7 @@ repos:
       status: draft
       last_audit: "2026-11-08"
     _seen:
-      last_push: "2026-11-08"
+      last_push: "2026-11-10"
   otel-stack:
     area: obsv
     status: dormant
@@ -2805,7 +2850,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       otelkit: 3.0.1
   outbox-kit:
     area: net
@@ -2822,7 +2867,7 @@ repos:
       last_audit: "2026-10-31"
 
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
       outbox-kit: 0.2.2
   outrider:
     area: app
@@ -2830,7 +2875,7 @@ repos:
     notes: "Fork of Panniantong/Agent-Reach (MIT), seeded 14c213405669 2026-10-31; agent web-access channels, Rust hot path planned. Converts crawlkit + aileron orphans."
 
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-06"
   paginate:
     area: data
     status: support
@@ -2846,7 +2891,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       api-paginate: 0.2.0
   pediment:
     area: ui
@@ -2966,7 +3011,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-06"
       policy-kit: 0.1.1
   polyfont:
     area: ui
@@ -3017,6 +3062,9 @@ repos:
     notes: "Async-friendly QUIC implementation in Rust (upstream quinn-rs/quinn fork kept for vendoring or patching). Added 2026-11-07."
 
 
+    _seen:
+      last_push: "2026-11-07"
+      fork: true
   ratelimit:
     area: net
     status: core
@@ -3032,8 +3080,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
-      throttle-kit: 2.1.2
+      last_push: "2026-11-08"
+      throttle-kit: 3.0.0
   retry-backoff:
     area: net
     status: support
@@ -3049,7 +3097,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
       loop-retry: 0.1.1
   salting:
     area: auth
@@ -3200,13 +3248,16 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-05"
+      last_push: "2026-11-10"
   siegekit:
     area: auth
     status: support
     notes: "Authorized-testing (pentest) automation built as a crawlkit consumer: OWASP WSTG-mapped checks against targets you are authorized to test; refuses otherwise. Added 2026-11-07."
 
 
+    _seen:
+      last_push: "2026-11-08"
+      private: true
   sieve-kit:
     area: net
     status: core
@@ -3376,7 +3427,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-05"
+      last_push: "2026-11-10"
   suture:
     area: app
     status: orphan
@@ -3476,7 +3527,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       tantivy-helper: 0.3.1
   tao:
     area: app
@@ -3516,7 +3567,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
       telemetry-init: 1.0.1
   testkit:
     area: dx
@@ -3531,7 +3582,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
   tokenkit:
     area: auth
     status: core
@@ -3547,7 +3598,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
       tokenkit: 1.0.1
   traefik-setup:
     area: infra
@@ -3580,8 +3631,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
-      typed-id-derive: 0.1.1
+      last_push: "2026-11-09"
+      typed-id-derive: 0.1.2
       typedids: 0.1.0
       typed-id-new: None
   uofg_physics:
@@ -3589,7 +3640,7 @@ repos:
     status: support
     notes: "Physics monorepo: Python packages, Jupyter notebooks and LaTeX papers under one lockfile — the Python counterpart of uofg_r_mono."
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-09"
       private: true
   tmp-push-probe:
     area: infra
@@ -3597,6 +3648,7 @@ repos:
     notes: "Private automation probe for push-pipeline verification; no source content, safe to delete after the pipeline stabilises."
     _seen:
       last_push: "2026-11-05"
+      private: true
   uds-kit:
     area: net
     status: support
@@ -3661,7 +3713,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-09"
       validkit: 1.3.3
       validkit-derive: 0.1.1
   vane:
@@ -3714,14 +3766,14 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-03"
+      last_push: "2026-11-08"
   web-estate:
     area: ui
     status: infra
     notes: "Web frontend estate: TS + SolidJS + Astro + Starlight under Bun, applying the Rust estate standards."
 
     _seen:
-      last_push: "2026-11-05"
+      last_push: "2026-11-06"
   webauthn-kit:
     area: auth
     status: support
@@ -3754,8 +3806,8 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
-      webhookkit: 2.2.3
+      last_push: "2026-11-08"
+      webhookkit: 2.2.4
   windows-dotfiles:
     area: infra
     status: personal
@@ -3796,7 +3848,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-10"
       worker-kit: 0.3.2
   wry:
     area: app
@@ -3838,7 +3890,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-02"
+      last_push: "2026-11-09"
       ws-kit: 1.0.1
   wyatt-cv:
     area: docs
@@ -3854,7 +3906,7 @@ repos:
     notes: "Battlesnake entry — axum webhook server over a pure, unit-tested engine."
 
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-09"
   xcp-core:
     area: data
     status: support
@@ -3949,7 +4001,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-10-29"
+      last_push: "2026-11-10"
       fork: true
   pele-rehype:
     area: docs
@@ -4050,4 +4102,4 @@ repos:
       status: current
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-10-31"
+      last_push: "2026-11-09"
