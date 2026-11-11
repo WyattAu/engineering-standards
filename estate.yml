@@ -156,7 +156,7 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   mcp-sentinel:
     area: auth
     status: support
@@ -286,7 +286,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   EvergreenShims:
     area: infra
     status: infra
@@ -511,6 +511,23 @@ repos:
     _seen:
       last_push: "2026-11-10"
       docs-witness: 0.1.0
+  docs-proof:
+    area: docs
+    status: support
+    notes: "Rust, Apache-2.0. Lean proof certificates: versioned record (theorem, sha256 source hash, toolchain, kernel result) with a drift verifier flagging stale source or toolchain as typed errors. Zero Lean linkage anywhere in the tree (REQ-P1 structural half; the out-of-process invocation lands in docs-compiler). docs-core extension program (REQ-P). Published 0.1.0 2026-11-11."
+    crates:
+      - docs-proof
+
+    docs:
+      tier: k
+      specs: []
+      truth_table: "README.md"
+      llms_txt: false
+      status: draft
+      last_audit: "2026-11-11"
+    _seen:
+      last_push: "2026-11-11"
+      docs-proof: 0.1.0
   font-conformance:
     area: ui
     status: personal
@@ -887,7 +904,7 @@ repos:
     crates: []
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
       private: true
   vat-mtd:
     area: money
@@ -1478,7 +1495,7 @@ repos:
     notes: "Open core logic for aether."
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   aileron:
     area: app
     status: orphan
@@ -2047,7 +2064,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   eventbus:
     area: data
     status: support
@@ -2102,7 +2119,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-11"
       fetch-kit: 0.2.3
       resilient-fetch: 0.1.1
   flag-kit:
@@ -2216,7 +2233,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-11"
       shutdown-kit: 0.3.3
   hdwallet:
     area: auth
@@ -2250,7 +2267,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-11"
       healthkit: 1.3.2
   homebite_docs:
     area: docs
@@ -2314,7 +2331,7 @@ repos:
     notes: "Personal site."
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   hydrated-site:
     area: ui
     status: support
@@ -2528,7 +2545,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-11"
       leptos-capital-markers: 0.1.1
   leptos-crypto-ws:
     area: ui
@@ -2708,7 +2725,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
       metrics-kit: 1.0.0
   model-router:
     area: app
@@ -2725,7 +2742,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-11"
       model-router: 1.0.0
   money:
     area: money
@@ -2842,7 +2859,7 @@ repos:
       status: draft
       last_audit: "2026-11-08"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   otel-stack:
     area: obsv
     status: dormant
@@ -2886,7 +2903,7 @@ repos:
       last_audit: "2026-10-31"
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
       outbox-kit: 0.2.2
   outrider:
     area: app
@@ -2964,7 +2981,7 @@ repos:
     status: orphan
     notes: "Multi-platform Matrix client: correct E2EE (UTD cluster), split-engine store, latency budgets as release gates; TUI first then desktop/web/mobile. Design scaffold 2026-11-10; protocol substrate = matrix-rust-sdk, spike pending."
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   phys-maths-gypt-notes:
     area: docs
     status: personal
@@ -3267,7 +3284,7 @@ repos:
       last_audit: "2026-11-01"
 
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
   siegekit:
     area: auth
     status: support
@@ -3546,7 +3563,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-11"
       tantivy-helper: 0.3.1
   tao:
     area: app
@@ -3586,7 +3603,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
       telemetry-init: 1.0.1
   testkit:
     area: dx
@@ -3732,7 +3749,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-11"
       validkit: 1.3.3
       validkit-derive: 0.1.1
   vane:
@@ -3760,7 +3777,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-04"
+      last_push: "2026-11-11"
       vane-client-sdk: 0.5.4
       vane-control: 0.13.1
       vane-filters: 0.6.2
@@ -3867,7 +3884,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-11"
       worker-kit: 0.3.2
   wry:
     area: app
