@@ -451,13 +451,13 @@ repos:
 
     docs:
       tier: k
-      specs: []
+      specs: ["SPEC.md"]
       truth_table: "README.md"
       llms_txt: false
       status: draft
-      last_audit: "2026-10-31"
+      last_audit: "2026-11-12"
     _seen:
-      last_push: "2026-11-11"
+      last_push: "2026-11-12"
       docs-core: 0.1.1
   docs-search:
     area: docs
@@ -994,7 +994,7 @@ repos:
     crates:
       - alertkit
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-12"
       alertkit: 0.1.0
   feedkit:
     area: obsv
@@ -1003,7 +1003,7 @@ repos:
     crates:
       - feedkit
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-12"
       feedkit: 0.1.0
   graphkit:
     area: obsv
@@ -1012,7 +1012,7 @@ repos:
     crates:
       - graphkit
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-12"
       graphkit: 0.1.0
   marketdata-kit:
     area: obsv
@@ -1021,7 +1021,7 @@ repos:
     crates:
       - marketdata-kit
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-12"
       marketdata-kit: 0.1.0
   ontokit:
     area: obsv
@@ -1030,7 +1030,7 @@ repos:
     crates:
       - ontokit
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-12"
       ontokit: 0.1.0
   beat-list:
     area: research
@@ -1890,7 +1890,7 @@ repos:
       - crawlkit-plugin-sdk
 
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-11"
       crawlkit-engine: 2.0.0
       crawlkit-plugin-sdk: 1.0.0
   crdt-demo:
@@ -2998,7 +2998,7 @@ repos:
     status: orphan
     notes: "Multi-platform Matrix client: correct E2EE (UTD cluster), split-engine store, latency budgets as release gates; TUI first then desktop/web/mobile. Design scaffold 2026-11-10; protocol substrate = matrix-rust-sdk, spike pending."
     _seen:
-      last_push: "2026-11-11"
+      last_push: "2026-11-12"
   phys-maths-gypt-notes:
     area: docs
     status: personal
@@ -3480,7 +3480,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-10"
+      last_push: "2026-11-12"
   suture:
     area: app
     status: orphan
@@ -3732,7 +3732,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-11"
   uring-kit:
     area: conc
     status: core
