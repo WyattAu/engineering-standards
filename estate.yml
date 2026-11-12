@@ -453,8 +453,8 @@ repos:
       tier: k
       specs: ["SPEC.md"]
       truth_table: "README.md"
-      llms_txt: false
-      status: draft
+      llms_txt: true
+      status: current
       last_audit: "2026-11-12"
     _seen:
       last_push: "2026-11-12"
