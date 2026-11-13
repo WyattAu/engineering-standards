@@ -286,7 +286,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-11"
+      last_push: "2026-11-12"
   EvergreenShims:
     area: infra
     status: infra
@@ -474,8 +474,8 @@ repos:
       status: draft
       last_audit: "2026-11-10"
     _seen:
-      last_push: "2026-11-10"
-      docs-search: 0.1.0
+      last_push: "2026-11-12"
+      docs-search: 0.2.0
   docs-symbols:
     area: docs
     status: support
@@ -527,7 +527,7 @@ repos:
       last_audit: "2026-11-11"
     _seen:
       last_push: "2026-11-12"
-      docs-proof: 0.1.1
+      docs-proof: 0.1.2
   docs-compiler:
     area: docs
     status: support
@@ -3341,6 +3341,9 @@ repos:
       llms_txt: false
       status: draft
       last_audit: "2026-11-12"
+    _seen:
+      last_push: "2026-11-12"
+      private: true
   simd-tokenizer:
     area: data
     status: core
