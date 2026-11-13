@@ -133,7 +133,7 @@ repos:
     notes: "Estate MCP OSINT server (mcp-kit-core native): keyless network-recon subset (14 tools) of the third-party osint server's 37 - dns_lookup/reverse, whois (slim), cert_transparency, subdomains_cert, wayback, http_headers, security_headers_audit, ip_info, bgp_asn_info; keyed sources (shodan/virustotal/securitytrails/censys) land when keys are provisioned via the key-file pattern."
 
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-13"
       private: true
   fresco:
     area: ui
@@ -286,7 +286,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-12"
+      last_push: "2026-11-13"
   EvergreenShims:
     area: infra
     status: infra
@@ -544,7 +544,7 @@ repos:
       last_audit: "2026-11-11"
     _seen:
       last_push: "2026-11-13"
-      docs-compiler: 0.2.0
+      docs-compiler: 0.4.0
   font-conformance:
     area: ui
     status: personal
@@ -1349,7 +1349,7 @@ repos:
     notes: "Derived repo verifying the OmniPython update channel (ADR-0001); template-managed."
 
     _seen:
-      last_push: "2026-11-09"
+      last_push: "2026-11-13"
   omni-copier-e2e:
     # Loop-owned: estate gates (one pin per action, llms contract)
     gated: true
@@ -1512,7 +1512,7 @@ repos:
     notes: "Open core logic for aether."
 
     _seen:
-      last_push: "2026-11-12"
+      last_push: "2026-11-13"
   aileron:
     area: app
     status: orphan
@@ -2348,7 +2348,7 @@ repos:
     notes: "Personal site."
 
     _seen:
-      last_push: "2026-11-12"
+      last_push: "2026-11-13"
   hydrated-site:
     area: ui
     status: support
@@ -3764,7 +3764,7 @@ repos:
       status: draft
       last_audit: "2026-10-31"
     _seen:
-      last_push: "2026-11-01"
+      last_push: "2026-11-13"
       uring-kit: 0.1.1
   validkit:
     area: data
