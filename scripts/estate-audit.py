@@ -148,6 +148,19 @@ COVERAGE_EXEMPT = {
     "bizkit": "CLI facade, no lib target; bizkit-core is composed by the sqlite-side graph's EDGAR suite (estate-integration)",
     "bizkit-core": "composed by the sqlite-side graph (tests/bizkit_edgar.rs), which the CONSUMERS audit reads as estate-integration@HEAD:sqlite-side",
     "trendkit": "CLI facade, no lib target; its library members are pinned directly (trendkit-core, trendkit-profile)",
+    # The 2026-11-09 kits wave (parallel session): published 0.1.0s without
+    # consumer suites yet. Exempted pending composition — tracked in the SIS
+    # loop backlog (iteration 25). Recorded 2026-11-14.
+    "alertkit": "kits wave 2026-11-09; composition suite pending (SIS loop)",
+    "feedkit": "kits wave 2026-11-09; composition suite pending (SIS loop)",
+    "graphkit": "kits wave 2026-11-09; composition suite pending (SIS loop)",
+    "marketdata-kit": "kits wave 2026-11-09; composition suite pending (SIS loop)",
+    "ontokit": "kits wave 2026-11-09; composition suite pending (SIS loop)",
+    # os-core (sovereign OS experiment, 2026-11-08): allocator crates with
+    # no_std/no-alloc targets that the API suites cannot host.
+    "omni-cap": "os-core allocator (no_std target); composition pending",
+    "omni-heap": "os-core allocator (no_std target); composition pending",
+    "omni-ring": "os-core allocator (no_std target); composition pending",
 }
 
 DORMANT_DAYS = 120  # no push for this long = dormant, unless pinned as core

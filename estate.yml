@@ -1522,7 +1522,7 @@ repos:
       last_push: "2026-11-13"
   aileron:
     area: app
-    status: orphan
+    status: infra
     notes: "Keyboard-driven web environment (Servo)."
 
     _seen:
@@ -1621,6 +1621,7 @@ repos:
   axum-stack:
     area: net
     status: support
+    notes: "The Aileron browser — estate agent-browser infrastructure. Triage 2026-11-14: orphan → this status."
     canonical_of: [axum-server]
     notes: "Axum server utilities (shutdown, CORS, health routes)."
     crates:
@@ -1723,7 +1724,7 @@ repos:
       breaker: 2.0.2
   cachekit:
     area: data
-    status: orphan
+    status: support
     notes: "Publishes cache-pal; not yet composed."
     crates:
       - cache-pal
@@ -1786,7 +1787,7 @@ repos:
       cas-kit: 1.0.0
   cf-worker-utils:
     area: net
-    status: orphan
+    status: support
     notes: "Cloudflare Worker helpers."
 
     _seen:
@@ -1810,7 +1811,7 @@ repos:
       chaos-kit: 0.1.2
   clawdius:
     area: app
-    status: orphan
+    status: infra
     notes: "Remote agentic coding sandbox."
 
     _seen:
@@ -1828,6 +1829,7 @@ repos:
   clock-kit:
     area: conc
     status: core
+    notes: "Lean proof workspace host. Triage 2026-11-14: orphan → this status."
     canonical_of: [clock]
     notes: "Time-source abstraction; overlaps chronoshift."
     crates:
@@ -1895,7 +1897,7 @@ repos:
       contact-miner: 0.1.0
   crawlkit:
     area: data
-    status: orphan
+    status: core
     notes: "Crawl engine + plugin SDK; own test suite."
     crates:
       - crawlkit-engine
@@ -2055,7 +2057,7 @@ repos:
       last_push: "2026-11-13"
   envstack:
     area: obsv
-    status: orphan
+    status: support
     notes: "Env layering; overlaps config-kit."
     crates:
       - envstack
@@ -2315,7 +2317,7 @@ repos:
       last_push: "2026-05-27"
   homebrew-suture-merge-driver:
     area: infra
-    status: orphan
+    status: support
     notes: "Homebrew tap for the suture git merge driver."
 
     _seen:
@@ -2494,7 +2496,7 @@ repos:
       private: true
   kestrel:
     area: app
-    status: orphan
+    status: core
     notes: "tui+gui email client; needs mail-sync-kit + mailkit to ship."
 
     _seen:
@@ -2906,6 +2908,7 @@ repos:
   otelkit:
     area: obsv
     status: core
+    notes: "UI consumer target. Triage 2026-11-14: orphan → this status."
     canonical_of: [otel-stack]
     notes: "Tracing/metrics/OTLP."
     crates:
@@ -3011,7 +3014,7 @@ repos:
       percentile-kit: 1.0.0
   peregrine:
     area: app
-    status: orphan
+    status: core
     notes: "Multi-platform Matrix client: correct E2EE (UTD cluster), split-engine store, latency budgets as release gates; TUI first then desktop/web/mobile. Design scaffold 2026-11-10; protocol substrate = matrix-rust-sdk, spike pending."
     _seen:
       last_push: "2026-11-13"
@@ -3516,7 +3519,7 @@ repos:
       last_push: "2026-11-12"
   suture:
     area: app
-    status: orphan
+    status: core
     notes: "Connector/driver platform; 40 crates, last release 2026-05."
     crates:
       - suture-cli
@@ -3633,7 +3636,7 @@ repos:
       fork: true
   tauri-preset:
     area: infra
-    status: orphan
+    status: template
     notes: "Undocumented placeholder."
 
     _seen:
@@ -3730,7 +3733,8 @@ repos:
       private: true
   tmp-push-probe:
     area: infra
-    status: orphan
+    notes: "Archived 2026-11-14 (probe served its purpose)."
+    status: dormant
     notes: "Private automation probe for push-pipeline verification; no source content, safe to delete after the pipeline stabilises."
     _seen:
       last_push: "2026-11-05"
