@@ -98,6 +98,11 @@ repos:
     _seen:
       last_push: "2026-11-08"
       private: true
+  seo-standards:
+    area: docs
+    status: core
+    notes: "The WyattAu SEO/rankings/authority canon - 80 techniques, DR/DA doctrine, SERP surfaces, GEO/AEO. SEO-CORE. Added 2026-11-14."
+
   sequential-thinking-kit:
     area: dx
     status: infra
@@ -2875,6 +2880,10 @@ repos:
     area: research
     status: support
     notes: "Sovereign operating system, not derived from Unix; derived from OmniRust-template 2026-11-08."
+    crates:
+      - omni-cap
+      - omni-heap
+      - omni-ring
     docs:
       tier: a
       specs: []
