@@ -82,6 +82,12 @@ CONSUMERS = (
     # directory are real coverage; without this entry the audit would report
     # nine crates as uncomposed that are in fact composed one directory over.
     "WyattAu/estate-integration@HEAD sqlite-side",
+    # SkyGauge: the satellite alt-data product (private). Consumes fetch-kit
+    # 0.2 (caret) for the CDSE catalog search and EIA dnav series fetches —
+    # both intermittently flaky public endpoints where retry+backoff is the
+    # fix; the P2 pipeline example and sg-ingest::cdse::search are the call
+    # sites. Consumption recorded 2026-11-14.
+    "WyattAu/skygauge",
 )
 
 UA = "wyatt-estate-audit (+https://github.com/WyattAu/engineering-standards)"

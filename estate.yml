@@ -3333,7 +3333,7 @@ repos:
   skygauge:
     area: data
     status: personal
-    notes: "Satellite alt-data signal factory (Sentinel-1 tank gauging, M0 scaffold 2026-11-12); private product, publishes no crate."
+    notes: "Satellite alt-data signal factory (Sentinel-1 tank gauging, M0 scaffold 2026-11-12); private product, publishes no crate. Dogfoods fetch-kit 0.2 since 2026-11-14 (CDSE catalog search + EIA dnav fetches — retry/backoff on flaky public endpoints); listed in estate-audit CONSUMERS."
     crates: []
 
     docs:
