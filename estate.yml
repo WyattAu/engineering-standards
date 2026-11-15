@@ -103,6 +103,11 @@ repos:
     status: core
     notes: "The WyattAu SEO/rankings/authority canon - 80 techniques, DR/DA doctrine, SERP surfaces, GEO/AEO. SEO-CORE. Added 2026-11-14."
 
+  pattern-standards:
+    area: docs
+    status: support
+    notes: "The WyattAu design-pattern canon - 107 constructs across foundations (T1-T50), field (P1-P50), and frontier (X1-X7) series, 8 refusals, 24 baseline-tier defaults. PATTERN-CORE. support, deliberately not core: founded 2026-11-15, no consumer repos wired yet. Added 2026-11-15."
+
   sequential-thinking-kit:
     area: dx
     status: infra
