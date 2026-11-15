@@ -7,6 +7,7 @@ Material change means version bump + ADR + entry here
 lands in the header of every document that changed.
 
 ## 0.9.0 - 2026-11-10
+- tier-route.py: OMNI CI-tier router (traits + language -> tier, coverage floor, tooling; estate-tiers.json layer lookup), per context-standards routing-contract.
 
 - `PROVENANCE.md` (PV-1..PV-3, PROPOSED): build provenance contract per
   OMNI-CORE 11c; requires an attestation workflow (using
