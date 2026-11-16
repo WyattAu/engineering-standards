@@ -8,6 +8,6 @@ permissions:
   contents: read
 jobs:
   docs:
-    uses: WyattAu/spec-standards/.github/workflows/docs.yml@7b9533b7537b87e01c798723ffae491cc5a5bd25  # main @ 2026-11-09
+    uses: WyattAu/spec-standards/.github/workflows/docs.yml@f69a10da29f8d84929bad9402d7aa23f7d3b24bf  # main @ 2026-11-15: EXTRA_FIND fix
     with:
       tier: k
