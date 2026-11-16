@@ -410,8 +410,24 @@ repos:
       observability, M3 damage-tracked 60fps on-device + Gate A pacing evidence, M4 interactive widget settings
       screen (touch-verified), M5 logical-res rendering (A53 7.9 -> 24.4 fps, widget UI fills the screen); osint-
       kit 0.2.0-0.3.1 (24 keyless tools, SEO/GitHub/DNS recon, bounded() pipe deadlock fix); real SEO findings on
-      estate properties (no root sitemap on wyattau.com, no SPF on wyattau.dev). REMAINING: M6 real-font text
-      (Parley+swash on Android), M7 SPH particle fluid, particle-fx styles, mesh animation loaders; kestrel-gui
+      estate properties (no root sitemap on wyattau.com, no SPF on wyattau.dev). ANDROID M6 TEXT SHIPPED at 0.8.7
+      (2026-11-16, CI green 20a963b): real-font text rendering LANDED via ab_glyph + ab_glyph_rasterizer, NOT
+      Parley+swash (deviation recorded: hermetic embed beats system-font enumeration on Android; DejaVu Sans
+      embedded via include_bytes! in text-kit realfont.rs with fonts/LICENSE, glyph coverage rasterized at any px
+      size, em-dash/bullet now covered); widget-kit label_text renders realfont glyphs first with micro-font
+      fallback per uncovered char; unknown chars map to the .notdef glyph (ab_glyph glyph_id is infallible -
+      callers filter by charset if they need strict coverage). DAMAGE-PLAN LESSON (CI-caught): DrawListPainter
+      push_clip/pop_clip were trait no-ops, so region passes clipped fills but AA glyph blits bypassed painter
+      clips and re-blended across passes - damaged-vs-full byte equality broke; fix = delegate clips to the
+      painter stack + label_text checks the active clip per glyph pixel (blend_pixel is clip-blind; alpha
+      blending is order-dependent). Gallery golden RGB hashes rebaselined in the same commit (scroll-pane label
+      ink no longer bleeds past the pane clip; alpha hashes unchanged). theme_gallery property fixed: seed-dark
+      is authored dichromat-safe, so the deuteranopia Brettel projection is a sub-LSB fixed point on it (cvd
+      variant renders byte-identical to seed by design - identity pinned as a property, uniqueness asserted
+      among the remaining variants; pre-existing failure masked on CI by cargo-test fail-fast). REMAINING:
+      Phase B 2D game demo (ecs-kit + phys-kit + sprite atlas + widget HUD at 60fps on-device) and CAD viewer
+      demo (DXF -> pick/zoom/measure -> SVG round-trip), M7 SPH particle fluid, particle-fx styles, mesh
+      animation loaders; kestrel-gui
       consumer is the final integration milestone and is now unblocked by the proven Android template.
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
