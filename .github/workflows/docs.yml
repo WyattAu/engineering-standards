@@ -8,6 +8,6 @@ permissions:
   contents: read
 jobs:
   docs:
-    uses: WyattAu/spec-standards/.github/workflows/docs.yml@f69a10da29f8d84929bad9402d7aa23f7d3b24bf  # main @ 2026-11-15: EXTRA_FIND fix
+    uses: WyattAu/spec-standards/.github/workflows/docs.yml@3bf49702f972f90c796b7c374185315e02065568  # main @ 2026-11-16: EXTRA_FIND fix + fence-aware stamp scan
     with:
       tier: k
