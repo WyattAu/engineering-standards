@@ -445,9 +445,24 @@ repos:
       paint 100ms / 7.9fps = the B.2 Gate-B target (60fps on-device needs the paint profile: full-surface bg
       refill + per-frame realfont label raster are the suspects). Oracles: walls containment, entity cap,
       determinism (twin-run byte equality), burst size, TTL reap vs tap-free twin. XBUILD LESSON 2: --package
-      overrides --manifest-path - verify the lib inside the APK by strings before install. B.2 NEXT: paint
-      profile to Gate B (60fps on-device), sprite atlas, then input control scheme. M7 SPH particle fluid,
-      particle-fx styles, mesh animation loaders; kestrel-gui
+      overrides --manifest-path - verify the lib inside the APK by strings before install. B.2 PERF CLOSED at
+      0.8.7 (2026-11-17, CI green 5aac97c/84162f9/f7a2537): two paint-kit fixes + a shared blit - (1)
+      rasterize_polys built events for EVERY surface row and ran the per-edge activity scan (x_at divisions) on
+      all of them: a 16px ball on a 740px surface paid ~43x wasted band work; band iteration now clamps to the
+      polygon y-span (28 balls 70.9 -> 2.0ms host, 35x, semantics-free - gallery goldens byte-identical); (2)
+      fill_rect ran the cov buffer + per-pixel fraction math even for pixel-aligned solid fills (coverage exactly
+      1.0): new fast path Surface::blend_rect_solid blends the constant color directly, identical blend bytes (bg
+      refill 6.7 -> 0.7ms); (3) the per-pixel f64 blit over 2.6M physical px (~25ms on the A53) lived copy-pasted
+      in BOTH shells - extracted to window-kit::blit::blit_upscaled with an integer-scale fast path (expand k
+      u32 copies per logical row, copy_within repeats it m-1 rows; fractional scales keep nearest-neighbor;
+      oracle: integer upscale equals the naive mapping). GAME RESULT on A53 release: paint 100 -> 3.5ms, fps
+      7.9 -> 33.3 (full budget now visible: paint 3.5ms + present 7.9ms = 11.4ms work against a 30ms period;
+      ticker 2ms experiment proved cadence is not the cap - the remaining ~18ms is BufferQueue dequeue
+      backpressure, i.e. vsync-quantized by the display pipeline, not compute-bound; 60fps needs frame-pacing
+      alignment, not engine work). Gate B verdict: engine-side cost is 11.4ms/frame on the mid-range 2017 phone;
+      Pixel verification pending device return. B.3 NEXT: sprite atlas (draw_image_region is already in
+      paint-kit), input control scheme, frame pacing; M7 SPH particle fluid, particle-fx styles, mesh animation
+      loaders; kestrel-gui
       consumer is the final integration milestone and is now unblocked by the proven Android template.
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
