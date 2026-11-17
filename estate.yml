@@ -460,9 +460,19 @@ repos:
       ticker 2ms experiment proved cadence is not the cap - the remaining ~18ms is BufferQueue dequeue
       backpressure, i.e. vsync-quantized by the display pipeline, not compute-bound; 60fps needs frame-pacing
       alignment, not engine work). Gate B verdict: engine-side cost is 11.4ms/frame on the mid-range 2017 phone;
-      Pixel verification pending device return. B.3 NEXT: sprite atlas (draw_image_region is already in
-      paint-kit), input control scheme, frame pacing; M7 SPH particle fluid, particle-fx styles, mesh animation
-      loaders; kestrel-gui
+      Pixel verification pending device return. B.3 SHIPPED at 0.8.7 (2026-11-17, CI green fca2ffd): sprite
+      atlas + grab-and-fling input - crate::atlas builds a deterministic SpriteAtlas procedurally (6 shaded ball
+      sprites: radial shade + off-center highlight, white player ring; paint-kit shelf packer, bytes identical
+      every build - oracle-tested); render switched from AA round rects to draw_image_region blits (paint 3.5 ->
+      1.9ms on the A53, sprite blit cheaper than AA coverage); input model: press = burst + grab a kinematic
+      player (inv_mass 0, gravity + contacts skip it), move = carry (position delta becomes the implicit Verlet
+      velocity), release = fling (inv_mass 1, natural velocity) - shells wire pointer_move via Touch Moved phase
+      (Android) and cursor-move-while-left-held (desktop, tracked button state - the winit MouseInput lesson).
+      A53 verified: shaded sprites render, player ring flung into the pile settles as a dynamic ball, fps 35.5.
+      Oracles: atlas determinism + regions, player follows pointer, release restores dynamics, burst+player
+      count; 443 workspace tests. B.4 NEXT: gameplay goal layer (targets/score via HUD widgets), particle-fx
+      on events (phys-kit ParticleSystem), multi-device matrix re-run (Pixel/S7 pending); M7 SPH particle
+      fluid, mesh animation loaders; kestrel-gui
       consumer is the final integration milestone and is now unblocked by the proven Android template.
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
