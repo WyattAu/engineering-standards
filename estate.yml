@@ -424,7 +424,14 @@ repos:
       ink no longer bleeds past the pane clip; alpha hashes unchanged). theme_gallery property fixed: seed-dark
       is authored dichromat-safe, so the deuteranopia Brettel projection is a sub-LSB fixed point on it (cvd
       variant renders byte-identical to seed by design - identity pinned as a property, uniqueness asserted
-      among the remaining variants; pre-existing failure masked on CI by cargo-test fail-fast). REMAINING:
+      among the remaining variants; pre-existing failure masked on CI by cargo-test fail-fast). PACING FIX at
+      0.8.7 (2026-11-17, CI green 53a44b8): pacing.csv data rows were NEVER written (header only at resumed();
+      observe_frame feeds the Inspector BMPs, nothing wrote rows) - Gate A pacing evidence silently depended on
+      logcat parsing, which dies on rotation; paint_and_present now writes frame,paint_us,fps_milli per frame,
+      flushed per row (Freecess freeze/kill eats buffered rows); A53 release on-device: 15.4ms/24.3fps persisting
+      in fresco-m4/pacing.csv, matching the M5 profile. XBUILD LESSON: x writes the APK to repo target/x/<profile>/
+      android/ (NOT the shared CARGO_TARGET_DIR cache) - check APK mtime + lib strings before install or you ship
+      a stale binary. REMAINING:
       Phase B 2D game demo (ecs-kit + phys-kit + sprite atlas + widget HUD at 60fps on-device) and CAD viewer
       demo (DXF -> pick/zoom/measure -> SVG round-trip), M7 SPH particle fluid, particle-fx styles, mesh
       animation loaders; kestrel-gui
