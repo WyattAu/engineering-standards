@@ -470,9 +470,17 @@ repos:
       (Android) and cursor-move-while-left-held (desktop, tracked button state - the winit MouseInput lesson).
       A53 verified: shaded sprites render, player ring flung into the pile settles as a dynamic ball, fps 35.5.
       Oracles: atlas determinism + regions, player follows pointer, release restores dynamics, burst+player
-      count; 443 workspace tests. B.4 NEXT: gameplay goal layer (targets/score via HUD widgets), particle-fx
-      on events (phys-kit ParticleSystem), multi-device matrix re-run (Pixel/S7 pending); M7 SPH particle
-      fluid, mesh animation loaders; kestrel-gui
+      count; 443 workspace tests. B.4 SHIPPED at 0.8.7 (2026-11-17, CI green 58c4f90): gameplay goal layer -
+      up to 3 amber ring targets spawn on a 1s cadence at deterministic positions (immovable Ball carriers,
+      inv_mass 0: balls bounce off them like bumpers), ball overlap pops a target -> score++ + 6 short-lived
+      mini-ball sparks (per-entity Ttl override 24 frames vs the 300-frame ball TTL; reap/cap scoped to Born
+      carriers so targets persist), HUD gains the score line, atlas packs the target sprite (8). Oracles:
+      pop scores + despawns + respawn cadence, fx expiry; 445 workspace tests. A53 ON-DEVICE VERIFICATION
+      PENDING: phone left USB mid-session (recurring), APK ready at repo target/x/release/android/, loop =
+      install -r + am start + tap near a ring + screencap. B.5 NEXT: sound? no - estate audio stack does not
+      exist yet; next: gameplay depth (combo timer, target motion), menu screen via widget-kit, multi-device
+      matrix re-run (Pixel/S7 pending - S7 in recovery); M7 SPH particle fluid, mesh animation loaders;
+      kestrel-gui
       consumer is the final integration milestone and is now unblocked by the proven Android template.
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
