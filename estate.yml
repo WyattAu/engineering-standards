@@ -485,7 +485,19 @@ repos:
       logcat stats on both devices; smoke BMPs for the deterministic render. B.5 NEXT: gameplay depth (combo
       timer, target motion), menu screen via widget-kit, sound needs an estate audio stack (does not exist yet);
       M7 SPH particle fluid, mesh animation loaders; kestrel-gui
-      consumer is the final integration milestone and is now unblocked by the proven Android template.
+      consumer is the final integration milestone and is now unblocked by the proven Android template. B.5
+      SHIPPED at 0.8.7 (2026-11-18, CI green 44222782754): combo chains + target drift - pops inside 180 sim
+      frames chain (each consecutive pop scores 1 + chain length, expiry pass resets stale chains, HUD shows
+      the multiplier); targets drift kinematically (6-24 px/s deterministic per spawn tick) bounced inside
+      their upper band, and spawn IN the band (out-of-band spawns clamp-teleport on the first drift step -
+      oracle-caught); hitbox aligned to physics contact (ball-ball resolution ejects a touching ball to
+      exactly t_rad + r with gravity wobble - a smaller forgiving radius could never trigger; half-px slack
+      absorbs the wobble). Oracles: combo chains inside window only (direct single-ball spawns, no burst
+      noise), drift stays in band; simultaneous-pop cascades chain same-frame by design. 447 workspace tests.
+      Device state: Pixel fingerprint-locked (adb cannot pass biometrics - verification needs a physical
+      unlock; the black screen was the lockscreen, not an app bug), A53 off USB again, S7 in recovery. B.6
+      NEXT: menu screen via widget-kit, audio decision (estate audio stack does not exist), M7 SPH particle
+      fluid, mesh animation loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
