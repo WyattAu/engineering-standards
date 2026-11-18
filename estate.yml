@@ -477,10 +477,14 @@ repos:
       carriers so targets persist), HUD gains the score line, atlas packs the target sprite (8). Oracles:
       pop scores + despawns + respawn cadence, fx expiry; 445 workspace tests. A53 ON-DEVICE VERIFICATION
       PENDING: phone left USB mid-session (recurring), APK ready at repo target/x/release/android/, loop =
-      install -r + am start + tap near a ring + screencap. B.5 NEXT: sound? no - estate audio stack does not
-      exist yet; next: gameplay depth (combo timer, target motion), menu screen via widget-kit, multi-device
-      matrix re-run (Pixel/S7 pending - S7 in recovery); M7 SPH particle fluid, mesh animation loaders;
-      kestrel-gui
+      install -r + am start + tap near a ring + screencap. B.4 VERIFIED + MATRIX RE-RUN (2026-11-18): Pixel 10
+      Pro (2025 flagship) BACK ON USB - GAME AT GATE B: 60.0fps locked, paint 0.7ms, present 4.3ms, balls 29
+      (engine 140x faster than the B1 baseline on the same device class); A53 (2022 mid-range): 35.3fps, paint
+      1.9ms, display-queue bound as before; S7 (2016) still in recovery, unavailable. Deterministic smoke frame
+      documents the amber target ring + score HUD + hint line. Multi-device evidence: screencaps + pacing.csv +
+      logcat stats on both devices; smoke BMPs for the deterministic render. B.5 NEXT: gameplay depth (combo
+      timer, target motion), menu screen via widget-kit, sound needs an estate audio stack (does not exist yet);
+      M7 SPH particle fluid, mesh animation loaders; kestrel-gui
       consumer is the final integration milestone and is now unblocked by the proven Android template.
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
