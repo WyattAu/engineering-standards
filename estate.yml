@@ -518,8 +518,12 @@ repos:
       crate exists), loaded at resumed(), grown + written only on change, parse is total (corrupt/absent reads
       0); menu gains a best label refreshed on every return-to-menu; game HUD line is
       balls/score/combo/best. Oracle: menu best label reflects set_best; 453 workspace tests. On-device
-      verification pending the Pixel unlock (recurring blocker). B.9 NEXT: menu smoke render for visual
-      evidence, M7 SPH particle fluid (capability depth), mesh animation loaders; kestrel-gui
+      verification pending the Pixel unlock (recurring blocker). B.9 SHIPPED at 0.8.7 (2026-11-19, CI green
+      862515e): menu evidence in the smoke runner - one deterministic menu.bmp lands next to the game frames
+      (Inspector::dir getter added; the capture dir was private); visual confirms title/subtitle/difficulty
+      select/best label/Play button all render as real widget-kit components. Device checks remain blocked on
+      the Pixel unlock. B.10 NEXT: M7 SPH particle fluid (capability depth), mesh animation loaders,
+      kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
