@@ -512,9 +512,14 @@ repos:
       right-aligned with shared geometry via hud_button_at - the shell's tap routing and the drawn affordance
       cannot drift apart; HUD buttons take priority over game input; the menu button returns to the main menu
       (discards the run). Oracles: pause freezes the sim + unpause advances, HUD hit regions match the drawn
-      labels; 452 workspace tests. On-device check pending the Pixel unlock (same blocker). B.8 NEXT:
-      high-score persistence (decision: file in the app capture dir until an estate kv crate exists), combo/
-      score polish, M7 SPH particle fluid, mesh animation loaders; kestrel-gui
+      labels; 452 workspace tests. On-device check pending the Pixel unlock (same blocker). B.8 SHIPPED at
+      0.8.7 (2026-11-19, CI green 09d7d57): high-score persistence - best score lives in
+      <capture-dir>/highscore.txt (the estate storage DECISION: app-local file until an estate kv/storage
+      crate exists), loaded at resumed(), grown + written only on change, parse is total (corrupt/absent reads
+      0); menu gains a best label refreshed on every return-to-menu; game HUD line is
+      balls/score/combo/best. Oracle: menu best label reflects set_best; 453 workspace tests. On-device
+      verification pending the Pixel unlock (recurring blocker). B.9 NEXT: menu smoke render for visual
+      evidence, M7 SPH particle fluid (capability depth), mesh animation loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
