@@ -497,7 +497,18 @@ repos:
       Device state: Pixel fingerprint-locked (adb cannot pass biometrics - verification needs a physical
       unlock; the black screen was the lockscreen, not an app bug), A53 off USB again, S7 in recovery. B.6
       NEXT: menu screen via widget-kit, audio decision (estate audio stack does not exist), M7 SPH particle
-      fluid, mesh animation loaders; kestrel-gui
+      fluid, mesh animation loaders; kestrel-gui consumer is the final integration milestone and is now
+      unblocked by the proven Android template. B.6 SHIPPED at 0.8.7 (2026-11-19, CI green 44458138577): main
+      menu via widget-kit - the retained-mode UI layer hosting an app menu: title/subtitle labels, difficulty
+      Select (Relaxed 30 / Normal 15 / Frenzy 6 sim frames per fountain ball), Play button through WidgetTree
+      take_actions; shell gained an AppState dispatch (Menu | Game) across pointer + paint paths (sim steps
+      only while playing; Play transitions to a fresh GameScreen with the selected cadence). Oracles: Play
+      press queues + drains action 1, difficulty maps to rates, menu paints deterministically, difficulty sets
+      cadence; 450 workspace tests. On-device menu verification still blocked by the Pixel fingerprint lock
+      (needs physical unlock; host oracle covers activation + deterministic paint). B.7 NEXT:
+      pause/return-to-menu (back navigation), high-score persistence (no estate kv/storage crate yet -
+      decide), audio decision (estate audio stack does not exist), M7 SPH particle fluid, mesh animation
+      loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
