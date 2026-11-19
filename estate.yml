@@ -506,9 +506,15 @@ repos:
       press queues + drains action 1, difficulty maps to rates, menu paints deterministically, difficulty sets
       cadence; 450 workspace tests. On-device menu verification still blocked by the Pixel fingerprint lock
       (needs physical unlock; host oracle covers activation + deterministic paint). B.7 NEXT:
-      pause/return-to-menu (back navigation), high-score persistence (no estate kv/storage crate yet -
-      decide), audio decision (estate audio stack does not exist), M7 SPH particle fluid, mesh animation
-      loaders; kestrel-gui
+      B.7 SHIPPED at 0.8.7 (2026-11-19, CI green 3f60832): pause + menu navigation - GameScreen paused flag
+      freezes the wall-time drain AND consumes the interval (an unpause does not sprint through the paused
+      span), render keeps running so the frozen frame stays visible; HUD buttons (pause/menu) drawn
+      right-aligned with shared geometry via hud_button_at - the shell's tap routing and the drawn affordance
+      cannot drift apart; HUD buttons take priority over game input; the menu button returns to the main menu
+      (discards the run). Oracles: pause freezes the sim + unpause advances, HUD hit regions match the drawn
+      labels; 452 workspace tests. On-device check pending the Pixel unlock (same blocker). B.8 NEXT:
+      high-score persistence (decision: file in the app capture dir until an estate kv crate exists), combo/
+      score polish, M7 SPH particle fluid, mesh animation loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
