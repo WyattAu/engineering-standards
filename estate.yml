@@ -522,8 +522,16 @@ repos:
       862515e): menu evidence in the smoke runner - one deterministic menu.bmp lands next to the game frames
       (Inspector::dir getter added; the capture dir was private); visual confirms title/subtitle/difficulty
       select/best label/Play button all render as real widget-kit components. Device checks remain blocked on
-      the Pixel unlock. B.10 NEXT: M7 SPH particle fluid (capability depth), mesh animation loaders,
-      kestrel-gui
+      the Pixel unlock. M7 OPENED at 0.8.7 M7.1 (2026-11-19, CI green 9d78f6d): fluid-kit::sph - Lagrangian
+      SPH solver alongside the Eulerian grid one: Muller 2003 formulation (poly6 density kernel, spiky
+      pressure gradient, viscosity Laplacian) in pixel units, deterministic f64 with fixed iteration order,
+      brute force O(n^2) neighbors sized for demo pools (spatial hash = upgrade path), wall clamp +
+      restitution, acceleration clamp bounds runaway forces. Params settled on the FIRST tuning pass (h 16,
+      rest density 6, stiffness 40, viscosity 0.6 - pool settles cleanly). Oracles: mass conservation, wall
+      containment, settled-speed bound (no explosion), twin-run determinism; 457 workspace tests. fluid-kit
+      gains path-kit as a dependency (2D vectors; layering legal - L0 under fluid-kit). M7.2 NEXT: SPH pool
+      rendered as sprites in the fresco game (second fluid mode / scene), on-device pacing; mesh animation
+      loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
