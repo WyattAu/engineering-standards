@@ -3312,9 +3312,12 @@ repos:
     status: support
     notes: "Sovereign operating system, not derived from Unix; derived from OmniRust-template 2026-11-08."
     crates:
+      - omni-block
       - omni-cap
       - omni-heap
       - omni-ring
+      - omni-sbe
+      - omni-task
     docs:
       tier: a
       specs: []
