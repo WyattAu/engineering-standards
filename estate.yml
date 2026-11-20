@@ -531,7 +531,14 @@ repos:
       containment, settled-speed bound (no explosion), twin-run determinism; 457 workspace tests. fluid-kit
       gains path-kit as a dependency (2D vectors; layering legal - L0 under fluid-kit). M7.2 NEXT: SPH pool
       rendered as sprites in the fresco game (second fluid mode / scene), on-device pacing; mesh animation
-      loaders; kestrel-gui
+      loaders; kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
+      an SphSystem basin in the bottom strip of the viewport (8px wall inset, 150px tall), filled once on the
+      first resize with a 55px-radius particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as
+      one water sprite per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
+      fluid-kit (workspace dependency added for it). Oracle: pool stays in its basin over 300 sim frames; 458
+      workspace tests. On-device verification pending phone return (APK ready). M7.3 NEXT: ball-into-pool
+      coupling (ECS balls exert forces on nearby SPH particles - splashes), spatial-hash neighbor search when
+      pools grow, mesh animation loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
