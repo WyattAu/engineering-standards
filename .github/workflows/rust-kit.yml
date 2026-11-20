@@ -86,6 +86,10 @@ env:
   CARGO_TERM_COLOR: always
   CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
   PKG_FLAG: ${{ inputs.package != '' && format('-p {0}', inputs.package) || '' }}
+  # Some caller repos commit a machine-local [build] target-dir (fleet dedup
+  # convention); runners cannot create /home/wyatt/.cache, so override it to
+  # a runner-safe path for every job. Env beats config.toml precedence.
+  CARGO_TARGET_DIR: ${{ github.workspace }}/.cargo-target-ci
 
 jobs:
   check:
