@@ -542,8 +542,15 @@ repos:
       live playback); render world-composes the joint chain (parent-chain Mat4 composition) and draws bones
       as white stamps along parent-child segments + player-ring sprites at joints; playback rides the sim
       clock (freezes when paused). Oracles: clip imported (name dance), playhead advances, arm tip swings
-      > 1 px over 30 frames; 464 workspace tests. M8.3 NEXT: skin a real mesh (bind_nearest + posed_mesh
-      through the raster path), audio decision (estate audio stack does not exist); kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
+      > 1 px over 30 frames; 464 workspace tests. M8.3 SHIPPED at 0.8.7 (2026-11-20, CI green adc1fc5):
+      skinned body through the raster path - a 2x9 vertex strip (80 px of bone length) auto-rigged via
+      Skin::bind_nearest, posed each frame through posed_mesh, drawn as filled triangles via the paint-kit
+      raster path under the bones (body under bones under joints); construction moved to prelude locals so
+      the skin binds the REAL mesh to the REAL joints (placeholder bind caught in review). Oracle: skinned
+      vertices deform over time and stay near the dancer (no explosion); 465 workspace tests. OPS NOTE:
+      /home hit 100 percent mid-gate (cargo incremental 26G cleared - 13G freed); watch disk on long
+      incremental builds. M8.4 NEXT: glTF binary import (needs a JSON parser decision), audio decision
+      (estate audio stack does not exist); kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
       an SphSystem basin in the bottom strip of the viewport (8px wall inset, 150px tall), filled once on the
       first resize with a 55px-radius particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as
       one water sprite per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
