@@ -155,437 +155,519 @@ repos:
     area: ui
     status: support
     notes: >-
-      Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph, damage-tracked
-      compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit closed-form springs, scene-kit
-      retained scene + damage, layout-kit incremental layout, paint-kit exact-coverage raster +
-      gradients/clip/images, window-kit winit facade, text-kit TextEngine trait (Parley backend) + 3x5 micro-font,
-      render-conformance golden-image gate (publish=false). Phase 2 landed 2026-11-01; Phase 3 scaffolding
-      (layout-engine contract, widget-kit retained-props spike, a11y emission) landed 2026-11-02; Phase 3
-      continued (ScrollPane, TabList, theme-kit styling resolver, label_text micro-font glyph rendering) landed
-      2026-11-03; tree-lite TreeList + per-widget CVD verification (Phase 3.4 closed) landed 2026-11-04 at 0.3.6;
-      Select dropdown closed the Phase 3.2 widget list at 0.3.7; Phase 4.1 groundwork at 0.4.0 (paint-kit sparse-
-      strip feature = vello_cpu 0.2 backend, render-conformance parity harness: both rasterizers agree within one
-      channel step on the shared fixture incl. linear/radial gradients at 0.4.1 and rounded rects at 0.4.2
-      (interior one-step parity; corner arcs under an explicit 2% pixel budget for independent curve flattening),
-      strict gate in CI) = Gate C option B made swappable by construction; damage-plan rendering at 0.4.3
-      (paint_tree_plan driven by scene-kit FramePlan: damaged repaint byte-identical to full render, pixel-aligned
-      region clips); rounded chrome for buttons/select at 0.4.4 with ring-inside-rect focus (damage invariant
-      preserved) - parity fixture visually verified on a phone screen; clip stacks on the strip backend at 0.4.5
-      with clipped-sequence parity (one-step oracle, zero budget); shadowed widget chrome at 0.4.9 (buttons/select
-      carry soft shadows; paint_tree_plan inflates damage regions by SHADOW_MARGIN - falsification-verified: 389
-      stale bytes without); sweep gradients at 0.4.10 complete the gradient-kind oracle coverage
-      (solid/linear/radial/sweep, strict parity at zero budget); backgrounds family expanded at 0.5.5
-      (Waves/GradientMesh/Particles/NoiseField/Beams - 9 backgrounds total, contact-sheet reviewed, NoiseField
-      defaults softened); text effects expanded at 0.5.6 (GlitchText RGB-split, FallingText gravity, ShuffleText
-      staggered resolve, DecryptedText threshold reveal - 7 text effects total); Gate C instrument complete at
-      0.5.0 (paint_tree_plan_with drives any renderer through the damage plan; first backend measurement: settings
-      tree 60 frames - CPU mean 5.7 ms/p99 8.1, strip mean 60.5 ms/p99 103.8, strip cost dominated by micro-font-
-      as-1x1-fills; decision waits for kestrel benches + native strip text); GATE A FIRST EVIDENCE at 0.5.1
-      (gate_a_pacing example: real winit window + softbuffer present on the live display, 300 frames -
-      paint+present p50 1.8 ms, present-to-present mean 2.6 ms, 99.3% within the 16.7 ms 60 Hz budget; provisional
-      verdict winit pacing sufficient for kestrel); Gate A SOAK at 0.5.1: 3000 release frames, paint p50 0.27 ms,
-      p99 1.7 ms, 100.0% within the 16.7 ms budget (one 86 ms compositor hiccup, 0.03%) - verdict definitive; fx
-      crate founded at 0.5.3 (solid-fx + plychart capability catalog as a widget library - golden gallery + FNV
-      gates + determinism asserts, catalog BMP artifact verified on a phone screen); charts expanded at 0.5.4 to
-      12 of 22 plychart types (added
-      Area/Multiline/Histogram/StackedBar/Candlestick/Heatmap/Correlation/Treemap/Waterfall - chart catalog page
-      4x3, visually verified); fx_showcase example at 0.5.3 part 2 (animated catalog in a real winit window, tree
-      overlay + fx compose in one frame, inspector recording; VISUAL VERIFICATION via inspector BMP frames read as
-      images: flicker grid animates cell-by-cell per diff map, charts static-and-correct, tree overlay legible;
-      findings: paint 141 ms/frame from micro-font-as-1x1-fills (Gate C lever), shimmer placement clip, scramble
-      charset gaps in micro-font); fresco inspector at 0.5.2 (attachable tracing + per-frame pixel-diff analysis +
-      BMP frame recording + platform screen captures + trace.json/analysis.txt + optional ffmpeg video; artifacts
-      land mid-run for review during operation - 4.4 instrumentation scope closed headlessly); also fixed the
-      present-path bug the example caught on run one (softbuffer surfaces now resize at creation); widget-level
-      strip rendering at 0.4.12 (StripListPainter renders the full widget tree on the sparse-strip pipeline;
-      settings-tree parity through both backends - crisp geometry byte-exact, shadow bands under a documented 2%
-      budget); pacing scaffolding at 0.4.11 (4.4 headless form: per-frame paint-time stats over 120 byte-identical
-      frames of a 360x640 settings screen - mean 6.5 ms, p50 5.2, p99 24.8; screen verified on a phone); pacing
-      instrumentation scaffolding at 0.4.11 (4.4 headless form: per-frame paint-time stats over 120 byte-identical
-      frames of a 360x640 settings screen - mean 6.5 ms, p50 5.2, p99 24.8; screen verified on a phone); strip-
-      backend damage proof at 0.4.6 (compositor model byte-identical to full render - Phase 4.1 headless work
-      closed); SDF shadow primitive at 0.4.7 + strip shadows via vello native gaussian at 0.4.8 (shadows excluded
-      from per-pixel parity by documented design: 50%-at-edge convolution vs 100%-at-edge SDF; structural falloff
-      tests on both backends) - showcase verified on a phone screen; consumer target kestrel-gui (Phase 2.4 alpha
-      remains, needs a display session); CAD/GAME-ENGINE arc opened 2026-11-09: path-kit Arc at 0.6.0 (circular
-      arc segment, eval/arclen/bbox, to-cubic-bezier kappa per <=90deg segment), offset/measure at same
-      (offset_poly miter joins, poly_length incl. closing segment, reverse_poly); quadtree spatial index at 0.6.1
-      (fixed-capacity/depth PR quadtree, straddlers stored at their branching level - regression-tested: nested-
-      split straddler never query-missed, out-of-region items reachable, Rect::contains_rect + Rect::intersects
-      added); polygon ops at 0.6.2 (poly_signed_area/poly_centroid surface centroid, convex_hull Andrew monotone
-      chain, clip_convex Sutherland-Hodgman against convex clip); intersection primitives at 0.6.3
-      (closest_point_on_segment, segment_segment, ray_rect slab method, segment_rect); phys-kit crate founded at
-      0.6.4 (verlet particle world: implicit-velocity particles, inv_mass pinned, DistanceConstraint relaxation,
-      N-iteration solver, deterministic byte-identical reruns, constraint_error metric; tests: rope settling under
-      gravity, pin immobility, damping energy bleed); narrow-phase collision at 0.6.5 (Circle overlap depth + inv-
-      mass resolution, StaticBox least-penetration push-out with epsilon margin); scene Camera + phys Clock at
-      0.6.6 (world<->screen affines with cursor-anchored zoom_at and zoomed pan + visible_rect; fixed-timestep
-      accumulator with interpolation alpha, spiral-of-death cap, deterministic step counting); many-body collision
-      at 0.6.7 (quadtree broad phase over particle AABBs, inv-mass circle narrow phase, static-box push-out;
-      VELOCITY-NEUTRAL corrections: prev shifted by the push-out delta so verlet never absorbs collision teleports
-      as energy - regression: grains tunneled through the floor from collision-injected velocity before the fix,
-      now settle in a stable lattice with a per-step escape assert); physics-to-render integration at 0.6.8
-      (render_rope test: verlet rope settles, rasterizes through paint-kit CPU painter as thick quads, FNV-gated
-      end-to-end determinism - sim + render byte-identical across runs; per-link constraint-error metric); cloth
-      at 0.6.9 (build_cloth grid: structural right/down + shear diagonal links, pinned top corners, air drag;
-      dozens of simultaneous links hold under gravity <0.5 px/link, sag envelope bounded, determinism byte-
-      identical). Fresco now has a complete 2D game-loop core: geometry (path-kit) + simulation (phys-kit) +
-      camera/clock + rendering (paint-kit), all headless-gated; rigid bodies at 0.7.0 (convex polys with
-      mass/inertia from area, SAT with winding-agnostic outward normals and min-separation semantics - regression:
-      max-projection gate never detected overlap and Y-down winding inverted the normals; contacts averaged within
-      0.5 px tolerance to kill corner-rocking; impulse resolution with restitution, clamped Coulomb friction,
-      rotational r x n terms; tests: head-on velocity exchange, floor settling, corner-first spin, determinism);
-      scene picking at 0.7.1 (Scene::pick world-point selection topmost-first with renderer fill rules and parent
-      transforms, Scene::pick_rect marquee via flattened segment/rect intersection; visibility hides subtree);
-      input abstraction at 0.7.2 (InputAction plain-data enum: pointer down/move/up, cursor-anchored scroll zoom,
-      semantic keys; CameraController: primary-button grab-pan with zoom-scaled delta, wheel zoom-at-cursor, key
-      pan/zoom/reset; headless-testable, winit adapter awaits a display session); undo/redo command history at
-      0.7.3 (Command trait: apply captures its own inverse; bounded History undo/redo stacks - bookkeeping
-      regression fixed: undo pushes the inverse-of-inverse to redo, was re-applying the inverse; SetValue
-      convenience command from getter/setter fn pointers); SVG export at 0.7.4 (Scene::export_svg: visible filled
-      paths as SVG document in draw order with global transforms applied, brush color + alpha as fill/fill-
-      opacity, M/L/Q/C/Z d-attributes; geometry-only, text/clips/images skipped as documented limitation). Fresco
-      now covers the full CAD+game-engine loop headless: model (scene) -> edit (pick/history) -> view
-      (camera/clock/input) -> simulate (verlet/rigid/cloth) -> render (paint) -> interchange (SVG export); ECS
-      founded at 0.7.5 (NEW CRATE ecs-kit: generational entity handles with slot recycling + generation bump ABA
-      protection, TypeId-keyed BTreeMap storages with as_any upcasting, deterministic entity-order queries
-      query/query2, has/component_count, two-phase system shape tested byte-identical); SVG path import at 0.7.6
-      (parse_path_d: M/L/Q/C/Z absolute+relative, implicit lineto after move, strict truncation rejection,
-      unsupported commands rejected; path_data_public wrapper - export/import round-trip proven byte-identical);
-      sprite atlas at 0.7.7 (Painter::draw_image_region pixel source-rect drawing; SpriteAtlas shelf packer with
-      1px gutters both axes, named regions, blit + lookup + convenience draw; tests: placement, wrap, out-of-
-      space, duplicate names, pixel correctness, source cropping); static-contact fix at 0.7.8 (REGRESSION:
-      velocity-neutral box push-out let falling grains ride the floor teleporting every step while gravity
-      accumulated normal velocity until the nearest face flipped to the slab bottom and grains tunneled through -
-      static contact is now inelastic: normal velocity absorbed, tangential kept; World::step restructured to the
-      standard PBD projection loop, collision + constraints + box push-out interleaved per iteration, single
-      passes could stack pushes past a slab midline; render_grains integration: 24 grains in a walled container,
-      per-step escape gate, FNV determinism); DXF import at 0.7.9 (scene-kit dxf.rs: minimal ASCII DXF reader,
-      LINE/CIRCLE/ARC/LWPOLYLINE entities, group-code tokenizer, ENTITIES walk, DxfEntity::to_path(flip_y) mirrors
-      Y-up into screen space and reverses arc direction; path-kit Arc re-exported); 3D foundation at 0.7.10 (NEW
-      CRATE three-kit: Vec3/Mat4 column-major math, perspective + look_at, transform_point_w exposing view depth -
-      REGRESSION FIXED: transform_point z had m[14]/w precedence instead of sum/w breaking depth ordering; Frame
-      z-buffered barycentric triangle rasterizer over paint-kit surfaces with near-plane whole-triangle rejection
-      gated on w not NDC z); meshes + lighting at 0.7.11 (Mesh verts+CCW faces with cube() and model-transform,
-      directional Lambert Light with ambient floor, render_mesh with world-space-normal backface culling against
-      the eye then flat shading into the z-buffered pipeline; iso-view culling test: 3 faces = 6 triangles visible
-      from a diagonal eye); texture mapping at 0.7.12 (TexturedTriangle per-vertex normalized UVs,
-      Frame::draw_textured nearest-neighbor sampling from a paint-kit Image, affine screen-space UV interpolation
-      - documented: no perspective-correct divide; BARCENTRIC ATTRIBUTION FIX: w0/w1/w2 edge-function weights
-      align to c/a/b, z interpolation was permuted across vertices - exact only on flat triangles, wrong depths on
-      sloped ones; paint-kit Image::sample publicized for external samplers); perspective-correct UVs at 0.7.13
-      (raster_textured interpolates (u/w, v/w) affinely and renormalizes by interpolated 1/w per pixel - texture
-      boundary follows the projected iso-line exactly; REGRESSION: depth-tilted quad w=1..w=5 where affine drifts
-      the u=0.5 boundary ~25 px, probe test at +-2 px around the projected midline also caught a denominator
-      weight-misalignment during bring-up); OBJ mesh import at 0.7.14 (three-kit obj.rs: v/vt/f subset, 1-based +
-      negative index resolution, v//vn and v/vt/vn slash forms, polygon fan triangulation, per-face UV triplets
-      aligned with mesh.faces defaulting to origin when vt missing, out-of-range and face-less documents
-      rejected); cube showcase at 0.7.15 (three-kit cube_showcase example: rotating lit flat-shaded + textured
-      cube rendered headless to BMP frames for visual verification - VERIFIED on screen: flat pass shows Lambert-
-      shaded faces with correct depth, textured pass shows the checker pattern perspective-projected on all
-      visible faces; Image::sample edge REGRESSION FIXED: u=1.0/v=1.0 clamped to the out-of-bounds index and
-      returned transparent black, so textured faces whose UV window touched v=1.0 vanished entirely - clamp now
-      lands on the last texel, paint-kit regression test added); skeletal skinning at 0.7.16 (three-kit skin.rs:
-      Joint hierarchy with memoized recursive world evaluation, rigid per-vertex binding + bind_nearest auto-rig,
-      posed_mesh composes pose_world * inverse(bind_world) - vertices in model space stay put at bind pose and
-      only the pose delta applies [without the inverse bind, child joint offsets double-applied - the classic
-      skinning bug]; Mat4::inverse Gauss-Jordan with partial pivoting + inverse-undoes-transforms regression;
-      Channel piecewise-linear keyframe sampling with end clamping; animated-arm determinism test); point lights
-      at 0.7.17 (Light enum: Directional | Point with position/ambient/range, shade_at derives the light vector +
-      linear range attenuation from the shaded position, render_mesh shades at the face centroid; tests: full
-      brightness under the light, attenuation falloff, ambient-only beyond range, facing asymmetry); smooth multi-
-      weight skinning at 0.7.18 (Skin bindings generalized to weighted joint lists per vertex - rigid is a single
-      weight-1 entry; posed_mesh weighted-sums pose_world * inverse(bind_world) across bindings; bind_smooth auto-
-      rig: k nearest joints with normalized inverse-distance weights; tests: 50/50 blend lands halfway between
-      rigid results, normalization, smooth bind-pose identity); spot lights at 0.7.19 (Light::Spot: cone axis +
-      inner/outer half-angles with smooth cosine falloff to the cutoff + range attenuation; REGRESSION: the cone
-      test compared the surface-to-light vector against the cone axis - they point in opposite directions, on-axis
-      faces read ambient-only until the vector was negated; tests: on-axis lit, outside-cutoff ambient, range
-      applies within cone); animation clips at 0.7.20 (three-kit animation.rs: AnimationClip binds rotation
-      Channel tracks to joints on X/Y/Z, pose(t) composes track rotations over bind locals with untracked joints
-      preserved; Animator playback state - play/pause/looping vs one-shot clamp-and-stop, advance(dt); tests:
-      pivot-relative rotation, loop wrap, one-shot stop, pause semantics, playback determinism); planar shadows at
-      0.7.21 (three-kit shadow.rs: project_to_plane ray-casts vertices through the light onto a point+normal plane
-      (parallel rays rejected), draw_planar_shadow flattens mesh faces onto the plane with a lift-along-normal
-      z-fighting guard and flat-colors them into the z-buffered pipeline between ground and mesh passes; tests:
-      projection arithmetic, on-plane invariant, parallel rejection, shadow extends away from the light, rendered
-      dark-pixel adjacency to lit ground); particle systems at 0.7.22 (phys-kit particles.rs: Emitter
-      position/velocity/spread/gravity/lifetime/rate, bounded pool with fractional spawn accumulation, velocity
-      integration, order-preserving expiry; DETERMINISTIC JITTER: spawn spread derives from an FNV hash of the
-      spawn index - no RNG, byte-identical runs; lerp_color ramp helper public so render layers build paints while
-      paint-kit stays a dev-dependency - the sim crate remains render-clean; tests: rate + capacity cap, lifetime
-      expiry, upward-spark gravity arc, FNV determinism, fade endpoints, render pixel coverage); fluid-kit crate
-      founded at 0.8.0 (NEW CRATE: 3D Eulerian stable-fluids solver - grid.rs scalar Field + VelocityField with
-      trilinear sampling, solver.rs semi-Lagrangian advection (unconditionally stable), density-driven buoyancy,
-      Jacobi-iterated pressure projection to incompressibility with mean_abs_divergence metric, solid-box
-      boundaries; smoke_showcase example: buoyant plume in a 24-cube grid raymarched per-pixel into BMP frames -
-      VERIFIED visually: mushroom plume rises, cap spreads at the ceiling; tests: projection shrinks divergence,
-      advection along coherent winds (single-cell jets get cancelled by projection - coherent slabs survive),
-      buoyancy lifts a slab, boundaries zero, FNV determinism, bounded density mass); obstacles at 0.8.1
-      (set_solid per-cell mask, solid cells hold Dirichlet p=0 in the Jacobi solve forming pressure walls that
-      divert flow, gradient subtraction + buoyancy skip solid cells, end-of-step cleanup strips velocity + density
-      from them; REGRESSION: the cleanup loop divided the velocity-field index by 3 against the per-cell solid
-      mask, zeroing the wrong cells - solid is one flag per cell; tests: wall blocks smoke and pools it below,
-      obstacle interiors empty, obstacle-flow determinism); obstacle verified in the smoke showcase at 0.8.2
-      (floating slab directly above the emitter: smoke rises, pools against its underside, spills around the sides
-      to the ceiling - raymarch composites the obstacle per-pixel via ray-box entry with entry-face Lambert
-      shading, smoke behind the block occluded by stopping the march at the surface); slice mapping + phone loop
-      at 0.8.3 (slice.rs: SliceAxis + slice_grid_coords mapping viewport pixels to grid coordinates of an axis-
-      aligned cut plane bounded to grid dims, heat_ramp colormap; pure math; PHONE LOOP: Pixel 10 Pro on USB via
-      adb - showcase frames converted to PNG, pushed to Download/fresco-smoke, MediaStore-scanned, openable by the
-      device gallery; device storage-full noted); ANDROID M4 at 0.8.6 M4 (2026-11-15, CI green): interactive
-      widget settings screen ON DEVICE - fresco-android widgets_screen.rs: real widget-kit components (header
-      Label, Save Button + Compact Checkbox row, sync Select dropdown, Device/Projects TreeList, live status
-      Label) laid out by the estate flow engine (tree.compute per resize), TouchPhase Started/Ended routed to
-      pointer_down/pointer_up with hit-test activation; VERIFIED on the Pixel: widget UI renders fullscreen, tree
-      row tap selects (status label updates to row: Device), checkbox toggles via tap; desktop mouse press/release
-      routed through tracked cursor position; headless smoke runner covers scene + widget screen through the same
-      inspector pipeline; fresco-android crate lessons: winit MouseInput carries no position (track last_cursor
-      from CursorMoved), WindowEvent::Touch is a tuple variant wrapping Touch{location, phase}, softbuffer Context
-      must be stored and Surface::new takes &ctx, restore scene_surface BEFORE the blit or the inspector reads
-      None, edition-2024 no_mangle needs unsafe(no_mangle) and the crate lints must allow unsafe_code for the FFI
-      shell."; velocity slice panel at 0.8.4 (smoke_showcase renders a top-down cut plane at mid-height through
-      slice_grid_coords + heat_ramp beside the raymarched view - VERIFIED visually: updraft core yellow/red,
-      obstacle a zero-velocity hole in the flow, green diversion around its edges). solid-fx backgrounds expansion
-      at 0.8.5 (fx backgrounds family 9 -> 13: HexGrid pointy-top lattice with 2px stroked segments, CircuitBoard
-      seeded orthogonal traces + solder dots, CodeRain falling columns with per-column cell_hash phases + fading
-      trails + bright heads, Plasma layered-sine 4px-block field with fire ramp; backgrounds_catalog extended to
-      13 kinds with placeholder-rebaseline goldens recorded, determinism + artifacts widened; VERIFIED visually
-      via RGBA artifact composite over dark ground); backgrounds expansion 2 at 0.8.6 (family 13 -> 17: ScanLines
-      CRT stripes drifting, Aurora sine-swayed alpha bands in mint/blue/violet, Constellation seeded stars
-      connected to nearest neighbors, TopoMap seeded nested wobbly contour systems; goldens recorded, VERIFIED
-      visually). ANDROID M2 SHIPPED at 0.8.6 (2026-11-14, CI green): NEW CRATE fresco-android (cdylib+rlib) - M2
-      windowed NativeActivity showcase running ON the Pixel: winit 0.30 ApplicationHandler + android-activity 0.6
-      + softbuffer present at phone resolution, Touch events mapped to the scene touch trail (finger visibly
-      lands), scene shared with a desktop X11 shell + headless smoke runner; OBSERVABILITY per frame in both
-      shells: Inspector captures (BMP cadence, pixel-diff, FNV) to the app external files dir
-      (/sdcard/Android/data/... adb-pullable), logcat carries stdout pacing lines, adb screencap verified
-      rendering + touch on-device; fixes landed: softbuffer resize before buffer_mut (Wayland panics without it,
-      caught on live desktop), portable .cargo config (CI has no /home/wyatt), infallible android_main (android-
-      target clippy denies expect_used), rustup target add for stable toolchain; packaging via xbuild 0.2.0 (auto-
-      provisions SDK, APK install + am start NativeActivity; xbuild needs --package + --manifest-path in virtual
-      workspaces); desktop shell ~34-42 fps full-frame (M3: damage-plan repaints for 60 fps). ANDROID MILESTONE M1
-      at 0.8.6 (2026-11-14): the whole stack cross-compiles pure-Rust to aarch64-linux-android (NDK r28b at
-      ~/Android/ndk wired as the target linker in .cargo/config.toml) and the fluid smoke_showcase RUNS NATIVELY
-      on the Pixel 10 Pro via adb: 30 frames of 24-cube sim + raymarch in 8.5s on-device, frames to /sdcard,
-      phone-rendered frame BYTE-IDENTICAL to the x86_64 desktop render (mean channel diff 0.0) - cross-
-      architecture determinism proven. M2 windowed NativeActivity + M3 fresco UI demo app remain. ANDROID M3 at
-      0.8.6 M3 (2026-11-14, CI green): damage-tracked rendering in the fresco-android shell - static base layer
-      (background + grid) rendered once per resize and restored under damaged rects (band prev/new, touch rects),
-      per-frame paint limited to band + touch dots; DAMAGE-ORDERING REGRESSION caught on-device: painting the band
-      before the damage restore erased it (band vanished from the phone screen), restore-before-paint is the
-      correct order; DESKTOP 33-42 fps -> 250-530 fps (paint 2.4-2.6ms); ON-DEVICE 59-61 fps locked to the Pixel
-      display (paint 4.3-4.5ms/frame, 100% within the 16.7ms budget) - on-device Gate A pacing evidence achieved;
-      on-device Inspector trace pulled (171 frames); follow-up CI fixes: unused paint_us field +
-      unwrap_or_else(Painter::default) caught by fresh-compile stable clippy (local incremental cache hid them -
-      always verify with a fresh target when counts disagree). MULTI-DEVICE MATRIX at M3 (2026-11-14): the M3 APK
-      installed and ran on 3 devices spanning 2016-2025 hardware - Pixel 10 Pro (Android 17): 56-63 fps paint
-      2.5-4.9ms; Galaxy A53 (Android 16): 44-46 fps paint 2.9-5.8ms; Galaxy S7 herolte (Android 8.0, 2016 SoC):
-      29-33 fps paint 7.9-9.9ms rendering behind the lock screen - the stack spans a decade of Android hardware
-      with zero code changes, API-24 min target covers all; adb screencaps captured per device. ON-SCREEN UNLOCKED
-      VERIFICATION: after the S7 unlock, all three devices show the app rendering on-screen simultaneously (grid
-      lattice + copper sweep band visible in side-by-side screencaps, per-device animation phases independent);
-      touch taps delivered via adb input on all three. ANDROID M4 at 0.8.6 M4 (2026-11-15, CI green): interactive
-      widget settings screen ON DEVICE - fresco-android widgets_screen.rs: real widget-kit components (header
-      Label, Save Button + Compact Checkbox row, sync Select dropdown, Device/Projects TreeList, live status
-      Label) laid out by the estate flow engine (tree.compute per resize), TouchPhase Started/Ended routed to
-      pointer_down/pointer_up with hit-test activation; VERIFIED on the Pixel: widget UI renders fullscreen, tree
-      row tap selects (status label updates to row: Device), checkbox toggles via tap; desktop mouse press/release
-      routed through tracked cursor position; headless smoke runner covers scene + widget screen through the same
-      inspector pipeline. M3 FOLLOW-UP fixes (2026-11-15): about_to_wait re-arms request_redraw every loop
-      iteration (the initial request is consumed after one frame on Android and the loop otherwise sleeps until a
-      real event), plus a 120 Hz redraw ticker thread (Samsung OneUI starves the about_to_wait re-arm -
-      request_redraw is thread-safe per winit so the ticker drives the chain), and file-based pacing.csv capture
-      in the app external files dir (survives logcat ring rotation; adb-pullable). A53 live findings: 7.9 fps at
-      full 1080x2400 physical res (paint 112 ms - CPU exact-coverage at 2.6 M px is the mid-range limit; logical-
-      res render + upscale is the M5 path — AND M5 LOGICAL-RES RENDERING SHIPPED (0.8.7, CI green):
-      paint_and_present paints the widget screen at LOGICAL resolution (physical / scale_factor, 360x800-class)
-      and the blit upscales logical -> physical nearest-neighbor during the copy; touch coords scale by the same
-      factor (hit testing stays exact); VERIFIED on-device: A53 7.9 -> 24.4 fps (paint 112 -> 15.2 ms, 7.4x),
-      widget UI now fills the phone screen properly (was tiny top-left corner at 1/3 scale), Pixel 57.8 fps;
-      desktop scale 1.0 unchanged; text renders via the 3x5 micro-font (ASCII 32..=126; em-dash gap fixed by
-      ASCII-only strings) — real-font rendering via Parley+swash is the M6 text project. SESSION RECORD
-      (2026-11-14/15): Android arc complete M1-M5 across 3 devices (Pixel 10 Pro/A53/S7, 2016-2025 span) — M1
-      cross-compile + on-device exec (byte-identical cross-arch), M2 windowed NativeActivity + touch + per-frame
-      observability, M3 damage-tracked 60fps on-device + Gate A pacing evidence, M4 interactive widget settings
-      screen (touch-verified), M5 logical-res rendering (A53 7.9 -> 24.4 fps, widget UI fills the screen); osint-
-      kit 0.2.0-0.3.1 (24 keyless tools, SEO/GitHub/DNS recon, bounded() pipe deadlock fix); real SEO findings on
-      estate properties (no root sitemap on wyattau.com, no SPF on wyattau.dev). ANDROID M6 TEXT SHIPPED at 0.8.7
-      (2026-11-16, CI green 20a963b): real-font text rendering LANDED via ab_glyph + ab_glyph_rasterizer, NOT
-      Parley+swash (deviation recorded: hermetic embed beats system-font enumeration on Android; DejaVu Sans
-      embedded via include_bytes! in text-kit realfont.rs with fonts/LICENSE, glyph coverage rasterized at any px
-      size, em-dash/bullet now covered); widget-kit label_text renders realfont glyphs first with micro-font
-      fallback per uncovered char; unknown chars map to the .notdef glyph (ab_glyph glyph_id is infallible -
-      callers filter by charset if they need strict coverage). DAMAGE-PLAN LESSON (CI-caught): DrawListPainter
-      push_clip/pop_clip were trait no-ops, so region passes clipped fills but AA glyph blits bypassed painter
-      clips and re-blended across passes - damaged-vs-full byte equality broke; fix = delegate clips to the
-      painter stack + label_text checks the active clip per glyph pixel (blend_pixel is clip-blind; alpha
-      blending is order-dependent). Gallery golden RGB hashes rebaselined in the same commit (scroll-pane label
-      ink no longer bleeds past the pane clip; alpha hashes unchanged). theme_gallery property fixed: seed-dark
-      is authored dichromat-safe, so the deuteranopia Brettel projection is a sub-LSB fixed point on it (cvd
-      variant renders byte-identical to seed by design - identity pinned as a property, uniqueness asserted
-      among the remaining variants; pre-existing failure masked on CI by cargo-test fail-fast). PACING FIX at
-      0.8.7 (2026-11-17, CI green 53a44b8): pacing.csv data rows were NEVER written (header only at resumed();
-      observe_frame feeds the Inspector BMPs, nothing wrote rows) - Gate A pacing evidence silently depended on
-      logcat parsing, which dies on rotation; paint_and_present now writes frame,paint_us,fps_milli per frame,
-      flushed per row (Freecess freeze/kill eats buffered rows); A53 release on-device: 15.4ms/24.3fps persisting
-      in fresco-m4/pacing.csv, matching the M5 profile. XBUILD LESSON: x writes the APK to repo target/x/<profile>/
-      android/ (NOT the shared CARGO_TARGET_DIR cache) - check APK mtime + lib strings before install or you ship
-      a stale binary. PHASE B OPENED at 0.8.7 B1 (2026-11-17, CI green 0fdfb57): new crate fresco-game - the
-      ball-fountain game demo proving the ecs-kit + phys-kit + widget-kit integration contract: ECS entities carry
-      Ball/Radius/Tint/Born components (BTreeMap storages, deterministic iteration), phys-kit Verlet particles +
-      inelastic StaticBox walls + pairwise circle impulses (copy-resolve-writeback: one storage cannot double-
-      borrow mut), fixed timestep 60Hz drained from wall time (4-step cap against renderer stalls), fountain 4/s
-      + tap bursts (8 balls, SPATIAL SPREAD - coincident spawn points form degenerate PBD towers: same-point
-      contacts have no separation direction and chain into self-supporting columns), TTL 5s, 96-entity cap
-      oldest-despawn, post-contact wall pass (ball-ball writeback can re-penetrate the wall band). Desktop winit
-      shell (mouse via tracked cursor) + android_main cdylib + headless smoke runner through the inspector;
-      pacing.csv rows + BMP dumps wired from frame one. ON DEVICE (A53 release): game renders fullscreen - HUD
-      via realfont label path, tap burst cluster mid-flight, fountain pile settled on the floor, 209 pacing rows;
-      paint 100ms / 7.9fps = the B.2 Gate-B target (60fps on-device needs the paint profile: full-surface bg
-      refill + per-frame realfont label raster are the suspects). Oracles: walls containment, entity cap,
-      determinism (twin-run byte equality), burst size, TTL reap vs tap-free twin. XBUILD LESSON 2: --package
-      overrides --manifest-path - verify the lib inside the APK by strings before install. B.2 PERF CLOSED at
-      0.8.7 (2026-11-17, CI green 5aac97c/84162f9/f7a2537): two paint-kit fixes + a shared blit - (1)
-      rasterize_polys built events for EVERY surface row and ran the per-edge activity scan (x_at divisions) on
-      all of them: a 16px ball on a 740px surface paid ~43x wasted band work; band iteration now clamps to the
-      polygon y-span (28 balls 70.9 -> 2.0ms host, 35x, semantics-free - gallery goldens byte-identical); (2)
-      fill_rect ran the cov buffer + per-pixel fraction math even for pixel-aligned solid fills (coverage exactly
-      1.0): new fast path Surface::blend_rect_solid blends the constant color directly, identical blend bytes (bg
-      refill 6.7 -> 0.7ms); (3) the per-pixel f64 blit over 2.6M physical px (~25ms on the A53) lived copy-pasted
-      in BOTH shells - extracted to window-kit::blit::blit_upscaled with an integer-scale fast path (expand k
-      u32 copies per logical row, copy_within repeats it m-1 rows; fractional scales keep nearest-neighbor;
-      oracle: integer upscale equals the naive mapping). GAME RESULT on A53 release: paint 100 -> 3.5ms, fps
-      7.9 -> 33.3 (full budget now visible: paint 3.5ms + present 7.9ms = 11.4ms work against a 30ms period;
-      ticker 2ms experiment proved cadence is not the cap - the remaining ~18ms is BufferQueue dequeue
-      backpressure, i.e. vsync-quantized by the display pipeline, not compute-bound; 60fps needs frame-pacing
-      alignment, not engine work). Gate B verdict: engine-side cost is 11.4ms/frame on the mid-range 2017 phone;
-      Pixel verification pending device return. B.3 SHIPPED at 0.8.7 (2026-11-17, CI green fca2ffd): sprite
-      atlas + grab-and-fling input - crate::atlas builds a deterministic SpriteAtlas procedurally (6 shaded ball
-      sprites: radial shade + off-center highlight, white player ring; paint-kit shelf packer, bytes identical
-      every build - oracle-tested); render switched from AA round rects to draw_image_region blits (paint 3.5 ->
-      1.9ms on the A53, sprite blit cheaper than AA coverage); input model: press = burst + grab a kinematic
-      player (inv_mass 0, gravity + contacts skip it), move = carry (position delta becomes the implicit Verlet
-      velocity), release = fling (inv_mass 1, natural velocity) - shells wire pointer_move via Touch Moved phase
-      (Android) and cursor-move-while-left-held (desktop, tracked button state - the winit MouseInput lesson).
-      A53 verified: shaded sprites render, player ring flung into the pile settles as a dynamic ball, fps 35.5.
-      Oracles: atlas determinism + regions, player follows pointer, release restores dynamics, burst+player
-      count; 443 workspace tests. B.4 SHIPPED at 0.8.7 (2026-11-17, CI green 58c4f90): gameplay goal layer -
-      up to 3 amber ring targets spawn on a 1s cadence at deterministic positions (immovable Ball carriers,
-      inv_mass 0: balls bounce off them like bumpers), ball overlap pops a target -> score++ + 6 short-lived
-      mini-ball sparks (per-entity Ttl override 24 frames vs the 300-frame ball TTL; reap/cap scoped to Born
-      carriers so targets persist), HUD gains the score line, atlas packs the target sprite (8). Oracles:
-      pop scores + despawns + respawn cadence, fx expiry; 445 workspace tests. A53 ON-DEVICE VERIFICATION
-      PENDING: phone left USB mid-session (recurring), APK ready at repo target/x/release/android/, loop =
-      install -r + am start + tap near a ring + screencap. B.4 VERIFIED + MATRIX RE-RUN (2026-11-18): Pixel 10
-      Pro (2025 flagship) BACK ON USB - GAME AT GATE B: 60.0fps locked, paint 0.7ms, present 4.3ms, balls 29
-      (engine 140x faster than the B1 baseline on the same device class); A53 (2022 mid-range): 35.3fps, paint
-      1.9ms, display-queue bound as before; S7 (2016) still in recovery, unavailable. Deterministic smoke frame
-      documents the amber target ring + score HUD + hint line. Multi-device evidence: screencaps + pacing.csv +
-      logcat stats on both devices; smoke BMPs for the deterministic render. B.5 NEXT: gameplay depth (combo
-      timer, target motion), menu screen via widget-kit, sound needs an estate audio stack (does not exist yet);
-      M7 SPH particle fluid, mesh animation loaders; kestrel-gui
-      consumer is the final integration milestone and is now unblocked by the proven Android template. B.5
-      SHIPPED at 0.8.7 (2026-11-18, CI green 44222782754): combo chains + target drift - pops inside 180 sim
-      frames chain (each consecutive pop scores 1 + chain length, expiry pass resets stale chains, HUD shows
-      the multiplier); targets drift kinematically (6-24 px/s deterministic per spawn tick) bounced inside
-      their upper band, and spawn IN the band (out-of-band spawns clamp-teleport on the first drift step -
-      oracle-caught); hitbox aligned to physics contact (ball-ball resolution ejects a touching ball to
-      exactly t_rad + r with gravity wobble - a smaller forgiving radius could never trigger; half-px slack
-      absorbs the wobble). Oracles: combo chains inside window only (direct single-ball spawns, no burst
-      noise), drift stays in band; simultaneous-pop cascades chain same-frame by design. 447 workspace tests.
-      Device state: Pixel fingerprint-locked (adb cannot pass biometrics - verification needs a physical
-      unlock; the black screen was the lockscreen, not an app bug), A53 off USB again, S7 in recovery. B.6
-      NEXT: menu screen via widget-kit, audio decision (estate audio stack does not exist), M7 SPH particle
-      fluid, mesh animation loaders; kestrel-gui consumer is the final integration milestone and is now
-      unblocked by the proven Android template. B.6 SHIPPED at 0.8.7 (2026-11-19, CI green 44458138577): main
-      menu via widget-kit - the retained-mode UI layer hosting an app menu: title/subtitle labels, difficulty
-      Select (Relaxed 30 / Normal 15 / Frenzy 6 sim frames per fountain ball), Play button through WidgetTree
-      take_actions; shell gained an AppState dispatch (Menu | Game) across pointer + paint paths (sim steps
-      only while playing; Play transitions to a fresh GameScreen with the selected cadence). Oracles: Play
-      press queues + drains action 1, difficulty maps to rates, menu paints deterministically, difficulty sets
-      cadence; 450 workspace tests. On-device menu verification still blocked by the Pixel fingerprint lock
-      (needs physical unlock; host oracle covers activation + deterministic paint). B.7 NEXT:
-      B.7 SHIPPED at 0.8.7 (2026-11-19, CI green 3f60832): pause + menu navigation - GameScreen paused flag
-      freezes the wall-time drain AND consumes the interval (an unpause does not sprint through the paused
-      span), render keeps running so the frozen frame stays visible; HUD buttons (pause/menu) drawn
-      right-aligned with shared geometry via hud_button_at - the shell's tap routing and the drawn affordance
-      cannot drift apart; HUD buttons take priority over game input; the menu button returns to the main menu
-      (discards the run). Oracles: pause freezes the sim + unpause advances, HUD hit regions match the drawn
-      labels; 452 workspace tests. On-device check pending the Pixel unlock (same blocker). B.8 SHIPPED at
-      0.8.7 (2026-11-19, CI green 09d7d57): high-score persistence - best score lives in
-      <capture-dir>/highscore.txt (the estate storage DECISION: app-local file until an estate kv/storage
-      crate exists), loaded at resumed(), grown + written only on change, parse is total (corrupt/absent reads
-      0); menu gains a best label refreshed on every return-to-menu; game HUD line is
-      balls/score/combo/best. Oracle: menu best label reflects set_best; 453 workspace tests. On-device
-      verification pending the Pixel unlock (recurring blocker). B.9 SHIPPED at 0.8.7 (2026-11-19, CI green
-      862515e): menu evidence in the smoke runner - one deterministic menu.bmp lands next to the game frames
-      (Inspector::dir getter added; the capture dir was private); visual confirms title/subtitle/difficulty
-      select/best label/Play button all render as real widget-kit components. Device checks remain blocked on
-      the Pixel unlock. M7 OPENED at 0.8.7 M7.1 (2026-11-19, CI green 9d78f6d): fluid-kit::sph - Lagrangian
-      SPH solver alongside the Eulerian grid one: Muller 2003 formulation (poly6 density kernel, spiky
-      pressure gradient, viscosity Laplacian) in pixel units, deterministic f64 with fixed iteration order,
-      brute force O(n^2) neighbors sized for demo pools (spatial hash = upgrade path), wall clamp +
-      restitution, acceleration clamp bounds runaway forces. Params settled on the FIRST tuning pass (h 16,
-      rest density 6, stiffness 40, viscosity 0.6 - pool settles cleanly). Oracles: mass conservation, wall
-      containment, settled-speed bound (no explosion), twin-run determinism; 457 workspace tests. fluid-kit
-      gains path-kit as a dependency (2D vectors; layering legal - L0 under fluid-kit). M7.2 NEXT: SPH pool
-      rendered as sprites in the fresco game (second fluid mode / scene), on-device pacing; mesh animation
-      loaders. M8.1 SHIPPED at 0.8.7 (2026-11-20, CI green 8cd049e): three-kit::anim_text - animation clip
-      text importer (the animation twin of the OBJ mesh importer): clip/track/key line format with # comments
-      parses into AnimationClip tracks (joint + axis + sorted-key Channel); malformed documents fail closed.
-      Oracles: exact parse (name/duration/axes/joints/sorted keys), linear sampling through the parsed clip,
-      fail-closed cases; 463 workspace tests. glTF binary import recorded as future work (needs a JSON
-      parser; the text format covers authoring now). M8.2 SHIPPED at 0.8.7 (2026-11-20, CI green 45da62d):
-      dancing skeleton through the imported clip - a 3-joint skeleton (hip -> torso -> arm) driven by an
-      Animator over the clip parsed from an embedded document via the M8.1 loader (dogfood: importer feeds
-      live playback); render world-composes the joint chain (parent-chain Mat4 composition) and draws bones
-      as white stamps along parent-child segments + player-ring sprites at joints; playback rides the sim
-      clock (freezes when paused). Oracles: clip imported (name dance), playhead advances, arm tip swings
-      > 1 px over 30 frames; 464 workspace tests. M8.3 SHIPPED at 0.8.7 (2026-11-20, CI green adc1fc5):
-      skinned body through the raster path - a 2x9 vertex strip (80 px of bone length) auto-rigged via
-      Skin::bind_nearest, posed each frame through posed_mesh, drawn as filled triangles via the paint-kit
-      raster path under the bones (body under bones under joints); construction moved to prelude locals so
-      the skin binds the REAL mesh to the REAL joints (placeholder bind caught in review). Oracle: skinned
-      vertices deform over time and stay near the dancer (no explosion); 465 workspace tests. OPS NOTE:
-      /home hit 100 percent mid-gate (cargo incremental 26G cleared - 13G freed); watch disk on long
-      incremental builds. M8.4 NEXT: glTF binary import (needs a JSON parser decision), audio decision
-      (estate audio stack does not exist); kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
-      an SphSystem basin in the bottom strip of the viewport (8px wall inset, 150px tall), filled once on the
-      first resize with a 55px-radius particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as
-      one water sprite per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
-      fluid-kit (workspace dependency added for it). Oracle: pool stays in its basin over 300 sim frames; 458
-      workspace tests. On-device verification pending phone return (APK ready). M7.3 SHIPPED at 0.8.7
-      (2026-11-20, CI green c04d4d3): ball-into-pool splash coupling - moving balls push nearby SPH particles
-      (one-way: the fluid answers the game; resting balls skip the churn; reach = ball radius + kernel radius,
-      linear falloff, capped impulse). Oracle: plunge peak churn exceeds the settled baseline by 80 px/s -
-      peak-tracked over the landing window because the splash is a transient spike (the one-step impulse decays
-      through SPH relaxation within ~15 frames). 459 workspace tests. M7.4 SHIPPED at 0.8.7 (2026-11-20, CI
-      green 65e8ac6): two-way pool coupling - submerged balls (below the SPH water line at h-110) get buoyant
-      gravity (cut to 30 percent) and linear drag on the implicit Verlet velocity; the pool now pushes back on
-      the game. Oracle: a ball dropped 10px below the water line falls >= 2x slower than its dry twin over 30
-      steps (both spawned via the in-crate helper). 460 workspace tests. DEFERRED with trigger: spatial-hash
-      neighbor search (activate when pools grow past ~500 particles - brute force is ~0.5ms at 150). M7.5
-      NEXT: mesh animation loaders (three-kit), sound decision; kestrel-gui. DECISION QUEUE EXECUTED
-      (2026-11-20, CI green eba5434): the best-practice review of every interim solution approved six items,
-      all shipped - (Q1) highscore relocated from the trace capture dir to a persist dir (Android internal
-      app data via android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer
-      dies with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
-      FixedUpdate-style bounded-drain idea) + XSPH velocity smoothing (replaces the near-zero Laplacian
-      viscosity) + velocity ceilings 2000 px/s at integration AND after XSPH + accel clamp 4e5 -> 1e5 - the
-      game basin had run away to 1e15 px/s under ball impact, now dissipation-bounded; (Q3) impulse
-      exchange (particle kicks apply equal-opposite reactions to balls, Verlet prev shift, ball mass 8);
-      (Q4) menu keyboard a11y through widget-kit key_nav + key_char (Tab/arrows navigate, Enter/Space
-      activate - the machinery already existed, the game just never routed it); (Q5) disk-janitor sweeps
-      idle cargo incremental caches in the shared target (incremental/ grew to 26G unchecked - the
-      artifact sweep only matched dirs NAMED target/build/.lake; chezmoi c9da42c). Oracles added:
+      Modular retained-mode UI engine for Rust (the estate modular Qt): owned scene graph,
+      damage-tracked compositing, split CPU/GPU paint. Crates: path-kit geometry, anim-kit
+      closed-form springs, scene-kit retained scene + damage, layout-kit incremental layout,
+      paint-kit exact-coverage raster + gradients/clip/images, window-kit winit facade, text-kit
+      TextEngine trait (Parley backend) + 3x5 micro-font, render-conformance golden-image gate
+      (publish=false). Phase 2 landed 2026-11-01; Phase 3 scaffolding (layout-engine contract,
+      widget-kit retained-props spike, a11y emission) landed 2026-11-02; Phase 3 continued
+      (ScrollPane, TabList, theme-kit styling resolver, label_text micro-font glyph rendering)
+      landed 2026-11-03; tree-lite TreeList + per-widget CVD verification (Phase 3.4 closed)
+      landed 2026-11-04 at 0.3.6; Select dropdown closed the Phase 3.2 widget list at 0.3.7;
+      Phase 4.1 groundwork at 0.4.0 (paint-kit sparse- strip feature = vello_cpu 0.2 backend,
+      render-conformance parity harness: both rasterizers agree within one channel step on the
+      shared fixture incl. linear/radial gradients at 0.4.1 and rounded rects at 0.4.2 (interior
+      one-step parity; corner arcs under an explicit 2% pixel budget for independent curve
+      flattening), strict gate in CI) = Gate C option B made swappable by construction; damage-
+      plan rendering at 0.4.3 (paint_tree_plan driven by scene-kit FramePlan: damaged repaint
+      byte-identical to full render, pixel-aligned region clips); rounded chrome for
+      buttons/select at 0.4.4 with ring-inside-rect focus (damage invariant preserved) - parity
+      fixture visually verified on a phone screen; clip stacks on the strip backend at 0.4.5
+      with clipped-sequence parity (one-step oracle, zero budget); shadowed widget chrome at
+      0.4.9 (buttons/select carry soft shadows; paint_tree_plan inflates damage regions by
+      SHADOW_MARGIN - falsification-verified: 389 stale bytes without); sweep gradients at
+      0.4.10 complete the gradient-kind oracle coverage (solid/linear/radial/sweep, strict
+      parity at zero budget); backgrounds family expanded at 0.5.5
+      (Waves/GradientMesh/Particles/NoiseField/Beams - 9 backgrounds total, contact-sheet
+      reviewed, NoiseField defaults softened); text effects expanded at 0.5.6 (GlitchText RGB-
+      split, FallingText gravity, ShuffleText staggered resolve, DecryptedText threshold reveal
+      - 7 text effects total); Gate C instrument complete at 0.5.0 (paint_tree_plan_with drives
+      any renderer through the damage plan; first backend measurement: settings tree 60 frames -
+      CPU mean 5.7 ms/p99 8.1, strip mean 60.5 ms/p99 103.8, strip cost dominated by micro-font-
+      as-1x1-fills; decision waits for kestrel benches + native strip text); GATE A FIRST
+      EVIDENCE at 0.5.1 (gate_a_pacing example: real winit window + softbuffer present on the
+      live display, 300 frames - paint+present p50 1.8 ms, present-to-present mean 2.6 ms, 99.3%
+      within the 16.7 ms 60 Hz budget; provisional verdict winit pacing sufficient for kestrel);
+      Gate A SOAK at 0.5.1: 3000 release frames, paint p50 0.27 ms, p99 1.7 ms, 100.0% within
+      the 16.7 ms budget (one 86 ms compositor hiccup, 0.03%) - verdict definitive; fx crate
+      founded at 0.5.3 (solid-fx + plychart capability catalog as a widget library - golden
+      gallery + FNV gates + determinism asserts, catalog BMP artifact verified on a phone
+      screen); charts expanded at 0.5.4 to 12 of 22 plychart types (added
+      Area/Multiline/Histogram/StackedBar/Candlestick/Heatmap/Correlation/Treemap/Waterfall -
+      chart catalog page 4x3, visually verified); fx_showcase example at 0.5.3 part 2 (animated
+      catalog in a real winit window, tree overlay + fx compose in one frame, inspector
+      recording; VISUAL VERIFICATION via inspector BMP frames read as images: flicker grid
+      animates cell-by-cell per diff map, charts static-and-correct, tree overlay legible;
+      findings: paint 141 ms/frame from micro-font-as-1x1-fills (Gate C lever), shimmer
+      placement clip, scramble charset gaps in micro-font); fresco inspector at 0.5.2
+      (attachable tracing + per-frame pixel-diff analysis + BMP frame recording + platform
+      screen captures + trace.json/analysis.txt + optional ffmpeg video; artifacts land mid-run
+      for review during operation - 4.4 instrumentation scope closed headlessly); also fixed the
+      present-path bug the example caught on run one (softbuffer surfaces now resize at
+      creation); widget-level strip rendering at 0.4.12 (StripListPainter renders the full
+      widget tree on the sparse-strip pipeline; settings-tree parity through both backends -
+      crisp geometry byte-exact, shadow bands under a documented 2% budget); pacing scaffolding
+      at 0.4.11 (4.4 headless form: per-frame paint-time stats over 120 byte-identical frames of
+      a 360x640 settings screen - mean 6.5 ms, p50 5.2, p99 24.8; screen verified on a phone);
+      pacing instrumentation scaffolding at 0.4.11 (4.4 headless form: per-frame paint-time
+      stats over 120 byte-identical frames of a 360x640 settings screen - mean 6.5 ms, p50 5.2,
+      p99 24.8; screen verified on a phone); strip- backend damage proof at 0.4.6 (compositor
+      model byte-identical to full render - Phase 4.1 headless work closed); SDF shadow
+      primitive at 0.4.7 + strip shadows via vello native gaussian at 0.4.8 (shadows excluded
+      from per-pixel parity by documented design: 50%-at-edge convolution vs 100%-at-edge SDF;
+      structural falloff tests on both backends) - showcase verified on a phone screen; consumer
+      target kestrel-gui (Phase 2.4 alpha remains, needs a display session); CAD/GAME-ENGINE arc
+      opened 2026-11-09: path-kit Arc at 0.6.0 (circular arc segment, eval/arclen/bbox, to-
+      cubic-bezier kappa per <=90deg segment), offset/measure at same (offset_poly miter joins,
+      poly_length incl. closing segment, reverse_poly); quadtree spatial index at 0.6.1 (fixed-
+      capacity/depth PR quadtree, straddlers stored at their branching level - regression-
+      tested: nested- split straddler never query-missed, out-of-region items reachable,
+      Rect::contains_rect + Rect::intersects added); polygon ops at 0.6.2
+      (poly_signed_area/poly_centroid surface centroid, convex_hull Andrew monotone chain,
+      clip_convex Sutherland-Hodgman against convex clip); intersection primitives at 0.6.3
+      (closest_point_on_segment, segment_segment, ray_rect slab method, segment_rect); phys-kit
+      crate founded at 0.6.4 (verlet particle world: implicit-velocity particles, inv_mass
+      pinned, DistanceConstraint relaxation, N-iteration solver, deterministic byte-identical
+      reruns, constraint_error metric; tests: rope settling under gravity, pin immobility,
+      damping energy bleed); narrow-phase collision at 0.6.5 (Circle overlap depth + inv- mass
+      resolution, StaticBox least-penetration push-out with epsilon margin); scene Camera + phys
+      Clock at 0.6.6 (world<->screen affines with cursor-anchored zoom_at and zoomed pan +
+      visible_rect; fixed-timestep accumulator with interpolation alpha, spiral-of-death cap,
+      deterministic step counting); many-body collision at 0.6.7 (quadtree broad phase over
+      particle AABBs, inv-mass circle narrow phase, static-box push-out; VELOCITY-NEUTRAL
+      corrections: prev shifted by the push-out delta so verlet never absorbs collision
+      teleports as energy - regression: grains tunneled through the floor from collision-
+      injected velocity before the fix, now settle in a stable lattice with a per-step escape
+      assert); physics-to-render integration at 0.6.8 (render_rope test: verlet rope settles,
+      rasterizes through paint-kit CPU painter as thick quads, FNV-gated end-to-end determinism
+      - sim + render byte-identical across runs; per-link constraint-error metric); cloth at
+      0.6.9 (build_cloth grid: structural right/down + shear diagonal links, pinned top corners,
+      air drag; dozens of simultaneous links hold under gravity <0.5 px/link, sag envelope
+      bounded, determinism byte- identical). Fresco now has a complete 2D game-loop core:
+      geometry (path-kit) + simulation (phys-kit) + camera/clock + rendering (paint-kit), all
+      headless-gated; rigid bodies at 0.7.0 (convex polys with mass/inertia from area, SAT with
+      winding-agnostic outward normals and min-separation semantics - regression: max-projection
+      gate never detected overlap and Y-down winding inverted the normals; contacts averaged
+      within 0.5 px tolerance to kill corner-rocking; impulse resolution with restitution,
+      clamped Coulomb friction, rotational r x n terms; tests: head-on velocity exchange, floor
+      settling, corner-first spin, determinism); scene picking at 0.7.1 (Scene::pick world-point
+      selection topmost-first with renderer fill rules and parent transforms, Scene::pick_rect
+      marquee via flattened segment/rect intersection; visibility hides subtree); input
+      abstraction at 0.7.2 (InputAction plain-data enum: pointer down/move/up, cursor-anchored
+      scroll zoom, semantic keys; CameraController: primary-button grab-pan with zoom-scaled
+      delta, wheel zoom-at-cursor, key pan/zoom/reset; headless-testable, winit adapter awaits a
+      display session); undo/redo command history at 0.7.3 (Command trait: apply captures its
+      own inverse; bounded History undo/redo stacks - bookkeeping regression fixed: undo pushes
+      the inverse-of-inverse to redo, was re-applying the inverse; SetValue convenience command
+      from getter/setter fn pointers); SVG export at 0.7.4 (Scene::export_svg: visible filled
+      paths as SVG document in draw order with global transforms applied, brush color + alpha as
+      fill/fill- opacity, M/L/Q/C/Z d-attributes; geometry-only, text/clips/images skipped as
+      documented limitation). Fresco now covers the full CAD+game-engine loop headless: model
+      (scene) -> edit (pick/history) -> view (camera/clock/input) -> simulate
+      (verlet/rigid/cloth) -> render (paint) -> interchange (SVG export); ECS founded at 0.7.5
+      (NEW CRATE ecs-kit: generational entity handles with slot recycling + generation bump ABA
+      protection, TypeId-keyed BTreeMap storages with as_any upcasting, deterministic entity-
+      order queries query/query2, has/component_count, two-phase system shape tested byte-
+      identical); SVG path import at 0.7.6 (parse_path_d: M/L/Q/C/Z absolute+relative, implicit
+      lineto after move, strict truncation rejection, unsupported commands rejected;
+      path_data_public wrapper - export/import round-trip proven byte-identical); sprite atlas
+      at 0.7.7 (Painter::draw_image_region pixel source-rect drawing; SpriteAtlas shelf packer
+      with 1px gutters both axes, named regions, blit + lookup + convenience draw; tests:
+      placement, wrap, out-of- space, duplicate names, pixel correctness, source cropping);
+      static-contact fix at 0.7.8 (REGRESSION: velocity-neutral box push-out let falling grains
+      ride the floor teleporting every step while gravity accumulated normal velocity until the
+      nearest face flipped to the slab bottom and grains tunneled through - static contact is
+      now inelastic: normal velocity absorbed, tangential kept; World::step restructured to the
+      standard PBD projection loop, collision + constraints + box push-out interleaved per
+      iteration, single passes could stack pushes past a slab midline; render_grains
+      integration: 24 grains in a walled container, per-step escape gate, FNV determinism); DXF
+      import at 0.7.9 (scene-kit dxf.rs: minimal ASCII DXF reader, LINE/CIRCLE/ARC/LWPOLYLINE
+      entities, group-code tokenizer, ENTITIES walk, DxfEntity::to_path(flip_y) mirrors Y-up
+      into screen space and reverses arc direction; path-kit Arc re-exported); 3D foundation at
+      0.7.10 (NEW CRATE three-kit: Vec3/Mat4 column-major math, perspective + look_at,
+      transform_point_w exposing view depth - REGRESSION FIXED: transform_point z had m[14]/w
+      precedence instead of sum/w breaking depth ordering; Frame z-buffered barycentric triangle
+      rasterizer over paint-kit surfaces with near-plane whole-triangle rejection gated on w not
+      NDC z); meshes + lighting at 0.7.11 (Mesh verts+CCW faces with cube() and model-transform,
+      directional Lambert Light with ambient floor, render_mesh with world-space-normal backface
+      culling against the eye then flat shading into the z-buffered pipeline; iso-view culling
+      test: 3 faces = 6 triangles visible from a diagonal eye); texture mapping at 0.7.12
+      (TexturedTriangle per-vertex normalized UVs, Frame::draw_textured nearest-neighbor
+      sampling from a paint-kit Image, affine screen-space UV interpolation - documented: no
+      perspective-correct divide; BARCENTRIC ATTRIBUTION FIX: w0/w1/w2 edge-function weights
+      align to c/a/b, z interpolation was permuted across vertices - exact only on flat
+      triangles, wrong depths on sloped ones; paint-kit Image::sample publicized for external
+      samplers); perspective-correct UVs at 0.7.13 (raster_textured interpolates (u/w, v/w)
+      affinely and renormalizes by interpolated 1/w per pixel - texture boundary follows the
+      projected iso-line exactly; REGRESSION: depth-tilted quad w=1..w=5 where affine drifts the
+      u=0.5 boundary ~25 px, probe test at +-2 px around the projected midline also caught a
+      denominator weight-misalignment during bring-up); OBJ mesh import at 0.7.14 (three-kit
+      obj.rs: v/vt/f subset, 1-based + negative index resolution, v//vn and v/vt/vn slash forms,
+      polygon fan triangulation, per-face UV triplets aligned with mesh.faces defaulting to
+      origin when vt missing, out-of-range and face-less documents rejected); cube showcase at
+      0.7.15 (three-kit cube_showcase example: rotating lit flat-shaded + textured cube rendered
+      headless to BMP frames for visual verification - VERIFIED on screen: flat pass shows
+      Lambert- shaded faces with correct depth, textured pass shows the checker pattern
+      perspective-projected on all visible faces; Image::sample edge REGRESSION FIXED:
+      u=1.0/v=1.0 clamped to the out-of-bounds index and returned transparent black, so textured
+      faces whose UV window touched v=1.0 vanished entirely - clamp now lands on the last texel,
+      paint-kit regression test added); skeletal skinning at 0.7.16 (three-kit skin.rs: Joint
+      hierarchy with memoized recursive world evaluation, rigid per-vertex binding +
+      bind_nearest auto-rig, posed_mesh composes pose_world * inverse(bind_world) - vertices in
+      model space stay put at bind pose and only the pose delta applies [without the inverse
+      bind, child joint offsets double-applied - the classic skinning bug]; Mat4::inverse Gauss-
+      Jordan with partial pivoting + inverse-undoes-transforms regression; Channel piecewise-
+      linear keyframe sampling with end clamping; animated-arm determinism test); point lights
+      at 0.7.17 (Light enum: Directional | Point with position/ambient/range, shade_at derives
+      the light vector + linear range attenuation from the shaded position, render_mesh shades
+      at the face centroid; tests: full brightness under the light, attenuation falloff,
+      ambient-only beyond range, facing asymmetry); smooth multi- weight skinning at 0.7.18
+      (Skin bindings generalized to weighted joint lists per vertex - rigid is a single weight-1
+      entry; posed_mesh weighted-sums pose_world * inverse(bind_world) across bindings;
+      bind_smooth auto- rig: k nearest joints with normalized inverse-distance weights; tests:
+      50/50 blend lands halfway between rigid results, normalization, smooth bind-pose
+      identity); spot lights at 0.7.19 (Light::Spot: cone axis + inner/outer half-angles with
+      smooth cosine falloff to the cutoff + range attenuation; REGRESSION: the cone test
+      compared the surface-to-light vector against the cone axis - they point in opposite
+      directions, on-axis faces read ambient-only until the vector was negated; tests: on-axis
+      lit, outside-cutoff ambient, range applies within cone); animation clips at 0.7.20 (three-
+      kit animation.rs: AnimationClip binds rotation Channel tracks to joints on X/Y/Z, pose(t)
+      composes track rotations over bind locals with untracked joints preserved; Animator
+      playback state - play/pause/looping vs one-shot clamp-and-stop, advance(dt); tests: pivot-
+      relative rotation, loop wrap, one-shot stop, pause semantics, playback determinism);
+      planar shadows at 0.7.21 (three-kit shadow.rs: project_to_plane ray-casts vertices through
+      the light onto a point+normal plane (parallel rays rejected), draw_planar_shadow flattens
+      mesh faces onto the plane with a lift-along-normal z-fighting guard and flat-colors them
+      into the z-buffered pipeline between ground and mesh passes; tests: projection arithmetic,
+      on-plane invariant, parallel rejection, shadow extends away from the light, rendered dark-
+      pixel adjacency to lit ground); particle systems at 0.7.22 (phys-kit particles.rs: Emitter
+      position/velocity/spread/gravity/lifetime/rate, bounded pool with fractional spawn
+      accumulation, velocity integration, order-preserving expiry; DETERMINISTIC JITTER: spawn
+      spread derives from an FNV hash of the spawn index - no RNG, byte-identical runs;
+      lerp_color ramp helper public so render layers build paints while paint-kit stays a dev-
+      dependency - the sim crate remains render-clean; tests: rate + capacity cap, lifetime
+      expiry, upward-spark gravity arc, FNV determinism, fade endpoints, render pixel coverage);
+      fluid-kit crate founded at 0.8.0 (NEW CRATE: 3D Eulerian stable-fluids solver - grid.rs
+      scalar Field + VelocityField with trilinear sampling, solver.rs semi-Lagrangian advection
+      (unconditionally stable), density-driven buoyancy, Jacobi-iterated pressure projection to
+      incompressibility with mean_abs_divergence metric, solid-box boundaries; smoke_showcase
+      example: buoyant plume in a 24-cube grid raymarched per-pixel into BMP frames - VERIFIED
+      visually: mushroom plume rises, cap spreads at the ceiling; tests: projection shrinks
+      divergence, advection along coherent winds (single-cell jets get cancelled by projection -
+      coherent slabs survive), buoyancy lifts a slab, boundaries zero, FNV determinism, bounded
+      density mass); obstacles at 0.8.1 (set_solid per-cell mask, solid cells hold Dirichlet p=0
+      in the Jacobi solve forming pressure walls that divert flow, gradient subtraction +
+      buoyancy skip solid cells, end-of-step cleanup strips velocity + density from them;
+      REGRESSION: the cleanup loop divided the velocity-field index by 3 against the per-cell
+      solid mask, zeroing the wrong cells - solid is one flag per cell; tests: wall blocks smoke
+      and pools it below, obstacle interiors empty, obstacle-flow determinism); obstacle
+      verified in the smoke showcase at 0.8.2 (floating slab directly above the emitter: smoke
+      rises, pools against its underside, spills around the sides to the ceiling - raymarch
+      composites the obstacle per-pixel via ray-box entry with entry-face Lambert shading, smoke
+      behind the block occluded by stopping the march at the surface); slice mapping + phone
+      loop at 0.8.3 (slice.rs: SliceAxis + slice_grid_coords mapping viewport pixels to grid
+      coordinates of an axis- aligned cut plane bounded to grid dims, heat_ramp colormap; pure
+      math; PHONE LOOP: Pixel 10 Pro on USB via adb - showcase frames converted to PNG, pushed
+      to Download/fresco-smoke, MediaStore-scanned, openable by the device gallery; device
+      storage-full noted); ANDROID M4 at 0.8.6 M4 (2026-11-15, CI green): interactive widget
+      settings screen ON DEVICE - fresco-android widgets_screen.rs: real widget-kit components
+      (header Label, Save Button + Compact Checkbox row, sync Select dropdown, Device/Projects
+      TreeList, live status Label) laid out by the estate flow engine (tree.compute per resize),
+      TouchPhase Started/Ended routed to pointer_down/pointer_up with hit-test activation;
+      VERIFIED on the Pixel: widget UI renders fullscreen, tree row tap selects (status label
+      updates to row: Device), checkbox toggles via tap; desktop mouse press/release routed
+      through tracked cursor position; headless smoke runner covers scene + widget screen
+      through the same inspector pipeline; fresco-android crate lessons: winit MouseInput
+      carries no position (track last_cursor from CursorMoved), WindowEvent::Touch is a tuple
+      variant wrapping Touch{location, phase}, softbuffer Context must be stored and
+      Surface::new takes &ctx, restore scene_surface BEFORE the blit or the inspector reads
+      None, edition-2024 no_mangle needs unsafe(no_mangle) and the crate lints must allow
+      unsafe_code for the FFI shell."; velocity slice panel at 0.8.4 (smoke_showcase renders a
+      top-down cut plane at mid-height through slice_grid_coords + heat_ramp beside the
+      raymarched view - VERIFIED visually: updraft core yellow/red, obstacle a zero-velocity
+      hole in the flow, green diversion around its edges). solid-fx backgrounds expansion at
+      0.8.5 (fx backgrounds family 9 -> 13: HexGrid pointy-top lattice with 2px stroked
+      segments, CircuitBoard seeded orthogonal traces + solder dots, CodeRain falling columns
+      with per-column cell_hash phases + fading trails + bright heads, Plasma layered-sine 4px-
+      block field with fire ramp; backgrounds_catalog extended to 13 kinds with placeholder-
+      rebaseline goldens recorded, determinism + artifacts widened; VERIFIED visually via RGBA
+      artifact composite over dark ground); backgrounds expansion 2 at 0.8.6 (family 13 -> 17:
+      ScanLines CRT stripes drifting, Aurora sine-swayed alpha bands in mint/blue/violet,
+      Constellation seeded stars connected to nearest neighbors, TopoMap seeded nested wobbly
+      contour systems; goldens recorded, VERIFIED visually). ANDROID M2 SHIPPED at 0.8.6
+      (2026-11-14, CI green): NEW CRATE fresco-android (cdylib+rlib) - M2 windowed
+      NativeActivity showcase running ON the Pixel: winit 0.30 ApplicationHandler + android-
+      activity 0.6 + softbuffer present at phone resolution, Touch events mapped to the scene
+      touch trail (finger visibly lands), scene shared with a desktop X11 shell + headless smoke
+      runner; OBSERVABILITY per frame in both shells: Inspector captures (BMP cadence, pixel-
+      diff, FNV) to the app external files dir (/sdcard/Android/data/... adb-pullable), logcat
+      carries stdout pacing lines, adb screencap verified rendering + touch on-device; fixes
+      landed: softbuffer resize before buffer_mut (Wayland panics without it, caught on live
+      desktop), portable .cargo config (CI has no /home/wyatt), infallible android_main
+      (android- target clippy denies expect_used), rustup target add for stable toolchain;
+      packaging via xbuild 0.2.0 (auto- provisions SDK, APK install + am start NativeActivity;
+      xbuild needs --package + --manifest-path in virtual workspaces); desktop shell ~34-42 fps
+      full-frame (M3: damage-plan repaints for 60 fps). ANDROID MILESTONE M1 at 0.8.6
+      (2026-11-14): the whole stack cross-compiles pure-Rust to aarch64-linux-android (NDK r28b
+      at ~/Android/ndk wired as the target linker in .cargo/config.toml) and the fluid
+      smoke_showcase RUNS NATIVELY on the Pixel 10 Pro via adb: 30 frames of 24-cube sim +
+      raymarch in 8.5s on-device, frames to /sdcard, phone-rendered frame BYTE-IDENTICAL to the
+      x86_64 desktop render (mean channel diff 0.0) - cross- architecture determinism proven. M2
+      windowed NativeActivity + M3 fresco UI demo app remain. ANDROID M3 at 0.8.6 M3
+      (2026-11-14, CI green): damage-tracked rendering in the fresco-android shell - static base
+      layer (background + grid) rendered once per resize and restored under damaged rects (band
+      prev/new, touch rects), per-frame paint limited to band + touch dots; DAMAGE-ORDERING
+      REGRESSION caught on-device: painting the band before the damage restore erased it (band
+      vanished from the phone screen), restore-before-paint is the correct order; DESKTOP 33-42
+      fps -> 250-530 fps (paint 2.4-2.6ms); ON-DEVICE 59-61 fps locked to the Pixel display
+      (paint 4.3-4.5ms/frame, 100% within the 16.7ms budget) - on-device Gate A pacing evidence
+      achieved; on-device Inspector trace pulled (171 frames); follow-up CI fixes: unused
+      paint_us field + unwrap_or_else(Painter::default) caught by fresh-compile stable clippy
+      (local incremental cache hid them - always verify with a fresh target when counts
+      disagree). MULTI-DEVICE MATRIX at M3 (2026-11-14): the M3 APK installed and ran on 3
+      devices spanning 2016-2025 hardware - Pixel 10 Pro (Android 17): 56-63 fps paint
+      2.5-4.9ms; Galaxy A53 (Android 16): 44-46 fps paint 2.9-5.8ms; Galaxy S7 herolte (Android
+      8.0, 2016 SoC): 29-33 fps paint 7.9-9.9ms rendering behind the lock screen - the stack
+      spans a decade of Android hardware with zero code changes, API-24 min target covers all;
+      adb screencaps captured per device. ON-SCREEN UNLOCKED VERIFICATION: after the S7 unlock,
+      all three devices show the app rendering on-screen simultaneously (grid lattice + copper
+      sweep band visible in side-by-side screencaps, per-device animation phases independent);
+      touch taps delivered via adb input on all three. ANDROID M4 at 0.8.6 M4 (2026-11-15, CI
+      green): interactive widget settings screen ON DEVICE - fresco-android widgets_screen.rs:
+      real widget-kit components (header Label, Save Button + Compact Checkbox row, sync Select
+      dropdown, Device/Projects TreeList, live status Label) laid out by the estate flow engine
+      (tree.compute per resize), TouchPhase Started/Ended routed to pointer_down/pointer_up with
+      hit-test activation; VERIFIED on the Pixel: widget UI renders fullscreen, tree row tap
+      selects (status label updates to row: Device), checkbox toggles via tap; desktop mouse
+      press/release routed through tracked cursor position; headless smoke runner covers scene +
+      widget screen through the same inspector pipeline. M3 FOLLOW-UP fixes (2026-11-15):
+      about_to_wait re-arms request_redraw every loop iteration (the initial request is consumed
+      after one frame on Android and the loop otherwise sleeps until a real event), plus a 120
+      Hz redraw ticker thread (Samsung OneUI starves the about_to_wait re-arm - request_redraw
+      is thread-safe per winit so the ticker drives the chain), and file-based pacing.csv
+      capture in the app external files dir (survives logcat ring rotation; adb-pullable). A53
+      live findings: 7.9 fps at full 1080x2400 physical res (paint 112 ms - CPU exact-coverage
+      at 2.6 M px is the mid-range limit; logical- res render + upscale is the M5 path — AND M5
+      LOGICAL-RES RENDERING SHIPPED (0.8.7, CI green): paint_and_present paints the widget
+      screen at LOGICAL resolution (physical / scale_factor, 360x800-class) and the blit
+      upscales logical -> physical nearest-neighbor during the copy; touch coords scale by the
+      same factor (hit testing stays exact); VERIFIED on-device: A53 7.9 -> 24.4 fps (paint 112
+      -> 15.2 ms, 7.4x), widget UI now fills the phone screen properly (was tiny top-left corner
+      at 1/3 scale), Pixel 57.8 fps; desktop scale 1.0 unchanged; text renders via the 3x5
+      micro-font (ASCII 32..=126; em-dash gap fixed by ASCII-only strings) — real-font rendering
+      via Parley+swash is the M6 text project. SESSION RECORD (2026-11-14/15): Android arc
+      complete M1-M5 across 3 devices (Pixel 10 Pro/A53/S7, 2016-2025 span) — M1 cross-compile +
+      on-device exec (byte-identical cross-arch), M2 windowed NativeActivity + touch + per-frame
+      observability, M3 damage-tracked 60fps on-device + Gate A pacing evidence, M4 interactive
+      widget settings screen (touch-verified), M5 logical-res rendering (A53 7.9 -> 24.4 fps,
+      widget UI fills the screen); osint- kit 0.2.0-0.3.1 (24 keyless tools, SEO/GitHub/DNS
+      recon, bounded() pipe deadlock fix); real SEO findings on estate properties (no root
+      sitemap on wyattau.com, no SPF on wyattau.dev). ANDROID M6 TEXT SHIPPED at 0.8.7
+      (2026-11-16, CI green 20a963b): real-font text rendering LANDED via ab_glyph +
+      ab_glyph_rasterizer, NOT Parley+swash (deviation recorded: hermetic embed beats system-
+      font enumeration on Android; DejaVu Sans embedded via include_bytes! in text-kit
+      realfont.rs with fonts/LICENSE, glyph coverage rasterized at any px size, em-dash/bullet
+      now covered); widget-kit label_text renders realfont glyphs first with micro-font fallback
+      per uncovered char; unknown chars map to the .notdef glyph (ab_glyph glyph_id is
+      infallible - callers filter by charset if they need strict coverage). DAMAGE-PLAN LESSON
+      (CI-caught): DrawListPainter push_clip/pop_clip were trait no-ops, so region passes
+      clipped fills but AA glyph blits bypassed painter clips and re-blended across passes -
+      damaged-vs-full byte equality broke; fix = delegate clips to the painter stack +
+      label_text checks the active clip per glyph pixel (blend_pixel is clip-blind; alpha
+      blending is order-dependent). Gallery golden RGB hashes rebaselined in the same commit
+      (scroll-pane label ink no longer bleeds past the pane clip; alpha hashes unchanged).
+      theme_gallery property fixed: seed-dark is authored dichromat-safe, so the deuteranopia
+      Brettel projection is a sub-LSB fixed point on it (cvd variant renders byte-identical to
+      seed by design - identity pinned as a property, uniqueness asserted among the remaining
+      variants; pre-existing failure masked on CI by cargo-test fail-fast). PACING FIX at 0.8.7
+      (2026-11-17, CI green 53a44b8): pacing.csv data rows were NEVER written (header only at
+      resumed(); observe_frame feeds the Inspector BMPs, nothing wrote rows) - Gate A pacing
+      evidence silently depended on logcat parsing, which dies on rotation; paint_and_present
+      now writes frame,paint_us,fps_milli per frame, flushed per row (Freecess freeze/kill eats
+      buffered rows); A53 release on-device: 15.4ms/24.3fps persisting in fresco-m4/pacing.csv,
+      matching the M5 profile. XBUILD LESSON: x writes the APK to repo target/x/<profile>/
+      android/ (NOT the shared CARGO_TARGET_DIR cache) - check APK mtime + lib strings before
+      install or you ship a stale binary. PHASE B OPENED at 0.8.7 B1 (2026-11-17, CI green
+      0fdfb57): new crate fresco-game - the ball-fountain game demo proving the ecs-kit + phys-
+      kit + widget-kit integration contract: ECS entities carry Ball/Radius/Tint/Born components
+      (BTreeMap storages, deterministic iteration), phys-kit Verlet particles + inelastic
+      StaticBox walls + pairwise circle impulses (copy-resolve-writeback: one storage cannot
+      double- borrow mut), fixed timestep 60Hz drained from wall time (4-step cap against
+      renderer stalls), fountain 4/s + tap bursts (8 balls, SPATIAL SPREAD - coincident spawn
+      points form degenerate PBD towers: same-point contacts have no separation direction and
+      chain into self-supporting columns), TTL 5s, 96-entity cap oldest-despawn, post-contact
+      wall pass (ball-ball writeback can re-penetrate the wall band). Desktop winit shell (mouse
+      via tracked cursor) + android_main cdylib + headless smoke runner through the inspector;
+      pacing.csv rows + BMP dumps wired from frame one. ON DEVICE (A53 release): game renders
+      fullscreen - HUD via realfont label path, tap burst cluster mid-flight, fountain pile
+      settled on the floor, 209 pacing rows; paint 100ms / 7.9fps = the B.2 Gate-B target (60fps
+      on-device needs the paint profile: full-surface bg refill + per-frame realfont label
+      raster are the suspects). Oracles: walls containment, entity cap, determinism (twin-run
+      byte equality), burst size, TTL reap vs tap-free twin. XBUILD LESSON 2: --package
+      overrides --manifest-path - verify the lib inside the APK by strings before install. B.2
+      PERF CLOSED at 0.8.7 (2026-11-17, CI green 5aac97c/84162f9/f7a2537): two paint-kit fixes +
+      a shared blit - (1) rasterize_polys built events for EVERY surface row and ran the per-
+      edge activity scan (x_at divisions) on all of them: a 16px ball on a 740px surface paid
+      ~43x wasted band work; band iteration now clamps to the polygon y-span (28 balls 70.9 ->
+      2.0ms host, 35x, semantics-free - gallery goldens byte-identical); (2) fill_rect ran the
+      cov buffer + per-pixel fraction math even for pixel-aligned solid fills (coverage exactly
+      1.0): new fast path Surface::blend_rect_solid blends the constant color directly,
+      identical blend bytes (bg refill 6.7 -> 0.7ms); (3) the per-pixel f64 blit over 2.6M
+      physical px (~25ms on the A53) lived copy-pasted in BOTH shells - extracted to window-
+      kit::blit::blit_upscaled with an integer-scale fast path (expand k u32 copies per logical
+      row, copy_within repeats it m-1 rows; fractional scales keep nearest-neighbor; oracle:
+      integer upscale equals the naive mapping). GAME RESULT on A53 release: paint 100 -> 3.5ms,
+      fps 7.9 -> 33.3 (full budget now visible: paint 3.5ms + present 7.9ms = 11.4ms work
+      against a 30ms period; ticker 2ms experiment proved cadence is not the cap - the remaining
+      ~18ms is BufferQueue dequeue backpressure, i.e. vsync-quantized by the display pipeline,
+      not compute-bound; 60fps needs frame-pacing alignment, not engine work). Gate B verdict:
+      engine-side cost is 11.4ms/frame on the mid-range 2017 phone; Pixel verification pending
+      device return. B.3 SHIPPED at 0.8.7 (2026-11-17, CI green fca2ffd): sprite atlas + grab-
+      and-fling input - crate::atlas builds a deterministic SpriteAtlas procedurally (6 shaded
+      ball sprites: radial shade + off-center highlight, white player ring; paint-kit shelf
+      packer, bytes identical every build - oracle-tested); render switched from AA round rects
+      to draw_image_region blits (paint 3.5 -> 1.9ms on the A53, sprite blit cheaper than AA
+      coverage); input model: press = burst + grab a kinematic player (inv_mass 0, gravity +
+      contacts skip it), move = carry (position delta becomes the implicit Verlet velocity),
+      release = fling (inv_mass 1, natural velocity) - shells wire pointer_move via Touch Moved
+      phase (Android) and cursor-move-while-left-held (desktop, tracked button state - the winit
+      MouseInput lesson). A53 verified: shaded sprites render, player ring flung into the pile
+      settles as a dynamic ball, fps 35.5. Oracles: atlas determinism + regions, player follows
+      pointer, release restores dynamics, burst+player count; 443 workspace tests. B.4 SHIPPED
+      at 0.8.7 (2026-11-17, CI green 58c4f90): gameplay goal layer - up to 3 amber ring targets
+      spawn on a 1s cadence at deterministic positions (immovable Ball carriers, inv_mass 0:
+      balls bounce off them like bumpers), ball overlap pops a target -> score++ + 6 short-lived
+      mini-ball sparks (per-entity Ttl override 24 frames vs the 300-frame ball TTL; reap/cap
+      scoped to Born carriers so targets persist), HUD gains the score line, atlas packs the
+      target sprite (8). Oracles: pop scores + despawns + respawn cadence, fx expiry; 445
+      workspace tests. A53 ON-DEVICE VERIFICATION PENDING: phone left USB mid-session
+      (recurring), APK ready at repo target/x/release/android/, loop = install -r + am start +
+      tap near a ring + screencap. B.4 VERIFIED + MATRIX RE-RUN (2026-11-18): Pixel 10 Pro (2025
+      flagship) BACK ON USB - GAME AT GATE B: 60.0fps locked, paint 0.7ms, present 4.3ms, balls
+      29 (engine 140x faster than the B1 baseline on the same device class); A53 (2022 mid-
+      range): 35.3fps, paint 1.9ms, display-queue bound as before; S7 (2016) still in recovery,
+      unavailable. Deterministic smoke frame documents the amber target ring + score HUD + hint
+      line. Multi-device evidence: screencaps + pacing.csv + logcat stats on both devices; smoke
+      BMPs for the deterministic render. B.5 NEXT: gameplay depth (combo timer, target motion),
+      menu screen via widget-kit, sound needs an estate audio stack (does not exist yet); M7 SPH
+      particle fluid, mesh animation loaders; kestrel-gui consumer is the final integration
+      milestone and is now unblocked by the proven Android template. B.5 SHIPPED at 0.8.7
+      (2026-11-18, CI green 44222782754): combo chains + target drift - pops inside 180 sim
+      frames chain (each consecutive pop scores 1 + chain length, expiry pass resets stale
+      chains, HUD shows the multiplier); targets drift kinematically (6-24 px/s deterministic
+      per spawn tick) bounced inside their upper band, and spawn IN the band (out-of-band spawns
+      clamp-teleport on the first drift step - oracle-caught); hitbox aligned to physics contact
+      (ball-ball resolution ejects a touching ball to exactly t_rad + r with gravity wobble - a
+      smaller forgiving radius could never trigger; half-px slack absorbs the wobble). Oracles:
+      combo chains inside window only (direct single-ball spawns, no burst noise), drift stays
+      in band; simultaneous-pop cascades chain same-frame by design. 447 workspace tests. Device
+      state: Pixel fingerprint-locked (adb cannot pass biometrics - verification needs a
+      physical unlock; the black screen was the lockscreen, not an app bug), A53 off USB again,
+      S7 in recovery. B.6 NEXT: menu screen via widget-kit, audio decision (estate audio stack
+      does not exist), M7 SPH particle fluid, mesh animation loaders; kestrel-gui consumer is
+      the final integration milestone and is now unblocked by the proven Android template. B.6
+      SHIPPED at 0.8.7 (2026-11-19, CI green 44458138577): main menu via widget-kit - the
+      retained-mode UI layer hosting an app menu: title/subtitle labels, difficulty Select
+      (Relaxed 30 / Normal 15 / Frenzy 6 sim frames per fountain ball), Play button through
+      WidgetTree take_actions; shell gained an AppState dispatch (Menu | Game) across pointer +
+      paint paths (sim steps only while playing; Play transitions to a fresh GameScreen with the
+      selected cadence). Oracles: Play press queues + drains action 1, difficulty maps to rates,
+      menu paints deterministically, difficulty sets cadence; 450 workspace tests. On-device
+      menu verification still blocked by the Pixel fingerprint lock (needs physical unlock; host
+      oracle covers activation + deterministic paint). B.7 NEXT: B.7 SHIPPED at 0.8.7
+      (2026-11-19, CI green 3f60832): pause + menu navigation - GameScreen paused flag freezes
+      the wall-time drain AND consumes the interval (an unpause does not sprint through the
+      paused span), render keeps running so the frozen frame stays visible; HUD buttons
+      (pause/menu) drawn right-aligned with shared geometry via hud_button_at - the shell's tap
+      routing and the drawn affordance cannot drift apart; HUD buttons take priority over game
+      input; the menu button returns to the main menu (discards the run). Oracles: pause freezes
+      the sim + unpause advances, HUD hit regions match the drawn labels; 452 workspace tests.
+      On-device check pending the Pixel unlock (same blocker). B.8 SHIPPED at 0.8.7 (2026-11-19,
+      CI green 09d7d57): high-score persistence - best score lives in <capture-
+      dir>/highscore.txt (the estate storage DECISION: app-local file until an estate kv/storage
+      crate exists), loaded at resumed(), grown + written only on change, parse is total
+      (corrupt/absent reads 0); menu gains a best label refreshed on every return-to-menu; game
+      HUD line is balls/score/combo/best. Oracle: menu best label reflects set_best; 453
+      workspace tests. On-device verification pending the Pixel unlock (recurring blocker). B.9
+      SHIPPED at 0.8.7 (2026-11-19, CI green 862515e): menu evidence in the smoke runner - one
+      deterministic menu.bmp lands next to the game frames (Inspector::dir getter added; the
+      capture dir was private); visual confirms title/subtitle/difficulty select/best label/Play
+      button all render as real widget-kit components. Device checks remain blocked on the Pixel
+      unlock. M7 OPENED at 0.8.7 M7.1 (2026-11-19, CI green 9d78f6d): fluid-kit::sph -
+      Lagrangian SPH solver alongside the Eulerian grid one: Muller 2003 formulation (poly6
+      density kernel, spiky pressure gradient, viscosity Laplacian) in pixel units,
+      deterministic f64 with fixed iteration order, brute force O(n^2) neighbors sized for demo
+      pools (spatial hash = upgrade path), wall clamp + restitution, acceleration clamp bounds
+      runaway forces. Params settled on the FIRST tuning pass (h 16, rest density 6, stiffness
+      40, viscosity 0.6 - pool settles cleanly). Oracles: mass conservation, wall containment,
+      settled-speed bound (no explosion), twin-run determinism; 457 workspace tests. fluid-kit
+      gains path-kit as a dependency (2D vectors; layering legal - L0 under fluid-kit). M7.2
+      NEXT: SPH pool rendered as sprites in the fresco game (second fluid mode / scene), on-
+      device pacing; mesh animation loaders. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green
+      915df64): the game hosts the SPH pool - an SphSystem basin in the bottom strip of the
+      viewport (8px wall inset, 150px tall), filled once on the first resize with a 55px-radius
+      particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as one water sprite
+      per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
+      fluid-kit (workspace dependency added for it). Oracle: pool stays in its basin over 300
+      sim frames; 458 workspace tests. On-device verification pending phone return (APK ready).
+      M7.3 SHIPPED at 0.8.7 (2026-11-20, CI green c04d4d3): ball-into-pool splash coupling -
+      moving balls push nearby SPH particles (one-way: the fluid answers the game; resting balls
+      skip the churn; reach = ball radius + kernel radius, linear falloff, capped impulse).
+      Oracle: plunge peak churn exceeds the settled baseline by 80 px/s - peak-tracked over the
+      landing window because the splash is a transient spike (the one-step impulse decays
+      through SPH relaxation within ~15 frames). 459 workspace tests. M7.4 SHIPPED at 0.8.7
+      (2026-11-20, CI green 65e8ac6): two-way pool coupling - submerged balls (below the SPH
+      water line at h-110) get buoyant gravity (cut to 30 percent) and linear drag on the
+      implicit Verlet velocity; the pool now pushes back on the game. Oracle: a ball dropped
+      10px below the water line falls >= 2x slower than its dry twin over 30 steps (both spawned
+      via the in-crate helper). 460 workspace tests. DEFERRED with trigger: spatial-hash
+      neighbor search (activate when pools grow past ~500 particles - brute force is ~0.5ms at
+      150). M7.5 NEXT: mesh animation loaders (three-kit), sound decision; kestrel-gui. M8.1
+      SHIPPED at 0.8.7 (2026-11-20, CI green 8cd049e): three-kit::anim_text - animation clip
+      text importer (the animation twin of the OBJ mesh importer): clip/track/key line format
+      with # comments parses into AnimationClip tracks (joint + axis + sorted-key Channel);
+      malformed documents fail closed. Oracles: exact parse (name/duration/axes/joints/sorted
+      keys), linear sampling through the parsed clip, fail-closed cases; 463 workspace tests.
+      glTF binary import recorded as future work (needs a JSON parser; the text format covers
+      authoring now). M8.2 SHIPPED at 0.8.7 (2026-11-20, CI green 45da62d): dancing skeleton
+      through the imported clip - a 3-joint skeleton (hip -> torso -> arm) driven by an Animator
+      over the clip parsed from an embedded document via the M8.1 loader (dogfood: importer
+      feeds live playback); render world-composes the joint chain (parent-chain Mat4
+      composition) and draws bones as white stamps along parent-child segments + player-ring
+      sprites at joints; playback rides the sim clock (freezes when paused). Oracles: clip
+      imported (name dance), playhead advances, arm tip swings > 1 px over 30 frames; 464
+      workspace tests. M8.3 SHIPPED at 0.8.7 (2026-11-20, CI green adc1fc5): skinned body
+      through the raster path - a 2x9 vertex strip (80 px of bone length) auto-rigged via
+      Skin::bind_nearest, posed each frame through posed_mesh, drawn as filled triangles via the
+      paint-kit raster path under the bones (body under bones under joints); construction moved
+      to prelude locals so the skin binds the REAL mesh to the REAL joints (placeholder bind
+      caught in review). Oracle: skinned vertices deform over time and stay near the dancer (no
+      explosion); 465 workspace tests. OPS NOTE: /home hit 100 percent mid-gate (cargo
+      incremental 26G cleared - 13G freed); watch disk on long incremental builds. M8.4 NEXT:
+      glTF binary import (needs a JSON parser decision), audio decision (estate audio stack does
+      not exist); kestrel-gui. DECISION QUEUE EXECUTED (2026-11-20, CI green eba5434): the best-
+      practice review of every interim solution approved six items, all shipped - (Q1) highscore
+      relocated from the trace capture dir to a persist dir (Android internal app data via
+      android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
+      with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
+      FixedUpdate-style bounded-drain idea) + XSPH velocity smoothing (replaces the near-zero
+      Laplacian viscosity) + velocity ceilings 2000 px/s at integration AND after XSPH + accel
+      clamp 4e5 -> 1e5 - the game basin had run away to 1e15 px/s under ball impact, now
+      dissipation-bounded; (Q3) impulse exchange (particle kicks apply equal-opposite reactions
+      to balls, Verlet prev shift, ball mass 8); (Q4) menu keyboard a11y through widget-kit
+      key_nav + key_char (Tab/arrows navigate, Enter/Space activate - the machinery already
+      existed, the game just never routed it); (Q5) disk-janitor sweeps idle cargo incremental
+      caches in the shared target (incremental/ grew to 26G unchecked - the artifact sweep only
+      matched dirs NAMED target/build/.lake; chezmoi c9da42c). Oracles added:
       pool_slows_submerged_balls (buoyancy >= 2x slower than dry twin), keyboard_activates_play,
-      keyboard_steps_difficulty, best_label_reflects_score; 467 workspace tests. DEFERRED WITH TRIGGERS
-      (re-affirmed): PCISPH (only if incompressible look needed), spatial hash (>500 particles), glTF JSON
-      parser (DCC interop), A53 frame pacing (android-activity limit), audio-kit (new crate, own approval),
-      mass exchange beyond impulse reaction. NOTE: parallel sessions appending to this folded scalar have
-      interleaved duplicate increment blocks (M7.2-M7.4 appear twice) - a dedup pass is owed before the
-      next major sync. kestrel-gui
+      keyboard_steps_difficulty, best_label_reflects_score; 467 workspace tests. DEFERRED WITH
+      TRIGGERS (re-affirmed): PCISPH (only if incompressible look needed), spatial hash (>500
+      particles), glTF JSON parser (DCC interop), A53 frame pacing (android-activity limit),
+      audio-kit (new crate, own approval), mass exchange beyond impulse reaction. NOTE: parallel
+      sessions appending to this folded scalar have interleaved duplicate increment blocks
+      (M7.2-M7.4 appear twice) - reordered chronologically (M7.2-M7.4 moved before M8.1; no
+      content removed) - future appends must anchor at the true end. kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
