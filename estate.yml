@@ -541,8 +541,13 @@ repos:
       (one-way: the fluid answers the game; resting balls skip the churn; reach = ball radius + kernel radius,
       linear falloff, capped impulse). Oracle: plunge peak churn exceeds the settled baseline by 80 px/s -
       peak-tracked over the landing window because the splash is a transient spike (the one-step impulse decays
-      through SPH relaxation within ~15 frames). 459 workspace tests. M7.4 NEXT: spatial-hash neighbor search
-      when pools grow, two-way coupling (buoyancy/drag on balls in water), mesh animation loaders; kestrel-gui
+      through SPH relaxation within ~15 frames). 459 workspace tests. M7.4 SHIPPED at 0.8.7 (2026-11-20, CI
+      green 65e8ac6): two-way pool coupling - submerged balls (below the SPH water line at h-110) get buoyant
+      gravity (cut to 30 percent) and linear drag on the implicit Verlet velocity; the pool now pushes back on
+      the game. Oracle: a ball dropped 10px below the water line falls >= 2x slower than its dry twin over 30
+      steps (both spawned via the in-crate helper). 460 workspace tests. DEFERRED with trigger: spatial-hash
+      neighbor search (activate when pools grow past ~500 particles - brute force is ~0.5ms at 150). M7.5
+      NEXT: mesh animation loaders (three-kit), sound decision; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
