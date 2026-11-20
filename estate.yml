@@ -536,8 +536,14 @@ repos:
       parses into AnimationClip tracks (joint + axis + sorted-key Channel); malformed documents fail closed.
       Oracles: exact parse (name/duration/axes/joints/sorted keys), linear sampling through the parsed clip,
       fail-closed cases; 463 workspace tests. glTF binary import recorded as future work (needs a JSON
-      parser; the text format covers authoring now). M8.2 NEXT: drive an Animator through the imported clip
-      in the game (skeletal demo mesh animating), sound decision; kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
+      parser; the text format covers authoring now). M8.2 SHIPPED at 0.8.7 (2026-11-20, CI green 45da62d):
+      dancing skeleton through the imported clip - a 3-joint skeleton (hip -> torso -> arm) driven by an
+      Animator over the clip parsed from an embedded document via the M8.1 loader (dogfood: importer feeds
+      live playback); render world-composes the joint chain (parent-chain Mat4 composition) and draws bones
+      as white stamps along parent-child segments + player-ring sprites at joints; playback rides the sim
+      clock (freezes when paused). Oracles: clip imported (name dance), playhead advances, arm tip swings
+      > 1 px over 30 frames; 464 workspace tests. M8.3 NEXT: skin a real mesh (bind_nearest + posed_mesh
+      through the raster path), audio decision (estate audio stack does not exist); kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
       an SphSystem basin in the bottom strip of the viewport (8px wall inset, 150px tall), filled once on the
       first resize with a 55px-radius particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as
       one water sprite per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
