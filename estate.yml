@@ -646,7 +646,17 @@ repos:
       explosion); 465 workspace tests. OPS NOTE: /home hit 100 percent mid-gate (cargo
       incremental 26G cleared - 13G freed); watch disk on long incremental builds. M8.4 NEXT:
       glTF binary import (needs a JSON parser decision), audio decision (estate audio stack does
-      not exist); kestrel-gui. DECISION QUEUE EXECUTED (2026-11-20, CI green eba5434): the best-
+      not exist); kestrel-gui. M8.4 SHIPPED at 0.8.7 (2026-11-20, CI green 40c4e0d): the glTF
+      JSON-parser decision EXECUTED as build-minimal-in-house - three-kit::json (deterministic std-only
+      parser: depth-capped recursion for stack safety, insertion-ordered objects, full escape +
+      surrogate-pair handling, strict number grammar, fail-closed on malformed/deep/trailing input) +
+      three-kit::gltf (glTF 2.0 subset loader: base64 data-uri buffer decode, bufferView/byteOffset
+      accessor resolution for FLOAT/BYTE/SHORT/INT, mesh 0 primitive 0 POSITION + indices into Mesh).
+      Oracles: representative-document parse, escape/surrogate resolution, 14 malformed fail-closed cases,
+      depth cap, base64 round-trip over all 256 byte values, embedded-triangle import; 474 workspace
+      tests. Estate-consistency note: three-kit is a mid-layer crate and CAN take deps, but a 300-line
+      spec parser beats a JSON dependency tree for one format. DECISION QUEUE EXECUTED (2026-11-20, CI
+      green eba5434): the best-
       practice review of every interim solution approved six items, all shipped - (Q1) highscore
       relocated from the trace capture dir to a persist dir (Android internal app data via
       android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
