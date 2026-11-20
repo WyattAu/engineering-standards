@@ -566,7 +566,26 @@ repos:
       the game. Oracle: a ball dropped 10px below the water line falls >= 2x slower than its dry twin over 30
       steps (both spawned via the in-crate helper). 460 workspace tests. DEFERRED with trigger: spatial-hash
       neighbor search (activate when pools grow past ~500 particles - brute force is ~0.5ms at 150). M7.5
-      NEXT: mesh animation loaders (three-kit), sound decision; kestrel-gui
+      NEXT: mesh animation loaders (three-kit), sound decision; kestrel-gui. DECISION QUEUE EXECUTED
+      (2026-11-20, CI green eba5434): the best-practice review of every interim solution approved six items,
+      all shipped - (Q1) highscore relocated from the trace capture dir to a persist dir (Android internal
+      app data via android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer
+      dies with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
+      FixedUpdate-style bounded-drain idea) + XSPH velocity smoothing (replaces the near-zero Laplacian
+      viscosity) + velocity ceilings 2000 px/s at integration AND after XSPH + accel clamp 4e5 -> 1e5 - the
+      game basin had run away to 1e15 px/s under ball impact, now dissipation-bounded; (Q3) impulse
+      exchange (particle kicks apply equal-opposite reactions to balls, Verlet prev shift, ball mass 8);
+      (Q4) menu keyboard a11y through widget-kit key_nav + key_char (Tab/arrows navigate, Enter/Space
+      activate - the machinery already existed, the game just never routed it); (Q5) disk-janitor sweeps
+      idle cargo incremental caches in the shared target (incremental/ grew to 26G unchecked - the
+      artifact sweep only matched dirs NAMED target/build/.lake; chezmoi c9da42c). Oracles added:
+      pool_slows_submerged_balls (buoyancy >= 2x slower than dry twin), keyboard_activates_play,
+      keyboard_steps_difficulty, best_label_reflects_score; 467 workspace tests. DEFERRED WITH TRIGGERS
+      (re-affirmed): PCISPH (only if incompressible look needed), spatial hash (>500 particles), glTF JSON
+      parser (DCC interop), A53 frame pacing (android-activity limit), audio-kit (new crate, own approval),
+      mass exchange beyond impulse reaction. NOTE: parallel sessions appending to this folded scalar have
+      interleaved duplicate increment blocks (M7.2-M7.4 appear twice) - a dedup pass is owed before the
+      next major sync. kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
