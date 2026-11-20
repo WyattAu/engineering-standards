@@ -531,7 +531,13 @@ repos:
       containment, settled-speed bound (no explosion), twin-run determinism; 457 workspace tests. fluid-kit
       gains path-kit as a dependency (2D vectors; layering legal - L0 under fluid-kit). M7.2 NEXT: SPH pool
       rendered as sprites in the fresco game (second fluid mode / scene), on-device pacing; mesh animation
-      loaders; kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
+      loaders. M8.1 SHIPPED at 0.8.7 (2026-11-20, CI green 8cd049e): three-kit::anim_text - animation clip
+      text importer (the animation twin of the OBJ mesh importer): clip/track/key line format with # comments
+      parses into AnimationClip tracks (joint + axis + sorted-key Channel); malformed documents fail closed.
+      Oracles: exact parse (name/duration/axes/joints/sorted keys), linear sampling through the parsed clip,
+      fail-closed cases; 463 workspace tests. glTF binary import recorded as future work (needs a JSON
+      parser; the text format covers authoring now). M8.2 NEXT: drive an Animator through the imported clip
+      in the game (skeletal demo mesh animating), sound decision; kestrel-gui. M7.2 SHIPPED at 0.8.7 (2026-11-20, CI green 915df64): the game hosts the SPH pool -
       an SphSystem basin in the bottom strip of the viewport (8px wall inset, 150px tall), filled once on the
       first resize with a 55px-radius particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as
       one water sprite per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
