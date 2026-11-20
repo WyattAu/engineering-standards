@@ -536,9 +536,13 @@ repos:
       first resize with a 55px-radius particle disc (spacing 9), two half-steps per 60Hz sim frame, rendered as
       one water sprite per particle via the atlas (blue shaded disc, 16px sprite at 8px). fresco-game gains
       fluid-kit (workspace dependency added for it). Oracle: pool stays in its basin over 300 sim frames; 458
-      workspace tests. On-device verification pending phone return (APK ready). M7.3 NEXT: ball-into-pool
-      coupling (ECS balls exert forces on nearby SPH particles - splashes), spatial-hash neighbor search when
-      pools grow, mesh animation loaders; kestrel-gui
+      workspace tests. On-device verification pending phone return (APK ready). M7.3 SHIPPED at 0.8.7
+      (2026-11-20, CI green c04d4d3): ball-into-pool splash coupling - moving balls push nearby SPH particles
+      (one-way: the fluid answers the game; resting balls skip the churn; reach = ball radius + kernel radius,
+      linear falloff, capped impulse). Oracle: plunge peak churn exceeds the settled baseline by 80 px/s -
+      peak-tracked over the landing window because the splash is a transient spike (the one-step impulse decays
+      through SPH relaxation within ~15 frames). 459 workspace tests. M7.4 NEXT: spatial-hash neighbor search
+      when pools grow, two-way coupling (buoyancy/drag on balls in water), mesh animation loaders; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
