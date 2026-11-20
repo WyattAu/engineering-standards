@@ -1445,6 +1445,13 @@ repos:
     _seen:
       last_push: "2026-11-12"
       marketdata-kit: 0.1.0
+  origami-core:
+    area: research
+    status: draft
+    notes: "FOLD-native origami design core: crease data model, Maekawa/Kawasaki gates, civilian design library, provenance-required materials DB. Hard split: defense/finance designs go to the private Forgejo repo origami-controlled, never public. Added 2026-11-20."
+    crates:
+      - origami-core
+
   ontokit:
     area: obsv
     status: support
