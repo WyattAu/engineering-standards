@@ -727,16 +727,15 @@ repos:
       imported dancer animating, SPH basin, targets, score HUD, pacing 34.7fps - M8.6/M8.7
       verified on-device. LESSON: every fresco-shell increment needs one x build early -
       android-target compile errors are invisible to host CI. K1 WINDOWED SHELL SHIPPED
-      (2026-11-21, CI green a369039): kestrel-gui app.rs - winit event loop +       softbuffer
-      present hosting the KestrelPanel (the fresco-game shell pattern, productized): logical-res
-      render, physical->logical cursor scaling (fresco-game touch lesson inherited), pacing.csv
-      evidence       flushed per row, 120-frame stats line, GATE_A_DIR override; mouse
-      press/release routes through the       tracked cursor; bin/desktop entry. Verified LIVE:
-      window opened, 120+ frames painted, pacing.csv       accruing (paint 2.7ms/frame at
-      360x740) + headless panel.bmp evidence (title/status/button all       rendering). K2 NEXT:
-      android packaging for kestrel-gui (the proven x chain), kestrel game integration
-      (the fresco-game loop as a kestrel panel), audio-kit CPAL backend feature; kestrel-gui
-      kestrel-gui
+      (2026-11-21, CI green a369039): kestrel-gui app.rs - winit event loop + softbuffer present
+      hosting the KestrelPanel (the fresco-game shell pattern, productized): logical-res render,
+      physical->logical cursor scaling (fresco-game touch lesson inherited), pacing.csv evidence
+      flushed per row, 120-frame stats line, GATE_A_DIR override; mouse press/release routes
+      through the tracked cursor; bin/desktop entry. Verified LIVE: window opened, 120+ frames
+      painted, pacing.csv accruing (paint 2.7ms/frame at 360x740) + headless panel.bmp evidence
+      (title/status/button all rendering). K2 NEXT: android packaging for kestrel-gui (the
+      proven x chain), kestrel game integration (the fresco-game loop as a kestrel panel),
+      audio-kit CPAL backend feature; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
     # need namespaced names (fresco-*) before the first publish.
