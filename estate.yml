@@ -678,8 +678,18 @@ repos:
       matches; 477 workspace tests. GAME: dancer clip now prefers the glTF document's animation samplers
       (dancer_gltf_doc grew an animations array: 3 rotation channels on hip/torso/arm, samplers sharing a
       times accessor); DANCER_DOC text format stays as the fallback - the dancer is now imported-AND-
-      animated from one glTF document. M8.8 NEXT: audio-kit crate decision (synth core + backend behind
-      default-off feature, window-kit pattern); kestrel-gui
+      animated from one glTF document. M9 + KESTREL-GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green
+      1be6997): the audio DECISION EXECUTED as build-deterministic-core - new crate audio-kit: oscillators
+      (sine/square/saw/triangle, stateful phase), ADSR envelope state machine, render_clip (osc through env
+      into f32 buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature is
+      the future layer, window-kit pattern) - the synth core is oracle-testable without an audio device
+      (exact sine samples, square phase-flip boundary, saw ramp, triangle peak, envelope stages, render
+      determinism byte-identical twins, mix clamp). KESTREL-GUI BOOTSTRAPPED: new crate kestrel-gui - the
+      consumer application shell on the fresco stack (widget-kit panel: title/status/button through the
+      flow engine; deterministic paint oracle; refresh-button activation oracle); windowed shells follow
+      the fresco-game pattern. 487 workspace tests. NEXT: audio-kit CPAL/AAudio backend feature, kestrel-
+      gui windowed shell + pacing evidence, kestrel game integration (the fresco-game loop as a kestrel
+      panel), mesh animation loaders, spatial hash at >500 particles
       practice review of every interim solution approved six items, all shipped - (Q1) highscore
       relocated from the trace capture dir to a persist dir (Android internal app data via
       android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
