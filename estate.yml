@@ -647,53 +647,58 @@ repos:
       incremental 26G cleared - 13G freed); watch disk on long incremental builds. M8.4 NEXT:
       glTF binary import (needs a JSON parser decision), audio decision (estate audio stack does
       not exist); kestrel-gui. M8.4 SHIPPED at 0.8.7 (2026-11-20, CI green 40c4e0d): the glTF
-      JSON-parser decision EXECUTED as build-minimal-in-house - three-kit::json (deterministic std-only
-      parser: depth-capped recursion for stack safety, insertion-ordered objects, full escape +
-      surrogate-pair handling, strict number grammar, fail-closed on malformed/deep/trailing input) +
-      three-kit::gltf (glTF 2.0 subset loader: base64 data-uri buffer decode, bufferView/byteOffset
-      accessor resolution for FLOAT/BYTE/SHORT/INT, mesh 0 primitive 0 POSITION + indices into Mesh).
-      Oracles: representative-document parse, escape/surrogate resolution, 14 malformed fail-closed cases,
-      depth cap, base64 round-trip over all 256 byte values, embedded-triangle import; 474 workspace
-      tests. Estate-consistency note: three-kit is a mid-layer crate and CAN take deps, but a 300-line
-      spec parser beats a JSON dependency tree for one format. M8.5 SHIPPED at 0.8.7 (2026-11-21, CI
-      green e290106): glTF skin import - import_gltf_skin reads JOINTS_0 (VEC4 u8/short) + WEIGHTS_0 (VEC4
-      float, normalized) attributes, skins[0] inverseBindMatrices (MAT4 accessors) and joint nodes (matrix
-      or TRS locals; quat_mat4 helper added; parent chain from node children, non-joint parents become
-      roots) into a Skin - the full imported pipeline now animates: glTF document -> mesh + skin -> Animator
-      clip -> posed_mesh deformation. Component-size-aware accessor reader (BYTE/SHORT were reading 4-byte
-      strides - caught by the skinned-document oracle). Oracles: 2-joint skinned document imports with
-      exact bindings + bind worlds, skinned mesh deforms when joint 1 rotates (full imported-pipeline
-      animation loop); 476 workspace tests. M8.6 SHIPPED at 0.8.7 (2026-11-21, CI green 7602a19): the
-      dancer body is IMPORTED - dancer_gltf_doc builds a glTF 2.0 document for the dancer (16-vertex strip
-      skinned to 3 joints, per-band JOINTS_0/WEIGHTS_0, inverse bind matrices, base64 data URI) and the
-      constructor imports it through three-kit's gltf importer (M8.4/M8.5 chain dogfooded into the live
-      game); procedural strip + bind_nearest remains as the fail-closed fallback; base64_encode promoted to
-      a pub three-kit utility (the doc builder embeds the buffer as a data URI). All 26 game oracles green
-      with the imported dancer; 476 workspace tests. M8.7 SHIPPED at 0.8.7 (2026-11-21, CI green
-      2ab1ef2): glTF animation sampler import - animations[0] rotation channels (quaternion samplers)
-      targeting joint nodes decompose to per-axis scalar tracks via quat_euler_xyz (XYZ euler; planar
-      z-only clips exact), node->joint mapping through skins[0].joints, duration from max key time;
-      non-joint targets and non-rotation paths skipped. AxisKeys type alias + sort_by_key (clippy).
-      Oracles: rotation channels import as 3 per-axis tracks with clip name/duration, z-key sampling
-      matches; 477 workspace tests. GAME: dancer clip now prefers the glTF document's animation samplers
-      (dancer_gltf_doc grew an animations array: 3 rotation channels on hip/torso/arm, samplers sharing a
-      times accessor); DANCER_DOC text format stays as the fallback - the dancer is now imported-AND-
-      animated from one glTF document. M9 + KESTREL-GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green
-      1be6997): the audio DECISION EXECUTED as build-deterministic-core - new crate audio-kit: oscillators
-      (sine/square/saw/triangle, stateful phase), ADSR envelope state machine, render_clip (osc through env
-      into f32 buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature is
-      the future layer, window-kit pattern) - the synth core is oracle-testable without an audio device
-      (exact sine samples, square phase-flip boundary, saw ramp, triangle peak, envelope stages, render
-      determinism byte-identical twins, mix clamp). KESTREL-GUI BOOTSTRAPPED: new crate kestrel-gui - the
-      consumer application shell on the fresco stack (widget-kit panel: title/status/button through the
-      flow engine; deterministic paint oracle; refresh-button activation oracle); windowed shells follow
-      the fresco-game pattern. 487 workspace tests. NEXT: audio-kit CPAL/AAudio backend feature, kestrel-
-      gui windowed shell + pacing evidence, kestrel game integration (the fresco-game loop as a kestrel
-      panel), mesh animation loaders, spatial hash at >500 particles
-      practice review of every interim solution approved six items, all shipped - (Q1) highscore
-      relocated from the trace capture dir to a persist dir (Android internal app data via
-      android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
-      with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
+      JSON-parser decision EXECUTED as build-minimal-in-house - three-kit::json (deterministic
+      std-only parser: depth-capped recursion for stack safety, insertion-ordered objects, full
+      escape + surrogate-pair handling, strict number grammar, fail-closed on
+      malformed/deep/trailing input) + three-kit::gltf (glTF 2.0 subset loader: base64 data-uri
+      buffer decode, bufferView/byteOffset accessor resolution for FLOAT/BYTE/SHORT/INT, mesh 0
+      primitive 0 POSITION + indices into Mesh). Oracles: representative-document parse,
+      escape/surrogate resolution, 14 malformed fail-closed cases, depth cap, base64 round-trip
+      over all 256 byte values, embedded-triangle import; 474 workspace tests. Estate-
+      consistency note: three-kit is a mid-layer crate and CAN take deps, but a 300-line spec
+      parser beats a JSON dependency tree for one format. M8.5 SHIPPED at 0.8.7 (2026-11-21, CI
+      green e290106): glTF skin import - import_gltf_skin reads JOINTS_0 (VEC4 u8/short) +
+      WEIGHTS_0 (VEC4 float, normalized) attributes, skins[0] inverseBindMatrices (MAT4
+      accessors) and joint nodes (matrix or TRS locals; quat_mat4 helper added; parent chain
+      from node children, non-joint parents become roots) into a Skin - the full imported
+      pipeline now animates: glTF document -> mesh + skin -> Animator clip -> posed_mesh
+      deformation. Component-size-aware accessor reader (BYTE/SHORT were reading 4-byte strides
+      - caught by the skinned-document oracle). Oracles: 2-joint skinned document imports with
+      exact bindings + bind worlds, skinned mesh deforms when joint 1 rotates (full imported-
+      pipeline animation loop); 476 workspace tests. M8.6 SHIPPED at 0.8.7 (2026-11-21, CI green
+      7602a19): the dancer body is IMPORTED - dancer_gltf_doc builds a glTF 2.0 document for the
+      dancer (16-vertex strip skinned to 3 joints, per-band JOINTS_0/WEIGHTS_0, inverse bind
+      matrices, base64 data URI) and the constructor imports it through three-kit's gltf
+      importer (M8.4/M8.5 chain dogfooded into the live game); procedural strip + bind_nearest
+      remains as the fail-closed fallback; base64_encode promoted to a pub three-kit utility
+      (the doc builder embeds the buffer as a data URI). All 26 game oracles green with the
+      imported dancer; 476 workspace tests. M8.7 SHIPPED at 0.8.7 (2026-11-21, CI green
+      2ab1ef2): glTF animation sampler import - animations[0] rotation channels (quaternion
+      samplers) targeting joint nodes decompose to per-axis scalar tracks via quat_euler_xyz
+      (XYZ euler; planar z-only clips exact), node->joint mapping through skins[0].joints,
+      duration from max key time; non-joint targets and non-rotation paths skipped. AxisKeys
+      type alias + sort_by_key (clippy). Oracles: rotation channels import as 3 per-axis tracks
+      with clip name/duration, z-key sampling matches; 477 workspace tests. GAME: dancer clip
+      now prefers the glTF document's animation samplers (dancer_gltf_doc grew an animations
+      array: 3 rotation channels on hip/torso/arm, samplers sharing a times accessor);
+      DANCER_DOC text format stays as the fallback - the dancer is now imported-AND- animated
+      from one glTF document. M9 + KESTREL-GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green
+      1be6997): the audio DECISION EXECUTED as build-deterministic-core - new crate audio-kit:
+      oscillators (sine/square/saw/triangle, stateful phase), ADSR envelope state machine,
+      render_clip (osc through env into f32 buffer), mix with clamp; backend-free by design
+      (CPAL/AAudio behind a default-off feature is the future layer, window-kit pattern) - the
+      synth core is oracle-testable without an audio device (exact sine samples, square phase-
+      flip boundary, saw ramp, triangle peak, envelope stages, render determinism byte-identical
+      twins, mix clamp). KESTREL-GUI BOOTSTRAPPED: new crate kestrel-gui - the consumer
+      application shell on the fresco stack (widget-kit panel: title/status/button through the
+      flow engine; deterministic paint oracle; refresh-button activation oracle); windowed
+      shells follow the fresco-game pattern. 487 workspace tests. NEXT: audio-kit CPAL/AAudio
+      backend feature, kestrel- gui windowed shell + pacing evidence, kestrel game integration
+      (the fresco-game loop as a kestrel panel), mesh animation loaders, spatial hash at >500
+      particles practice review of every interim solution approved six items, all shipped - (Q1)
+      highscore relocated from the trace capture dir to a persist dir (Android internal app data
+      via android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer
+      dies with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
       FixedUpdate-style bounded-drain idea) + XSPH velocity smoothing (replaces the near-zero
       Laplacian viscosity) + velocity ceilings 2000 px/s at integration AND after XSPH + accel
       clamp 4e5 -> 1e5 - the game basin had run away to 1e15 px/s under ball impact, now
@@ -710,16 +715,27 @@ repos:
       audio-kit (new crate, own approval), mass exchange beyond impulse reaction. NOTE: parallel
       sessions appending to this folded scalar have interleaved duplicate increment blocks
       (M7.2-M7.4 appear twice) - reordered chronologically (M7.2-M7.4 moved before M8.1; no
-      content removed) - future appends must anchor at the true end. kestrel-gui. ON-DEVICE VERIFICATION SWEEP (2026-11-21, CI
-      green 04a1079): TWO BLOCKING BUGS CAUGHT BY REAL HARDWARE - (1) fresco-game touch events passed RAW
-      PHYSICAL px as logical: on the A53 3x screen every touch landed 3x off (menu Play button unhittable;
-      the fresco-android M5 scale lesson was lost in the fresco-game shell copy) - touch + cursor now divide
-      by the window scale factor; (2) PERSIST_DIR referenced from android_entry without super:: - HOST CI
-      NEVER BUILDS THE ANDROID TARGET so the q1 storage relocation compiled on host but broke the APK build
-      (the x build is the only android-target check - CI GAP RECORDED). Post-fix on-device A53: menu -> tap
-      Play (scaled coords hit widget 5) -> game state with glTF-imported dancer animating, SPH basin,
-      targets, score HUD, pacing 34.7fps - M8.6/M8.7 verified on-device. LESSON: every fresco-shell
-      increment needs one x build early - android-target compile errors are invisible to host CI.
+      content removed) - future appends must anchor at the true end. kestrel-gui. ON-DEVICE
+      VERIFICATION SWEEP (2026-11-21, CI green 04a1079): TWO BLOCKING BUGS CAUGHT BY REAL
+      HARDWARE - (1) fresco-game touch events passed RAW PHYSICAL px as logical: on the A53 3x
+      screen every touch landed 3x off (menu Play button unhittable; the fresco-android M5 scale
+      lesson was lost in the fresco-game shell copy) - touch + cursor now divide by the window
+      scale factor; (2) PERSIST_DIR referenced from android_entry without super:: - HOST CI
+      NEVER BUILDS THE ANDROID TARGET so the q1 storage relocation compiled on host but broke
+      the APK build (the x build is the only android-target check - CI GAP RECORDED). Post-fix
+      on-device A53: menu -> tap Play (scaled coords hit widget 5) -> game state with glTF-
+      imported dancer animating, SPH basin, targets, score HUD, pacing 34.7fps - M8.6/M8.7
+      verified on-device. LESSON: every fresco-shell increment needs one x build early -
+      android-target compile errors are invisible to host CI. K1 WINDOWED SHELL SHIPPED
+      (2026-11-21, CI green a369039): kestrel-gui app.rs - winit event loop +       softbuffer
+      present hosting the KestrelPanel (the fresco-game shell pattern, productized): logical-res
+      render, physical->logical cursor scaling (fresco-game touch lesson inherited), pacing.csv
+      evidence       flushed per row, 120-frame stats line, GATE_A_DIR override; mouse
+      press/release routes through the       tracked cursor; bin/desktop entry. Verified LIVE:
+      window opened, 120+ frames painted, pacing.csv       accruing (paint 2.7ms/frame at
+      360x740) + headless panel.bmp evidence (title/status/button all       rendering). K2 NEXT:
+      android packaging for kestrel-gui (the proven x chain), kestrel game integration
+      (the fresco-game loop as a kestrel panel), audio-kit CPAL backend feature; kestrel-gui
       kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
