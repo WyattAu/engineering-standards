@@ -655,8 +655,16 @@ repos:
       Oracles: representative-document parse, escape/surrogate resolution, 14 malformed fail-closed cases,
       depth cap, base64 round-trip over all 256 byte values, embedded-triangle import; 474 workspace
       tests. Estate-consistency note: three-kit is a mid-layer crate and CAN take deps, but a 300-line
-      spec parser beats a JSON dependency tree for one format. DECISION QUEUE EXECUTED (2026-11-20, CI
-      green eba5434): the best-
+      spec parser beats a JSON dependency tree for one format. M8.5 SHIPPED at 0.8.7 (2026-11-21, CI
+      green e290106): glTF skin import - import_gltf_skin reads JOINTS_0 (VEC4 u8/short) + WEIGHTS_0 (VEC4
+      float, normalized) attributes, skins[0] inverseBindMatrices (MAT4 accessors) and joint nodes (matrix
+      or TRS locals; quat_mat4 helper added; parent chain from node children, non-joint parents become
+      roots) into a Skin - the full imported pipeline now animates: glTF document -> mesh + skin -> Animator
+      clip -> posed_mesh deformation. Component-size-aware accessor reader (BYTE/SHORT were reading 4-byte
+      strides - caught by the skinned-document oracle). Oracles: 2-joint skinned document imports with
+      exact bindings + bind worlds, skinned mesh deforms when joint 1 rotates (full imported-pipeline
+      animation loop); 476 workspace tests. M8.6 NEXT: drive the imported skin through the game's Animator
+      (render an imported-and-animated model in the game scene), audio-kit decision; kestrel-gui
       practice review of every interim solution approved six items, all shipped - (Q1) highscore
       relocated from the trace capture dir to a persist dir (Android internal app data via
       android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
