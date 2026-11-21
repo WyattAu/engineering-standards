@@ -733,8 +733,18 @@ repos:
       flushed per row, 120-frame stats line, GATE_A_DIR override; mouse press/release routes
       through the tracked cursor; bin/desktop entry. Verified LIVE: window opened, 120+ frames
       painted, pacing.csv accruing (paint 2.7ms/frame at 360x740) + headless panel.bmp evidence
-      (title/status/button all rendering). K2 NEXT: android packaging for kestrel-gui (the
-      proven x chain), kestrel game integration (the fresco-game loop as a kestrel panel),
+      (title/status/button all rendering). K2 ANDROID PACKAGING + GAME INTEGRATION SHIPPED
+      (2026-11-21, CI green 2f7505e/ad4a841): kestrel-gui goes dual-target (cdylib android +
+      rlib desktop, NativeActivity entry, x metadata) AND integrates the fresco game - AppState
+      dispatch (Menu | Game): the kestrel panel hosts menu/buttons, Play transitions to a fresco
+      GameScreen (ECS loop, SPH pool, targets), input routes per state, sim steps only while
+      playing, game HUD menu button returns to the panel. TWO LESSONS FROM REAL HARDWARE: (1)
+      fresco-game's android_main collides with kestrel-gui's when kestrel links fresco-game -
+      duplicate android_main symbol at link time; fixed with an android-entry feature gate on
+      fresco-game (its own APK builds with --features android-entry; library consumers compile
+      without the shell); (2) kestrel-gui's shell never handled Touch events - Android input tap
+      delivers Touch, not MouseInput - touches now route to the panel. On-device verification of
+      the kestrel flow blocked on phone return (both left USB; fixed APK ready). M9.1 NEXT:
       audio-kit CPAL backend feature; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
