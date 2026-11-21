@@ -669,9 +669,17 @@ repos:
       constructor imports it through three-kit's gltf importer (M8.4/M8.5 chain dogfooded into the live
       game); procedural strip + bind_nearest remains as the fail-closed fallback; base64_encode promoted to
       a pub three-kit utility (the doc builder embeds the buffer as a data URI). All 26 game oracles green
-      with the imported dancer; 476 workspace tests. M8.7 NEXT: glTF animation sampler import (times +
-      rotation keyframes into AnimationClip - completes imported-AND-animated), audio-kit decision;
-      kestrel-gui
+      with the imported dancer; 476 workspace tests. M8.7 SHIPPED at 0.8.7 (2026-11-21, CI green
+      2ab1ef2): glTF animation sampler import - animations[0] rotation channels (quaternion samplers)
+      targeting joint nodes decompose to per-axis scalar tracks via quat_euler_xyz (XYZ euler; planar
+      z-only clips exact), node->joint mapping through skins[0].joints, duration from max key time;
+      non-joint targets and non-rotation paths skipped. AxisKeys type alias + sort_by_key (clippy).
+      Oracles: rotation channels import as 3 per-axis tracks with clip name/duration, z-key sampling
+      matches; 477 workspace tests. GAME: dancer clip now prefers the glTF document's animation samplers
+      (dancer_gltf_doc grew an animations array: 3 rotation channels on hip/torso/arm, samplers sharing a
+      times accessor); DANCER_DOC text format stays as the fallback - the dancer is now imported-AND-
+      animated from one glTF document. M8.8 NEXT: audio-kit crate decision (synth core + backend behind
+      default-off feature, window-kit pattern); kestrel-gui
       practice review of every interim solution approved six items, all shipped - (Q1) highscore
       relocated from the trace capture dir to a persist dir (Android internal app data via
       android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
