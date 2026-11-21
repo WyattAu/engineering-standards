@@ -663,8 +663,15 @@ repos:
       clip -> posed_mesh deformation. Component-size-aware accessor reader (BYTE/SHORT were reading 4-byte
       strides - caught by the skinned-document oracle). Oracles: 2-joint skinned document imports with
       exact bindings + bind worlds, skinned mesh deforms when joint 1 rotates (full imported-pipeline
-      animation loop); 476 workspace tests. M8.6 NEXT: drive the imported skin through the game's Animator
-      (render an imported-and-animated model in the game scene), audio-kit decision; kestrel-gui
+      animation loop); 476 workspace tests. M8.6 SHIPPED at 0.8.7 (2026-11-21, CI green 7602a19): the
+      dancer body is IMPORTED - dancer_gltf_doc builds a glTF 2.0 document for the dancer (16-vertex strip
+      skinned to 3 joints, per-band JOINTS_0/WEIGHTS_0, inverse bind matrices, base64 data URI) and the
+      constructor imports it through three-kit's gltf importer (M8.4/M8.5 chain dogfooded into the live
+      game); procedural strip + bind_nearest remains as the fail-closed fallback; base64_encode promoted to
+      a pub three-kit utility (the doc builder embeds the buffer as a data URI). All 26 game oracles green
+      with the imported dancer; 476 workspace tests. M8.7 NEXT: glTF animation sampler import (times +
+      rotation keyframes into AnimationClip - completes imported-AND-animated), audio-kit decision;
+      kestrel-gui
       practice review of every interim solution approved six items, all shipped - (Q1) highscore
       relocated from the trace capture dir to a persist dir (Android internal app data via
       android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
