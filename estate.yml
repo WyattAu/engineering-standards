@@ -739,78 +739,89 @@ repos:
       use break_on_hyphens=False (textwrap's default split hyphenated words across lines and the
       YAML fold re-joined them with spaces - 61 corrupted words repaired f34faf2), and a
       block-regex replacement must re-supply the trailing newline the match consumes (otherwise
-      the following line fuses onto the last wrapped line). M9.2 SHIPPED at 0.8.7 (2026-11-22,
-      CI green 0244b97): fresco-game consumes audio-kit - the first real synth consumer: sfx.rs
-      generates the effect set deterministically at construction (pop 880Hz sine burst, grab
-      220Hz triangle tick, splash 180Hz sine thud; ADSR envelopes), played on demand into the
-      SilentSink; target pops + grabs feed the sink; HUD shows the sfx frame count
-      (balls/score/combo/ sfx). Oracles: clips deterministic byte-identical, pop clip short, one
-      pop writes exactly one clip into the sink; 492 workspace tests. M9.3 NEXT: real output
-      backend (CPAL desktop + AAudio android behind a default-off feature - needs libasound2-dev
-      locally for the linux host build), audio polish (splash/pop rate limiting); kestrel-gui M9
-      + KESTREL-GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio
-      DECISION EXECUTED as build-deterministic-core - new crate audio-kit: oscillators
-      (sine/square/saw/triangle, stateful phase), ADSR envelope state machine, render_clip (osc
-      through env into f32 buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a
-      default-off feature is the future layer, window-kit pattern) - the synth core is
-      oracle-testable without an audio device (exact sine samples, square phase-flip boundary,
-      saw ramp, triangle peak, envelope stages, render determinism byte-identical twins, mix
-      clamp). KESTREL-GUI BOOTSTRAPPED: new crate kestrel-gui - the consumer application shell
-      on the fresco stack (widget-kit panel: title/status/button through the flow engine;
-      deterministic paint oracle; refresh-button activation oracle); windowed shells follow the
-      fresco-game pattern. 487 workspace tests. NEXT: audio-kit CPAL/AAudio backend feature,
-      kestrel-gui windowed shell + pacing evidence, kestrel game integration (the fresco-game
-      loop as a kestrel panel), mesh animation loaders, spatial hash at >500 particles practice
-      review of every interim solution approved six items, all shipped - (Q1) highscore
-      relocated from the trace capture dir to a persist dir (Android internal app data via
-      android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
-      with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
-      FixedUpdate-style bounded-drain idea) + XSPH velocity smoothing (replaces the near-zero
-      Laplacian viscosity) + velocity ceilings 2000 px/s at integration AND after XSPH + accel
-      clamp 4e5 -> 1e5 - the game basin had run away to 1e15 px/s under ball impact, now
-      dissipation-bounded; (Q3) impulse exchange (particle kicks apply equal-opposite reactions
-      to balls, Verlet prev shift, ball mass 8); (Q4) menu keyboard a11y through widget-kit
-      key_nav + key_char (Tab/arrows navigate, Enter/Space activate - the machinery already
-      existed, the game just never routed it); (Q5) disk-janitor sweeps idle cargo incremental
-      caches in the shared target (incremental/ grew to 26G unchecked - the artifact sweep only
-      matched dirs NAMED target/build/.lake; chezmoi c9da42c). Oracles added:
-      pool_slows_submerged_balls (buoyancy >= 2x slower than dry twin), keyboard_activates_play,
-      keyboard_steps_difficulty, best_label_reflects_score; 467 workspace tests. DEFERRED WITH
-      TRIGGERS (re-affirmed): PCISPH (only if incompressible look needed), spatial hash (>500
-      particles), glTF JSON parser (DCC interop), A53 frame pacing (android-activity limit),
-      audio-kit (new crate, own approval), mass exchange beyond impulse reaction. NOTE: parallel
-      sessions appending to this folded scalar have interleaved duplicate increment blocks
-      (M7.2-M7.4 appear twice) - reordered chronologically (M7.2-M7.4 moved before M8.1; no
-      content removed) - future appends must anchor at the true end. kestrel-gui. ON-DEVICE
-      VERIFICATION SWEEP (2026-11-21, CI green 04a1079): TWO BLOCKING BUGS CAUGHT BY REAL
-      HARDWARE - (1) fresco-game touch events passed RAW PHYSICAL px as logical: on the A53 3x
-      screen every touch landed 3x off (menu Play button unhittable; the fresco-android M5 scale
-      lesson was lost in the fresco-game shell copy) - touch + cursor now divide by the window
-      scale factor; (2) PERSIST_DIR referenced from android_entry without super:: - HOST CI
-      NEVER BUILDS THE ANDROID TARGET so the q1 storage relocation compiled on host but broke
-      the APK build (the x build is the only android-target check - CI GAP RECORDED). Post-fix
-      on-device A53: menu -> tap Play (scaled coords hit widget 5) -> game state with
-      glTF-imported dancer animating, SPH basin, targets, score HUD, pacing 34.7fps - M8.6/M8.7
-      verified on-device. LESSON: every fresco-shell increment needs one x build early -
-      android-target compile errors are invisible to host CI. K1 WINDOWED SHELL SHIPPED
-      (2026-11-21, CI green a369039): kestrel-gui app.rs - winit event loop + softbuffer present
-      hosting the KestrelPanel (the fresco-game shell pattern, productized): logical-res render,
-      physical->logical cursor scaling (fresco-game touch lesson inherited), pacing.csv evidence
-      flushed per row, 120-frame stats line, GATE_A_DIR override; mouse press/release routes
-      through the tracked cursor; bin/desktop entry. Verified LIVE: window opened, 120+ frames
-      painted, pacing.csv accruing (paint 2.7ms/frame at 360x740) + headless panel.bmp evidence
-      (title/status/button all rendering). K2 ANDROID PACKAGING + GAME INTEGRATION SHIPPED
-      (2026-11-21, CI green 2f7505e/ad4a841): kestrel-gui goes dual-target (cdylib android +
-      rlib desktop, NativeActivity entry, x metadata) AND integrates the fresco game - AppState
-      dispatch (Menu | Game): the kestrel panel hosts menu/buttons, Play transitions to a fresco
-      GameScreen (ECS loop, SPH pool, targets), input routes per state, sim steps only while
-      playing, game HUD menu button returns to the panel. TWO LESSONS FROM REAL HARDWARE: (1)
-      fresco-game's android_main collides with kestrel-gui's when kestrel links fresco-game -
-      duplicate android_main symbol at link time; fixed with an android-entry feature gate on
-      fresco-game (its own APK builds with --features android-entry; library consumers compile
-      without the shell); (2) kestrel-gui's shell never handled Touch events - Android input tap
-      delivers Touch, not MouseInput - touches now route to the panel. On-device verification of
-      the kestrel flow blocked on phone return (both left USB; fixed APK ready). M9.1 NEXT:
+      the following line fuses onto the last wrapped line). PIXEL SWEEP SHIPPED (2026-11-22,
+      mid-call, user-approved automation): fresh APKs installed; fresco-game LAUNCH FIXED on
+      device - boots to menu at 59.9-60.4 fps (paint 0.8-0.9ms, present 4.2-4.6ms), menu Play
+      tap enters the game; kestrel-gui panel renders (best 0, paint 0.86-0.99ms stable to frame
+      2640) and the PLAY-STAGING FIX verified ON DEVICE - the panel's Play button entered the
+      game (pre-fix the tap was dead); SFX pipeline live - HUD sfx counter hit 800 after two
+      taps = exactly 2 grabs x 400 samples. Found: the menu Play button's label renders dark-on-
+      dark (low contrast, cosmetic, fix later). The call ran as a PiP overlay over the app the
+      whole time - captures used for layout only and deleted, none persisted. Focus-gated taps
+      held: every tap and screencap checked mCurrentFocus first. After force-stop the launcher
+      has focus; the call continues via its foreground service (tap the notification to restore
+      its UI). M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97): fresco-game consumes
+      audio-kit - the first real synth consumer: sfx.rs generates the effect set
+      deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle tick, splash
+      180Hz sine thud; ADSR envelopes), played on demand into the SilentSink; target pops +
+      grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx). Oracles:
+      clips deterministic byte-identical, pop clip short, one pop writes exactly one clip into
+      the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop + AAudio
+      android behind a default-off feature - needs libasound2-dev locally for the linux host
+      build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI BOOTSTRAP
+      SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
+      build-deterministic-core - new crate audio-kit: oscillators (sine/square/saw/triangle,
+      stateful phase), ADSR envelope state machine, render_clip (osc through env into f32
+      buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature
+      is the future layer, window-kit pattern) - the synth core is oracle-testable without an
+      audio device (exact sine samples, square phase-flip boundary, saw ramp, triangle peak,
+      envelope stages, render determinism byte-identical twins, mix clamp). KESTREL-GUI
+      BOOTSTRAPPED: new crate kestrel-gui - the consumer application shell on the fresco stack
+      (widget-kit panel: title/status/button through the flow engine; deterministic paint
+      oracle; refresh-button activation oracle); windowed shells follow the fresco-game pattern.
+      487 workspace tests. NEXT: audio-kit CPAL/AAudio backend feature, kestrel-gui windowed
+      shell + pacing evidence, kestrel game integration (the fresco-game loop as a kestrel
+      panel), mesh animation loaders, spatial hash at >500 particles practice review of every
+      interim solution approved six items, all shipped - (Q1) highscore relocated from the trace
+      capture dir to a persist dir (Android internal app data via android_main static; desktop
+      XDG state; PERSIST_DIR override) - persistence no longer dies with trace rotation; (Q2)
+      fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy FixedUpdate-style bounded-drain
+      idea) + XSPH velocity smoothing (replaces the near-zero Laplacian viscosity) + velocity
+      ceilings 2000 px/s at integration AND after XSPH + accel clamp 4e5 -> 1e5 - the game basin
+      had run away to 1e15 px/s under ball impact, now dissipation-bounded; (Q3) impulse
+      exchange (particle kicks apply equal-opposite reactions to balls, Verlet prev shift, ball
+      mass 8); (Q4) menu keyboard a11y through widget-kit key_nav + key_char (Tab/arrows
+      navigate, Enter/Space activate - the machinery already existed, the game just never routed
+      it); (Q5) disk-janitor sweeps idle cargo incremental caches in the shared target
+      (incremental/ grew to 26G unchecked - the artifact sweep only matched dirs NAMED
+      target/build/.lake; chezmoi c9da42c). Oracles added: pool_slows_submerged_balls (buoyancy
+      >= 2x slower than dry twin), keyboard_activates_play, keyboard_steps_difficulty,
+      best_label_reflects_score; 467 workspace tests. DEFERRED WITH TRIGGERS (re-affirmed):
+      PCISPH (only if incompressible look needed), spatial hash (>500 particles), glTF JSON
+      parser (DCC interop), A53 frame pacing (android-activity limit), audio-kit (new crate, own
+      approval), mass exchange beyond impulse reaction. NOTE: parallel sessions appending to
+      this folded scalar have interleaved duplicate increment blocks (M7.2-M7.4 appear twice) -
+      reordered chronologically (M7.2-M7.4 moved before M8.1; no content removed) - future
+      appends must anchor at the true end. kestrel-gui. ON-DEVICE VERIFICATION SWEEP
+      (2026-11-21, CI green 04a1079): TWO BLOCKING BUGS CAUGHT BY REAL HARDWARE - (1)
+      fresco-game touch events passed RAW PHYSICAL px as logical: on the A53 3x screen every
+      touch landed 3x off (menu Play button unhittable; the fresco-android M5 scale lesson was
+      lost in the fresco-game shell copy) - touch + cursor now divide by the window scale
+      factor; (2) PERSIST_DIR referenced from android_entry without super:: - HOST CI NEVER
+      BUILDS THE ANDROID TARGET so the q1 storage relocation compiled on host but broke the APK
+      build (the x build is the only android-target check - CI GAP RECORDED). Post-fix on-device
+      A53: menu -> tap Play (scaled coords hit widget 5) -> game state with glTF-imported dancer
+      animating, SPH basin, targets, score HUD, pacing 34.7fps - M8.6/M8.7 verified on-device.
+      LESSON: every fresco-shell increment needs one x build early - android-target compile
+      errors are invisible to host CI. K1 WINDOWED SHELL SHIPPED (2026-11-21, CI green a369039):
+      kestrel-gui app.rs - winit event loop + softbuffer present hosting the KestrelPanel (the
+      fresco-game shell pattern, productized): logical-res render, physical->logical cursor
+      scaling (fresco-game touch lesson inherited), pacing.csv evidence flushed per row,
+      120-frame stats line, GATE_A_DIR override; mouse press/release routes through the tracked
+      cursor; bin/desktop entry. Verified LIVE: window opened, 120+ frames painted, pacing.csv
+      accruing (paint 2.7ms/frame at 360x740) + headless panel.bmp evidence (title/status/button
+      all rendering). K2 ANDROID PACKAGING + GAME INTEGRATION SHIPPED (2026-11-21, CI green
+      2f7505e/ad4a841): kestrel-gui goes dual-target (cdylib android + rlib desktop,
+      NativeActivity entry, x metadata) AND integrates the fresco game - AppState dispatch (Menu
+      | Game): the kestrel panel hosts menu/buttons, Play transitions to a fresco GameScreen
+      (ECS loop, SPH pool, targets), input routes per state, sim steps only while playing, game
+      HUD menu button returns to the panel. TWO LESSONS FROM REAL HARDWARE: (1) fresco-game's
+      android_main collides with kestrel-gui's when kestrel links fresco-game - duplicate
+      android_main symbol at link time; fixed with an android-entry feature gate on fresco-game
+      (its own APK builds with --features android-entry; library consumers compile without the
+      shell); (2) kestrel-gui's shell never handled Touch events - Android input tap delivers
+      Touch, not MouseInput - touches now route to the panel. On-device verification of the
+      kestrel flow blocked on phone return (both left USB; fixed APK ready). M9.1 NEXT:
       audio-kit CPAL backend feature; kestrel-gui
     # crates.io note: the in-repo crate names are unpublished and `path-kit`
     # is already taken on crates.io (owned by songhuaixu) — fresco's crates
