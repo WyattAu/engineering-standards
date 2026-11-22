@@ -745,21 +745,21 @@ repos:
       tap enters the game; kestrel-gui panel renders (best 0, paint 0.86-0.99ms stable to frame
       2640) and the PLAY-STAGING FIX verified ON DEVICE - the panel's Play button entered the
       game (pre-fix the tap was dead); SFX pipeline live - HUD sfx counter hit 800 after two
-      taps = exactly 2 grabs x 400 samples. Found: the menu Play button's label renders dark-on-
-      dark (low contrast, cosmetic, fix later). The call ran as a PiP overlay over the app the
-      whole time - captures used for layout only and deleted, none persisted. Focus-gated taps
-      held: every tap and screencap checked mCurrentFocus first. After force-stop the launcher
-      has focus; the call continues via its foreground service (tap the notification to restore
-      its UI). M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97): fresco-game consumes
-      audio-kit - the first real synth consumer: sfx.rs generates the effect set
-      deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle tick, splash
-      180Hz sine thud; ADSR envelopes), played on demand into the SilentSink; target pops +
-      grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx). Oracles:
-      clips deterministic byte-identical, pop clip short, one pop writes exactly one clip into
-      the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop + AAudio
-      android behind a default-off feature - needs libasound2-dev locally for the linux host
-      build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI BOOTSTRAP
-      SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
+      taps = exactly 2 grabs x 400 samples. Found: the menu Play button's label renders
+      dark-on-dark (low contrast, cosmetic, fix later). The call ran as a PiP overlay over the
+      app the whole time - captures used for layout only and deleted, none persisted.
+      Focus-gated taps held: every tap and screencap checked mCurrentFocus first. After
+      force-stop the launcher has focus; the call continues via its foreground service (tap the
+      notification to restore its UI). M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97):
+      fresco-game consumes audio-kit - the first real synth consumer: sfx.rs generates the
+      effect set deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle
+      tick, splash 180Hz sine thud; ADSR envelopes), played on demand into the SilentSink;
+      target pops + grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx).
+      Oracles: clips deterministic byte-identical, pop clip short, one pop writes exactly one
+      clip into the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop +
+      AAudio android behind a default-off feature - needs libasound2-dev locally for the linux
+      host build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI
+      BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
       build-deterministic-core - new crate audio-kit: oscillators (sine/square/saw/triangle,
       stateful phase), ADSR envelope state machine, render_clip (osc through env into f32
       buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature
