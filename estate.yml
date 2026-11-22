@@ -1676,6 +1676,14 @@ repos:
 
     _seen:
       last_push: "2026-10-30"
+  edureel:
+    area: app
+    status: support
+    notes: "Short-form video learning platform (public): feed mechanics chosen for demonstrated learning gain, not watch time — post-video recall, FSRS-style review scheduler, topic prerequisite graph. TS (SolidJS+Astro under bun, OmniTS-derived) plus planned Rust learning-engine crates consuming graphkit; SRS derived from Tachyon flashcards/srs.rs. Literature corpus in research/ (OpenAlex harvest). Registered 2026-11-22."
+    crates: []
+
+    _seen:
+      last_push: "2026-11-22"
   game-spec:
     area: app
     status: support
