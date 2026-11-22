@@ -689,24 +689,32 @@ repos:
       the user's PERSONAL phone (an automation screencap caught a personal messaging/call screen
       mid-use - captures deleted, automation stopped); Pixel excluded from automated UI sweeps
       until explicitly re-approved; the A53 is the sweep device. Both phones left USB (Nov 22):
-      kestrel + fresco-game sweeps (touch flow, pops, menu nav) pending re-attach. M9 + KESTREL-
-      GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED
-      as build-deterministic-core - new crate audio-kit: oscillators (sine/square/saw/triangle,
-      stateful phase), ADSR envelope state machine, render_clip (osc through env into f32
-      buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature
-      is the future layer, window-kit pattern) - the synth core is oracle-testable without an
-      audio device (exact sine samples, square phase- flip boundary, saw ramp, triangle peak,
-      envelope stages, render determinism byte-identical twins, mix clamp). KESTREL-GUI
-      BOOTSTRAPPED: new crate kestrel-gui - the consumer application shell on the fresco stack
-      (widget-kit panel: title/status/button through the flow engine; deterministic paint
-      oracle; refresh-button activation oracle); windowed shells follow the fresco-game pattern.
-      487 workspace tests. NEXT: audio-kit CPAL/AAudio backend feature, kestrel- gui windowed
-      shell + pacing evidence, kestrel game integration (the fresco-game loop as a kestrel
-      panel), mesh animation loaders, spatial hash at >500 particles practice review of every
-      interim solution approved six items, all shipped - (Q1) highscore relocated from the trace
-      capture dir to a persist dir (Android internal app data via android_main static; desktop
-      XDG state; PERSIST_DIR override) - persistence no longer dies with trace rotation; (Q2)
-      fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy FixedUpdate-style bounded-drain
+      kestrel + fresco-game sweeps (touch flow, pops, menu nav) pending re-attach. M9.2 SHIPPED
+      at 0.8.7 (2026-11-22, CI green 0244b97): fresco-game consumes audio-kit - the first real
+      synth consumer: sfx.rs generates the effect set deterministically at construction (pop
+      880Hz sine burst, grab 220Hz triangle tick, splash 180Hz sine thud; ADSR envelopes),
+      played on demand into the SilentSink; target pops + grabs feed the sink; HUD shows the sfx
+      frame count (balls/score/combo/ sfx). Oracles: clips deterministic byte-identical, pop
+      clip short, one pop writes exactly one clip into the sink; 492 workspace tests. M9.3 NEXT:
+      real output backend (CPAL desktop + AAudio android behind a default-off feature - needs
+      libasound2-dev locally for the linux host build), audio polish (splash/pop rate limiting);
+      kestrel-gui M9 + KESTREL- GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997):
+      the audio DECISION EXECUTED as build-deterministic-core - new crate audio-kit: oscillators
+      (sine/square/saw/triangle, stateful phase), ADSR envelope state machine, render_clip (osc
+      through env into f32 buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a
+      default-off feature is the future layer, window-kit pattern) - the synth core is oracle-
+      testable without an audio device (exact sine samples, square phase- flip boundary, saw
+      ramp, triangle peak, envelope stages, render determinism byte-identical twins, mix clamp).
+      KESTREL-GUI BOOTSTRAPPED: new crate kestrel-gui - the consumer application shell on the
+      fresco stack (widget-kit panel: title/status/button through the flow engine; deterministic
+      paint oracle; refresh-button activation oracle); windowed shells follow the fresco-game
+      pattern. 487 workspace tests. NEXT: audio-kit CPAL/AAudio backend feature, kestrel- gui
+      windowed shell + pacing evidence, kestrel game integration (the fresco-game loop as a
+      kestrel panel), mesh animation loaders, spatial hash at >500 particles practice review of
+      every interim solution approved six items, all shipped - (Q1) highscore relocated from the
+      trace capture dir to a persist dir (Android internal app data via android_main static;
+      desktop XDG state; PERSIST_DIR override) - persistence no longer dies with trace rotation;
+      (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy FixedUpdate-style bounded-drain
       idea) + XSPH velocity smoothing (replaces the near-zero Laplacian viscosity) + velocity
       ceilings 2000 px/s at integration AND after XSPH + accel clamp 4e5 -> 1e5 - the game basin
       had run away to 1e15 px/s under ball impact, now dissipation-bounded; (Q3) impulse
