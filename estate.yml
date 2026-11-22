@@ -682,31 +682,52 @@ repos:
       now prefers the glTF document's animation samplers (dancer_gltf_doc grew an animations
       array: 3 rotation channels on hip/torso/arm, samplers sharing a times accessor);
       DANCER_DOC text format stays as the fallback - the dancer is now imported-AND- animated
-      from one glTF document. M9.1 SHIPPED at 0.8.7 (2026-11-22, CI green 94b0a21): SilentSink
-      output backend - the device-free pull-model output (write frames, count, retain last) that
-      a real output stream (CPAL/AAudio) will implement; oracle: rendered clip passes through
-      the sink intact + frame counting; 489 workspace tests. DEVICE POLICY UPDATE: the Pixel is
-      the user's PERSONAL phone (an automation screencap caught a personal messaging/call screen
-      mid-use - captures deleted, automation stopped); Pixel excluded from automated UI sweeps
-      until explicitly re-approved; the A53 is the sweep device. Both phones left USB (Nov 22):
-      kestrel + fresco-game sweeps pending DEVICE + USER: (Nov 22 sweep attempt) the A53
-      demanded Samsung account re-verification after the reinstalls (fingerprint/password -
-      automation cannot pass, capture deleted); the Pixel 10 Pro was in active personal use
-      (automation stopped per the device policy, capture deleted); the S7 remains in recovery.
-      Both APKs are built and ready - sweeps resume when the phones are unlocked/free AND the
-      user approves automation. M9.3 audio backend (CPAL) also blocked: libasound2-dev absent
-      locally and sudo needs a password - install it to unblock the CPAL host build; kestrel-gui
-      M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97): fresco-game consumes audio-kit - the
-      first real synth consumer: sfx.rs generates the effect set deterministically at
-      construction (pop 880Hz sine burst, grab 220Hz triangle tick, splash 180Hz sine thud; ADSR
-      envelopes), played on demand into the SilentSink; target pops + grabs feed the sink; HUD
-      shows the sfx frame count (balls/score/combo/ sfx). Oracles: clips deterministic byte-
-      identical, pop clip short, one pop writes exactly one clip into the sink; 492 workspace
-      tests. M9.3 NEXT: real output backend (CPAL desktop + AAudio android behind a default-off
-      feature - needs libasound2-dev locally for the linux host build), audio polish (splash/pop
-      rate limiting); kestrel-gui M9 + KESTREL- GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI
-      green 1be6997): the audio DECISION EXECUTED as build-deterministic-core - new crate audio-
-      kit: oscillators (sine/square/saw/triangle, stateful phase), ADSR envelope state machine,
+      from one glTF document. DECISION QUEUE EXECUTED (2026-11-20, CI green eba5434): the best-
+      practice review of every interim solution approved six items, all shipped - (Q1) highscore
+      relocated from the trace capture dir to a persist dir (Android internal app data via
+      android_main static; desktop XDG state; PERSIST_DIR override) - persistence no longer dies
+      with trace rotation; (Q2) fluid-kit CFL timestep clamp (dt <= cfl*h/v_max, Bevy
+      FixedUpdate-style bounded-drain idea) + XSPH velocity smoothing (replaces the near-zero
+      Laplacian viscosity) + velocity ceilings 2000 px/s at integration AND after XSPH + accel
+      clamp 4e5 -> 1e5 - the game basin had run away to 1e15 px/s under ball impact, now
+      dissipation-bounded; (Q3) impulse exchange (particle kicks apply equal-opposite reactions
+      to balls, Verlet prev shift, ball mass 8); (Q4) menu keyboard a11y through widget-kit
+      key_nav + key_char (Tab/arrows navigate, Enter/Space activate - the machinery already
+      existed, the game just never routed it); (Q5) disk-janitor sweeps idle cargo incremental
+      caches in the shared target (incremental/ grew to 26G unchecked - the artifact sweep only
+      matched dirs NAMED target/build/.lake; chezmoi c9da42c). Oracles added:
+      pool_slows_submerged_balls (buoyancy >= 2x slower than dry twin), keyboard_activates_play,
+      keyboard_steps_difficulty, best_label_reflects_score; 467 workspace tests. DEFERRED WITH
+      TRIGGERS (re-affirmed): PCISPH (only if incompressible look needed), spatial hash (>500
+      particles), glTF JSON parser (DCC interop), A53 frame pacing (android-activity limit),
+      audio-kit (new crate, own approval), mass exchange beyond impulse reaction. NOTE: parallel
+      sessions appending to this folded scalar have interleaved duplicate increment blocks
+      (M7.2-M7.4 appear twice) - a dedup pass is owed before the next major sync. M9.1 SHIPPED
+      at 0.8.7 (2026-11-22, CI green 94b0a21): SilentSink output backend - the device-free pull-
+      model output (write frames, count, retain last) that a real output stream (CPAL/AAudio)
+      will implement; oracle: rendered clip passes through the sink intact + frame counting; 489
+      workspace tests. DEVICE POLICY UPDATE: the Pixel is the user's PERSONAL phone (an
+      automation screencap caught a personal messaging/call screen mid-use - captures deleted,
+      automation stopped); Pixel excluded from automated UI sweeps until explicitly re-approved;
+      the A53 is the sweep device. Both phones left USB (Nov 22): kestrel + fresco-game sweeps
+      pending DEVICE + USER: (Nov 22 sweep attempt) the A53 demanded Samsung account re-
+      verification after the reinstalls (fingerprint/password - automation cannot pass, capture
+      deleted); the Pixel 10 Pro was in active personal use (automation stopped per the device
+      policy, capture deleted); the S7 remains in recovery. Both APKs are built and ready -
+      sweeps resume when the phones are unlocked/free AND the user approves automation. M9.3
+      audio backend (CPAL) also blocked: libasound2-dev absent locally and sudo needs a password
+      - install it to unblock the CPAL host build; kestrel-gui M9.2 SHIPPED at 0.8.7
+      (2026-11-22, CI green 0244b97): fresco-game consumes audio-kit - the first real synth
+      consumer: sfx.rs generates the effect set deterministically at construction (pop 880Hz
+      sine burst, grab 220Hz triangle tick, splash 180Hz sine thud; ADSR envelopes), played on
+      demand into the SilentSink; target pops + grabs feed the sink; HUD shows the sfx frame
+      count (balls/score/combo/ sfx). Oracles: clips deterministic byte- identical, pop clip
+      short, one pop writes exactly one clip into the sink; 492 workspace tests. M9.3 NEXT: real
+      output backend (CPAL desktop + AAudio android behind a default-off feature - needs
+      libasound2-dev locally for the linux host build), audio polish (splash/pop rate limiting);
+      kestrel-gui M9 + KESTREL- GUI BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997):
+      the audio DECISION EXECUTED as build-deterministic-core - new crate audio- kit:
+      oscillators (sine/square/saw/triangle, stateful phase), ADSR envelope state machine,
       render_clip (osc through env into f32 buffer), mix with clamp; backend-free by design
       (CPAL/AAudio behind a default-off feature is the future layer, window-kit pattern) - the
       synth core is oracle- testable without an audio device (exact sine samples, square phase-
