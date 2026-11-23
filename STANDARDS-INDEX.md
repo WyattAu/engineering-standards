@@ -24,11 +24,11 @@ printed, never silently passed.
 
 | Metric | Value |
 |---|---|
-| Concerns listed | 57 |
-| With a standard | 49 |
-| With a machine check | 45 |
+| Concerns listed | 58 |
+| With a standard | 50 |
+| With a machine check | 46 |
 | Gated | 31 |
-| Advisory | 11 |
+| Advisory | 12 |
 | Declared only | 8 |
 | No standard | 7 |
 
@@ -95,6 +95,12 @@ assertion this index exists to prevent.
 | llms.txt projection | ext:spec-standards/SPEC-CORE.md | SC-10 | scripts/check-llms-links.py | gated | 8/125 checkouts |
 | Agent contract file | OMNI-CORE.md | 11i | scripts/check-llms-links.py | gated | 20/125 AGENTS.md |
 | ADR practice | DECISIONS.md | DC-1..DC-8 (OMNI-CORE 9) | scripts/check-adr.py | gated | 18 records, 0 findings (2026-11-09) |
+
+## Proof engineering
+
+| Concern | Standard | Requirements | Gate | Enforcement | Adoption |
+|---|---|---|---|---|---|
+| Lean proof packaging (toolchain pin, zero-sorry gate, claim pins, reuse) | docs/lean-pkg.md | LP-1..LP-8 | scripts/check-lean-pkg.py | advisory | 2/8 clean, 3 pass-with-findings, 3 true drift (2026-11-23) |
 
 ## Design and accessibility
 
