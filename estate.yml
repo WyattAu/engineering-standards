@@ -52,6 +52,21 @@ owner: WyattAu
 crates_io_user_id: 404181
 
 repos:
+  game-spec:
+    area: research
+    status: support
+    notes: "Lean 4 formal specs for competition bots (Tumbleweed first). Zero-sorry, core-only; LEAN-PKG conform. v0.1.0 tagged; Reservoir-indexable. Added 2026-11-22."
+
+  clawdius-spec:
+    area: research
+    status: core
+    notes: "Shared Lean proof package for the clawdius estate: 23 modules extracted byte-identical from clawdius .specs/02_architecture/proofs. clawdius pins v0.1.0 exactly (lakefile [[require]] rev) — core is earned, not aspirational. Added 2026-11-22."
+
+  morph:
+    area: research
+    status: support
+    notes: "Specification of an agentic programming language in Lean 4; own ADR-driven toolchain governance (lakefile ADR-010 note). On v4.27.0, below the LEAN-PKG v4.35.0 baseline — bump blocked on active Stage-C WIP. Added 2026-11-23."
+
   cal-model:
     area: data
     status: support
