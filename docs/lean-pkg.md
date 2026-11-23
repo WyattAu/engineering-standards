@@ -76,13 +76,13 @@ section exists when the source declares axioms.
 ### LP-5 Import-free modules (REVIEW)
 
 Proof modules MUST NOT import each other and MUST NOT be co-elaborated
-(umbrella files that `import` every module are forbidden — duplicate type
+(umbrella files that `import` every module are forbidden: duplicate type
 names across modules are intentional, and merging environments turns
 restatement into collision). Cross-file concepts are restated and tied
 by enumeration theorems. Reuse happens at the package level.
 
 Evidence: `REVIEW`; the clawdius-spec extraction demonstrated the
-collision (two modules each declaring `ResourceLimits` — legal
+collision (two modules each declaring `ResourceLimits`, legal
 separately, a build error merged).
 
 ### LP-6 Roots gate (GATE)
@@ -90,7 +90,7 @@ separately, a build error merged).
 Every proof file MUST be reachable from a build target: an explicit
 `roots` entry in `lakefile.toml` (or a `[[lean_lib]]` entry in the
 clawdius legacy shape). A file no target builds is hand-checked, not
-proven — that is how stale proofs survived (`TestFold.lean`, ungated
+proven: that is how stale proofs survived (`TestFold.lean`, ungated
 for its whole life).
 
 Evidence: `scripts/check-lean-pkg.py` lists files under the library
@@ -114,7 +114,7 @@ MIT `LICENSE`, and a README stating the rigor contract, so Reservoir
 indexes it correctly. Adoption is measured by the package appearing in
 `reservoir.lean-lang.org` search (crawl latency: days, not instant).
 
-Evidence: `MEASURE` — next estate review records indexed/not per
+Evidence: `MEASURE` at the next estate review: record indexed/not per
 package with the query date.
 
 ## Exceptions
