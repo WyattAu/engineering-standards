@@ -765,7 +765,22 @@ repos:
       app the whole time - captures used for layout only and deleted, none persisted.
       Focus-gated taps held: every tap and screencap checked mCurrentFocus first. After
       force-stop the launcher has focus; the call continues via its foreground service (tap the
-      notification to restore its UI). M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97):
+      notification to restore its UI). REQ-K16 SHIPPED (2026-11-23, CI green f44a431):
+      widget-kit buttons render their LABEL - the Button paint arm drew only the frame chrome,
+      so the label string rode along as dead data and every button in every consumer
+      (fresco-game menu Play, kestrel Refresh/Play) rendered as a blank chip (yesterday's
+      'dark-on-dark' diagnosis was wrong - the label was never drawn at all). Fix: the Button
+      arm draws the label centered in the frame with the text color; SPEC REQ-K16 + REQUIREMENTS
+      entry + a11y_render oracle (text-bright pixels inside the button rect); gallery golden
+      hashes regenerated for all three palettes; 500 workspace tests. APKs rebuilt with the fix
+      (fresco-game 1.08MB android-entry verified); the on-device label check is pending - the
+      Pixel left USB before the screencap and the A53 remains dozing at the NotificationShade
+      (Samsung gate untouched since Nov 22). MANIMGX CHECKED OUT (2026-11-24):
+      academa-labs/manimgx cloned to the dev tree - Manim-compatible Python API over a Rust wgpu
+      engine (Typst typesetting, x264 encode), agent-first (ships its own SKILL.md, AGENTS.md,
+      llms.txt), MIT. Smoke: uv tool install manimgx, rendered the CircleArea scene 2s 720p30 in
+      1.8s on the discrete GPU, storyboard + layout check clean. Candidate to replace/augment
+      the ECC manim-video skill's engine. M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97):
       fresco-game consumes audio-kit - the first real synth consumer: sfx.rs generates the
       effect set deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle
       tick, splash 180Hz sine thud; ADSR envelopes), played on demand into the SilentSink;
