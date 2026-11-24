@@ -780,16 +780,34 @@ repos:
       engine (Typst typesetting, x264 encode), agent-first (ships its own SKILL.md, AGENTS.md,
       llms.txt), MIT. Smoke: uv tool install manimgx, rendered the CircleArea scene 2s 720p30 in
       1.8s on the discrete GPU, storyboard + layout check clean. Candidate to replace/augment
-      the ECC manim-video skill's engine. M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97):
-      fresco-game consumes audio-kit - the first real synth consumer: sfx.rs generates the
-      effect set deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle
-      tick, splash 180Hz sine thud; ADSR envelopes), played on demand into the SilentSink;
-      target pops + grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx).
-      Oracles: clips deterministic byte-identical, pop clip short, one pop writes exactly one
-      clip into the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop +
-      AAudio android behind a default-off feature - needs libasound2-dev locally for the linux
-      host build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI
-      BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
+      the ECC manim-video skill's engine. M10 VIDEO EXPORT SHIPPED at 0.8.7 (2026-11-24, CI
+      green 0560471): new crate video-kit (app-support export layer above paint-kit,
+      publish=false, ADR-0005) - the answer to 'custom rendering not dependent on wgpu': a
+      deterministic frame loop handing a fresh zeroed Surface plus the frame timestamp to a
+      caller draw closure, feeding a FrameSink trait; the reference sink writes numbered 24-bit
+      BMPs (estate zero-dep image convention), the real backend pipes rawvideo RGBA into an
+      external ffmpeg (libx264 mp4) behind the default-off ffmpeg feature with graceful skip
+      when the binary is absent. CORPUS + STRESS (the user's goal): five scenes across distinct
+      render paths (round rects, shadows, polygon paths, linear/radial gradients, widgets over
+      paint_tree, clipped layers) with checked-in per-frame FNV golden keys - any renderer
+      output change now diffs a hash over time, not just per single frame; stress bench 60
+      frames 480x800: release p50 paint 67ms/frame p95 125ms max 143ms (debug 1161ms - the CI
+      bench runs debug with a generous bound). ENVELOPE RECORDED: the CPU raster comfortably
+      covers interactive UI (sub-3ms paint on device screens) but 300+-shape-per-frame 60fps
+      animation needs the ADR-0004 Vello GPU backend or lighter scenes. SPEC REQ-V1..V3, README
+      layer table, AGENTS.md note. 508 workspace tests. ManimGX decision recorded (2026-11-24):
+      consumer not fork - its functionality fits as an external agent video tool; forking would
+      import wgpu+Typst+Python into a stack whose CPU backend is deliberately headless and
+      wgpu-free. M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97): fresco-game consumes
+      audio-kit - the first real synth consumer: sfx.rs generates the effect set
+      deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle tick, splash
+      180Hz sine thud; ADSR envelopes), played on demand into the SilentSink; target pops +
+      grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx). Oracles:
+      clips deterministic byte-identical, pop clip short, one pop writes exactly one clip into
+      the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop + AAudio
+      android behind a default-off feature - needs libasound2-dev locally for the linux host
+      build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI BOOTSTRAP
+      SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
       build-deterministic-core - new crate audio-kit: oscillators (sine/square/saw/triangle,
       stateful phase), ADSR envelope state machine, render_clip (osc through env into f32
       buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature
