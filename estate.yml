@@ -819,16 +819,29 @@ repos:
       video-editing handoff); complements the upstream ECC manim-video skill (Manim CE CLI)
       instead of editing third-party content. Lesson: write tool arguments ABSOLUTE - a
       relative-path write landed in dev/src/.local and had to be relocated before chezmoi apply
-      could see it. M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97): fresco-game consumes
-      audio-kit - the first real synth consumer: sfx.rs generates the effect set
-      deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle tick, splash
-      180Hz sine thud; ADSR envelopes), played on demand into the SilentSink; target pops +
-      grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx). Oracles:
-      clips deterministic byte-identical, pop clip short, one pop writes exactly one clip into
-      the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop + AAudio
-      android behind a default-off feature - needs libasound2-dev locally for the linux host
-      build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI BOOTSTRAP
-      SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
+      could see it. M10.3-M10.4 + K4 SHIPPED at 0.8.7 (2026-11-25, CI green 28d4234, 510 tests):
+      (1) the video corpus gains a damage-planned leg - a widget tree lives across frames, frame
+      0 repaints Full, later frames repaint only the damaged region through paint_tree_plan
+      (scene-kit FramePlan); per-frame golden keys pin the plan-clipped output, so the damage
+      machinery is now timeline-covered. (2) audio-kit write_wav (mono 16-bit PCM,
+      deterministic, header-parsed oracle). (3) FfmpegPipeSink::spawn_with_audio muxes a WAV
+      into the export; ffprobe oracle verifies both streams; CONTRACT: the audio bed must be >=
+      the video or -shortest closes the encoder under the writer (broken pipe; found by the
+      oracle). (4) kestrel K4: HUD buttons route in game state (Pause toggles, Menu returns to
+      the panel and refreshes the persisted best - the game-return loop is complete); BUG FIX:
+      the Android touch path drove the panel in every state - gameplay input was dead on
+      Android; now routes per state. SPEC REQ-V4/V5/V6 + REQ-A1 + REQUIREMENTS rows. Device
+      verification of K4 pending a free phone (fresh APKs: rebuild before install - the label
+      fix and this routing are both in). M9.2 SHIPPED at 0.8.7 (2026-11-22, CI green 0244b97):
+      fresco-game consumes audio-kit - the first real synth consumer: sfx.rs generates the
+      effect set deterministically at construction (pop 880Hz sine burst, grab 220Hz triangle
+      tick, splash 180Hz sine thud; ADSR envelopes), played on demand into the SilentSink;
+      target pops + grabs feed the sink; HUD shows the sfx frame count (balls/score/combo/ sfx).
+      Oracles: clips deterministic byte-identical, pop clip short, one pop writes exactly one
+      clip into the sink; 492 workspace tests. M9.3 NEXT: real output backend (CPAL desktop +
+      AAudio android behind a default-off feature - needs libasound2-dev locally for the linux
+      host build), audio polish (splash/pop rate limiting); kestrel-gui M9 + KESTREL-GUI
+      BOOTSTRAP SHIPPED at 0.8.7 (2026-11-21, CI green 1be6997): the audio DECISION EXECUTED as
       build-deterministic-core - new crate audio-kit: oscillators (sine/square/saw/triangle,
       stateful phase), ADSR envelope state machine, render_clip (osc through env into f32
       buffer), mix with clamp; backend-free by design (CPAL/AAudio behind a default-off feature
