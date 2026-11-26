@@ -66,6 +66,11 @@ on:
         required: false
         default: ""
         type: string
+      coverage-test-threads:
+        description: "Test threads passed after -- to the instrumented test binaries (default 1: workspaces whose tests share GPU/software adapters serialize; CPU-bound workspaces set 4+ and fit the 1h job cap)"
+        required: false
+        default: "1"
+        type: string
       coverage-exclude:
         description: "Space-separated crate names for cargo-llvm-cov --exclude (crates whose tests cannot run on a plain runner, e.g. GPU rendering)"
         required: false
@@ -401,6 +406,7 @@ jobs:
           IGNORE_REGEX: ${{ inputs.coverage-ignore-regex }}
           ALLF: ${{ inputs.all-features }}
           COVEXCL: ${{ inputs.coverage-exclude }}
+          COVTHREADS: ${{ inputs.coverage-test-threads }}
         run: |
           set -euo pipefail
           case "$TIER" in
@@ -438,7 +444,14 @@ jobs:
           # The passthrough stays last: everything after `--` reaches the
           # test binary, so a flag appended after it silently becomes a
           # test-binary option (observed as "Unrecognized option: 'p'").
-          set -- "$@" -- --test-threads=1
+          # The thread count is an env, not an interpolated flag: the
+          # default (1) serializes for workspaces whose tests fight over
+          # one software GPU adapter; CPU-bound workspaces raise it and
+          # keep the instrumented run inside the job's time cap.
+          case "$COVTHREADS" in
+            ''|*[!0-9]*) COVTHREADS=1 ;;
+          esac
+          set -- "$@" -- --test-threads="$COVTHREADS"
           if [ "${INFO:-0}" = "1" ]; then
             cargo llvm-cov --summary-only "$@"
           else
