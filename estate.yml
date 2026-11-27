@@ -1897,6 +1897,14 @@ repos:
 
     _seen:
       last_push: "2026-10-31"
+  combat-robot:
+    area: app
+    status: personal
+    notes: "Combat robot spec sheets, deterministic seeded bout simulation, and failsafe-first control surfaces; derived from OmniRust-template (tier-a), private; crates combat-robot / combat-cli / combat-service unpublished. Registered 2026-11-27."
+    crates: []
+
+    _seen:
+      last_push: "2026-11-27"
   competitions:
     area: app
     status: support
